@@ -14,7 +14,7 @@ crates.io 版本還沒發佈（名稱待確認，見 PRD〈11〉Q2）。目前�
 markdown-fixer = { path = "../markdown-syntax-fixer/crates/markdown-fixer" }
 
 # 或指定 git commit
-# markdown-fixer = { git = "https://github.com/doggy8088/markdown-syntax-fixer", rev = "<commit>" }
+# markdown-fixer = { git = "https://github.com/doggy8088/markdown-fixer", rev = "<commit>" }
 ```
 
 需要把結果序列化成 JSON 時，開啟 `serde` feature：

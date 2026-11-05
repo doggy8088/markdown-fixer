@@ -1,0 +1,54 @@
+name: Publish to crates.io
+
+# 推送 vX.Y.Z tag 時，以 crates.io Trusted Publishing（GitHub OIDC）發佈
+# markdown-fixer 與 markdown-fixer-cli，不使用長期 API token。
+# crates.io 端的設定（每個 crate 各一筆 trusted publisher）見 docs/release.md。
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  publish:
+    name: cargo publish (trusted publishing)
+    runs-on: ubuntu-latest
+    # 必須與 crates.io trusted publisher 設定的 environment 名稱一致。
+    environment: release
+    permissions:
+      contents: read
+      id-token: write # 以 OIDC 向 crates.io 換取短期 token
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - name: Check the tag matches Cargo.toml
+        if: github.event_name == 'push'
+        run: |
+          tag="${GITHUB_REF_NAME#v}"
+          cargo_version=$(grep -m1 '^version' Cargo.toml | sed -E 's/.*"(.*)".*/\1/')
+          echo "tag=$tag cargo=$cargo_version"
+          [ "$tag" = "$cargo_version" ] || {
+            echo "::error::Version mismatch: tag=$tag Cargo.toml=$cargo_version"
+            exit 1
+          }
+
+      - name: Test before publishing
+        run: cargo test --workspace --all-features --locked
+
+      - uses: rust-lang/crates-io-auth-action@v1
+        id: auth
+
+      # --workspace 會依相依順序先發佈 markdown-fixer，再發佈 markdown-fixer-cli；
+      # markdown-fixer-ffi 設了 publish = false，不會上傳。
+      - name: cargo publish
+        run: cargo publish --workspace --locked
+        env:
+          CARGO_REGISTRY_TOKEN: ${{ steps.auth.outputs.token }}

@@ -14,12 +14,12 @@
     {
       "path": "corpus",
       "copyDir": "fixtures/corpus",
-      "fingerprint": "7d6f97f9d4361a38"
+      "fingerprint": "1eec800b91afd733"
     }
   ],
   "expected": {
     "status": 1,
-    "stdout": "Fixed 331 issue(s) in 83 file(s).\n674 problem(s) remain: 15 fixable, 18 error(s), 158 warning(s), 498 info.\n14 file(s) were not modified because of structural or frontmatter ambiguity.\n",
+    "stdout": "Fixed 330 issue(s) in 82 file(s).\n449 problem(s) remain: 15 fixable, 18 error(s), 156 warning(s), 275 info.\n14 file(s) were not modified because of structural or frontmatter ambiguity.\n",
     "stderr": "",
     "files": [
       {
@@ -187,40 +187,12 @@
         "fnv": "cc69c1cff5ec43f7"
       },
       {
-        "path": "corpus/real/skills/eli5-SKILL.md",
-        "fnv": "812a9a13324a766c"
-      },
-      {
-        "path": "corpus/real/skills/humanizer-SKILL.md",
-        "fnv": "57171a1e23ab99f3"
-      },
-      {
         "path": "corpus/real/skills/markdown-autocorrect-SKILL.md",
         "fnv": "c2af8989ae240e24"
       },
       {
-        "path": "corpus/real/skills/marpit-markdown-slide-deck-framework-SKILL.md",
-        "fnv": "0989965172827305"
-      },
-      {
         "path": "corpus/real/skills/query-taiwan-holiday-SKILL.md",
         "fnv": "4b271af03446da79"
-      },
-      {
-        "path": "corpus/real/skills/tdd-SKILL.md",
-        "fnv": "d6c58e335264dc47"
-      },
-      {
-        "path": "corpus/real/skills/teach-SKILL.md",
-        "fnv": "4f0a6e880c7d76e7"
-      },
-      {
-        "path": "corpus/real/skills/writing-beats-SKILL.md",
-        "fnv": "93eb4e0704141d22"
-      },
-      {
-        "path": "corpus/real/skills/writing-for-agents-SKILL.md",
-        "fnv": "1e906fc1aa1f26dc"
       },
       {
         "path": "corpus/regressions/definition-deep-quotes.md",

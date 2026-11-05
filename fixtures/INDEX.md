@@ -2,7 +2,7 @@
 
 `fixtures/corpus/` 是 golden 差異測試的語料，`fixtures/golden/` 是由 `scripts/gen-golden.mjs` 以 oracle 產生的預期輸出（不可手改）。這份索引本身不在語料目錄裡，不參與比對。測試怎麼跑見 [docs/testing.md](../docs/testing.md)，golden 格式見 [docs/parity.md](../docs/parity.md)。
 
-- **規模**：195 份文件、5,275 行（2026-11-05）。
+- **規模**：187 份文件、4,359 行（2026-11-05）。
 - **位元組**：`fixtures/.gitattributes` 設定 `* -text`，git 不會改寫 CRLF、CR 與 BOM。含 BOM、NBSP、零寬字元、CRLF 或沒有檔尾換行的檔案以 Node 寫入，不要用會自動正規化的編輯器修改。
 - **自我檢查**：`gen-golden.mjs` 會確認 `rules/<ID>/trigger.md` 回報該規則、`negative.md` 不回報，`edge/blocking-*` 與 `edge/frontmatter-trap-*` 被拒絕修正，且 48 條規則都至少被回報一次。
 
@@ -20,7 +20,7 @@
 | `real/dedent-paste/CHANGELOG.md` | `~/projects/dedent-paste/CHANGELOG.md` | Keep a Changelog 格式的中文變更紀錄 |
 | `real/dedent-paste/DEVELOPMENT.md` | `~/projects/dedent-paste/DEVELOPMENT.md` | 開發說明，大量程式碼區塊 |
 | `real/dedent-paste/AGENTS.md` | `~/projects/dedent-paste/AGENTS.md` | AI agent 指引 |
-| `real/skills/*-SKILL.md` | `~/.agents/skills/<名稱>/SKILL.md` | 9 份 skill 說明（markdown-autocorrect、humanizer、writing-for-agents、teach、query-taiwan-holiday、tdd、writing-beats、eli5、marpit-markdown-slide-deck-framework），含 frontmatter 與英文長文 |
+| `real/skills/*-SKILL.md` | `~/.agents/skills/<名稱>/SKILL.md` | 2 份作者本人的 skill 說明（markdown-autocorrect、query-taiwan-holiday），含 frontmatter 與英文長文；第三方 skill 因授權考量不收錄 |
 
 ## synthetic：接近真實的手寫文件
 

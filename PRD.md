@@ -302,7 +302,7 @@ void mdfix_string_free(char *s);
   5. 不在 log 裡寫入剪貼簿內容。
 - 文件 `docs/clipboard.md` 說明安裝、改熱鍵、疑難排解（輔助使用權限、語系、找不到執行檔），並附 Linux（`wl-paste`／`xclip`）與 Windows（AutoHotkey）的對應寫法。
 
-### 6.8 dedent-paste 整合（`/Users/will/projects/dedent-paste`）
+### 6.8 dedent-paste 整合（[doggy8088/dedent-paste](https://github.com/doggy8088/dedent-paste)）
 
 - 新增相依 `markdown-fixer`，只用函式庫 crate。
 - 流程順序：讀剪貼簿 → 既有 `dedent_text`（含提示符展開）→ `detect::looks_like_markdown` → 若為 Markdown，呼叫 `fix_document`（停用 MDX002 與 MDX003：保留 Windows 剪貼簿的 CRLF 與 dedent 既有的檔尾換行行為）→ 寫回剪貼簿 → 貼上。

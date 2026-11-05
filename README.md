@@ -29,8 +29,8 @@
 需要 Rust 1.85 以上：
 
 ```sh
-git clone https://github.com/doggy8088/markdown-syntax-fixer.git
-cd markdown-syntax-fixer
+git clone https://github.com/doggy8088/markdown-fixer.git
+cd markdown-fixer
 cargo install --path crates/markdown-fixer-cli
 ```
 

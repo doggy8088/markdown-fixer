@@ -7,6 +7,10 @@ rust-version.workspace = true
 license.workspace = true
 authors.workspace = true
 repository.workspace = true
+readme = "README.md"
+exclude = ["tests/"]
+homepage = "https://github.com/doggy8088/markdown-fixer"
+documentation = "https://docs.rs/markdown-fixer"
 keywords = ["markdown", "lint", "formatter", "cjk"]
 categories = ["text-processing"]
 

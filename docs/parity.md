@@ -69,7 +69,7 @@ node scripts/gen-golden.mjs --check    # 只檢查：golden 過期、缺少或�
 
 2026-11-05 的結果：
 
-- 語料 195 份文件、5,275 行，五組選項共 975 個案例，`golden.rs` 與 `scripts/parity.sh fixtures/corpus` 都與 oracle 全部一致。
+- 語料 187 份文件、4,359 行，五組選項共 935 個案例，`golden.rs` 與 `scripts/parity.sh fixtures/corpus` 都與 oracle 全部一致。
 - `scripts/fuzz-parity.mjs`：種子 20261105 與 20261106 各 1 萬份隨機文件（五組選項各 5 萬個案例），沒有差異。
 - repo 外的真實文件：`~/projects/*/README.md` 40 份（五組選項）與 `~/projects/*/docs/` 底下 2,096 份（預設選項），沒有差異。
 - oracle 的冪等性：約 12 萬組（文件, 選項）中，唯一不冪等的情況是下面〈oracle 疑似問題〉第 7 項。
