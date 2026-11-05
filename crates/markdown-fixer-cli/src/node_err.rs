@@ -22,7 +22,6 @@ fn code_and_message(error: &io::Error) -> Option<(&'static str, &'static str)> {
         ReadOnlyFilesystem => ("EROFS", "read-only file system"),
         StorageFull => ("ENOSPC", "no space left on device"),
         CrossesDevices => ("EXDEV", "cross-device link not permitted"),
-        InvalidFilename => ("ENAMETOOLONG", "name too long"),
         ResourceBusy => ("EBUSY", "resource busy or locked"),
         InvalidInput => ("EINVAL", "invalid argument"),
         _ => return None,
@@ -80,7 +79,20 @@ fn platform_errno(errno: i32) -> Option<(&'static str, &'static str)> {
     }
 }
 
-#[cfg(not(unix))]
+/// Windows 的路徑名稱錯誤照 libuv `uv_translate_sys_error` 對應。
+/// `ErrorKind::InvalidFilename` 要到 Rust 1.87 才穩定，MSRV 1.85 只能看原始錯誤碼。
+#[cfg(windows)]
+fn from_errno(code: i32) -> Option<(&'static str, &'static str)> {
+    match code {
+        // ERROR_INVALID_NAME、ERROR_BAD_PATHNAME
+        123 | 161 => Some(("ENOENT", "no such file or directory")),
+        // ERROR_FILENAME_EXCED_RANGE
+        206 => Some(("ENAMETOOLONG", "name too long")),
+        _ => None,
+    }
+}
+
+#[cfg(not(any(unix, windows)))]
 fn from_errno(_errno: i32) -> Option<(&'static str, &'static str)> {
     None
 }
@@ -131,6 +143,21 @@ mod tests {
         assert_eq!(
             format(&error, "open", "x"),
             "EPERM: operation not permitted, open 'x'"
+        );
+    }
+
+    #[cfg(windows)]
+    #[test]
+    fn maps_windows_path_errors_like_libuv() {
+        let error = io::Error::from_raw_os_error(206);
+        assert_eq!(
+            format(&error, "open", "x"),
+            "ENAMETOOLONG: name too long, open 'x'"
+        );
+        let error = io::Error::from_raw_os_error(123);
+        assert_eq!(
+            format(&error, "stat", "a?b"),
+            "ENOENT: no such file or directory, stat 'a?b'"
         );
     }
 }
