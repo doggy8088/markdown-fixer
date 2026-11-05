@@ -664,6 +664,9 @@ fn property_regressions() {
         // CI（macos-latest，run 42032175558）：清單項目裡未關閉的 HTML comment，tab 展開剩下的
         // 欄位讓 guard 把 HTML 區塊拆段，內部空行被當成看不見的差異，MDX005 的合併因此沒被擋下。
         "- <!-- >\n    \n\n\t#",
+        // 同一類，其他跨空行的 HTML 區塊（U8b；oracle v1.1.0 已改為保護）。
+        "- <pre>\n    \n\n\tx\n  </pre>\n",
+        "- <script>\n    \n\n\tx\n</script>\n",
         "- <!-- >\n\t ",
         // 測試自己的比對器曾把 `---` 後的 U+3000 當成空白，誤判成 frontmatter。
         "---\u{3000}\n- #\n```\n---",

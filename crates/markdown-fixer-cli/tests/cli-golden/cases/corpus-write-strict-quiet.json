@@ -14,12 +14,12 @@
     {
       "path": "corpus",
       "copyDir": "fixtures/corpus",
-      "fingerprint": "b874ff9f958cf97a"
+      "fingerprint": "e13a98997cb1e41a"
     }
   ],
   "expected": {
     "status": 1,
-    "stdout": "Fixed 336 issue(s) in 90 file(s).\n480 problem(s) remain: 10 fixable, 21 error(s), 178 warning(s), 281 info.\n16 file(s) were not modified because of structural or frontmatter ambiguity.\n",
+    "stdout": "Fixed 337 issue(s) in 91 file(s).\n481 problem(s) remain: 10 fixable, 22 error(s), 178 warning(s), 281 info.\n17 file(s) were not modified because of structural or frontmatter ambiguity.\n",
     "stderr": "",
     "files": [
       {
@@ -29,6 +29,10 @@
       {
         "path": "corpus/edge/blocking-frontmatter-unclosed.md",
         "fnv": "6239005de7c7f0cf"
+      },
+      {
+        "path": "corpus/edge/blocking-html-comment-in-list.md",
+        "fnv": "27dc4d0ef07cdf56"
       },
       {
         "path": "corpus/edge/blocking-html-comment.md",
@@ -209,6 +213,14 @@
       {
         "path": "corpus/regressions/definition-quote-prefixes.md",
         "fnv": "cbf0c46fb4c81726"
+      },
+      {
+        "path": "corpus/regressions/html-comment-after-container-marker.md",
+        "fnv": "01a5d4e63683ebcd"
+      },
+      {
+        "path": "corpus/regressions/html-raw-block-after-container-marker.md",
+        "fnv": "c58df1e47c5490b1"
       },
       {
         "path": "corpus/regressions/html-raw-tag-at-eol.md",

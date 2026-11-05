@@ -483,6 +483,22 @@ pub(crate) fn scan_quote_markers(line: &[u16]) -> (usize, usize) {
     (depth, pos)
 }
 
+/// JS `containerPrefix`：行首的引言與清單標記。回傳內容開始的位置，以及當作清單標記的 `*` 的索引。
+pub(crate) fn container_prefix(line: &[u16]) -> (usize, Vec<usize>) {
+    let mut stars = Vec::new();
+    let (_, mut pos) = scan_quote_markers(line);
+    while let Some(caps) = re!(r"^[ \t]*([-*+]|\d{1,9}[.)])(?:[ \t]+|$)").exec(&line[pos..]) {
+        let (Some((_, end)), Some((marker_start, marker_end))) = (caps.get(0), caps.get(1)) else {
+            break;
+        };
+        if line[pos + marker_start..pos + marker_end] == [u16::from(b'*')] {
+            stars.push(pos + marker_start);
+        }
+        pos += end;
+    }
+    (pos, stars)
+}
+
 fn resource_limit_message(depth: usize, limit: usize) -> String {
     format!(
         "Blockquote nesting depth {depth} exceeds the limit of {limit}. Reduce the nesting, raise --max-quote-depth (0 = no limit), or use --on-limit ignore to leave such lines untouched."
@@ -761,6 +777,28 @@ pub(crate) fn scan_document_with(text: &[u16], limits: Limits) -> Scan {
                     });
                 }
                 continue;
+            }
+        }
+
+        // 引言或清單標記後面開的、以結束標記收尾的 HTML 區塊（raw 的 `<pre>`／`<script>`／`<style>`、
+        // comment、`<?…?>`、`<!…>`、CDATA），內容（含空行）必須原樣保留。與 `$$` 數學區塊相同，
+        // 一直保護到結束標記；只有沒關閉的 comment 會阻擋修正，與頂層相同。以空行結束的
+        // type 6／7 不在此列。
+        let (nested_start, _) = container_prefix(line);
+        if nested_start > 0 {
+            if let Some(start) = detect_html_block_start(&line[nested_start..]) {
+                if !matches!(start.kind, "type6" | "type7") && !start.closed_on_same_line {
+                    let item = &mut info[i];
+                    item.html_block = true;
+                    item.html_start = true;
+                    item.html_kind = start.kind;
+                    html = Some(OpenHtml {
+                        kind: start.kind,
+                        close: start.close,
+                        start: i,
+                    });
+                    continue;
+                }
             }
         }
 

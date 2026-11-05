@@ -461,7 +461,7 @@ title: x
 
 - 這個工具是行導向的啟發式檢查器，不是 CommonMark parser。
 - Frontmatter 必須從檔案第一個位元組開始（可有 BOM）。`---` 前有空行時，語意上是 thematic break；若移除空行會讓第一行（忽略 BOM）變成 `---`，即使那行可能只是 thematic break，工具也會拒絕寫入，請人工確認。
-- HTML block 採 type 1–7 的近似判斷。type 6/7 持續到下一個空行，因此 `</div>` 後沒有空行時，後面的 Markdown 會被視為 raw HTML。
+- HTML block 採 type 1–7 的近似判斷。引言或清單標記後開始的多行 HTML 區塊（comment、`<pre>`、`<script>`、`<style>`、`<?…?>`、CDATA 等以結束標記收尾的區塊）也受保護，一直到結束標記；沒有關閉的 comment 會拒絕寫入（MDX083）。type 6/7 持續到下一個空行，因此 `</div>` 後沒有空行時，後面的 Markdown 會被視為 raw HTML。
 - 縮排 4 個空白欄位（tab 以 4 欄計）以上的表格、blockquote 內的表格，可能不會被偵測；清單內縮排 1–3 個空格的表格會偵測，但 MDX062 不處理。
 - 縮排段落延續（lazy continuation）與 indented code 的邊界用啟發式判斷；4 欄以上的行若緊接段落，會視為段落延續。
 - 跨行的 link/emphasis、巢狀 blockquote 內的標題與清單、複雜 YAML 不做完整解析。

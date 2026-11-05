@@ -588,6 +588,21 @@ function scanDocument(text, limits = createLimits()) {
       continue;
     }
 
+    // An HTML block that ends at a marker (raw <pre>/<script>/<style>, comment,
+    // <?...?>, <!...>, CDATA) opened after blockquote or list markers keeps its
+    // content, blank lines included, verbatim. Like $$ math, protect it until
+    // the marker; only an unclosed comment blocks fixing, as at the top level.
+    // Blocks that end at a blank line (types 6 and 7) are left to the line rules.
+    const nestedStart = containerPrefix(line).end;
+    const nestedHtml = nestedStart > 0 ? detectHtmlBlockStart(line.slice(nestedStart)) : null;
+    if (nestedHtml && !nestedHtml.type6 && !nestedHtml.closedOnSameLine) {
+      lineInfo.htmlBlock = true;
+      lineInfo.htmlStart = true;
+      lineInfo.htmlKind = nestedHtml.kind;
+      html = { ...nestedHtml, start: i };
+      continue;
+    }
+
     if (matchDefinition(line)) {
       lineInfo.definition = true;
     }

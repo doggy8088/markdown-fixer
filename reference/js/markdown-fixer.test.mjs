@@ -873,3 +873,23 @@ test('MDX008 reports but keeps an NBSP right after a list marker', () => {
   assert.equal(fixed('*\u00A0x\u00A0y\n'), '*\u00A0x y\n');
   assert.deepEqual(diagnose('*\u00A0x\u00A0y\n').map((problem) => [problem.rule, problem.column, problem.fixable]), [['MDX008', 2, false], ['MDX008', 4, true]]);
 });
+
+test('protects an HTML comment or raw block opened after a list or blockquote marker', () => {
+  const text = '# T\n\n- <!-- note\n\n\n  still  comment\n-->\n\n> <!-- quoted\n>\n>\n> -->\n';
+  assert.equal(fixed(text), text);
+  assert.ok(!rulesOf(text).includes('MDX005'));
+  // Unclosed, it blocks fixing like a top-level unclosed comment.
+  const unclosed = '# T\n\n- <!-- note\n\n\n\t#x\n';
+  const result = fixDocument(unclosed);
+  assert.equal(result.refused, true);
+  assert.match(result.reason, /Unclosed HTML comment/);
+  // A comment closed on the same line is masked inline as before.
+  assert.equal(fixed('- <!-- x -->  **  y**\n'), '- <!-- x -->  **y**\n');
+  for (const block of ['- <pre>\n    \n\n\tx  **  y**\n  </pre>\n', '> <script>\n>\n>\n> </script>\n', '- <?php\n\n\n?>\n', '- <![CDATA[\n\n\n]]>\n']) {
+    const text = `# T\n\n${block}`;
+    assert.equal(fixed(text), text, JSON.stringify(block));
+  }
+  // Unclosed raw blocks stay protected to the end, without blocking (as at the top level).
+  assert.equal(fixDocument('# T\n\n- <pre>\n\n\nx\n').refused, false);
+  assert.equal(fixed('# T\n\n- <pre>\n\n\nx\n'), '# T\n\n- <pre>\n\n\nx\n');
+});

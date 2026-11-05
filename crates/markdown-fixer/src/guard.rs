@@ -1244,11 +1244,16 @@ mod tests {
             render("<div>\nx  \n</div>\n\n"),
             render("<div>\nx\n</div>\n")
         );
-        let result = fix_document("- <!-- >\n    \n\n\t#", &Options::default());
-        // MDX004 只清掉空白行上的空白（看不見），MDX005 合併空行會改變 HTML 內容，被擋下。
-        assert_eq!(result.text, "- <!-- >\n\n\n\t#\n");
-        let rules: Vec<&str> = result.skipped.iter().map(|s| s.rule).collect();
-        assert_eq!(rules, ["MDX005"]);
+        // 清單項目裡跨空行的 raw HTML（`<pre>` 的空行看得見）：渲染比對必須看到空行數的差異。
+        let input = "- <pre>\n    \n\n\tx\n  </pre>\n";
+        assert_ne!(render(input), render("- <pre>\n\n\tx\n  </pre>\n"));
+        // oracle v1.1.0 修正 U8／U8b 後，這些區塊受保護，fix_document 完全不動它們；
+        // 未關閉的 comment 則拒絕修正。
+        let result = fix_document(input, &Options::default());
+        assert_eq!(result.text, input);
+        assert!(result.skipped.is_empty(), "{result:?}");
+        let comment = fix_document("- <!-- >\n    \n\n\t#", &Options::default());
+        assert!(comment.refused && comment.skipped.is_empty(), "{comment:?}");
     }
 
     #[test]

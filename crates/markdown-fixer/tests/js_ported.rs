@@ -971,3 +971,27 @@ fn resource_limits_apply_with_the_render_guard_on() {
         assert_eq!(diagnose(text, &with_guard), diagnose(text, &without_guard));
     }
 }
+
+// 55. 'protects an HTML comment or raw block opened after a list or blockquote marker'
+#[test]
+fn protects_an_html_comment_or_raw_block_opened_after_a_list_or_blockquote_marker() {
+    let text = "# T\n\n- <!-- note\n\n\n  still  comment\n-->\n\n> <!-- quoted\n>\n>\n> -->\n";
+    assert_eq!(fixed(text), text);
+    assert!(!has(text, "MDX005"));
+    let result = fix_document("# T\n\n- <!-- note\n\n\n\t#x\n", &opts());
+    assert!(result.refused);
+    assert!(result.reason.contains("Unclosed HTML comment"));
+    assert_eq!(fixed("- <!-- x -->  **  y**\n"), "- <!-- x -->  **y**\n");
+    for block in [
+        "- <pre>\n    \n\n\tx  **  y**\n  </pre>\n",
+        "> <script>\n>\n>\n> </script>\n",
+        "- <?php\n\n\n?>\n",
+        "- <![CDATA[\n\n\n]]>\n",
+    ] {
+        let text = format!("# T\n\n{block}");
+        assert_eq!(fixed(&text), text, "{block:?}");
+    }
+    let unclosed = "# T\n\n- <pre>\n\n\nx\n";
+    assert!(!fix_document(unclosed, &opts()).refused);
+    assert_eq!(fixed(unclosed), unclosed);
+}

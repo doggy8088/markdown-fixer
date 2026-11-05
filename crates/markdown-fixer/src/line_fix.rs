@@ -7,7 +7,7 @@ use crate::jsstr::{self, JsString, at, concat, is_js_space, is_punct_or_symbol, 
 use crate::mask::{MaskOptions, Segment, build_mask, replace_with_offsets, split_masked};
 use crate::rules::{Enabled, Overrides, make_problem};
 use crate::scan::{
-    LineInfo, is_protected_line, is_thematic_break, parse_quote_prefix, scan_quote_markers,
+    LineInfo, container_prefix, is_protected_line, is_thematic_break, parse_quote_prefix,
 };
 
 const SPACE: u16 = b' ' as u16;
@@ -135,22 +135,6 @@ pub(crate) fn fix_heading(line: &[u16], enabled: &Enabled) -> Option<StepResult>
 /// JS `startsIndentSensitiveBlock`：在引言裡意義取決於縮排的區塊（fence 與清單標記）。
 fn starts_indent_sensitive_block(content: &[u16]) -> bool {
     re!(r"^(?:`{3,}|~{3,}|(?:[-*+]|\d{1,9}[.)])(?:[ \t]|$))").test(content)
-}
-
-/// JS `containerPrefix`：行首的引言與清單標記。回傳內容開始的位置，以及當作清單標記的 `*` 的索引。
-fn container_prefix(line: &[u16]) -> (usize, Vec<usize>) {
-    let mut stars = Vec::new();
-    let (_, mut pos) = scan_quote_markers(line);
-    while let Some(caps) = re!(r"^[ \t]*([-*+]|\d{1,9}[.)])(?:[ \t]+|$)").exec(&line[pos..]) {
-        let (Some((_, end)), Some((marker_start, marker_end))) = (caps.get(0), caps.get(1)) else {
-            break;
-        };
-        if line[pos + marker_start..pos + marker_end] == [u16::from(b'*')] {
-            stars.push(pos + marker_start);
-        }
-        pos += end;
-    }
-    (pos, stars)
 }
 
 pub(crate) fn fix_blockquote(line: &[u16], enabled: &Enabled) -> Option<StepResult> {

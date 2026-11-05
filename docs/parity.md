@@ -13,7 +13,7 @@
 
 兩個容易誤會的地方：
 
-- **問題會排序**：oracle 的 `dedupeProblems`（`markdown-fixer.mjs` 第 2135 行）先以 `rule:line:column:message` 去重，再以行號、欄號、規則 ID 做穩定排序（規則 ID 用 `localeCompare`，但 ID 都是 ASCII，結果與一般字串比較相同）。同一行同一欄同一規則的多個問題保留產生順序。
+- **問題會排序**：oracle 的 `dedupeProblems`（`markdown-fixer.mjs` 第 2150 行）先以 `rule:line:column:message` 去重，再以行號、欄號、規則 ID 做穩定排序（規則 ID 用 `localeCompare`，但 ID 都是 ASCII，結果與一般字串比較相同）。同一行同一欄同一規則的多個問題保留產生順序。
 - **規則數是 49 條**：oracle v1.1.0 的 `RULES` 共 49 條，其中 19 條可自動修正（v1.0.0 是 48 條、20 條；v1.1.0 新增 MDX086，MDX031 改為只報告）。測試一律以 `fixtures/golden/rules.json` 為準，不寫死數量。
 
 ## Golden 檔怎麼產生
@@ -118,7 +118,7 @@ oracle 從 v1.0.0 升到 v1.1.0 時，與 Rust 一起修正了下列行為。每
 | MDX031 | 只報告，不再修正（換 bullet 就是新清單，統一後必然合併清單） | `regressions/mdx031-adjacent-lists.md` |
 | MDX040 | 清單標記的 `*` 不當成強調符號 | `regressions/mdx040-list-marker-star.md` |
 | MDX020 | 只移除一般內容前多的一個空格，或空內容前至多三個空格；一次處理整串 `>  >` | `regressions/mdx020-significant-gaps.md` |
-| HTML 區塊 | raw 標籤名稱在行尾（`<iframe`）也算區塊開頭 | `regressions/html-raw-tag-at-eol.md` |
+| HTML 區塊 | raw 標籤名稱在行尾（`<iframe`）也算區塊開頭；引言或清單標記後開始、同一行沒有關閉、以結束標記收尾的 HTML 區塊（raw 的 `<pre>`／`<script>`／`<style>`、comment、`<?…?>`、`<!…>`、CDATA）保護到結束標記，沒有關閉的 comment 以 MDX083 拒絕修正（稽核 U8、U8b） | `regressions/html-raw-tag-at-eol.md`、`regressions/html-comment-after-container-marker.md`、`regressions/html-raw-block-after-container-marker.md`、`edge/blocking-html-comment-in-list.md` |
 | MDX060 | 表頭與分隔列的 GFM 儲存格數不同時不處理 | `regressions/mdx060-gfm-not-a-table.md` |
 | MDX006 | 空行後那一行以 U+FEFF 開頭時不修，只報告 | `regressions/oracle-bom-exposed-by-leading-blanks.md` |
 | MDX008 | NBSP 是整行或清單項目唯一的內容時不換；緊接在清單標記後的 NBSP 只報告（`fixable: false`） | `regressions/mdx008-nbsp-only-content.md`、`regressions/mdx008-nbsp-after-list-marker.md` |
@@ -172,7 +172,7 @@ v1.0.0 時記錄的第 1、2、7、12 項已在 v1.1.0 修正：
 
 ### 8. 同一段落有多個 MDX042 修正時，以原始偏移量逐一套用（潛在問題）
 
-- **位置**：`applyCjkEmphasisFixes`（第 1832 行）。core 回報。
+- **位置**：`applyCjkEmphasisFixes`（第 1847 行）。core 回報。
 - **oracle 行為**：`analyzeCjkEmphasis` 以原始段落的偏移量產生每個 transform，`applyCjkEmphasisFixes` 卻逐一套用在已經被前一個 transform 改過的段落上。
 - **實際影響**：目前無法觸發。每個 transform 只是把一段標點從 `**` 內側搬到外側，長度不變，而且後一個 transform 的位置都在前一個的 closer 之後。以結構化產生的 39,985 個「同一段落有多個 transform」的段落比對「逐一套用」與「依原始偏移量一次套用」，結果全部相同。
 - **風險**：日後若加入會改變長度的修正，就會套用到錯誤的位置。
@@ -181,13 +181,13 @@ v1.0.0 時記錄的第 1、2、7、12 項已在 v1.1.0 修正：
 
 ### 9. `analyzeCjkEmphasis` 的 `run !== opener` 永遠成立（不影響結果）
 
-- **位置**：第 1793 行。core 回報。
+- **位置**：第 1808 行。core 回報。
 - **oracle 行為**：`matchEmphasisRuns` 回傳的 leftovers 是 `{ ...run }` 的複本，與 `runs` 裡的原物件比較永遠不相等，所以排除 opener 與 closer 的條件形同虛設。
 - **實際影響**：沒有。後面的位置條件（`run.start >= opener.end && run.end <= closer.start`）本來就排除了 opener 與 closer 本身。Rust 照位置條件實作即可。
 
 ### 10. `matchEmphasisRuns` 在大量 closer 上是平方時間
 
-- **位置**：`matchEmphasisRuns`（第 1669 到 1702 行），由 `analyzeCjkEmphasis` 呼叫（MDX042）。review 回報。
+- **位置**：`matchEmphasisRuns`（第 1684 到 1717 行），由 `analyzeCjkEmphasis` 呼叫（MDX042）。review 回報。
 - **oracle 行為**：每遇到一個能當 closer 的 run，就從它往回逐一檢查前面所有的 run 找 opener。只有 closer、沒有可用 opener 的段落（例如 `a* ` 重複很多次，每個 `*` 前面是文字、後面是空白，只能收尾）每次都要掃到段落開頭，總共是 O(n²)。
 - **重現**：`'a* '.repeat(n)` 單一段落，只啟用 MDX042。實測 n = 10,000（29 KB）約 60 ms、20,000（59 KB）約 230 ms、40,000（117 KB）約 900 ms，輸入加倍時間約變 4 倍；1 MB 會花上數十秒。
 - **影響**：只影響執行時間，不影響結果。剪貼簿或 CI 遇到這種輸入時，Node 版會明顯停頓。
@@ -195,7 +195,7 @@ v1.0.0 時記錄的第 1、2、7、12 項已在 v1.1.0 修正：
 
 ### 11. `analyzeCjkEmphasis` 與 `applyCjkEmphasisFixes` 在大量可修正組合上是平方時間
 
-- **位置**：`analyzeCjkEmphasis`（第 1704 到 1820 行）與 `applyCjkEmphasisFixes`（第 1832 到 1849 行），MDX042。review 回報。
+- **位置**：`analyzeCjkEmphasis`（第 1719 到 1835 行）與 `applyCjkEmphasisFixes`（第 1847 到 1864 行），MDX042。review 回報。
 - **oracle 行為**：每個候選 closer 都重掃全部 leftovers 找 opener，再用 `runs.some(...)` 掃全部 run 找中間的 delimiter；`locate` 與 `lineOffsetOf` 反向線性找行號。套用時每個 transform 都重新 join、改寫、split 整個段落。
 - **重現**：`'**甲：**乙 '.repeat(n) + '\n'`，預設選項。oracle 的 `fixDocument` 在 n = 4,000（56 KB）約 0.2 秒、8,000（112 KB）約 0.7 秒；v1.0.0 在 n = 16,000 時改為拋出 `RangeError`，v1.1.0 已修正（見〈已在 v1.1.0 修正的疑似問題〉），但仍是平方時間。
 - **影響**：只影響執行時間，不影響結果。
@@ -216,6 +216,7 @@ v1.0.0 時記錄的第 1、2、7、12 項已在 v1.1.0 修正：
 
   oracle 認為 fence 在第 4 行關閉，把 `** y **` 修成 `**y**`。
 - **CommonMark**：fence 不能 lazy continuation；`x` 讓清單與第一個 fence 結束，第 4 行開了新的 fence，一直到檔尾，`** y **` 是程式碼。引言版本（`> ```js` 被引言外的 ` >>> ``` ` 或 ` ``` ` 「關閉」）同理。
+- **相關**：稽核 U8、U8b（清單標記後開的 HTML comment、`<pre>`、`<script>` 等不受保護）在 v1.1.0 以「去掉容器前綴再找區塊開頭、保護到結束標記」修正，作法與 `$$` 數學區塊相同；這些區塊是否該在容器結束時跟著結束，同樣沒有追蹤，這只會多保護，不會多修改。
 - **為什麼不在 v1.1.0 修**：要讓 fence 跟著容器結束，掃描器得追蹤清單項目與引言的範圍，等於做一個 CommonMark 區塊解析器，超出行導向掃描的設計（[architecture.md](architecture.md)）。
 - **Rust**：照 oracle。渲染保護會擋下這種情況下的版面類修正；修復類修正由 guard 的「修復不得改到渲染成程式碼或 raw HTML 的行」檢查擋下。
 

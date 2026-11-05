@@ -896,7 +896,7 @@ Blockquote nesting depth 33 exceeds the limit of 32. Reduce the nesting, raise -
 這個工具是行導向的啟發式檢查器，不是 CommonMark parser。原因與取捨見 [architecture.md](architecture.md#為什麼不用-markdown-parser)。
 
 - frontmatter 必須從檔案第一個位元組開始（前面可以有 BOM）。以 `---` 開頭、後面還有第二條 `---` 的檔案一律視為 frontmatter。
-- HTML 區塊採 CommonMark type 1 到 7 的近似判斷。type 6、7 一直延續到下一個空行，所以 `</div>` 後面沒有空行時，後面的 Markdown 會被當成 raw HTML 而不處理。
+- HTML 區塊採 CommonMark type 1 到 7 的近似判斷。引言或清單標記後開始的多行 HTML 區塊（comment、`<pre>`、`<script>`、`<style>`、`<?…?>`、CDATA 等以結束標記收尾的區塊）也受保護，一直到結束標記；沒有關閉的 comment 以 MDX083 拒絕修正（v1.1.0）。type 6、7 一直延續到下一個空行，所以 `</div>` 後面沒有空行時，後面的 Markdown 會被當成 raw HTML 而不處理。
 - 縮排段落延續（lazy continuation）與縮排 code 的邊界用啟發式判斷；4 欄以上的行如果緊接在段落後面，視為段落延續。
 - 跨行的連結與強調、巢狀 blockquote 裡的標題與清單、複雜的 YAML 都不做完整解析。
 - fence 的開關以行判斷，不追蹤容器。清單項目或引言裡開的 fence，若被容器外的 fence 標記「關閉」，工具會把之後的行當成一般文字；CommonMark 則是容器結束時 fence 也結束，容器外的標記開了新的 fence，之後的行渲染成程式碼。Rust 版的渲染保護會擋下這種情況下的修正（見 [parity.md](parity.md)）。
