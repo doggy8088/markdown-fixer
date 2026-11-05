@@ -14,7 +14,7 @@
     {
       "path": "corpus",
       "copyDir": "fixtures/corpus",
-      "fingerprint": "25a55b2941f413b9"
+      "fingerprint": "7d6f97f9d4361a38"
     }
   ],
   "expected": {
@@ -223,6 +223,14 @@
         "fnv": "1e906fc1aa1f26dc"
       },
       {
+        "path": "corpus/regressions/definition-deep-quotes.md",
+        "fnv": "8d23fbc2adb42d8f"
+      },
+      {
+        "path": "corpus/regressions/definition-quote-prefixes.md",
+        "fnv": "3b0a2b90ccfa6f36"
+      },
+      {
         "path": "corpus/regressions/js-mixed-idempotent.md",
         "fnv": "f9d4fffcd049af4f"
       },
@@ -249,6 +257,10 @@
       {
         "path": "corpus/regressions/oracle-mdx030-section-number.md",
         "fnv": "aabcab7ddd2ff172"
+      },
+      {
+        "path": "corpus/regressions/oracle-mdx042-multiple-transforms.md",
+        "fnv": "21cd6be221d8c1b6"
       },
       {
         "path": "corpus/regressions/oracle-mdx052-quoted-fence.md",

@@ -8,9 +8,12 @@
 use std::path::{Path, PathBuf};
 use std::process::Command;
 
-/// `cargo test` 會把本 crate 的 `staticlib`／`cdylib` 放在測試執行檔的上兩層目錄
-/// （`target/<profile>/`），有時只留在 `target/<profile>/deps/`（例如之前用
-/// `cargo rustc --crate-type` 建置過）。依序在這兩個目錄尋找。
+/// 找本 crate 的 `staticlib`／`cdylib`。
+///
+/// cargo 會把它們建在 `target/<profile>/deps/`，通常再複製（uplift）一份到
+/// `target/<profile>/`。但 uplift 不一定會更新：例如曾用 `cargo rustc --crate-type`
+/// 建置過，`target/<profile>/` 可能留著舊版。所以兩處都找，取修改時間最新的那個，
+/// 避免連結到過期的函式庫。
 fn find_lib(file_name: &str) -> PathBuf {
     let exe = std::env::current_exe().expect("找不到測試執行檔路徑");
     let deps = exe
@@ -20,7 +23,12 @@ fn find_lib(file_name: &str) -> PathBuf {
     [profile, deps]
         .iter()
         .map(|dir| dir.join(file_name))
-        .find(|path| path.exists())
+        .filter_map(|path| {
+            let modified = std::fs::metadata(&path).and_then(|m| m.modified()).ok()?;
+            Some((modified, path))
+        })
+        .max_by_key(|(modified, _)| *modified)
+        .map(|(_, path)| path)
         .unwrap_or_else(|| {
             panic!(
                 "在 {} 與 {} 都找不到 {file_name}；cargo test 應該已經建置 staticlib 與 cdylib",
@@ -153,7 +161,6 @@ fn c_example_compiles_against_header() {
 }
 
 #[test]
-#[ignore = "等核心函式庫完成"]
 fn c_example_runs() {
     let source = repo_root().join("examples/c/main.c");
     for link in [Link::Static, Link::Dynamic] {

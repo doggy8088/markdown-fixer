@@ -1,0 +1,515 @@
+{
+  "source": "regressions/definition-deep-quotes.md",
+  "referenceVersion": "1.0.0",
+  "cases": [
+    {
+      "name": "default",
+      "options": {},
+      "diagnose": [
+        {
+          "rule": "MDX020",
+          "name": "blockquote-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 11,
+          "column": 1,
+          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
+        },
+        {
+          "rule": "MDX020",
+          "name": "blockquote-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 17,
+          "column": 1,
+          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
+        },
+        {
+          "rule": "MDX073",
+          "name": "reference-missing-definition",
+          "severity": "warning",
+          "fixable": false,
+          "line": 25,
+          "column": 1,
+          "message": "Reference link label \"d83t\" has no matching definition."
+        },
+        {
+          "rule": "MDX020",
+          "name": "blockquote-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 35,
+          "column": 1,
+          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
+        },
+        {
+          "rule": "MDX020",
+          "name": "blockquote-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 41,
+          "column": 1,
+          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
+        },
+        {
+          "rule": "MDX073",
+          "name": "reference-missing-definition",
+          "severity": "warning",
+          "fixable": false,
+          "line": 49,
+          "column": 1,
+          "message": "Reference link label \"d143t\" has no matching definition."
+        },
+        {
+          "rule": "MDX020",
+          "name": "blockquote-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 59,
+          "column": 1,
+          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
+        },
+        {
+          "rule": "MDX020",
+          "name": "blockquote-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 65,
+          "column": 1,
+          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
+        },
+        {
+          "rule": "MDX073",
+          "name": "reference-missing-definition",
+          "severity": "warning",
+          "fixable": false,
+          "line": 73,
+          "column": 1,
+          "message": "Reference link label \"d173t\" has no matching definition."
+        },
+        {
+          "rule": "MDX020",
+          "name": "blockquote-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 83,
+          "column": 1,
+          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
+        },
+        {
+          "rule": "MDX020",
+          "name": "blockquote-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 89,
+          "column": 1,
+          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
+        },
+        {
+          "rule": "MDX073",
+          "name": "reference-missing-definition",
+          "severity": "warning",
+          "fixable": false,
+          "line": 97,
+          "column": 1,
+          "message": "Reference link label \"d203t\" has no matching definition."
+        }
+      ],
+      "fix": {
+        "text": "# 深層引言裡的 reference definition\n\n> > > > > > > > [d82]: https://example.com/d82\n\n> > > > > > > > q 沒有定義的深層引言\n\n[文字][d82]\n\n>>>>>>>>[d81]: https://example.com/d81\n\n> > > > > > > > q 沒有定義的深層引言\n\n[文字][d81]\n\n>  >  >  >  >  >  >  >  [d83]: https://example.com/d83\n\n> > > > > > >  >  q 沒有定義的深層引言\n\n[文字][d83]\n\n> \t> \t> \t> \t> \t> \t> \t> \t[d83t]: https://example.com/d83t\n\n> \t> \t> \t> \t> \t> \t> \t> \tq 沒有定義的深層引言\n\n[文字][d83t]\n\n> > > > > > > > > > > > > > [d142]: https://example.com/d142\n\n> > > > > > > > > > > > > > q 沒有定義的深層引言\n\n[文字][d142]\n\n>>>>>>>>>>>>>>[d141]: https://example.com/d141\n\n> > > > > > > > > > > > > > q 沒有定義的深層引言\n\n[文字][d141]\n\n>  >  >  >  >  >  >  >  >  >  >  >  >  >  [d143]: https://example.com/d143\n\n> > > > > > >  >  >  >  >  >  >  >  q 沒有定義的深層引言\n\n[文字][d143]\n\n> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t[d143t]: https://example.com/d143t\n\n> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \tq 沒有定義的深層引言\n\n[文字][d143t]\n\n> > > > > > > > > > > > > > > > > [d172]: https://example.com/d172\n\n> > > > > > > > > > > > > > > > > q 沒有定義的深層引言\n\n[文字][d172]\n\n>>>>>>>>>>>>>>>>>[d171]: https://example.com/d171\n\n> > > > > > > > > > > > > > > > > q 沒有定義的深層引言\n\n[文字][d171]\n\n>  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  [d173]: https://example.com/d173\n\n> > > > > > >  >  >  >  >  >  >  >  >  >  >  q 沒有定義的深層引言\n\n[文字][d173]\n\n> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t[d173t]: https://example.com/d173t\n\n> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \tq 沒有定義的深層引言\n\n[文字][d173t]\n\n> > > > > > > > > > > > > > > > > > > > [d202]: https://example.com/d202\n\n> > > > > > > > > > > > > > > > > > > > q 沒有定義的深層引言\n\n[文字][d202]\n\n>>>>>>>>>>>>>>>>>>>>[d201]: https://example.com/d201\n\n> > > > > > > > > > > > > > > > > > > > q 沒有定義的深層引言\n\n[文字][d201]\n\n>  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  [d203]: https://example.com/d203\n\n> > > > > > >  >  >  >  >  >  >  >  >  >  >  >  >  >  q 沒有定義的深層引言\n\n[文字][d203]\n\n> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t[d203t]: https://example.com/d203t\n\n> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \tq 沒有定義的深層引言\n\n[文字][d203t]\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "snippet",
+      "options": {
+        "ignoreRules": [
+          "MDX003"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX020",
+          "name": "blockquote-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 11,
+          "column": 1,
+          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
+        },
+        {
+          "rule": "MDX020",
+          "name": "blockquote-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 17,
+          "column": 1,
+          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
+        },
+        {
+          "rule": "MDX073",
+          "name": "reference-missing-definition",
+          "severity": "warning",
+          "fixable": false,
+          "line": 25,
+          "column": 1,
+          "message": "Reference link label \"d83t\" has no matching definition."
+        },
+        {
+          "rule": "MDX020",
+          "name": "blockquote-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 35,
+          "column": 1,
+          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
+        },
+        {
+          "rule": "MDX020",
+          "name": "blockquote-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 41,
+          "column": 1,
+          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
+        },
+        {
+          "rule": "MDX073",
+          "name": "reference-missing-definition",
+          "severity": "warning",
+          "fixable": false,
+          "line": 49,
+          "column": 1,
+          "message": "Reference link label \"d143t\" has no matching definition."
+        },
+        {
+          "rule": "MDX020",
+          "name": "blockquote-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 59,
+          "column": 1,
+          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
+        },
+        {
+          "rule": "MDX020",
+          "name": "blockquote-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 65,
+          "column": 1,
+          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
+        },
+        {
+          "rule": "MDX073",
+          "name": "reference-missing-definition",
+          "severity": "warning",
+          "fixable": false,
+          "line": 73,
+          "column": 1,
+          "message": "Reference link label \"d173t\" has no matching definition."
+        },
+        {
+          "rule": "MDX020",
+          "name": "blockquote-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 83,
+          "column": 1,
+          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
+        },
+        {
+          "rule": "MDX020",
+          "name": "blockquote-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 89,
+          "column": 1,
+          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
+        },
+        {
+          "rule": "MDX073",
+          "name": "reference-missing-definition",
+          "severity": "warning",
+          "fixable": false,
+          "line": 97,
+          "column": 1,
+          "message": "Reference link label \"d203t\" has no matching definition."
+        }
+      ],
+      "fix": {
+        "text": "# 深層引言裡的 reference definition\n\n> > > > > > > > [d82]: https://example.com/d82\n\n> > > > > > > > q 沒有定義的深層引言\n\n[文字][d82]\n\n>>>>>>>>[d81]: https://example.com/d81\n\n> > > > > > > > q 沒有定義的深層引言\n\n[文字][d81]\n\n>  >  >  >  >  >  >  >  [d83]: https://example.com/d83\n\n> > > > > > >  >  q 沒有定義的深層引言\n\n[文字][d83]\n\n> \t> \t> \t> \t> \t> \t> \t> \t[d83t]: https://example.com/d83t\n\n> \t> \t> \t> \t> \t> \t> \t> \tq 沒有定義的深層引言\n\n[文字][d83t]\n\n> > > > > > > > > > > > > > [d142]: https://example.com/d142\n\n> > > > > > > > > > > > > > q 沒有定義的深層引言\n\n[文字][d142]\n\n>>>>>>>>>>>>>>[d141]: https://example.com/d141\n\n> > > > > > > > > > > > > > q 沒有定義的深層引言\n\n[文字][d141]\n\n>  >  >  >  >  >  >  >  >  >  >  >  >  >  [d143]: https://example.com/d143\n\n> > > > > > >  >  >  >  >  >  >  >  q 沒有定義的深層引言\n\n[文字][d143]\n\n> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t[d143t]: https://example.com/d143t\n\n> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \tq 沒有定義的深層引言\n\n[文字][d143t]\n\n> > > > > > > > > > > > > > > > > [d172]: https://example.com/d172\n\n> > > > > > > > > > > > > > > > > q 沒有定義的深層引言\n\n[文字][d172]\n\n>>>>>>>>>>>>>>>>>[d171]: https://example.com/d171\n\n> > > > > > > > > > > > > > > > > q 沒有定義的深層引言\n\n[文字][d171]\n\n>  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  [d173]: https://example.com/d173\n\n> > > > > > >  >  >  >  >  >  >  >  >  >  >  q 沒有定義的深層引言\n\n[文字][d173]\n\n> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t[d173t]: https://example.com/d173t\n\n> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \tq 沒有定義的深層引言\n\n[文字][d173t]\n\n> > > > > > > > > > > > > > > > > > > > [d202]: https://example.com/d202\n\n> > > > > > > > > > > > > > > > > > > > q 沒有定義的深層引言\n\n[文字][d202]\n\n>>>>>>>>>>>>>>>>>>>>[d201]: https://example.com/d201\n\n> > > > > > > > > > > > > > > > > > > > q 沒有定義的深層引言\n\n[文字][d201]\n\n>  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  [d203]: https://example.com/d203\n\n> > > > > > >  >  >  >  >  >  >  >  >  >  >  >  >  >  q 沒有定義的深層引言\n\n[文字][d203]\n\n> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t[d203t]: https://example.com/d203t\n\n> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \tq 沒有定義的深層引言\n\n[文字][d203t]\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "line-length-80",
+      "options": {
+        "maxLineLength": 80
+      },
+      "diagnose": [
+        {
+          "rule": "MDX020",
+          "name": "blockquote-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 11,
+          "column": 1,
+          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
+        },
+        {
+          "rule": "MDX020",
+          "name": "blockquote-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 17,
+          "column": 1,
+          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
+        },
+        {
+          "rule": "MDX073",
+          "name": "reference-missing-definition",
+          "severity": "warning",
+          "fixable": false,
+          "line": 25,
+          "column": 1,
+          "message": "Reference link label \"d83t\" has no matching definition."
+        },
+        {
+          "rule": "MDX020",
+          "name": "blockquote-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 35,
+          "column": 1,
+          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
+        },
+        {
+          "rule": "MDX020",
+          "name": "blockquote-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 41,
+          "column": 1,
+          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
+        },
+        {
+          "rule": "MDX073",
+          "name": "reference-missing-definition",
+          "severity": "warning",
+          "fixable": false,
+          "line": 49,
+          "column": 1,
+          "message": "Reference link label \"d143t\" has no matching definition."
+        },
+        {
+          "rule": "MDX020",
+          "name": "blockquote-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 59,
+          "column": 1,
+          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
+        },
+        {
+          "rule": "MDX020",
+          "name": "blockquote-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 65,
+          "column": 1,
+          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
+        },
+        {
+          "rule": "MDX073",
+          "name": "reference-missing-definition",
+          "severity": "warning",
+          "fixable": false,
+          "line": 73,
+          "column": 1,
+          "message": "Reference link label \"d173t\" has no matching definition."
+        },
+        {
+          "rule": "MDX020",
+          "name": "blockquote-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 83,
+          "column": 1,
+          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
+        },
+        {
+          "rule": "MDX020",
+          "name": "blockquote-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 89,
+          "column": 1,
+          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
+        },
+        {
+          "rule": "MDX073",
+          "name": "reference-missing-definition",
+          "severity": "warning",
+          "fixable": false,
+          "line": 97,
+          "column": 1,
+          "message": "Reference link label \"d203t\" has no matching definition."
+        }
+      ],
+      "fix": {
+        "text": "# 深層引言裡的 reference definition\n\n> > > > > > > > [d82]: https://example.com/d82\n\n> > > > > > > > q 沒有定義的深層引言\n\n[文字][d82]\n\n>>>>>>>>[d81]: https://example.com/d81\n\n> > > > > > > > q 沒有定義的深層引言\n\n[文字][d81]\n\n>  >  >  >  >  >  >  >  [d83]: https://example.com/d83\n\n> > > > > > >  >  q 沒有定義的深層引言\n\n[文字][d83]\n\n> \t> \t> \t> \t> \t> \t> \t> \t[d83t]: https://example.com/d83t\n\n> \t> \t> \t> \t> \t> \t> \t> \tq 沒有定義的深層引言\n\n[文字][d83t]\n\n> > > > > > > > > > > > > > [d142]: https://example.com/d142\n\n> > > > > > > > > > > > > > q 沒有定義的深層引言\n\n[文字][d142]\n\n>>>>>>>>>>>>>>[d141]: https://example.com/d141\n\n> > > > > > > > > > > > > > q 沒有定義的深層引言\n\n[文字][d141]\n\n>  >  >  >  >  >  >  >  >  >  >  >  >  >  [d143]: https://example.com/d143\n\n> > > > > > >  >  >  >  >  >  >  >  q 沒有定義的深層引言\n\n[文字][d143]\n\n> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t[d143t]: https://example.com/d143t\n\n> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \tq 沒有定義的深層引言\n\n[文字][d143t]\n\n> > > > > > > > > > > > > > > > > [d172]: https://example.com/d172\n\n> > > > > > > > > > > > > > > > > q 沒有定義的深層引言\n\n[文字][d172]\n\n>>>>>>>>>>>>>>>>>[d171]: https://example.com/d171\n\n> > > > > > > > > > > > > > > > > q 沒有定義的深層引言\n\n[文字][d171]\n\n>  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  [d173]: https://example.com/d173\n\n> > > > > > >  >  >  >  >  >  >  >  >  >  >  q 沒有定義的深層引言\n\n[文字][d173]\n\n> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t[d173t]: https://example.com/d173t\n\n> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \tq 沒有定義的深層引言\n\n[文字][d173t]\n\n> > > > > > > > > > > > > > > > > > > > [d202]: https://example.com/d202\n\n> > > > > > > > > > > > > > > > > > > > q 沒有定義的深層引言\n\n[文字][d202]\n\n>>>>>>>>>>>>>>>>>>>>[d201]: https://example.com/d201\n\n> > > > > > > > > > > > > > > > > > > > q 沒有定義的深層引言\n\n[文字][d201]\n\n>  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  [d203]: https://example.com/d203\n\n> > > > > > >  >  >  >  >  >  >  >  >  >  >  >  >  >  q 沒有定義的深層引言\n\n[文字][d203]\n\n> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t[d203t]: https://example.com/d203t\n\n> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \tq 沒有定義的深層引言\n\n[文字][d203t]\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "keep-encoding",
+      "options": {
+        "ignoreRules": [
+          "MDX001",
+          "MDX002"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX020",
+          "name": "blockquote-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 11,
+          "column": 1,
+          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
+        },
+        {
+          "rule": "MDX020",
+          "name": "blockquote-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 17,
+          "column": 1,
+          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
+        },
+        {
+          "rule": "MDX073",
+          "name": "reference-missing-definition",
+          "severity": "warning",
+          "fixable": false,
+          "line": 25,
+          "column": 1,
+          "message": "Reference link label \"d83t\" has no matching definition."
+        },
+        {
+          "rule": "MDX020",
+          "name": "blockquote-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 35,
+          "column": 1,
+          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
+        },
+        {
+          "rule": "MDX020",
+          "name": "blockquote-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 41,
+          "column": 1,
+          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
+        },
+        {
+          "rule": "MDX073",
+          "name": "reference-missing-definition",
+          "severity": "warning",
+          "fixable": false,
+          "line": 49,
+          "column": 1,
+          "message": "Reference link label \"d143t\" has no matching definition."
+        },
+        {
+          "rule": "MDX020",
+          "name": "blockquote-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 59,
+          "column": 1,
+          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
+        },
+        {
+          "rule": "MDX020",
+          "name": "blockquote-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 65,
+          "column": 1,
+          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
+        },
+        {
+          "rule": "MDX073",
+          "name": "reference-missing-definition",
+          "severity": "warning",
+          "fixable": false,
+          "line": 73,
+          "column": 1,
+          "message": "Reference link label \"d173t\" has no matching definition."
+        },
+        {
+          "rule": "MDX020",
+          "name": "blockquote-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 83,
+          "column": 1,
+          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
+        },
+        {
+          "rule": "MDX020",
+          "name": "blockquote-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 89,
+          "column": 1,
+          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
+        },
+        {
+          "rule": "MDX073",
+          "name": "reference-missing-definition",
+          "severity": "warning",
+          "fixable": false,
+          "line": 97,
+          "column": 1,
+          "message": "Reference link label \"d203t\" has no matching definition."
+        }
+      ],
+      "fix": {
+        "text": "# 深層引言裡的 reference definition\n\n> > > > > > > > [d82]: https://example.com/d82\n\n> > > > > > > > q 沒有定義的深層引言\n\n[文字][d82]\n\n>>>>>>>>[d81]: https://example.com/d81\n\n> > > > > > > > q 沒有定義的深層引言\n\n[文字][d81]\n\n>  >  >  >  >  >  >  >  [d83]: https://example.com/d83\n\n> > > > > > >  >  q 沒有定義的深層引言\n\n[文字][d83]\n\n> \t> \t> \t> \t> \t> \t> \t> \t[d83t]: https://example.com/d83t\n\n> \t> \t> \t> \t> \t> \t> \t> \tq 沒有定義的深層引言\n\n[文字][d83t]\n\n> > > > > > > > > > > > > > [d142]: https://example.com/d142\n\n> > > > > > > > > > > > > > q 沒有定義的深層引言\n\n[文字][d142]\n\n>>>>>>>>>>>>>>[d141]: https://example.com/d141\n\n> > > > > > > > > > > > > > q 沒有定義的深層引言\n\n[文字][d141]\n\n>  >  >  >  >  >  >  >  >  >  >  >  >  >  [d143]: https://example.com/d143\n\n> > > > > > >  >  >  >  >  >  >  >  q 沒有定義的深層引言\n\n[文字][d143]\n\n> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t[d143t]: https://example.com/d143t\n\n> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \tq 沒有定義的深層引言\n\n[文字][d143t]\n\n> > > > > > > > > > > > > > > > > [d172]: https://example.com/d172\n\n> > > > > > > > > > > > > > > > > q 沒有定義的深層引言\n\n[文字][d172]\n\n>>>>>>>>>>>>>>>>>[d171]: https://example.com/d171\n\n> > > > > > > > > > > > > > > > > q 沒有定義的深層引言\n\n[文字][d171]\n\n>  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  [d173]: https://example.com/d173\n\n> > > > > > >  >  >  >  >  >  >  >  >  >  >  q 沒有定義的深層引言\n\n[文字][d173]\n\n> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t[d173t]: https://example.com/d173t\n\n> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \tq 沒有定義的深層引言\n\n[文字][d173t]\n\n> > > > > > > > > > > > > > > > > > > > [d202]: https://example.com/d202\n\n> > > > > > > > > > > > > > > > > > > > q 沒有定義的深層引言\n\n[文字][d202]\n\n>>>>>>>>>>>>>>>>>>>>[d201]: https://example.com/d201\n\n> > > > > > > > > > > > > > > > > > > > q 沒有定義的深層引言\n\n[文字][d201]\n\n>  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  [d203]: https://example.com/d203\n\n> > > > > > >  >  >  >  >  >  >  >  >  >  >  >  >  >  q 沒有定義的深層引言\n\n[文字][d203]\n\n> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t[d203t]: https://example.com/d203t\n\n> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \tq 沒有定義的深層引言\n\n[文字][d203t]\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "headings-only",
+      "options": {
+        "rules": [
+          "MDX010",
+          "MDX011",
+          "MDX012",
+          "MDX013"
+        ]
+      },
+      "diagnose": [],
+      "fix": {
+        "text": "# 深層引言裡的 reference definition\n\n> > > > > > > > [d82]: https://example.com/d82\n\n> > > > > > > > q 沒有定義的深層引言\n\n[文字][d82]\n\n>>>>>>>>[d81]: https://example.com/d81\n\n>>>>>>>>q 沒有定義的深層引言\n\n[文字][d81]\n\n>  >  >  >  >  >  >  >  [d83]: https://example.com/d83\n\n>  >  >  >  >  >  >  >  q 沒有定義的深層引言\n\n[文字][d83]\n\n> \t> \t> \t> \t> \t> \t> \t> \t[d83t]: https://example.com/d83t\n\n> \t> \t> \t> \t> \t> \t> \t> \tq 沒有定義的深層引言\n\n[文字][d83t]\n\n> > > > > > > > > > > > > > [d142]: https://example.com/d142\n\n> > > > > > > > > > > > > > q 沒有定義的深層引言\n\n[文字][d142]\n\n>>>>>>>>>>>>>>[d141]: https://example.com/d141\n\n>>>>>>>>>>>>>>q 沒有定義的深層引言\n\n[文字][d141]\n\n>  >  >  >  >  >  >  >  >  >  >  >  >  >  [d143]: https://example.com/d143\n\n>  >  >  >  >  >  >  >  >  >  >  >  >  >  q 沒有定義的深層引言\n\n[文字][d143]\n\n> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t[d143t]: https://example.com/d143t\n\n> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \tq 沒有定義的深層引言\n\n[文字][d143t]\n\n> > > > > > > > > > > > > > > > > [d172]: https://example.com/d172\n\n> > > > > > > > > > > > > > > > > q 沒有定義的深層引言\n\n[文字][d172]\n\n>>>>>>>>>>>>>>>>>[d171]: https://example.com/d171\n\n>>>>>>>>>>>>>>>>>q 沒有定義的深層引言\n\n[文字][d171]\n\n>  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  [d173]: https://example.com/d173\n\n>  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  q 沒有定義的深層引言\n\n[文字][d173]\n\n> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t[d173t]: https://example.com/d173t\n\n> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \tq 沒有定義的深層引言\n\n[文字][d173t]\n\n> > > > > > > > > > > > > > > > > > > > [d202]: https://example.com/d202\n\n> > > > > > > > > > > > > > > > > > > > q 沒有定義的深層引言\n\n[文字][d202]\n\n>>>>>>>>>>>>>>>>>>>>[d201]: https://example.com/d201\n\n>>>>>>>>>>>>>>>>>>>>q 沒有定義的深層引言\n\n[文字][d201]\n\n>  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  [d203]: https://example.com/d203\n\n>  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  >  q 沒有定義的深層引言\n\n[文字][d203]\n\n> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t[d203t]: https://example.com/d203t\n\n> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \t> \tq 沒有定義的深層引言\n\n[文字][d203t]\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    }
+  ]
+}

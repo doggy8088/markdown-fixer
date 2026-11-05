@@ -46,7 +46,8 @@ repo 裡其他與架構相關的目錄：
 | `jsstr` | 無 | JS 字串語意：UTF-16 字串型別、`\s`、`\w`、`trim()` 等 |
 | `jsregex` | 無 | 只涵蓋 oracle 用到的語法子集的 JS 正規表示式引擎 |
 | `unicode_tables` | 無 | 由 Node 產生的 `\p{P}`、`\p{S}` 範圍表 |
-| `parity_probe` | 無 | 只在測試中編譯，把 scan／mask 結果輸出成文字與 oracle 比對 |
+| `parity_probe` | 無 | 只在測試中編譯，把 scan／mask、`fix_document`、`diagnose` 的結果輸出成文字與 oracle 比對 |
+| `regex_hazards` | 無 | 只在測試中編譯，用病態輸入檢查每個正規表示式的比對時間，另含 1 MB 效能量測 |
 
 ## 前處理：normalizeForAnalysis
 
@@ -214,7 +215,9 @@ Rust `regex` crate 不支援 lookaround、以 UTF-8 運作、`\w` 預設是 Unic
 - 只支援 oracle 用到的語法子集：字元類別、錨點、`\b`、群組、選擇、貪婪與惰性量詞、lookahead、固定寬度的 lookbehind、ASCII 的 `i` 旗標。
 - 以 UTF-16 code unit 比對，`\s`、`\w`、`\d` 採 JS 定義。
 - 用明確的堆疊回溯，不遞迴，長行不會 stack overflow。
-- 不支援 backreference、named group，以及可以匹配空字串的無上限迴圈（編譯時回報錯誤）。
+- 有步數預算（約 4096 + 64 ×（長度 + 1））。預算用完後改用記憶化回溯：記住已經失敗過的（指令, 位置）組合，跨起點共用。因為不支援 backreference，記憶化不會改變結果，最壞情況是「指令數 × 長度」，不會指數爆炸。
+- 以樣式的第一個字元預先過濾起點。
+- 不支援 backreference、named group，以及可以比對到空字串的無上限迴圈（編譯時回報錯誤）。
 
 好處是 JS 的正規表示式原文幾乎可以直接搬過來（寫成 `re!(r"...")`，不要改寫成 Rust `regex` 語法），比對優先順序與 JS 相同。`\p{P}`、`\p{S}` 則由 `unicode_tables` 的範圍表判斷，表格是從 Node 產生的，不要手改。
 
@@ -245,7 +248,7 @@ Rust `regex` crate 不支援 lookaround、以 UTF-8 運作、`\w` 預設是 Unic
 - 在這份文件說明理由。
 - 不加入會帶進 I/O、執行緒池或 C 相依的套件。
 
-刻意不用 `regex` crate，原因見〈正規表示式語意〉。`jsregex` 是回溯式引擎，理論上可能遇到回溯爆炸；oracle 的樣式本身都是線性或近線性的，新增樣式時要避免巢狀量詞（例如 `(a+)+`），並以極長行的 property test 驗證。
+刻意不用 `regex` crate，原因見〈正規表示式語意〉。`jsregex` 的記憶化回溯保證最壞情況是多項式時間；新增樣式時仍要把它加進 `regex_hazards` 的病態輸入測試。
 
 CLI 與 FFI crate 可以有自己的相依（例如 FFI 用 `serde_json` 解析 options），但不能讓函式庫因此多出相依。
 
@@ -261,6 +264,23 @@ CLI 與 FFI crate 可以有自己的相依（例如 FFI 用 `serde_json` 解析 
 
 ## 效能
 
-PRD〈7〉的目標：1 MB 的 Markdown，`fix_document` 在 Apple M 系列上低於 200 ms；剪貼簿常見的 20 KB 以下片段，整個 CLI 執行低於 20 ms。
+PRD〈7〉的目標：1 MB 的 Markdown，`fix_document` 在 Apple M 系列上低於 200 ms；剪貼簿常見的 20 KB 以下片段，整個 CLI 執行低於 20 ms；release 版 CLI 小於 3 MB。
+
+實測結果（release build，Apple M5 Max）：
+
+| 項目 | 結果 |
+| --- | --- |
+| 約 1.16 MB 的文件，`fix_document` | 約 136 ms |
+| 同一份文件，`diagnose` | 約 65 ms（105 個問題） |
+| 15 KB 片段，`markdown-fixer --stdin --write`（含行程啟動） | 中位數約 6.5 ms |
+| release 版 CLI 執行檔（macOS aarch64） | 約 0.70 MB |
+
+1 MB 的量測可以自己重跑：
+
+```sh
+cargo test --release -p markdown-fixer --lib -- --ignored one_megabyte --nocapture
+```
 
 修正迴圈每一輪都會重新掃描好幾次，最壞情況是 6 輪乘上每輪的掃描次數，但每次掃描都是線性的。實作時避免在迴圈裡做「對每一行重新組整份文字」這類二次方運算。
+
+已知的非線性情況：一行裡有大量 `[](` 時，`buildMask` 的連結目的地掃描是平方時間，和 oracle 相同（10k 字元的病態行，`diagnose` 約 30 ms）。`regex_hazards` 測試以約 340 種病態輸入檢查每個正規表示式與遮罩，時間上限只在 release build 斷言，避免慢速的 debug CI 誤報。

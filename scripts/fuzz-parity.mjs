@@ -224,7 +224,7 @@ export function makeGenerator(rand) {
       });
     },
     quote: () => repeat(1 + int(4), () => {
-      const depth = 1 + int(3);
+      const depth = 1 + (chance(0.2) ? int(10) : int(3));
       const marker = repeat(depth, () => pick(['>', '> ', '>  '])).join('');
       return `${pick(['', ' '])}${marker}${pick([inline(), '', '    code', '- ' + word(), '```', '$$', '#' + word()])}`;
     }),
@@ -261,7 +261,12 @@ export function makeGenerator(rand) {
       ['<?php echo 1; ?>']
     ]),
     hr: () => [pick(['---', '***', '___', '- - -', '* * *', '===', '--', '  ---'])],
-    definition: () => [`${pick(['', '> ', '   '])}[${pick(['ref', 'Ref', 'other', word()])}]: ${pick(URLS)}`],
+    definition: () => {
+      const prefix = pick(['', '', '> ', '   ', '>', '>  ', '>   ', '>    ', '>     ', '>\t', '>\t ', '> \t', '   > > ', '    > '])
+        .repeat(chance(0.2) ? 1 + int(10) : 1);
+      const tail = pick([`: ${pick(URLS)}`, ` : ${pick(URLS)}`, ':', ':   <a b>', `:\t${pick(URLS)}`]);
+      return [`${prefix}[${pick(['ref', 'Ref', 'other', word()])}]${tail}`];
+    },
     indentedCode: () => repeat(1 + int(3), () => '    ' + pick([inline(), '#x', '** y **'])),
     blank: () => repeat(1 + int(3), () => pick(['', '', ' ', '\t'])),
     jsx: () => [pick(['import X from "y";', '<Tabs>', '</Tabs>', 'export const a = 1;', ':::tip', ':::', '{/* c */}'])],
@@ -366,12 +371,26 @@ function parseCli(argv) {
   return opts;
 }
 
+// oracle 的已知不冪等情況（docs/parity.md〈oracle 疑似問題〉第 7 項）：移除檔首空行後，
+// 後面行首的 U+FEFF 變成檔首。與 properties.rs 的 bom_exposed_by_leading_blank_removal 相同。
+export function bomExposedByLeadingBlankRemoval(text) {
+  const lines = text.replace(/^\uFEFF+/, '').replace(/\r\n?/g, '\n').split('\n');
+  let skipped = false;
+  for (const line of lines) {
+    if (/^[ \t]*$/.test(line)) {
+      skipped = true;
+      continue;
+    }
+    return skipped && line.startsWith('\uFEFF');
+  }
+  return false;
+}
+
 function idempotenceReport(docs) {
-  const sets = OPTION_SETS;
   let checked = 0;
   const failures = [];
   for (const [index, text] of docs.entries()) {
-    for (const set of sets) {
+    for (const set of OPTION_SETS) {
       const once = fixDocument(text, set.options);
       if (once.refused) continue;
       checked++;
@@ -379,19 +398,19 @@ function idempotenceReport(docs) {
       if (twice.text !== once.text) failures.push({ index, set: set.name, text });
     }
   }
+  const docsFailing = [...new Map(failures.map((f) => [f.index, f])).values()];
+  const unknown = docsFailing.filter((f) => !bomExposedByLeadingBlankRemoval(f.text));
   console.log(`oracle idempotence: ${failures.length} of ${checked} non-refused (doc, option set) pair(s) change again on a second fixDocument`);
-  const bySet = {};
-  for (const f of failures) bySet[f.set] = (bySet[f.set] || 0) + 1;
-  if (failures.length > 0) console.log(`by option set: ${JSON.stringify(bySet)}`);
-  for (const f of failures.slice(0, 3)) {
+  console.log(`  ${docsFailing.length} distinct doc(s); ${docsFailing.length - unknown.length} match the known BOM-exposure case, ${unknown.length} unexplained`);
+  for (const f of unknown.slice(0, 5)) {
     const set = OPTION_SETS.find((s) => s.name === f.set);
     const small = minimize(f.text, (t) => {
       const once = fixDocument(t, set.options);
       return !once.refused && fixDocument(once.text, set.options).text !== once.text;
     }, 3000);
-    console.log(`  doc #${f.index} [${f.set}] minimized: ${JSON.stringify(small)}`);
+    console.log(`  unexplained doc #${f.index} [${f.set}] minimized: ${JSON.stringify(small)}`);
   }
-  return failures.length;
+  return unknown.length;
 }
 
 function main(argv) {

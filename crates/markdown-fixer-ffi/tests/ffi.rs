@@ -149,12 +149,11 @@ fn error_results_can_be_freed_repeatedly_without_leaking_state() {
     }
 }
 
-// ---- 需要核心函式庫完成後才能通過的測試 ----
+// ---- 依賴核心函式庫行為的測試（與 oracle 輸出比對） ----
 
 const NBSP_DOC: &str = "#Title\n\n中文 text\u{a0}here\n";
 
 #[test]
-#[ignore = "等核心函式庫完成"]
 fn rules_json_matches_library_catalog() {
     let json = take(mdfix_rules_json());
     let value: serde_json::Value = serde_json::from_str(&json).unwrap();
@@ -172,7 +171,6 @@ fn rules_json_matches_library_catalog() {
 }
 
 #[test]
-#[ignore = "等核心函式庫完成"]
 fn diagnose_matches_oracle_json() {
     let expected = concat!(
         r##"{"problems":[{"rule":"MDX010","name":"atx-missing-space","severity":"warning","fixable":true,"line":1,"column":2,"message":"Add a space after the heading marker: \"# \" rather than \"#\"."},"##,
@@ -185,7 +183,6 @@ fn diagnose_matches_oracle_json() {
 }
 
 #[test]
-#[ignore = "等核心函式庫完成"]
 fn diagnose_honours_options() {
     let json = diagnose_bytes(NBSP_DOC.as_bytes(), Some(r#"{"ignoreRules":["MDX008"]}"#));
     assert_eq!(
@@ -205,7 +202,6 @@ fn diagnose_honours_options() {
 }
 
 #[test]
-#[ignore = "等核心函式庫完成"]
 fn unknown_rule_is_an_error() {
     let json = diagnose_bytes(b"# Title\n", Some(r#"{"rules":["MDX999"]}"#));
     assert_eq!(json, r#"{"error":"Unknown rule: MDX999"}"#);
@@ -214,7 +210,6 @@ fn unknown_rule_is_an_error() {
 }
 
 #[test]
-#[ignore = "等核心函式庫完成"]
 fn fix_matches_oracle_json() {
     assert_eq!(
         fix_bytes(NBSP_DOC.as_bytes(), None),
@@ -231,7 +226,6 @@ fn fix_matches_oracle_json() {
 }
 
 #[test]
-#[ignore = "等核心函式庫完成"]
 fn empty_and_null_text_are_valid_input() {
     // SAFETY: text 為 NULL 且 len 為 0，代表空字串。
     let json = take(unsafe { mdfix_diagnose(std::ptr::null(), 0, std::ptr::null()) });
@@ -246,7 +240,6 @@ fn empty_and_null_text_are_valid_input() {
 }
 
 #[test]
-#[ignore = "等核心函式庫完成"]
 fn interior_nul_round_trips_through_json() {
     // 長度制的輸入可以含 NUL；輸出以 \u0000 跳脫，仍是合法的 NUL 結尾字串。
     let json = fix_bytes(b"a\0b\n", None);
@@ -256,7 +249,6 @@ fn interior_nul_round_trips_through_json() {
 }
 
 #[test]
-#[ignore = "等核心函式庫完成"]
 fn detect_returns_detection_object() {
     let json = detect_bytes("# 標題\n\n- 一\n- 二\n\n```sh\necho hi\n```\n".as_bytes());
     let value: serde_json::Value = serde_json::from_str(&json).unwrap();
@@ -276,7 +268,6 @@ fn detect_returns_detection_object() {
 }
 
 #[test]
-#[ignore = "等核心函式庫完成"]
 fn concurrent_calls_are_independent() {
     let handles: Vec<_> = (0..8)
         .map(|_| {

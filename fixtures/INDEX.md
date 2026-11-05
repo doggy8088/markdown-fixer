@@ -2,7 +2,7 @@
 
 `fixtures/corpus/` 是 golden 差異測試的語料，`fixtures/golden/` 是由 `scripts/gen-golden.mjs` 以 oracle 產生的預期輸出（不可手改）。這份索引本身不在語料目錄裡，不參與比對。測試怎麼跑見 [docs/testing.md](../docs/testing.md)，golden 格式見 [docs/parity.md](../docs/parity.md)。
 
-- **規模**：192 份文件、4,893 行（2026-11-05）。
+- **規模**：195 份文件、5,275 行（2026-11-05）。
 - **位元組**：`fixtures/.gitattributes` 設定 `* -text`，git 不會改寫 CRLF、CR 與 BOM。含 BOM、NBSP、零寬字元、CRLF 或沒有檔尾換行的檔案以 Node 寫入，不要用會自動正規化的編輯器修改。
 - **自我檢查**：`gen-golden.mjs` 會確認 `rules/<ID>/trigger.md` 回報該規則、`negative.md` 不回報，`edge/blocking-*` 與 `edge/frontmatter-trap-*` 被拒絕修正，且 48 條規則都至少被回報一次。
 
@@ -75,12 +75,58 @@
 
 ## rules：逐條規則的觸發與反例
 
-48 條規則各有一個目錄 `rules/<ID>/`：
+48 條規則各有一個目錄 `rules/<ID>/`：`trigger.md` 是會回報該規則的最小但接近真實的案例，`negative.md` 是看起來像、但不該回報該規則的案例。blocking 規則的 trigger 會被拒絕修正。MDX090 以 `line-length-80` 選項檢查，其餘以預設選項檢查。
 
-- `trigger.md`：會回報該規則的最小但接近真實的案例。
-- `negative.md`：看起來像、但不該回報該規則的案例，例如 `C#`、`--help`、`-1`、`1.5`、code 裡的語法、跳脫字元、ZWJ 表情符號、ZWNJ、全形標點、`$5` 金額、表格裡的長行。
-
-blocking 規則（MDX081、MDX083、MDX053、MDX085）的 trigger 會被拒絕修正。MDX090 以 `line-length-80` 選項檢查，其餘以預設選項檢查。
+| 規則 | `trigger.md` | `negative.md` |
+| --- | --- | --- |
+| MDX001 | 檔首 BOM | inline code 與 fence 裡提到 BOM，檔首沒有 |
+| MDX002 | Outlook 複製的 CRLF 會議紀錄 | 只用 LF，inline code 裡提到 CRLF |
+| MDX003 | 沒有檔尾換行 | 以 fence 結尾、剛好一個換行 |
+| MDX004 | 一個與三個行尾空白、tab 結尾、空白行 | 兩個空白的硬換行、fence 裡的行尾空白 |
+| MDX005 | 段落間三個空行 | fence 裡的連續空行 |
+| MDX006 | 檔首兩個空行 | fence 開頭的空行 |
+| MDX007 | 散文與清單裡的 tab | Makefile fence 與 inline code 裡的 tab |
+| MDX008 | 從 Word 複製的 NBSP | code 裡的 NBSP、全形空白 U+3000 |
+| MDX009 | 零寬空白、檔案中段的 BOM | ZWJ 表情符號、ZWNJ、code 裡的零寬空白 |
+| MDX010 | 井號後缺空白 | `C#`、跳脫的井號、七個井號、`#include`、縮排程式碼 |
+| MDX011 | 兩個空白、tab 間隔 | 一個空白、inline code |
+| MDX012 | 結尾井號 | `C#`、`Issue#42`、`F#` 結尾 |
+| MDX013 | 標題前後緊接段落 | 標題後接清單、引言與清單裡的標題 |
+| MDX014 | 意外縮排的標題 | 清單後四個空白（縮排程式碼） |
+| MDX015 | H1 跳到 H3 | 依序遞增、往回跳、fence 裡的標題 |
+| MDX016 | 只有井號、井號後只有空白 | 有內容的標題、inline code 與跳脫的井號 |
+| MDX017 | 結尾問號、冒號、句點 | 版本號、`C++`、引號、`Q&A` 結尾 |
+| MDX018 | 從 H2 開始 | frontmatter 後先有縮排標題再有 H1 |
+| MDX019 | 兩個 H1 | fence 裡的 H1、Setext H1 |
+| MDX020 | 缺空白、巢狀缺空白、兩個空白 | 正常引言、引言裡的縮排程式碼 |
+| MDX030 | `-`、`+`、`*`、`1.`、`2)` 後缺空白 | `--help`、`-1`、`+1`、`1.5`、`*強調*`、`1.a`、`-->` |
+| MDX031 | 同一清單混用三種符號 | 巢狀層用不同符號、被段落隔開的兩份清單 |
+| MDX032 | 清單緊接段落前後 | 有空行、清單緊接標題 |
+| MDX035 | 空項目 `- ` 與 `1.` | 任務清單、分隔線、fence 裡的空項目 |
+| MDX040 | 粗體、底線、斜體內側空白 | 對稱的單一星號、算式、code、連結目的地 |
+| MDX041 | 未配對的 `**` 與 `~~` | 已配對、code 裡、`snake__case__name` |
+| MDX042 | `**標籤：**內容`、開頭側的 `**「引號」**` | 已修正的寫法、ASCII 冒號、code、`claude-*` |
+| MDX050 | 沒有語言的 backtick 與 tilde fence | 有語言的 fence |
+| MDX051 | 未關閉的 fence | 較長的外層 fence、不同字元的 fence |
+| MDX052 | fence 緊接段落前後 | 有空行、清單裡的 fence |
+| MDX053 | info string 含反引號（拒絕修正） | tilde fence 的 info string 含反引號、`title=` 屬性 |
+| MDX060 | 一個與兩個連字號的分隔儲存格 | 三個連字號、散文裡的 `--` |
+| MDX061 | 列的儲存格數不符 | 跳脫的管線、code span 裡的管線 |
+| MDX062 | 表格緊接段落前後 | 有空行、清單裡的表格 |
+| MDX063 | code span 裡未跳脫的管線 | code span 裡跳脫的管線 |
+| MDX070 | bare URL 與 `www.` | 角括號 autolink、連結文字、inline code |
+| MDX071 | 空連結文字、空目的地 | 完整連結、inline code |
+| MDX072 | `]` 與 `(` 之間有空白 | 正常連結、code 裡的 `a[0] (索引)` |
+| MDX073 | 未定義的 reference label | 大小寫不同但已定義、collapsed reference、code 裡的 `arr[0][1]` |
+| MDX074 | 大小寫不同的重複定義 | 不同 label、fence 裡的重複定義 |
+| MDX075 | 空的與只有空白的 alt | 有 alt 的圖片、code 裡的空 alt |
+| MDX080 | 段落後的 `---` | 有空行的 `---`、`***`、表格分隔列 |
+| MDX081 | 未關閉的 frontmatter（拒絕修正） | 檔首 `---` 後不是 key: value |
+| MDX082 | frontmatter 後緊接標題 | frontmatter 後有空行 |
+| MDX083 | 未關閉的 HTML comment（拒絕修正） | 多行與單行 comment、inline code 裡的 `<!--` |
+| MDX084 | 全形井號、減號、全形連結 | 散文裡的全形括號與方括號、行中的全形井號 |
+| MDX085 | 未關閉的 `$$`（拒絕修正） | 行內 `$$x$$`、金額 `$5`、已關閉的區塊 |
+| MDX090 | 超過 80 字元的英文與中文行（`line-length-80`） | 表格列、fence 裡的長行 |
 
 ## edge：邊界情況
 
@@ -125,5 +171,8 @@ blocking 規則（MDX081、MDX083、MDX053、MDX085）的 trigger 會被拒絕�
 | `regressions/oracle-mdx018-setext-h1.md` | oracle 疑似問題 5：Setext H1 不算進標題結構 |
 | `regressions/oracle-mdx030-section-number.md` | oracle 疑似問題 6：章節編號被改成清單 |
 | `regressions/oracle-bom-exposed-by-leading-blanks.md` | oracle 疑似問題 7：露出的 BOM 讓修正不冪等 |
+| `regressions/oracle-mdx042-multiple-transforms.md` | oracle 疑似問題 8：同一段落多個 MDX042 修正 |
+| `regressions/definition-quote-prefixes.md` | 引言裡 reference definition 的前綴空白與 tab 變化（`>`、`>    `、`>\t`、四個空白開頭等）與近似失敗的寫法，每個定義後面都有引用 |
+| `regressions/definition-deep-quotes.md` | 8～20 層引言裡的定義；14 層以上會讓 Rust 的 regex VM 改走記憶化回溯，確認結果仍與 oracle 相同 |
 
 `scripts/fuzz-parity.mjs` 找到的差異會縮小後存成 `regressions/fuzz-s<種子>-d<編號>.md`。新增 regression 的流程見 [docs/testing.md](../docs/testing.md)。

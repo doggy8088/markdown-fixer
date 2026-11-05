@@ -81,7 +81,9 @@ export MARKDOWN_FIX_PASTE_MODIFIER_TIMEOUT_MS=1500
 
 Karabiner 在按下 `V` 的瞬間就執行腳本，這時 `Option` 與 `Shift` 通常還按著。直接送出 `Cmd+V`，前景 App 收到的會是 `Cmd+Option+Shift+V`，在很多 App 裡是另一個指令（例如「貼上並符合樣式」），或是什麼都不做。
 
-腳本用一次 `osascript -l JavaScript` 在行程內每 10 毫秒輪詢 `CGEventSourceFlagsState`（透過 JXA 的 ObjC bridge），直到 Shift、Control、Option、Command 都放開，或超過逾時（預設 1 秒），再用 System Events 送出 `Cmd+V`。API 與逾時都和 `dedent-paste` 相同。
+腳本用一次 `osascript -l JavaScript` 在行程內每 10 毫秒輪詢 `CGEventSourceFlagsState`（透過 JXA 的 ObjC bridge），等 Shift、Control、Option、Command 都放開，再用 System Events 送出 `Cmd+V`。API 與逾時（預設 1 秒）都和 `dedent-paste` 相同。
+
+超過逾時修飾鍵仍按著時，腳本**不會**送出 `Cmd+V`：修正後的文字已經在剪貼簿裡，log 記一行 `modifier keys still held`，腳本以結束碼 1 結束，你放開按鍵後自己按 `Cmd+V` 即可。這樣前景 App 永遠不會收到 `Cmd+Option+Shift+V` 之類的組合。
 
 考慮過的其他做法：
 
@@ -119,11 +121,13 @@ tail -n 20 ~/Library/Logs/markdown-fix-paste.log
 | 貼上的是原文，log 寫 `exited with status 2` | 剪貼簿不是合法 UTF-8，或 `markdown-fixer` 版本太舊、不支援 `--stdin`。手動執行 `pbpaste \| markdown-fixer --stdin --check` 看錯誤訊息 |
 | 貼上的是原文，log 寫 `no changes` | 內容本來就沒有可自動修正的問題，或修正被拒絕（未閉合的 frontmatter、HTML comment、`$$` 或非法 fence）。用 `pbpaste \| markdown-fixer --stdin --check` 檢查 |
 | 只有圖片時按熱鍵沒反應 | 刻意的設計：沒有文字就不動剪貼簿也不貼上 |
-| 貼上時多了 `Option` 或 `Shift` 的效果 | 修飾鍵超過逾時還沒放開。調高 `MARKDOWN_FIX_PASTE_MODIFIER_TIMEOUT_MS` |
+| 剪貼簿已修正但沒有自動貼上，log 寫 `modifier keys still held` | 熱鍵的修飾鍵按得比逾時久。直接按 `Cmd+V`，或調高 `MARKDOWN_FIX_PASTE_MODIFIER_TIMEOUT_MS` |
 
 ### 測試
 
-`examples/macos/test-markdown-fix-paste.sh` 用假的 `pbpaste`、`pbcopy`、`osascript` 與 `markdown-fixer` 測試腳本流程，不需要 Karabiner，也不碰真正的剪貼簿，macOS 與 Linux 都能跑：
+`examples/macos/test-markdown-fix-paste.sh` 用假的 `pbpaste`、`pbcopy`、`osascript` 與 `markdown-fixer` 測試腳本流程，不需要 Karabiner，也不碰真正的剪貼簿，macOS 與 Linux 都能跑。
+
+有 Node 時，它也會執行 `examples/macos/test-paste-jxa.mjs`：從腳本抽出 `<paste-jxa>` 標記之間的 JXA，在 `node:vm` 裡以模擬的 `CGEventSourceFlagsState`、時間與 System Events 實際執行，驗證「放開才貼上、逾時不貼上、Caps Lock 不算修飾鍵」等等待邏輯。
 
 ```sh
 examples/macos/test-markdown-fix-paste.sh

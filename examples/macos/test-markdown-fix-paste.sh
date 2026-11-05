@@ -35,11 +35,14 @@ printf 'pbcopy LANG=%s LC_ALL=%s\n' "${LANG:-}" "${LC_ALL:-}" >>"$FAKE_CALLS"
 cat >"$FAKE_CLIP"
 EOF
 
-# osascript：只記錄被呼叫、語言與輪詢逾時參數。
+# osascript：記錄被呼叫、語言與輪詢逾時參數，並像 JXA 的 run() 一樣在 stdout 印出
+# 結果（FAKE_OSASCRIPT_RESULT，預設 pasted）。JXA 本身的等待邏輯由
+# test-paste-jxa.mjs 實際執行。
 cat >"$bin/osascript" <<'EOF'
 #!/bin/sh
 printf 'osascript %s %s timeout=%s\n' "$1" "$2" "$5" >>"$FAKE_CALLS"
-exit "${FAKE_OSASCRIPT_STATUS:-0}"
+[ "${FAKE_OSASCRIPT_STATUS:-0}" = 0 ] || exit "$FAKE_OSASCRIPT_STATUS"
+printf '%s\n' "${FAKE_OSASCRIPT_RESULT:-pasted}"
 EOF
 
 # markdown-fixer stub：記錄參數；行為由 FAKE_FIXER_MODE 決定。
@@ -76,11 +79,15 @@ reset_case() {
     current=$1
     shift
     # shellcheck disable=SC2059 # 刻意把參數當格式字串，方便寫 \n 與 \xc2\xa0。
-    printf "$@" >"$FAKE_CLIP"
+    # `--` 讓以 `-` 開頭的 fixture（例如 frontmatter 的 `---`）不被當成選項。
+    if ! printf -- "$@" >"$FAKE_CLIP"; then
+        echo "fixture error in case: $current" >&2
+        exit 2
+    fi
     cp "$FAKE_CLIP" "$work/original"
     : >"$FAKE_CALLS"
     : >"$MARKDOWN_FIX_PASTE_LOG"
-    unset FAKE_FIXER_MODE FAKE_PBPASTE_FAIL FAKE_OSASCRIPT_STATUS
+    unset FAKE_FIXER_MODE FAKE_PBPASTE_FAIL FAKE_OSASCRIPT_STATUS FAKE_OSASCRIPT_RESULT
 }
 
 run_script() {
@@ -101,7 +108,10 @@ expect_calls() {
 # 剪貼簿內容必須與 printf 格式產生的位元組完全相同。
 expect_clipboard() {
     # shellcheck disable=SC2059
-    printf "$@" >"$work/expected"
+    if ! printf -- "$@" >"$work/expected"; then
+        echo "fixture error in case: $current" >&2
+        exit 2
+    fi
     cmp -s "$work/expected" "$FAKE_CLIP" || fail "clipboard is $(od -c "$FAKE_CLIP" | head -3)"
 }
 
@@ -216,6 +226,26 @@ expect_status 1
 expect_clipboard '# a'
 expect_log_contains "Accessibility"
 
+reset_case "modifiers still held after the timeout: no paste, fixed text kept" '#a'
+export FAKE_OSASCRIPT_RESULT=modifiers-held
+run_script
+expect_status 1
+expect_calls osascript 1
+expect_clipboard '# a'
+expect_log_contains "still held"
+
+reset_case "unexpected osascript output is reported" '#a'
+export FAKE_OSASCRIPT_RESULT=garbage
+run_script
+expect_status 1
+expect_log_contains "unexpected osascript result"
+
+reset_case "fixture starting with --- reaches the script intact" '---\ntitle: x\n---\n#a\n'
+run_script
+expect_status 0
+expect_calls fixer 1
+expect_clipboard '---\ntitle: x\n---\n# a\n'
+
 reset_case "binary found under HOME/.local/bin without MARKDOWN_FIXER_BIN" '#a'
 mkdir -p "$work/home/.local/bin" "$work/home/Library/Logs"
 cp "$bin/fake-fixer" "$work/home/.local/bin/markdown-fixer"
@@ -226,24 +256,49 @@ expect_clipboard '# a'
 # ---- 端對端：真正的 markdown-fixer ----
 
 if [ -n "${MARKDOWN_FIXER_TEST_BIN:-}" ]; then
+    # 包一層記錄呼叫，確認每個案例真的交給執行檔，而不是走「剪貼簿沒有文字」的捷徑。
+    cat >"$bin/real-fixer" <<EOF
+#!/bin/sh
+printf 'fixer %s\\n' "\$*" >>"\$FAKE_CALLS"
+exec "$MARKDOWN_FIXER_TEST_BIN" "\$@"
+EOF
+    chmod +x "$bin/real-fixer"
+
     reset_case "real binary: CJK, NBSP, no trailing newline" '#標題\n\n中文\xc2\xa0段落'
-    MARKDOWN_FIXER_BIN="$MARKDOWN_FIXER_TEST_BIN" run_script
+    MARKDOWN_FIXER_BIN="$bin/real-fixer" run_script
     expect_status 0
     expect_clipboard '# 標題\n\n中文 段落'
+    expect_calls fixer 1
 
     reset_case "real binary: unclosed frontmatter is refused, clipboard kept" '---\ntitle: x\n#標題\n'
-    MARKDOWN_FIXER_BIN="$MARKDOWN_FIXER_TEST_BIN" run_script
+    MARKDOWN_FIXER_BIN="$bin/real-fixer" run_script
     expect_status 0
+    expect_calls fixer 1
     expect_calls pbcopy 0
     expect_clipboard_unchanged
+    [ -s "$FAKE_CLIP" ] || fail "fixture produced an empty clipboard"
+    expect_log_contains "no changes"
 
     reset_case "real binary: invalid UTF-8 keeps the clipboard" '#a \xff\n'
-    MARKDOWN_FIXER_BIN="$MARKDOWN_FIXER_TEST_BIN" run_script
+    MARKDOWN_FIXER_BIN="$bin/real-fixer" run_script
     expect_status 1
+    expect_calls fixer 1
     expect_calls pbcopy 0
     expect_clipboard_unchanged
 else
     echo "skip: set MARKDOWN_FIXER_TEST_BIN=/path/to/markdown-fixer to run end-to-end cases"
+fi
+
+# ---- JXA 等待邏輯（需要 Node）----
+
+if command -v node >/dev/null 2>&1; then
+    current="JXA modifier wait (test-paste-jxa.mjs)"
+    if ! node --test "$here/test-paste-jxa.mjs" >"$work/jxa.log" 2>&1; then
+        cat "$work/jxa.log"
+        fail "node --test test-paste-jxa.mjs failed"
+    fi
+else
+    echo "skip: node not found; JXA modifier-wait tests not run"
 fi
 
 if [ "$failures" -gt 0 ]; then

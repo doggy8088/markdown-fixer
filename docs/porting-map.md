@@ -192,6 +192,6 @@ oracle 的這幾個 regex 在回溯式引擎上是平方時間，下列函式都
 ## 測試與探針
 
 - **單元測試**：各模組的 `tests`。`parity_probe::scan_and_mask_match_oracle` 以 oracle 產生的預期輸出檢查 `scan_document` 與五組選項的 `build_mask`，包含 emoji、lone surrogate 與 `<` 加 260 個 emoji 的情況。
-- **效能防護**：`regex_hazards` 對 core 模組用到的每一個 regex 餵入 10k code unit 的病態輸入（release 上限 50 ms，debug 放寬 10 倍），並對整份病態文件跑 `fix_document` 與 `diagnose`。
-- **探針（ignored）**：`parity_probe::parity_probe` 讀 `MDFIX_PROBE_IN`（JSON 字串陣列），依 `MDFIX_PROBE_MODE`（`scan` 或 `fix`，選項放在 `MDFIX_PROBE_OPTS`）把結果寫到 `MDFIX_PROBE_OUT`，用來與 Node 端呼叫 oracle 的輸出逐字比較。
+- **效能防護**：`regex_hazards` 對 core 模組用到的每一個 regex 與 `build_mask` 餵入 10k code unit 的病態輸入，並對整份病態文件跑 `fix_document` 與 `diagnose`。時間上限 50 ms 只在 release build 斷言；debug build 只印出超時的項目，避免慢速 CI 誤報。
+- **探針（ignored）**：`parity_probe::parity_probe` 讀 `MDFIX_PROBE_IN`（JSON 字串陣列），依 `MDFIX_PROBE_MODE`（`scan`、`fix` 或 `diagnose`，選項放在 `MDFIX_PROBE_OPTS`）把結果寫到 `MDFIX_PROBE_OUT`，用來與 Node 端呼叫 oracle 的輸出逐字比較。設定 `MDFIX_FORCE_MEMO=1` 會讓 jsregex 從第一步就使用記憶化回溯（`jsregex::FORCE_MEMO`，只在測試中存在），用來驗證記憶模式的結果與 oracle 相同。
 - **diag 的測試**：`structure::tests`、`diagnose::tests`、`diagnose::tests::diagnose_probe`（ignored）、`structure::timing::structure_timing`（ignored）。

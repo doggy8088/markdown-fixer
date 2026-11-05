@@ -95,6 +95,9 @@ fn parity_probe() {
         return;
     };
     let mode = std::env::var("MDFIX_PROBE_MODE").unwrap_or_else(|_| "scan".into());
+    if std::env::var("MDFIX_FORCE_MEMO").is_ok() {
+        crate::jsregex::FORCE_MEMO.store(true, std::sync::atomic::Ordering::Relaxed);
+    }
     let data = std::fs::read_to_string(input).expect("read input");
     let docs: Vec<String> = serde_json::from_str(&data).expect("json");
     let mut out = String::new();
@@ -139,6 +142,21 @@ fn probe_mode(mode: &str, doc: &str) -> String {
                 serde_json::to_string(&r.reason).expect("json"),
             )
         }
+        "diagnose" => crate::diagnose(doc, &probe_options())
+            .iter()
+            .map(|p| {
+                format!(
+                    "{}|{}|{}|{}|{}|{}|{}\n",
+                    p.rule,
+                    p.name,
+                    p.severity.as_str(),
+                    p.fixable,
+                    p.line,
+                    p.column,
+                    p.message
+                )
+            })
+            .collect(),
         _ => format!("unknown mode {mode}\n"),
     }
 }

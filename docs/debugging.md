@@ -48,7 +48,9 @@ console.log(JSON.stringify(fixDocument(text, {}).text));
 
 ## 2. 用 parity.sh 找第一個差異
 
-`scripts/parity.sh` 會對每個檔案同時跑 oracle 與 Rust，比對 `--check --json` 的問題清單與修正後的文字，列出第一個不一致的問題或第一個不同的位元組。用法與輸出格式以 [testing.md](testing.md) 為準。
+`scripts/parity.sh` 比對的是**函式庫層級**的結果，不是 CLI 輸出。它對每個檔案、每組選項，分別在 Node 裡呼叫 oracle 的 `diagnose` 與 `fixDocument`，在 Rust 端透過 `crates/markdown-fixer/examples/dump.rs`（`cargo run -p markdown-fixer --example dump --features serde`）取得 `diagnose` 與 `fix_document` 的 JSON，逐一比較。每個檔案只列出第一個差異。
+
+選項組合沿用 `scripts/gen-golden.mjs` 的 `OPTION_SETS`：`default`、`snippet`（忽略 MDX003）、`line-length-80`、`keep-encoding`（忽略 MDX001、MDX002）、`headings-only`。只想跑其中一組時設定 `PARITY_OPTIONS`，例如 `PARITY_OPTIONS=default`。
 
 ```sh
 scripts/parity.sh fixtures/corpus
@@ -60,6 +62,19 @@ scripts/parity.sh path/to/file.md
 ```sh
 scripts/parity.sh ~/projects/*/README.md ~/projects/*/docs/
 ```
+
+輸出格式：
+
+```text
+DIFF docs/example.md [snippet] {"ignoreRules":["MDX003"]}
+  <第一個差異的說明>
+  repro: cargo run -q -p markdown-fixer --example dump --features serde -- '{"ignoreRules":["MDX003"]}' < docs/example.md
+parity: 2 file(s), 10 case(s), 1 file(s) diverged
+```
+
+`repro` 那一行可以直接執行，看 Rust 端的完整結果；oracle 端用〈1. 重現〉裡的 node 指令，把同樣的選項傳給 `diagnose` 與 `fixDocument`。有差異時結束碼是 1，用法錯誤是 2。Rust 執行檔建在 `CARGO_TARGET_DIR`（預設 `target/parity`），也可以用 `MDFIX_DUMP` 指定已經建好的 dump 執行檔。
+
+CLI 層級的差異（文字輸出格式、`--json` 結構、結束碼、目錄排序）不在 `parity.sh` 的範圍內，請用〈1. 重現〉的 `--check --json` 比對，CLI 的 golden 測試見 [testing.md](testing.md)。
 
 隨機文件的差異測試用 `node scripts/fuzz-parity.mjs --count 2000`。
 
@@ -160,7 +175,15 @@ cat /tmp/probe-out.txt
 | `C` | `fenceContent` | `X` | `mathClose` |
 | `h` | `htmlBlock` | | |
 
-接著是掃描問題（`規則@行:欄 訊息`）、`fm=<frontmatterEnd>`，最後每一行輸出五組 0／1 遮罩，對應 oracle 程式碼裡用到的五種 `buildMask` 選項組合。這是內部除錯工具，格式可能隨實作調整，以 `crates/markdown-fixer/src/parity_probe.rs` 為準。
+接著是掃描問題（`規則@行:欄 訊息`）、`fm=<frontmatterEnd>`，最後每一行輸出五組 0／1 遮罩，對應 oracle 程式碼裡用到的五種 `buildMask` 選項組合。其他環境變數：
+
+| 變數 | 作用 |
+| --- | --- |
+| `MDFIX_PROBE_MODE` | `scan`（預設）、`fix` 或 `diagnose`。`fix` 每份文件輸出一行 `FixResult` JSON；`diagnose` 每個問題輸出一行 `rule\|name\|severity\|fixable\|line\|column\|message` |
+| `MDFIX_PROBE_OPTS` | 選項 JSON，鍵名與 JS 相同，例如 `{"ignoreRules":["MDX003"],"maxLineLength":80}` |
+| `MDFIX_FORCE_MEMO` | 設定後 `jsregex` 從第一步就用記憶化回溯，用來確認記憶化路徑與 oracle 一致 |
+
+這是內部除錯工具，格式可能隨實作調整，以 `crates/markdown-fixer/src/parity_probe.rs` 為準。
 
 ## 檢查一行的遮罩
 

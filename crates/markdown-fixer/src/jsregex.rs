@@ -715,6 +715,21 @@ fn run(
     Outcome::NoMatch
 }
 
+/// 測試用：強制從第一步就使用記憶化回溯，用來驗證記憶模式與 oracle 結果相同。
+#[cfg(test)]
+pub(crate) static FORCE_MEMO: std::sync::atomic::AtomicBool =
+    std::sync::atomic::AtomicBool::new(false);
+
+#[cfg(test)]
+fn force_memo() -> bool {
+    FORCE_MEMO.load(std::sync::atomic::Ordering::Relaxed)
+}
+
+#[cfg(not(test))]
+fn force_memo() -> bool {
+    false
+}
+
 /// 編譯後的 JS 正規表示式。
 #[derive(Debug, Clone)]
 pub(crate) struct Regex {
@@ -894,7 +909,11 @@ impl Regex {
         }
         // 先以步數預算跑一般回溯；超過預算（病態輸入）才改用記憶模式從頭重跑，
         // 結果相同但保證多項式時間。
-        let budget = 4096 + 64 * (s.len() + 1);
+        let budget = if force_memo() {
+            0
+        } else {
+            4096 + 64 * (s.len() + 1)
+        };
         let mut exec = Exec::new(Some(budget));
         let mut start = from;
         while start <= last {

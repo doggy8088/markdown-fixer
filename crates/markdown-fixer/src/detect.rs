@@ -7,7 +7,7 @@
 //!
 //! # 做法
 //!
-//! 1. 只看前 [`MAX_LINES`] 行，每行的行內掃描最多看前 [`MAX_INLINE_BYTES`]
+//! 1. 只看前 [`MAX_LINES`](crate::detect::MAX_LINES) 行，每行的行內掃描最多看前 [`MAX_INLINE_BYTES`](crate::detect::MAX_INLINE_BYTES)
 //!    位元組，整體工作量對輸入長度是線性的。
 //! 2. 先找出檔首 frontmatter 與**成對**的 fenced code 區塊。fence 內的內容不參與
 //!    任何正向或反向訊號的判斷。沒有成對的 fence 不算訊號，其後的行照常參與
@@ -44,7 +44,7 @@
 //!
 //! 反向訊號（shebang、前置處理指令、連續的 `#` 註解區塊、`"""` 多行字串界線、
 //! 程式碼宣告與程式碼特徵、log、stack trace、diff、JSON、YAML（含 block
-//! scalar）、TOML、XML）不會出現在 [`Detection::signals`]，`signals` 只列正向訊號。
+//! scalar）、TOML、XML）不會出現在 [`Detection::signals`](crate::detect::Detection::signals)，`signals` 只列正向訊號。
 //!
 //! 已知的取捨：Docusaurus／MDX 文件有 `import X from '...'` 這種 JavaScript 行，
 //! 會被當成程式碼而判定為非 Markdown。

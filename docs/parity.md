@@ -69,9 +69,10 @@ node scripts/gen-golden.mjs --check    # 只檢查：golden 過期、缺少或�
 
 2026-11-05 的結果：
 
-- 語料 192 份文件、4,893 行，五組選項共 960 個案例，與 oracle 全部一致。
-- `scripts/fuzz-parity.mjs --count 10000 --seed 20261105`：1 萬份隨機文件、五組選項共 5 萬個案例，沒有差異。
-- oracle 的冪等性：約 6 萬組（文件, 選項）中，唯一不冪等的情況是下面〈oracle 疑似問題〉第 7 項。
+- 語料 195 份文件、5,275 行，五組選項共 975 個案例，`golden.rs` 與 `scripts/parity.sh fixtures/corpus` 都與 oracle 全部一致。
+- `scripts/fuzz-parity.mjs`：種子 20261105 與 20261106 各 1 萬份隨機文件（五組選項各 5 萬個案例），沒有差異。
+- repo 外的真實文件：`~/projects/*/README.md` 40 份（五組選項）與 `~/projects/*/docs/` 底下 2,096 份（預設選項），沒有差異。
+- oracle 的冪等性：約 12 萬組（文件, 選項）中，唯一不冪等的情況是下面〈oracle 疑似問題〉第 7 項。
 
 ## Oracle 升版流程
 
@@ -159,5 +160,19 @@ node scripts/gen-golden.mjs --check    # 只檢查：golden 過期、缺少或�
 ### 7. 移除檔首空行後露出的 BOM 留在檔首，修正因此不冪等
 
 - **重現**：`regressions/oracle-bom-exposed-by-leading-blanks.md`，內容是兩個空行，接著一行以 U+FEFF 開頭的 `# T`。
-- **oracle 行為**：MDX001 只在修正前移除檔首 BOM；MDX006 移除檔首空行後，原本在第 3 行行首的 U+FEFF 變成檔首，輸出以 BOM 開頭。再修一次時 MDX001 又把它移除，所以 `fixDocument` 在這種輸入上不冪等。`fuzz-parity.mjs --idempotence` 找到的不冪等案例全部縮小成這個形狀。
+- **oracle 行為**：MDX001 只在修正前移除檔首 BOM；MDX006 移除檔首空行後，原本在第 3 行行首的 U+FEFF 變成檔首，輸出以 BOM 開頭。再修一次時 MDX001 又把它移除，所以 `fixDocument` 在這種輸入上不冪等。`fuzz-parity.mjs --idempotence` 以 6 個種子各 5,000 份文件找到 38 份不冪等的文件，全部符合這個形狀（腳本會逐一檢查，沒有無法解釋的案例）。
 - **Rust**：照 oracle。`properties.rs` 的冪等與編碼 property 排除這個情況（`bom_exposed_by_leading_blank_removal`）。
+
+### 8. 同一段落有多個 MDX042 修正時，以原始偏移量逐一套用（潛在問題）
+
+- **位置**：`applyCjkEmphasisFixes`（第 1660 行）。core 回報。
+- **oracle 行為**：`analyzeCjkEmphasis` 以原始段落的偏移量產生每個 transform，`applyCjkEmphasisFixes` 卻逐一套用在已經被前一個 transform 改過的段落上。
+- **實際影響**：目前無法觸發。每個 transform 只是把一段標點從 `**` 內側搬到外側，長度不變，而且後一個 transform 的位置都在前一個的 closer 之後。以結構化產生的 39,985 個「同一段落有多個 transform」的段落比對「逐一套用」與「依原始偏移量一次套用」，結果全部相同。
+- **風險**：日後若加入會改變長度的修正，就會套用到錯誤的位置。
+- **重現**：`regressions/oracle-mdx042-multiple-transforms.md` 固定目前的多 transform 行為。
+
+### 9. `analyzeCjkEmphasis` 的 `run !== opener` 永遠成立（不影響結果）
+
+- **位置**：第 1621 行。core 回報。
+- **oracle 行為**：`matchEmphasisRuns` 回傳的 leftovers 是 `{ ...run }` 的複本，與 `runs` 裡的原物件比較永遠不相等，所以排除 opener 與 closer 的條件形同虛設。
+- **實際影響**：沒有。後面的位置條件（`run.start >= opener.end && run.end <= closer.start`）本來就排除了 opener 與 closer 本身。Rust 照位置條件實作即可。

@@ -14,12 +14,12 @@
     {
       "path": "corpus",
       "copyDir": "fixtures/corpus",
-      "fingerprint": "25a55b2941f413b9"
+      "fingerprint": "7d6f97f9d4361a38"
     }
   ],
   "expected": {
     "status": 1,
-    "stdout": "Fixed 305 issue(s) in 80 file(s).\n614 problem(s) remain: 11 fixable, 18 error(s), 107 warning(s), 489 info.\n14 file(s) were not modified because of structural or frontmatter ambiguity.\n",
+    "stdout": "Fixed 331 issue(s) in 83 file(s).\n674 problem(s) remain: 15 fixable, 18 error(s), 158 warning(s), 498 info.\n14 file(s) were not modified because of structural or frontmatter ambiguity.\n",
     "stderr": "",
     "files": [
       {
@@ -223,6 +223,14 @@
         "fnv": "1e906fc1aa1f26dc"
       },
       {
+        "path": "corpus/regressions/definition-deep-quotes.md",
+        "fnv": "54fe8ea28c89dd55"
+      },
+      {
+        "path": "corpus/regressions/definition-quote-prefixes.md",
+        "fnv": "b0296e277d085a60"
+      },
+      {
         "path": "corpus/regressions/js-mixed-idempotent.md",
         "fnv": "0ecb57269f4317e3"
       },
@@ -249,6 +257,10 @@
       {
         "path": "corpus/regressions/oracle-mdx030-section-number.md",
         "fnv": "9e63cc5f70eb35a0"
+      },
+      {
+        "path": "corpus/regressions/oracle-mdx042-multiple-transforms.md",
+        "fnv": "b8983c985b093516"
       },
       {
         "path": "corpus/regressions/oracle-mdx052-quoted-fence.md",

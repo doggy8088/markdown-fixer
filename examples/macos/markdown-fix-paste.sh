@@ -10,7 +10,7 @@
 #   3. markdown-fixer --stdin --write --quiet --exit-zero --ignore-rule MDX003
 #   4. 修正失敗或輸出為空時保留原剪貼簿；內容沒變時也不重寫剪貼簿，
 #      保留原本的 RTF／HTML 格式。
-#   5. 等使用者放開修飾鍵，再送出 Cmd+V。
+#   5. 等使用者放開修飾鍵，再送出 Cmd+V；逾時仍按著就不送出，以結束碼 1 結束。
 #
 # 環境變數（都可以省略，也可以寫在 ~/.config/markdown-fixer/env）：
 #   MARKDOWN_FIXER_BIN                  markdown-fixer 執行檔路徑
@@ -65,6 +65,12 @@ byte_count() {
 #
 # 用一次 osascript（JXA）在行程內輪詢 CGEventSourceFlagsState，比每次輪詢都啟動
 # 一個 osascript 快得多。讀取修飾鍵狀態不需要輔助使用權限；送出按鍵需要。
+#
+# 逾時後修飾鍵仍按著時「不」送出按鍵：否則前景 App 收到的是 Cmd+Option+Shift+V
+# 之類的組合。修正後的文字留在剪貼簿，使用者自己按 Cmd+V 即可。
+#
+# <paste-jxa> 與 </paste-jxa> 之間的程式由 test-paste-jxa.mjs 抽出，以模擬的
+# CoreGraphics 與時間實際執行；修改時保留這兩個標記。
 paste_clipboard() {
     if [ "${MARKDOWN_FIX_PASTE_NO_PASTE:-0}" = 1 ]; then
         return 0
@@ -74,23 +80,41 @@ paste_clipboard() {
         '' | *[!0-9]*) timeout_ms=1000 ;;
     esac
     # shellcheck disable=SC2016 # $ 是 JXA 的 ObjC bridge，不是 shell 變數。
-    osascript -l JavaScript -e '
+    result=$(osascript -l JavaScript -e '
+// <paste-jxa>
 function run(argv) {
     ObjC.import("CoreGraphics");
     // Shift 0x20000 | Control 0x40000 | Option 0x80000 | Command 0x100000
     var mask = 0x1E0000;
     var deadline = Date.now() + Number(argv[0]);
     // 0 = kCGEventSourceStateCombinedSessionState，與 dedent-paste 相同。
-    while ((Number($.CGEventSourceFlagsState(0)) & mask) !== 0 && Date.now() < deadline) {
+    while ((Number($.CGEventSourceFlagsState(0)) & mask) !== 0) {
+        if (Date.now() >= deadline) {
+            return "modifiers-held";
+        }
         delay(0.01);
     }
     // 給剪貼簿一點時間讓其他 App 看到新內容。
     delay(0.03);
     Application("System Events").keystroke("v", { using: "command down" });
-}' "$timeout_ms" >/dev/null || {
+    return "pasted";
+}
+// </paste-jxa>
+' "$timeout_ms") || {
         log "paste failed (check Accessibility permission for Karabiner-Elements / osascript)"
         return 1
     }
+    case $result in
+        pasted) return 0 ;;
+        modifiers-held)
+            log "modifier keys still held after ${timeout_ms} ms; not sending Cmd+V (the clipboard is ready, paste manually)"
+            return 1
+            ;;
+        *)
+            log "unexpected osascript result; not sure whether Cmd+V was sent"
+            return 1
+            ;;
+    esac
 }
 
 umask 077
