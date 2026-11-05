@@ -47,45 +47,33 @@ CI（`.github/workflows/ci.yml`）在 push 到 `main` 或 `ci/**` 分支，以�
    3. 打包並為每個檔案產生 `.sha256`，最後彙整成 `SHA256SUMS`。
    4. 建立 GitHub Release，附上所有檔案與自動產生的 release notes。
 
-5. 發佈到 crates.io（手動，名稱確認見 PRD〈11〉Q2）：
+5. `.github/workflows/publish.yml` 會以 crates.io Trusted Publishing（GitHub OIDC）依序發佈 `markdown-fixer` 與 `markdown-fixer-cli`，不需要長期 API token；已經在 crates.io 上的版本會跳過。`markdown-fixer-ffi` 設了 `publish = false`，只透過 GitHub Release 散佈。
+
+## crates.io Trusted Publishing
+
+crates.io 只能替已經存在的 crate 設定 trusted publisher，而且每個 crate 要各設一筆。所以第一版的流程是：
+
+1. **第一次發佈用 API token**：在 crates.io 的 Account Settings → API Tokens 建立 token（scope 選 `publish-new` 與 `publish-update`，crate 名稱限制 `markdown-fixer*`），`cargo login` 後在 repo 根目錄執行：
 
    ```sh
    cargo publish -p markdown-fixer
    cargo publish -p markdown-fixer-cli
    ```
 
-   `markdown-fixer-ffi` 設了 `publish = false`，只透過 GitHub Release 散佈。
+   發佈完就可以撤銷這個 token。
 
-## 目標平台與產物
+2. **設定 trusted publisher**：在 crates.io 分別打開兩個 crate 的 Settings → Trusted Publishing，新增 GitHub publisher：
 
-| Target | Runner | CLI | FFI |
-| --- | --- | --- | --- |
-| `aarch64-apple-darwin` | `macos-latest` | `.tar.gz` | `.a`、`.dylib` |
-| `x86_64-apple-darwin` | `macos-latest`（交叉編譯） | `.tar.gz` | `.a`、`.dylib` |
-| `x86_64-unknown-linux-gnu` | `ubuntu-latest` | `.tar.gz` | `.a`、`.so` |
-| `aarch64-unknown-linux-gnu` | `ubuntu-24.04-arm` | `.tar.gz` | `.a`、`.so` |
-| `x86_64-unknown-linux-musl` | `ubuntu-latest` | `.tar.gz` | `.a` |
-| `aarch64-unknown-linux-musl` | `ubuntu-24.04-arm` | `.tar.gz` | `.a` |
-| `x86_64-pc-windows-msvc` | `windows-latest` | `.zip` | `.lib`、`.dll`、`.dll.lib` |
-| `aarch64-pc-windows-msvc` | `windows-11-arm` | `.zip` | `.lib`、`.dll`、`.dll.lib` |
+   | 欄位 | 值 |
+   | --- | --- |
+   | Repository owner | `doggy8088` |
+   | Repository name | `markdown-fixer` |
+   | Workflow filename | `publish.yml` |
+   | Environment | `release` |
 
-每個目標產生兩個壓縮檔：
+3. **GitHub environment**：repo 已建立 `release` environment，部署規則只允許 `v*` tag。`publish.yml` 的 job 使用這個 environment，並以 `permissions: id-token: write` 向 crates.io 換取短期 token（`rust-lang/crates-io-auth-action@v1`，job 結束時自動撤銷）。
 
-- `markdown-fixer-<版本>-<target>`：`markdown-fixer` 執行檔，以及 `README.md`、`LICENSE`（存在時）。
-- `markdown-fixer-ffi-<版本>-<target>`：`include/markdown_fixer.h` 與 `lib/` 下的函式庫。
-
-說明：
-
-- **musl 沒有共用函式庫**：musl 目標預設 `crt-static`，rustc 會略過 `cdylib`，只產生 staticlib。需要 musl 的 `.so` 時，以 `RUSTFLAGS="-C target-feature=-crt-static"` 自行建置。
-- **macOS dylib 的 install name**：打包時以 `install_name_tool -id @rpath/libmarkdown_fixer_ffi.dylib` 改寫，使用端連結時設定 rpath 即可。
-- **Windows**：`markdown_fixer_ffi.dll.lib` 是 DLL 的匯入程式庫，`markdown_fixer_ffi.lib` 是靜態函式庫，兩者不要混用。
-- release profile 已開啟 `lto`、`strip`、`codegen-units = 1`（根目錄 `Cargo.toml`）。PRD〈7〉要求 CLI 小於 3 MB。
-
-## 驗證下載
-
-```sh
-shasum -a 256 -c SHA256SUMS --ignore-missing
-```
+4. **之後的版本**：bump 版本、推送 tag，`release.yml` 建置 GitHub Release，`publish.yml` 發佈到 crates.io。
 
 ## 後續
 
