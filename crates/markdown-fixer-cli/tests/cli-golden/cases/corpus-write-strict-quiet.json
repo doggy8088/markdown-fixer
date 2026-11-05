@@ -14,12 +14,12 @@
     {
       "path": "corpus",
       "copyDir": "fixtures/corpus",
-      "fingerprint": "e13a98997cb1e41a"
+      "fingerprint": "b9b4321f8e82a478"
     }
   ],
   "expected": {
     "status": 1,
-    "stdout": "Fixed 337 issue(s) in 91 file(s).\n481 problem(s) remain: 10 fixable, 22 error(s), 178 warning(s), 281 info.\n17 file(s) were not modified because of structural or frontmatter ambiguity.\n",
+    "stdout": "Fixed 342 issue(s) in 92 file(s).\n486 problem(s) remain: 10 fixable, 22 error(s), 183 warning(s), 281 info.\n17 file(s) were not modified because of structural or frontmatter ambiguity.\n",
     "stderr": "",
     "files": [
       {
@@ -213,6 +213,10 @@
       {
         "path": "corpus/regressions/definition-quote-prefixes.md",
         "fnv": "cbf0c46fb4c81726"
+      },
+      {
+        "path": "corpus/regressions/github-whitespace-after-empty-item.md",
+        "fnv": "649359751d9db7fc"
       },
       {
         "path": "corpus/regressions/html-comment-after-container-marker.md",

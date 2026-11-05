@@ -893,3 +893,25 @@ test('protects an HTML comment or raw block opened after a list or blockquote ma
   assert.equal(fixDocument('# T\n\n- <pre>\n\n\nx\n').refused, false);
   assert.equal(fixed('# T\n\n- <pre>\n\n\nx\n'), '# T\n\n- <pre>\n\n\nx\n');
 });
+
+test('keeps whitespace-only lines that GitHub treats as content after an empty list item or in a footnote', () => {
+  // [input, fixed output, line number of the kept whitespace-only line]
+  const cases = [
+    ['- \n  \n  x\n', '-\n  \n  x\n', 2],
+    ['- a\n- \n  \n  b\n- c\n', '- a\n-\n  \n  b\n- c\n', 3],
+    ['1.\n   \n   x\n', '1.\n   \n   x\n', 2],
+    ['- \n\t\n  x\n', '-\n\t\n  x\n', 2],
+    ['> - \n>   \n>   x\n', '> -\n>   \n>   x\n', 2],
+    ['x[^1]\n\n[^1]: a\n  \n    b\n', 'x[^1]\n\n[^1]: a\n  \n    b\n', 4],
+    // MDX005 does not collapse across the kept line, but still collapses the empty lines after it.
+    ['# T\n\n- \n  \n\n\n  x\n', '# T\n\n-\n  \n\n  x\n', 4]
+  ];
+  for (const [input, output, kept] of cases) {
+    assert.equal(fixed(input), output, JSON.stringify(input));
+    const onKept = diagnose(input).filter((problem) => problem.line === kept && ['MDX004', 'MDX005', 'MDX020'].includes(problem.rule));
+    assert.deepEqual(onKept, [], JSON.stringify(input));
+  }
+  // Elsewhere whitespace-only lines are still cleared.
+  assert.equal(fixed('text  \n\n  \n\nmore\n'), 'text  \n\nmore\n');
+  assert.equal(fixed('- a\n  \n  b\n'), '- a\n\n  b\n');
+});

@@ -995,3 +995,32 @@ fn protects_an_html_comment_or_raw_block_opened_after_a_list_or_blockquote_marke
     assert!(!fix_document(unclosed, &opts()).refused);
     assert_eq!(fixed(unclosed), unclosed);
 }
+
+// 56. 'keeps whitespace-only lines that GitHub treats as content after an empty list item or in a footnote'
+#[test]
+fn keeps_whitespace_only_lines_that_github_treats_as_content() {
+    // (輸入, 修正結果, 保留的只含空白行的行號)
+    let cases = [
+        ("- \n  \n  x\n", "-\n  \n  x\n", 2),
+        ("- a\n- \n  \n  b\n- c\n", "- a\n-\n  \n  b\n- c\n", 3),
+        ("1.\n   \n   x\n", "1.\n   \n   x\n", 2),
+        ("- \n\t\n  x\n", "-\n\t\n  x\n", 2),
+        ("> - \n>   \n>   x\n", "> -\n>   \n>   x\n", 2),
+        (
+            "x[^1]\n\n[^1]: a\n  \n    b\n",
+            "x[^1]\n\n[^1]: a\n  \n    b\n",
+            4,
+        ),
+        ("# T\n\n- \n  \n\n\n  x\n", "# T\n\n-\n  \n\n  x\n", 4),
+    ];
+    for (input, output, kept) in cases {
+        assert_eq!(fixed(input), output, "{input:?}");
+        let on_kept: Vec<_> = diagnose(input, &opts())
+            .into_iter()
+            .filter(|p| p.line == kept && matches!(p.rule, "MDX004" | "MDX005" | "MDX020"))
+            .collect();
+        assert!(on_kept.is_empty(), "{input:?}: {on_kept:?}");
+    }
+    assert_eq!(fixed("text  \n\n  \n\nmore\n"), "text  \n\nmore\n");
+    assert_eq!(fixed("- a\n  \n  b\n"), "- a\n\n  b\n");
+}

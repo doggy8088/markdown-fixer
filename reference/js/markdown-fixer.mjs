@@ -380,7 +380,8 @@ function scanDocument(text, limits = createLimits()) {
     mathBlock: false,
     mathOpen: false,
     mathClose: false,
-    opaque: false
+    opaque: false,
+    keepWhitespace: false
   }));
   const issues = [];
   let frontmatterEnd = -1;
@@ -608,6 +609,8 @@ function scanDocument(text, limits = createLimits()) {
     }
   }
 
+  markSignificantWhitespace(lines, info);
+
   if (fence) {
     issues.push(makeProblem('MDX051', fence.start + 1, 1, `Unclosed ${fence.char === '`' ? 'backtick' : 'tilde'} code fence.`));
   }
@@ -619,6 +622,36 @@ function scanDocument(text, limits = createLimits()) {
   }
 
   return { lines, info, issues, frontmatterEnd };
+}
+
+// GitHub (cmark-gfm) treats an indented whitespace-only line as content after
+// an empty list item marker and inside a footnote definition: `- \n  \n  x`
+// is one item `x` there, but two blocks once the middle line is cleared. Mark
+// such lines (also `>   ` inside a blockquote) so whitespace and blank-line
+// rules leave them as they are.
+function markSignificantWhitespace(lines, info) {
+  let context = null;
+  for (let i = 0; i < lines.length; i++) {
+    const lineInfo = info[i];
+    if (lineInfo.frontmatter || lineInfo.fenceContent || lineInfo.htmlBlock || lineInfo.mathBlock || lineInfo.opaque) {
+      context = null;
+      continue;
+    }
+    const line = lines[i];
+    const quoteEnd = scanQuoteMarkers(line).end;
+    const rest = line.slice(quoteEnd);
+    if (isBlank(rest)) {
+      if (context !== null && rest.length > 0) lineInfo.keepWhitespace = true;
+      continue;
+    }
+    if (/^ {0,3}\[\^[^\]\n]+\]:/.test(rest)) {
+      context = 'footnote';
+    } else if (containerPrefix(line).end === line.length && !isThematicBreak(rest)) {
+      context = 'item';
+    } else if (!(context === 'footnote' && /^[ \t]/.test(rest))) {
+      context = null;
+    }
+  }
 }
 
 function isProtectedLine(lineInfo) {
@@ -1161,7 +1194,7 @@ function fixNbsp(line, isEnabled = () => true) {
 
 function transformLine(line, lineInfo, lineNo, isEnabled) {
   const issues = [];
-  if (isProtectedLine(lineInfo)) {
+  if (isProtectedLine(lineInfo) || lineInfo.keepWhitespace) {
     return { line, issues };
   }
 
@@ -1975,7 +2008,7 @@ function computeTrailingWhitespace(lines, info, isEnabled) {
   const issues = [];
   for (let i = 0; i < lines.length; i++) {
     const lineInfo = info[i];
-    if (lineInfo.frontmatter || lineInfo.fenceContent || lineInfo.htmlBlock || lineInfo.indentedCode || lineInfo.mathBlock || lineInfo.opaque) continue;
+    if (lineInfo.frontmatter || lineInfo.fenceContent || lineInfo.htmlBlock || lineInfo.indentedCode || lineInfo.mathBlock || lineInfo.opaque || lineInfo.keepWhitespace) continue;
     const match = lines[i].match(/[ \t]+$/);
     if (!match) continue;
     if (!isBlank(lines[i]) && /^ {2}$/.test(match[0])) continue;
@@ -1989,7 +2022,7 @@ function applyTrailingWhitespace(text, isEnabled) {
   const scan = scanDocument(text, isEnabled.limits);
   const lines = scan.lines.map((line, i) => {
     const lineInfo = scan.info[i];
-    if (lineInfo.frontmatter || lineInfo.fenceContent || lineInfo.htmlBlock || lineInfo.indentedCode || lineInfo.mathBlock || lineInfo.opaque) return line;
+    if (lineInfo.frontmatter || lineInfo.fenceContent || lineInfo.htmlBlock || lineInfo.indentedCode || lineInfo.mathBlock || lineInfo.opaque || lineInfo.keepWhitespace) return line;
     const match = line.match(/[ \t]+$/);
     if (!match) return line;
     if (!isBlank(line) && /^ {2}$/.test(match[0])) return line;
@@ -2045,7 +2078,7 @@ function computeBlankLineRuns(text, scan, isEnabled) {
   const lines = scan.lines;
   const protectedBlank = function (i) {
     const lineInfo = scan.info[i];
-    return Boolean(lineInfo.frontmatter || lineInfo.fenceContent || lineInfo.htmlBlock || lineInfo.indentedCode || lineInfo.mathBlock || lineInfo.opaque);
+    return Boolean(lineInfo.frontmatter || lineInfo.fenceContent || lineInfo.htmlBlock || lineInfo.indentedCode || lineInfo.mathBlock || lineInfo.opaque || lineInfo.keepWhitespace);
   };
 
   let i = 0;
@@ -2088,7 +2121,7 @@ function applyBlankLineNormalization(text, isEnabled) {
   const lines = scan.lines;
   const protectedBlank = function (i) {
     const lineInfo = scan.info[i];
-    return Boolean(lineInfo.frontmatter || lineInfo.fenceContent || lineInfo.htmlBlock || lineInfo.indentedCode || lineInfo.mathBlock || lineInfo.opaque);
+    return Boolean(lineInfo.frontmatter || lineInfo.fenceContent || lineInfo.htmlBlock || lineInfo.indentedCode || lineInfo.mathBlock || lineInfo.opaque || lineInfo.keepWhitespace);
   };
 
   const output = [];

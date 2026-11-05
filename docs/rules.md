@@ -133,6 +133,8 @@ text
 
 frontmatter、fenced code 內容、HTML 區塊、縮排 code、`$$` 數學區塊不處理。參考定義行會處理。
 
+空的清單項目標記之後（`- `、`1.`，引言裡的 `> - ` 也算）以及註腳定義裡，有縮排的只含空白行不清空，MDX005 也不把它併進前後的空行：GitHub（cmark-gfm）把這種行當成內容，`- \n  \n  x` 在 GitHub 是一個內容為 `x` 的清單項目，清空後會變成空項目加一個段落。MDX003、MDX006 同樣不移除這種行（v1.1.0）。
+
 ### MDX005 `multiple-blank-lines`
 
 - 嚴重度：warning

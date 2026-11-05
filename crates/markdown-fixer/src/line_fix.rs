@@ -536,7 +536,7 @@ pub(crate) fn transform_line(
     enabled: &Enabled,
 ) -> LineResult {
     let mut issues = Vec::new();
-    if is_protected_line(info) {
+    if is_protected_line(info) || info.keep_whitespace {
         return LineResult {
             line: line.to_vec(),
             issues,

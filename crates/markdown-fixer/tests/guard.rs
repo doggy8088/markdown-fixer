@@ -314,6 +314,75 @@ fn mdx062_lazy_table_row_repair_is_local() {
     assert!(distant_changes(input, &result.text).is_empty());
 }
 
+#[test]
+fn long_run_followed_by_line_insertion_keeps_locality() {
+    // review-6 m1：長串修復（超過 Myers 的上限）後面緊接著會改變行數的修復（MDX062 在表格前
+    // 補空行）時，逐行配對曾一路走到檔尾，後段變成一個 hunk，區域性檢查失效。`-item` 改成
+    // 清單後，`para3` 會被併進清單項目（非區域的改變），MDX030 必須被擋下。
+    let tail = "| a | b |\n|---|---|\n| 1 | 2 |\n\n-item\n\n  para2\n\n  para3\n";
+    for (lines, repaired) in [(120, true), (140, true), (300, true), (140, false)] {
+        let mut input = String::new();
+        for i in 0..lines {
+            if repaired {
+                input.push_str(&format!("行 {i} ** x **\n"));
+            } else {
+                input.push_str(&format!("行 {i} x\n"));
+            }
+        }
+        input.push_str(tail);
+        let result = fix_document(&input, &guarded());
+        assert_eq!(
+            skipped_rules(&result),
+            ["MDX030"],
+            "{lines} lines (repaired {repaired})"
+        );
+        assert!(
+            result.text.contains("\n\n| a | b |\n"),
+            "MDX062 still applied"
+        );
+        assert!(result.text.contains("\n-item\n"));
+        if repaired {
+            assert_eq!(result.text.matches("**x**").count(), lines);
+        }
+        assert!(distant_changes(&input, &result.text).is_empty());
+    }
+}
+
+#[test]
+fn long_runs_of_repaired_lines_are_all_applied() {
+    // review-5 M1：連續超過 128 行被修復時，行 diff 曾經對不齊，guard 把整份文件的修復類
+    // 修正全部還原（連無關的 `#標題` 也是）。剪貼簿貼上的長清單、長表格、長段落正是這種形狀。
+    let mut list = String::from("#標題\n\n-項目\n\n");
+    for i in 0..200 {
+        list.push_str(&format!("- item {i}\u{a0}text\n"));
+    }
+    let mut table = String::from("| 名稱 | 說明 |\n| --- | --- |\n");
+    for i in 0..150 {
+        table.push_str(&format!("| 第\u{a0}{i} 列 | 內容\u{a0}{i} |\n"));
+    }
+    let mut paragraph = String::new();
+    for i in 0..150 {
+        paragraph.push_str(&format!("段落 {i} ** x **\n"));
+    }
+    for input in [&list, &table, &paragraph] {
+        let plain = fix_document(input, &oracle());
+        assert!(plain.changed);
+        let result = fix_document(input, &guarded());
+        assert!(
+            result.skipped.is_empty(),
+            "{:?}",
+            &result.skipped[..3.min(result.skipped.len())]
+        );
+        assert_eq!(result, plain);
+    }
+    let result = fix_document(&list, &guarded());
+    assert!(
+        result
+            .text
+            .starts_with("# 標題\n\n- 項目\n\n- item 0 text\n")
+    );
+}
+
 // ---- 版面類：改變渲染時不套用 ----
 
 #[test]

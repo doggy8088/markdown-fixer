@@ -13,7 +13,7 @@
 
 兩個容易誤會的地方：
 
-- **問題會排序**：oracle 的 `dedupeProblems`（`markdown-fixer.mjs` 第 2150 行）先以 `rule:line:column:message` 去重，再以行號、欄號、規則 ID 做穩定排序（規則 ID 用 `localeCompare`，但 ID 都是 ASCII，結果與一般字串比較相同）。同一行同一欄同一規則的多個問題保留產生順序。
+- **問題會排序**：oracle 的 `dedupeProblems`（`markdown-fixer.mjs` 第 2183 行）先以 `rule:line:column:message` 去重，再以行號、欄號、規則 ID 做穩定排序（規則 ID 用 `localeCompare`，但 ID 都是 ASCII，結果與一般字串比較相同）。同一行同一欄同一規則的多個問題保留產生順序。
 - **規則數是 49 條**：oracle v1.1.0 的 `RULES` 共 49 條，其中 19 條可自動修正（v1.0.0 是 48 條、20 條；v1.1.0 新增 MDX086，MDX031 改為只報告）。測試一律以 `fixtures/golden/rules.json` 為準，不寫死數量。
 
 ## Golden 檔怎麼產生
@@ -121,6 +121,7 @@ oracle 從 v1.0.0 升到 v1.1.0 時，與 Rust 一起修正了下列行為。每
 | HTML 區塊 | raw 標籤名稱在行尾（`<iframe`）也算區塊開頭；引言或清單標記後開始、同一行沒有關閉、以結束標記收尾的 HTML 區塊（raw 的 `<pre>`／`<script>`／`<style>`、comment、`<?…?>`、`<!…>`、CDATA）保護到結束標記，沒有關閉的 comment 以 MDX083 拒絕修正（稽核 U8、U8b） | `regressions/html-raw-tag-at-eol.md`、`regressions/html-comment-after-container-marker.md`、`regressions/html-raw-block-after-container-marker.md`、`edge/blocking-html-comment-in-list.md` |
 | MDX060 | 表頭與分隔列的 GFM 儲存格數不同時不處理 | `regressions/mdx060-gfm-not-a-table.md` |
 | MDX006 | 空行後那一行以 U+FEFF 開頭時不修，只報告 | `regressions/oracle-bom-exposed-by-leading-blanks.md` |
+| MDX004／MDX005 | 空的清單項目標記之後與註腳定義裡、有縮排的只含空白行不清空也不合併（GitHub 當成內容，review 5 的 m1） | `regressions/github-whitespace-after-empty-item.md` |
 | MDX008 | NBSP 是整行或清單項目唯一的內容時不換；緊接在清單標記後的 NBSP 只報告（`fixable: false`） | `regressions/mdx008-nbsp-only-content.md`、`regressions/mdx008-nbsp-after-list-marker.md` |
 
 除了資源上限與 `RangeError`，這些都來自渲染稽核：v1.0.0 的修正會改變 CommonMark／GFM 的渲染結果。
@@ -172,7 +173,7 @@ v1.0.0 時記錄的第 1、2、7、12 項已在 v1.1.0 修正：
 
 ### 8. 同一段落有多個 MDX042 修正時，以原始偏移量逐一套用（潛在問題）
 
-- **位置**：`applyCjkEmphasisFixes`（第 1847 行）。core 回報。
+- **位置**：`applyCjkEmphasisFixes`（第 1880 行）。core 回報。
 - **oracle 行為**：`analyzeCjkEmphasis` 以原始段落的偏移量產生每個 transform，`applyCjkEmphasisFixes` 卻逐一套用在已經被前一個 transform 改過的段落上。
 - **實際影響**：目前無法觸發。每個 transform 只是把一段標點從 `**` 內側搬到外側，長度不變，而且後一個 transform 的位置都在前一個的 closer 之後。以結構化產生的 39,985 個「同一段落有多個 transform」的段落比對「逐一套用」與「依原始偏移量一次套用」，結果全部相同。
 - **風險**：日後若加入會改變長度的修正，就會套用到錯誤的位置。
@@ -181,13 +182,13 @@ v1.0.0 時記錄的第 1、2、7、12 項已在 v1.1.0 修正：
 
 ### 9. `analyzeCjkEmphasis` 的 `run !== opener` 永遠成立（不影響結果）
 
-- **位置**：第 1808 行。core 回報。
+- **位置**：第 1841 行。core 回報。
 - **oracle 行為**：`matchEmphasisRuns` 回傳的 leftovers 是 `{ ...run }` 的複本，與 `runs` 裡的原物件比較永遠不相等，所以排除 opener 與 closer 的條件形同虛設。
 - **實際影響**：沒有。後面的位置條件（`run.start >= opener.end && run.end <= closer.start`）本來就排除了 opener 與 closer 本身。Rust 照位置條件實作即可。
 
 ### 10. `matchEmphasisRuns` 在大量 closer 上是平方時間
 
-- **位置**：`matchEmphasisRuns`（第 1684 到 1717 行），由 `analyzeCjkEmphasis` 呼叫（MDX042）。review 回報。
+- **位置**：`matchEmphasisRuns`（第 1717 到 1750 行），由 `analyzeCjkEmphasis` 呼叫（MDX042）。review 回報。
 - **oracle 行為**：每遇到一個能當 closer 的 run，就從它往回逐一檢查前面所有的 run 找 opener。只有 closer、沒有可用 opener 的段落（例如 `a* ` 重複很多次，每個 `*` 前面是文字、後面是空白，只能收尾）每次都要掃到段落開頭，總共是 O(n²)。
 - **重現**：`'a* '.repeat(n)` 單一段落，只啟用 MDX042。實測 n = 10,000（29 KB）約 60 ms、20,000（59 KB）約 230 ms、40,000（117 KB）約 900 ms，輸入加倍時間約變 4 倍；1 MB 會花上數十秒。
 - **影響**：只影響執行時間，不影響結果。剪貼簿或 CI 遇到這種輸入時，Node 版會明顯停頓。
@@ -195,7 +196,7 @@ v1.0.0 時記錄的第 1、2、7、12 項已在 v1.1.0 修正：
 
 ### 11. `analyzeCjkEmphasis` 與 `applyCjkEmphasisFixes` 在大量可修正組合上是平方時間
 
-- **位置**：`analyzeCjkEmphasis`（第 1719 到 1835 行）與 `applyCjkEmphasisFixes`（第 1847 到 1864 行），MDX042。review 回報。
+- **位置**：`analyzeCjkEmphasis`（第 1752 到 1868 行）與 `applyCjkEmphasisFixes`（第 1880 到 1897 行），MDX042。review 回報。
 - **oracle 行為**：每個候選 closer 都重掃全部 leftovers 找 opener，再用 `runs.some(...)` 掃全部 run 找中間的 delimiter；`locate` 與 `lineOffsetOf` 反向線性找行號。套用時每個 transform 都重新 join、改寫、split 整個段落。
 - **重現**：`'**甲：**乙 '.repeat(n) + '\n'`，預設選項。oracle 的 `fixDocument` 在 n = 4,000（56 KB）約 0.2 秒、8,000（112 KB）約 0.7 秒；v1.0.0 在 n = 16,000 時改為拋出 `RangeError`，v1.1.0 已修正（見〈已在 v1.1.0 修正的疑似問題〉），但仍是平方時間。
 - **影響**：只影響執行時間，不影響結果。
@@ -237,3 +238,22 @@ v1.0.0 時記錄的第 1、2、7、12 項已在 v1.1.0 修正：
 - **前一行是 lazy continuation**：`> para` 或 `- item` 後面直接接表格時，GFM 把表頭與分隔列當成引言或清單項目段落的延續文字，不是表格。MDX062 在表格前補空行後，它變成容器外的表格。
 - **表格後面接沒有 `|` 的行**：GFM 把 `text` 當成表格的最後一列，MDX062 補空行後它變成表格後的段落。
 - **為什麼保留**：PRD〈6.9〉把 MDX062 歸為修復類，目的就是讓作者想要的表格與段落正確分開；這些改變只發生在被修正的表格與相鄰的一個區塊。渲染保護以修復類的規則檢查，只在影響超出範圍時還原。
+
+### 17. GitHub（cmark-gfm）與 pulldown-cmark 不一致時，渲染保護可能漏擋
+
+- **來源**：review 5（lead），以 GitHub API（`gh api markdown`，`mode=markdown`）、pandoc 與 pulldown-cmark 對照。
+- **說明**：渲染保護以 pulldown-cmark 判斷。兩個渲染器不一致時，第 15 項是保護擋太多（少修），這一項是反方向：pulldown-cmark 看不出差異，GitHub 的渲染卻變了，`skippedFixes` 也是空的。
+- **已修正（v1.1.0）**：空的清單項目標記之後與註腳定義裡、有縮排的只含空白行。GitHub 把它當成內容（`- \n  \n  x` 是一個內容為 `x` 的項目），pulldown-cmark 依規格當成空行；oracle 的 MDX004 清空它、MDX005 把它併進空行，都會改變 GitHub 的渲染。現在這種行標成 `keepWhitespace`，MDX004、MDX005、MDX003、MDX006 與行內修正都不動它。以 GitHub API 確認修正前後渲染相同。
+- **沒有修正**：一種刻意構造的表格形狀。
+
+  ```text
+     | `a|b` | … |
+     | --- | --- | --- |:--|--:|
+     $$
+     $$
+     | https://example.com/a|b |
+     |:--|--:|
+  ```
+
+  oracle 與 pulldown-cmark 都把最後兩行當成表格，MDX060 把分隔列改成 `|:---|---:|`；GitHub 把整段渲染成段落文字，讀者看得到分隔列的變化。差異來自兩個渲染器判斷「表格能不能在這裡開始」的規則不同，沒有乾淨又保守的規則可以在行導向掃描裡分辨，所以只記錄。
+- **影響**：渲染保護的保證是「以 pulldown-cmark 的渲染為準不改變」；遇到 GitHub 與 pulldown-cmark 不一致的輸入，GitHub 上的結果仍可能改變。

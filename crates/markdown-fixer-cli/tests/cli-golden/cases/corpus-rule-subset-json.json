@@ -14,7 +14,7 @@
     {
       "path": "corpus",
       "copyDir": "fixtures/corpus",
-      "fingerprint": "e13a98997cb1e41a"
+      "fingerprint": "b9b4321f8e82a478"
     }
   ],
   "expected": {
@@ -213,6 +213,10 @@
       {
         "path": "corpus/regressions/definition-quote-prefixes.md",
         "fnv": "3b0a2b90ccfa6f36"
+      },
+      {
+        "path": "corpus/regressions/github-whitespace-after-empty-item.md",
+        "fnv": "bb119cd6da3ea638"
       },
       {
         "path": "corpus/regressions/html-comment-after-container-marker.md",

@@ -51,6 +51,8 @@ pub(crate) struct LineInfo {
     /// 引言深度超過 [`Limits::max_quote_depth`] 的不透明行（JS `opaque`）：不是任何區塊的開頭、
     /// 不是 definition、不修改也不診斷。
     pub(crate) opaque: bool,
+    /// GitHub（cmark-gfm）當成內容的只含空白行（JS `keepWhitespace`），見 [`mark_significant_whitespace`]。
+    pub(crate) keep_whitespace: bool,
 }
 
 /// `scanDocument` 的結果。
@@ -807,6 +809,8 @@ pub(crate) fn scan_document_with(text: &[u16], limits: Limits) -> Scan {
         }
     }
 
+    mark_significant_whitespace(&lines, &mut info);
+
     if let Some(open) = fence {
         let kind = if open.ch == BACKTICK {
             "backtick"
@@ -898,6 +902,47 @@ fn is_definition_line(line: &[u16]) -> bool {
     match_definition(line).is_some()
 }
 
+/// JS `markSignificantWhitespace`：GitHub（cmark-gfm）在空的清單項目標記之後、以及註腳定義
+/// 裡，把有縮排的只含空白行當成內容：`- \n  \n  x` 在 GitHub 是一個內容為 `x` 的項目，
+/// 清掉中間那行就變成兩個區塊。把這種行（引言裡的 `>   ` 也算）標成 `keep_whitespace`，
+/// 讓空白與空行規則不動它。
+fn mark_significant_whitespace(lines: &[JsString], info: &mut [LineInfo]) {
+    #[derive(Clone, Copy, PartialEq, Eq)]
+    enum Context {
+        Item,
+        Footnote,
+    }
+    let mut context = None;
+    for (line, item) in lines.iter().zip(info.iter_mut()) {
+        if item.frontmatter
+            || item.fence_content
+            || item.html_block
+            || item.math_block
+            || item.opaque
+        {
+            context = None;
+            continue;
+        }
+        let (_, quote_end) = scan_quote_markers(line);
+        let rest = &line[quote_end..];
+        if is_blank(rest) {
+            if context.is_some() && !rest.is_empty() {
+                item.keep_whitespace = true;
+            }
+            continue;
+        }
+        if re!(r"^ {0,3}\[\^[^\]\n]+\]:").test(rest) {
+            context = Some(Context::Footnote);
+        } else if container_prefix(line).0 == line.len() && !is_thematic_break(rest) {
+            context = Some(Context::Item);
+        } else if !(context == Some(Context::Footnote)
+            && matches!(rest.first(), Some(&c) if c == SPACE || c == TAB))
+        {
+            context = None;
+        }
+    }
+}
+
 /// JS `isProtectedLine`。
 pub(crate) fn is_protected_line(info: &LineInfo) -> bool {
     info.frontmatter
@@ -910,6 +955,9 @@ pub(crate) fn is_protected_line(info: &LineInfo) -> bool {
 }
 
 /// 不含 `definition` 的保護判斷（JS 多處的 `frontmatter || fenceContent || htmlBlock || indentedCode || mathBlock || opaque`）。
+///
+/// 也含 `keep_whitespace`：JS 只在 MDX004 與空行規則的判斷加上它，但這種行只含空白，不可能
+/// 有零寬字元或 definition，所以在其他呼叫端（MDX009、參考定義）加上它結果相同。
 pub(crate) fn is_protected_block(info: &LineInfo) -> bool {
     info.frontmatter
         || info.fence_content
@@ -917,6 +965,7 @@ pub(crate) fn is_protected_block(info: &LineInfo) -> bool {
         || info.indented_code
         || info.math_block
         || info.opaque
+        || info.keep_whitespace
 }
 
 #[cfg(test)]

@@ -13,8 +13,9 @@
 //!    最後再驗證一次合併結果，仍不相等就退回只套用修復類的結果。
 //!
 //! 每一層都以「驗證，失敗就退一步」收尾：全部修正 → 去掉肇事規則 → 只套用（部分）修復 →
-//! 原文。原文永遠安全，所以結果一定不會有未預期的渲染改變。工作量有上限：每條版面類規則
-//! 最多多跑一次完整修正，修復類最多 [`MAX_REPAIR_ROUNDS`] 輪渲染。
+//! 原文。原文永遠安全，所以以 pulldown-cmark 渲染時，結果不會有未預期的改變；與 GitHub
+//! 渲染器（cmark-gfm）的差異見 `docs/architecture.md`〈已知限制〉。工作量有上限：每條版面類
+//! 規則最多多跑一次完整修正，修復類最多 [`MAX_REPAIR_ROUNDS`] 輪渲染。
 //!
 //! 渲染設定見 [`parser_options`]。數學式（`$…$`、`$$`）開啟：fixer 本來就把數學式當保護
 //! 區域，不開的話數學式裡的 `*`、`_` 會被當成強調，造成與修正無關的誤報。
@@ -52,6 +53,9 @@ const MYERS_MAX_D: usize = 256;
 
 /// 貪婪重新對齊時，往前找共同行的視窗大小。
 const RESYNC_WINDOW: usize = 64;
+
+/// 逐行替換時，每一步檢查兩邊是否錯開這麼多行就能對齊（插入或刪除了幾行）。
+const SHIFT_PROBE: usize = 4;
 
 const REASON_LAYOUT: &str = "fixes for this layout rule would change how the document renders, so none were applied in this file";
 const REASON_REPAIR: &str =
@@ -334,9 +338,9 @@ pub(crate) struct Hunk {
 }
 
 /// 行 diff。先去掉共同的開頭與結尾，中段用編輯距離有上限的 Myers；超過上限改用貪婪重新
-/// 對齊。任何共同子序列都是合法的對齊，品質只影響 hunk 的大小（hunk 越大檢查越寬鬆）。
-/// 貪婪對齊在 [`RESYNC_WINDOW`] 內找不到共同行時回傳 `None`，呼叫端要走安全的那一邊。
-pub(crate) fn diff_lines(a: &[&str], b: &[&str]) -> Option<Vec<Hunk>> {
+/// 對齊。任何共同子序列都是合法的對齊，品質只影響 hunk 的大小（hunk 越大檢查越寬鬆），
+/// 所以一定回傳一個對齊，不會失敗。
+pub(crate) fn diff_lines(a: &[&str], b: &[&str]) -> Vec<Hunk> {
     let prefix = a.iter().zip(b).take_while(|(x, y)| x == y).count();
     let suffix = a[prefix..]
         .iter()
@@ -346,19 +350,14 @@ pub(crate) fn diff_lines(a: &[&str], b: &[&str]) -> Option<Vec<Hunk>> {
         .count();
     let a_mid = &a[prefix..a.len() - suffix];
     let b_mid = &b[prefix..b.len() - suffix];
-    let hunks = match myers(a_mid, b_mid, MYERS_MAX_D) {
-        Some(hunks) => hunks,
-        None => greedy(a_mid, b_mid)?,
-    };
-    Some(
-        hunks
-            .into_iter()
-            .map(|h| Hunk {
-                a: h.a.start + prefix..h.a.end + prefix,
-                b: h.b.start + prefix..h.b.end + prefix,
-            })
-            .collect(),
-    )
+    let hunks = myers(a_mid, b_mid, MYERS_MAX_D).unwrap_or_else(|| greedy(a_mid, b_mid));
+    hunks
+        .into_iter()
+        .map(|h| Hunk {
+            a: h.a.start + prefix..h.a.end + prefix,
+            b: h.b.start + prefix..h.b.end + prefix,
+        })
+        .collect()
 }
 
 /// 由依序排列、互不重疊的相同行配對 `(i, j)` 產生 hunk。
@@ -443,8 +442,10 @@ fn myers_backtrack(
 }
 
 /// 貪婪重新對齊：遇到不同的行，在視窗內找 `x + y` 最小、而且下一行也相同（或兩邊同時
-/// 結束）的共同行。
-fn greedy(a: &[&str], b: &[&str]) -> Option<Vec<Hunk>> {
+/// 結束）的共同行；只差一行、下一行就相同時當成單行替換。視窗內找不到共同行時（例如長清單、
+/// 長表格的每一行都被修復），沿對角線逐行配對，直到兩邊的行再度相同。修復類規則多半不改
+/// 行數，逐行配對就是精確的對齊。
+fn greedy(a: &[&str], b: &[&str]) -> Vec<Hunk> {
     let (n, m) = (a.len(), b.len());
     let mut hunks = Vec::new();
     let (mut i, mut j) = (0, 0);
@@ -477,18 +478,45 @@ fn greedy(a: &[&str], b: &[&str]) -> Option<Vec<Hunk>> {
                 break;
             }
         }
-        let (x, y) = found?;
-        hunks.push(Hunk {
-            a: i..i + x,
-            b: j..j + y,
+        let (x, y) = found.unwrap_or_else(|| {
+            // 視窗內沒有共同行：逐行替換。遇到相同的行、兩邊錯開幾行就對得上（例如長串修復
+            // 後面緊接著 MDX062 補的空行），或走滿一個視窗時就停下，交回視窗搜尋。不能一路
+            // 配對到檔尾，否則後段整個變成一個 hunk，區域性檢查就失效了。
+            let shifted = |p: usize, q: usize| {
+                (1..=SHIFT_PROBE).any(|d| {
+                    (p < n && q + d < m && a[p] == b[q + d] && confirmed(p + 1, q + d + 1))
+                        || (p + d < n && q < m && a[p + d] == b[q] && confirmed(p + d + 1, q + 1))
+                })
+            };
+            let mut run = 0;
+            while run < RESYNC_WINDOW && i + run < n && j + run < m && a[i + run] != b[j + run] {
+                run += 1;
+                if shifted(i + run, j + run) {
+                    break;
+                }
+            }
+            (run, run)
         });
+        push_merged(&mut hunks, i..i + x, j..j + y);
         i += x;
         j += y;
     }
     if i < n || j < m {
-        hunks.push(Hunk { a: i..n, b: j..m });
+        push_merged(&mut hunks, i..n, j..m);
     }
-    Some(hunks)
+    hunks
+}
+
+/// 加入 hunk；與前一個 hunk 首尾相接時合併，讓連續的修改與 Myers 一樣是同一個 hunk。
+fn push_merged(hunks: &mut Vec<Hunk>, a: Range<usize>, b: Range<usize>) {
+    if let Some(last) = hunks.last_mut() {
+        if last.a.end == a.start && last.b.end == b.start {
+            last.a.end = a.end;
+            last.b.end = b.end;
+            return;
+        }
+    }
+    hunks.push(Hunk { a, b });
 }
 
 /// 原文中沒被 hunk 改到的第 `line` 行，在新文字中的行號。
@@ -709,12 +737,7 @@ fn repair_stage(original: &str, repaired: &str, problems: &[&Problem]) -> Repair
         text: original.to_string(),
         reverted: hunks.into_iter().map(|h| (h, REASON_REPAIR)).collect(),
     };
-    let Some(hunks) = diff_lines(&old, &new) else {
-        return revert_all(vec![Hunk {
-            a: 0..old.len(),
-            b: 0..new.len(),
-        }]);
-    };
+    let hunks = diff_lines(&old, &new);
     let old_paths = line_paths(original);
     let mut kept = Vec::with_capacity(hunks.len());
     let mut reverted: Vec<(Hunk, &'static str)> = Vec::new();
@@ -851,7 +874,7 @@ fn culprit_window(base_n: &str, reference_n: &str, full_n: &str) -> Option<Range
     let full_blocks = top_level_blocks(full_n);
     let a: Vec<&str> = reference_blocks.iter().map(|b| b.html.as_str()).collect();
     let b: Vec<&str> = full_blocks.iter().map(|b| b.html.as_str()).collect();
-    let block_hunks = diff_lines(&a, &b)?;
+    let block_hunks = diff_lines(&a, &b);
     // 不同的區塊在全部修正文字中的行範圍。
     let mut lo = usize::MAX;
     let mut hi = 0;
@@ -869,7 +892,7 @@ fn culprit_window(base_n: &str, reference_n: &str, full_n: &str) -> Option<Range
     // 對應回原文行號。
     let old: Vec<&str> = base_n.split('\n').collect();
     let new: Vec<&str> = full_n.split('\n').collect();
-    let line_hunks = diff_lines(&old, &new)?;
+    let line_hunks = diff_lines(&old, &new);
     let back = |line: usize, end: bool| {
         let i = line_hunks.partition_point(|h| h.b.end <= line);
         match line_hunks.get(i) {
@@ -1186,7 +1209,7 @@ mod tests {
         ];
         for (a, b) in cases {
             let (la, lb) = (lines(a), lines(b));
-            let hunks = diff_lines(&la, &lb).unwrap();
+            let hunks = diff_lines(&la, &lb);
             assert_eq!(apply(&la, &lb, &hunks), lb, "{a:?} -> {b:?}");
         }
     }
@@ -1202,8 +1225,54 @@ mod tests {
         let la: Vec<&str> = a.iter().map(String::as_str).collect();
         let lb: Vec<&str> = b.iter().map(String::as_str).collect();
         assert!(myers(&la, &lb, MYERS_MAX_D).is_none());
-        let hunks = diff_lines(&la, &lb).unwrap();
+        let hunks = diff_lines(&la, &lb);
         assert_eq!(apply(&la, &lb, &hunks), lb);
+    }
+
+    #[test]
+    fn greedy_never_fails_on_long_changed_runs() {
+        // 每一行都改了、視窗內沒有共同行：逐行配對成一個 hunk，不能失敗。
+        let a: Vec<String> = (0..300).map(|i| format!("- item {i}\u{a0}x")).collect();
+        let b: Vec<String> = (0..300).map(|i| format!("- item {i} x")).collect();
+        let la: Vec<&str> = a.iter().map(String::as_str).collect();
+        let lb: Vec<&str> = b.iter().map(String::as_str).collect();
+        assert!(myers(&la, &lb, MYERS_MAX_D).is_none());
+        let hunks = diff_lines(&la, &lb);
+        assert_eq!(
+            hunks,
+            vec![Hunk {
+                a: 0..300,
+                b: 0..300
+            }]
+        );
+        // 中間夾著沒改的行、兩邊行數不同時仍能重新對齊。
+        let mut c = b.clone();
+        c.insert(150, String::new());
+        let mut d = a.clone();
+        d[150] = b[150].clone();
+        let lc: Vec<&str> = c.iter().map(String::as_str).collect();
+        let ld: Vec<&str> = d.iter().map(String::as_str).collect();
+        assert_eq!(apply(&ld, &lc, &diff_lines(&ld, &lc)), lc);
+        // 長串修復後緊接著插入一行：逐行配對要在錯開的地方停下，後面沒改的行不能被吞進 hunk。
+        let mut e = b.clone();
+        e.insert(300, String::new());
+        let mut f = a.clone();
+        let tail: Vec<String> = (0..50).map(|i| format!("tail {i}")).collect();
+        e.extend(tail.iter().cloned());
+        f.extend(tail.iter().cloned());
+        let le: Vec<&str> = e.iter().map(String::as_str).collect();
+        let lf: Vec<&str> = f.iter().map(String::as_str).collect();
+        let hunks = diff_lines(&lf, &le);
+        assert_eq!(apply(&lf, &le, &hunks), le);
+        assert!(hunks.iter().all(|h| h.a.end <= 300), "{hunks:?}");
+        // 中段也一樣：插入點後還有很多被修復的行。
+        let mut g = b.clone();
+        g.insert(150, String::new());
+        g.extend(tail.iter().cloned());
+        let lg: Vec<&str> = g.iter().map(String::as_str).collect();
+        let hunks = diff_lines(&lf, &lg);
+        assert_eq!(apply(&lf, &lg, &hunks), lg);
+        assert!(hunks.iter().all(|h| h.a.end <= 300), "{hunks:?}");
     }
 
     #[test]
@@ -1274,7 +1343,7 @@ mod tests {
     fn locality_allows_touched_and_adjacent() {
         let old = "#A\n\np1\n\np2\n\np3\n";
         let new = "# A\n\np1\n\np2\n\np3\n";
-        let hunks = diff_lines(&lines(old), &lines(new)).unwrap();
+        let hunks = diff_lines(&lines(old), &lines(new));
         let v = locality_violations(&top_level_blocks(old), &top_level_blocks(new), &hunks);
         assert!(v.is_empty());
     }
@@ -1284,7 +1353,7 @@ mod tests {
         // 開一個沒關的 fence 會讓後面所有區塊都變成程式碼。
         let old = "p0\n\np1\n\np2\n\np3\n";
         let new = "```\np0\n\np1\n\np2\n\np3\n";
-        let hunks = diff_lines(&lines(old), &lines(new)).unwrap();
+        let hunks = diff_lines(&lines(old), &lines(new));
         let v = locality_violations(&top_level_blocks(old), &top_level_blocks(new), &hunks);
         assert_eq!(v, vec![2, 3]);
     }

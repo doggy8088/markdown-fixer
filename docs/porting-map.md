@@ -46,7 +46,7 @@ oracle 用了大量 lookbehind、lookahead、惰性量詞與回溯語意，而�
 | `RULE_BY_ID` | 79 | `rules::find`、`lib::rule` | |
 | `makeProblem` | 105–119 | `rules::make_problem`、`rules::Overrides` | `line`、`column` 小於 1 時夾成 1；`Overrides::NONE`、`NOT_FIXABLE`、`severity(..)` 對應 JS 的 `{}`、`{ fixable: false }`、`{ severity }` |
 | `createEnabled` | 133–144 | `rules::Enabled::new`、`Enabled::is` | `rules: Some(vec![])` 停用全部規則（JS 空陣列是 truthy）；MDX090 需要 `max_line_length > 0` |
-| `parseArgs` 的規則檢查 | 2516–2525 | `rules::validate`、`Options::validate` | 先檢查 `rules` 再檢查 `ignore_rules`，回報第一個未知 ID |
+| `parseArgs` 的規則檢查 | 2549–2558 | `rules::validate`、`Options::validate` | 先檢查 `rules` 再檢查 `ignore_rules`，回報第一個未知 ID |
 
 ## 掃描（scan.rs）
 
@@ -68,25 +68,26 @@ oracle 用了大量 lookbehind、lookahead、惰性量詞與回溯語意，而�
 | `parseQuoteFence` | 257–269 | `scan::parse_quote_fence` | |
 | `parseMathOpen` | 273–302 | `scan::parse_math_open` | 最多剝 16 層容器前綴 |
 | `isClosingFence` | 304–313 | `scan::is_closing_fence` | |
-| `scanDocument` | 361–622 | `scan::scan_document_with`、`scan::Scan`、`scan::LineInfo` | `frontmatterEnd` 的 `-1` 改成 `None`；`fenceChar` 的 `''` 改成 `None`。v1.1.0 多一個 `limits` 參數與 `opaque` 欄位；引言或清單標記後開始、同一行沒有關閉、以結束標記收尾的 HTML 區塊（raw、comment、`<?`、`<!`、CDATA）也算 HTML 區塊（第 591–605 行，前綴由 `scan::container_prefix` 計算）；`scan::scan_document`（預設上限）只給測試用，函式庫內的呼叫一律傳入選項的上限 |
+| `scanDocument` | 361–625 | `scan::scan_document_with`、`scan::Scan`、`scan::LineInfo` | `frontmatterEnd` 的 `-1` 改成 `None`；`fenceChar` 的 `''` 改成 `None`。v1.1.0 多一個 `limits` 參數與 `opaque` 欄位；引言或清單標記後開始、同一行沒有關閉、以結束標記收尾的 HTML 區塊（raw、comment、`<?`、`<!`、CDATA）也算 HTML 區塊（第 592–605 行，前綴由 `scan::container_prefix` 計算）；`scan::scan_document`（預設上限）只給測試用，函式庫內的呼叫一律傳入選項的上限 |
 | `scanQuoteMarkers` | 319–332 | `scan::scan_quote_markers` | v1.1.0。以 `(?: {0,3}>[ \t]?)*` 貪婪的方式數引言標記，回傳（深度, 結束位置）；MDX086 的深度與定義行掃描共用 |
 | `matchDefinition` | 342–355 | `scan::match_definition` | v1.1.0 取代 v1.0.0 第 515、1331 行的 regex。先吃完引言前綴，再比對至多 3 個空格、`[label]:`、`[ \t]*` 後的非空白字元；回傳 label（第 1 組）的範圍。舊 regex 保留為測試專用的 `scan::definition_re`，`definition_equivalence_tests` 窮舉長度 5 以內的字串並以 2 萬行結構化輸入（引言深度到 24）比對兩者 |
 | `createLimits`、`DEFAULT_MAX_QUOTE_DEPTH` | 121–131 | `scan::Limits`、`Limits::new`、`lib::DEFAULT_MAX_QUOTE_DEPTH` | v1.1.0。JS 把它掛在 `isEnabled.limits`；Rust 放在 `rules::Enabled::limits`，每次 `scan_document_with` 都傳入 |
 | `resourceLimitMessage` | 357–359 | `scan::resource_limit_message` | MDX086 的訊息 |
-| 資源上限檢查 | 502–513 | `scan_document_with` 內 | v1.1.0。frontmatter、fence、HTML、數學區塊、空行與縮排 code 之後才檢查；超過上限的行標成 `opaque` 並 `continue`，`error` 模式另外回報 MDX086 |
-| `isProtectedLine` | 624–634 | `scan::is_protected_line` | v1.1.0 含 `opaque` |
-| 不含 `definition` 的保護判斷 | 1514、1978、1992、2027 等 | `scan::is_protected_block` | JS 在多處手寫 `frontmatter \|\| fenceContent \|\| htmlBlock \|\| indentedCode \|\| mathBlock \|\| opaque` |
+| 資源上限檢查 | 503–512 | `scan_document_with` 內 | v1.1.0。frontmatter、fence、HTML、數學區塊、空行與縮排 code 之後才檢查；超過上限的行標成 `opaque` 並 `continue`，`error` 模式另外回報 MDX086 |
+| `markSignificantWhitespace` | 632–655 | `scan::mark_significant_whitespace` | v1.1.0。`scanDocument` 最後的一輪：空的清單項目標記之後、註腳定義裡的只含空白行（含引言裡的 `>   `）標成 `keepWhitespace`；Rust 把它併進 `is_protected_block`（只含空白的行沒有零寬字元也不是 definition，結果相同），`transform_line` 另外跳過 |
+| `isProtectedLine` | 657–667 | `scan::is_protected_line` | v1.1.0 含 `opaque` |
+| 不含 `definition` 的保護判斷 | 1547、2011、2025、2060 等 | `scan::is_protected_block` | JS 在多處手寫 `frontmatter \|\| fenceContent \|\| htmlBlock \|\| indentedCode \|\| mathBlock \|\| opaque` |
 
 ## 遮罩（mask.rs）
 
 | JS | JS 行號 | Rust | 備註 |
 | --- | --- | --- | --- |
-| `buildMask` | 636–748 | `mask::build_mask`、`mask::MaskOptions` | `MaskOptions::default()` 等於 JS 不帶選項；`MaskOptions::NO_BARE_URLS` 等於 `{ maskBareUrls: false }` |
-| `markRegex` | 687–696 | `build_mask` 內的 `mark_regex` | 比對起點已被遮罩時整個比對略過，但仍從比對結尾繼續找下一個 |
-| `/<[^>\n]{1,500}>/g` | 740 | `mask::angle_spans` | 線性實作：比對成立若且唯若 `<` 之後第一個 `>` 或 `\n` 是 `>` 且距離 1–500；`angle_spans_match_regex` 與原 regex 比對 |
-| 裸 URL regex | 743、2008、2247 | `mask::url_re` | |
-| `splitMasked` | 750–761 | `mask::split_masked`、`mask::Segment` | |
-| `replaceWithOffsets` | 763–777 | `mask::replace_with_offsets` | |
+| `buildMask` | 669–781 | `mask::build_mask`、`mask::MaskOptions` | `MaskOptions::default()` 等於 JS 不帶選項；`MaskOptions::NO_BARE_URLS` 等於 `{ maskBareUrls: false }` |
+| `markRegex` | 720–729 | `build_mask` 內的 `mark_regex` | 比對起點已被遮罩時整個比對略過，但仍從比對結尾繼續找下一個 |
+| `/<[^>\n]{1,500}>/g` | 773 | `mask::angle_spans` | 線性實作：比對成立若且唯若 `<` 之後第一個 `>` 或 `\n` 是 `>` 且距離 1–500；`angle_spans_match_regex` 與原 regex 比對 |
+| 裸 URL regex | 776、2041、2280 | `mask::url_re` | |
+| `splitMasked` | 783–794 | `mask::split_masked`、`mask::Segment` | |
+| `replaceWithOffsets` | 796–810 | `mask::replace_with_offsets` | |
 
 `build_mask` 會先確認行內含有各樣式必需的字元（`$`、`]`、`[`、`<`、`@`、`:` 或 `.`）才跑對應的 regex，結果不變。
 
@@ -94,17 +95,17 @@ oracle 用了大量 lookbehind、lookahead、惰性量詞與回溯語意，而�
 
 | JS | JS 行號 | Rust | 備註 |
 | --- | --- | --- | --- |
-| `fixHeading` | 779–832 | `line_fix::fix_heading` | MDX010、MDX011、MDX012 |
-| `fixBlockquote` | 839–887 | `line_fix::fix_blockquote` | MDX020。v1.1.0：一次吃完 `>  >` 串；只移除一般內容前多的一個空格或空內容前至多三個空格 |
-| `startsIndentSensitiveBlock` | 835–837 | `line_fix::starts_indent_sensitive_block` | v1.1.0。fence 與清單標記 |
-| `containerPrefix` | 972–983 | `scan::container_prefix` | v1.1.0。引言與清單標記的結束位置與 `*` bullet 的索引；MDX040 跳過 bullet，MDX008 判斷內容是否只剩空白 |
-| `fixListMarker` | 889–936 | `line_fix::fix_list_marker` | MDX030；第一個樣式比對成功但被排除時直接回傳 `None`，不會再試後面的樣式 |
-| `isBoundaryOrWhitespace` | 948–950 | `line_fix::is_boundary_or_whitespace` | `None` 代表行內內容的開頭或結尾 |
-| `isUnicodePunct` | 952–954 | `line_fix::is_unicode_punct` | |
-| `delimiterFlanking` | 959–968 | `line_fix::delimiter_flanking`、`line_fix::Flanking` | |
-| `fixEmphasis` | 985–1104 | `line_fix::fix_emphasis`、`line_fix::trim_pair` | MDX040；八個 `trimPair` 樣式原樣移植，起點是清單標記 `*` 的比對不套用（v1.1.0）。`charBefore`／`charAfter` 讀的是該輪取代前的區段文字，超出區段時退回原始整行 |
-| `fixNbsp` | 1106–1160 | `line_fix::fix_nbsp` | MDX008。v1.1.0：換完後容器前綴之後只剩空白時不換；緊接在清單標記後的 NBSP 不換，改以 `fixable: false` 回報（`Change::overrides`） |
-| `transformLine` | 1162–1191 | `line_fix::transform_line`、`line_fix::LineResult` | 回傳修正後的行與問題；`diagnose` 用 `.line` 組出 normalized lines |
+| `fixHeading` | 812–865 | `line_fix::fix_heading` | MDX010、MDX011、MDX012 |
+| `fixBlockquote` | 872–920 | `line_fix::fix_blockquote` | MDX020。v1.1.0：一次吃完 `>  >` 串；只移除一般內容前多的一個空格或空內容前至多三個空格 |
+| `startsIndentSensitiveBlock` | 868–870 | `line_fix::starts_indent_sensitive_block` | v1.1.0。fence 與清單標記 |
+| `containerPrefix` | 1005–1016 | `scan::container_prefix` | v1.1.0。引言與清單標記的結束位置與 `*` bullet 的索引；MDX040 跳過 bullet，MDX008 判斷內容是否只剩空白 |
+| `fixListMarker` | 922–969 | `line_fix::fix_list_marker` | MDX030；第一個樣式比對成功但被排除時直接回傳 `None`，不會再試後面的樣式 |
+| `isBoundaryOrWhitespace` | 981–983 | `line_fix::is_boundary_or_whitespace` | `None` 代表行內內容的開頭或結尾 |
+| `isUnicodePunct` | 985–987 | `line_fix::is_unicode_punct` | |
+| `delimiterFlanking` | 992–1001 | `line_fix::delimiter_flanking`、`line_fix::Flanking` | |
+| `fixEmphasis` | 1018–1137 | `line_fix::fix_emphasis`、`line_fix::trim_pair` | MDX040；八個 `trimPair` 樣式原樣移植，起點是清單標記 `*` 的比對不套用（v1.1.0）。`charBefore`／`charAfter` 讀的是該輪取代前的區段文字，超出區段時退回原始整行 |
+| `fixNbsp` | 1139–1193 | `line_fix::fix_nbsp` | MDX008。v1.1.0：換完後容器前綴之後只剩空白時不換；緊接在清單標記後的 NBSP 不換，改以 `fixable: false` 回報（`Change::overrides`） |
+| `transformLine` | 1195–1224 | `line_fix::transform_line`、`line_fix::LineResult` | 回傳修正後的行與問題；`diagnose` 用 `.line` 組出 normalized lines |
 
 `fix_emphasis` 在行內沒有 `*` 與 `_` 時、`fix_nbsp` 在沒有 U+00A0 時直接回傳原行，省下建立遮罩的成本，結果不變。
 
@@ -112,32 +113,32 @@ oracle 用了大量 lookbehind、lookahead、惰性量詞與回溯語意，而�
 
 | JS | JS 行號 | Rust | 備註 |
 | --- | --- | --- | --- |
-| `splitTableCells` | 1193–1226 | `table::split_table_cells` | 每個 cell 都已 `trim()` |
-| `gfmCellCount`、`isGfmTable` | 1231–1245 | `table::gfm_cell_count`、`table::is_gfm_table` | v1.1.0。只有 `\|` 不分割；MDX060 只處理表頭與分隔列儲存格數相同的表格 |
-| `isTableDelimiterRow` | 1247–1251 | `table::is_table_delimiter_row` | |
-| `isTableHeaderCandidate` | 1253–1260 | `table::is_table_header_candidate` | |
-| `isTableRow` | 1262–1270 | `table::is_table_row` | |
-| `findTables` | 1272–1287 | `table::find_tables`、`table::Table` | |
-| `fixTableDelimiter` | 1289–1317 | `table::fix_table_delimiter` | 欄號只在第一次修改前計算，等於原始各段長度的累加 |
-| `normalizeLabel` | 1319–1321 | `table::normalize_label` | |
-| `applyTableDelimiterFixes` | 2163–2174 | `table::apply_table_delimiter_fixes` | |
+| `splitTableCells` | 1226–1259 | `table::split_table_cells` | 每個 cell 都已 `trim()` |
+| `gfmCellCount`、`isGfmTable` | 1264–1278 | `table::gfm_cell_count`、`table::is_gfm_table` | v1.1.0。只有 `\|` 不分割；MDX060 只處理表頭與分隔列儲存格數相同的表格 |
+| `isTableDelimiterRow` | 1280–1284 | `table::is_table_delimiter_row` | |
+| `isTableHeaderCandidate` | 1286–1293 | `table::is_table_header_candidate` | |
+| `isTableRow` | 1295–1303 | `table::is_table_row` | |
+| `findTables` | 1305–1320 | `table::find_tables`、`table::Table` | |
+| `fixTableDelimiter` | 1322–1350 | `table::fix_table_delimiter` | 欄號只在第一次修改前計算，等於原始各段長度的累加 |
+| `normalizeLabel` | 1352–1354 | `table::normalize_label` | |
+| `applyTableDelimiterFixes` | 2196–2207 | `table::apply_table_delimiter_fixes` | |
 
 ## CJK 強調（cjk_emphasis.rs）
 
 | JS | JS 行號 | Rust | 備註 |
 | --- | --- | --- | --- |
-| `CJK_ADJACENT_RE` | 943 | `cjk_emphasis::is_cjk_adjacent` | |
-| `MOVABLE_PUNCT_RE` | 946 | `cjk_emphasis::is_movable_punct` | |
-| `isEmphasisProseLine` | 1625–1627 | `cjk_emphasis::is_emphasis_prose_line` | |
-| `startsInlineBlockBoundary` | 1629–1631 | `cjk_emphasis::starts_inline_block_boundary` | |
-| `forEachEmphasisParagraph` | 1633–1651 | `cjk_emphasis::emphasis_paragraphs` | 回傳 `(from, to)` 清單，取代 callback |
-| `findStarDelimiterRuns` | 1653–1678 | `cjk_emphasis::find_star_delimiter_runs` | |
-| `matchEmphasisRuns` | 1684–1717 | `cjk_emphasis::leftover_runs` | 以索引取代物件身分。演算法改寫：JS 每個 closer 往回逐一掃描，是 O(n²)；Rust 把候選 opener 依 `(len % 3, can_close)` 分成 6 個 stack，dropped 區間用差分陣列最後一次標記，攤銷 O(n)。測試專用的 `leftover_runs_naive` 是直接移植，`leftover_equivalence_tests` 以 20,000 組隨機 run 序列比對兩者結果相同 |
-| `analyzeCjkEmphasis` | 1719–1835 | `cjk_emphasis::analyze` | 沒有 `*` 的段落直接略過。演算法改寫：JS 對每個候選 closer 重掃全部 leftovers 找 opener、用 `runs.some` 找中間的 run、反向線性找行號，大量 `**X：**Y` 時是 O(n²)；Rust 事先算好每個 leftover 之前最後一個合格 opener，中間有沒有 run 改成比較 run 索引，行號用二分搜尋，每段 O(n log n)。測試專用的 `naive::analyze_naive` 是直接移植 |
-| `computeCjkEmphasis` | 1837–1845 | `cjk_emphasis::compute_cjk_emphasis` | MDX042 |
-| `applyCjkEmphasisFixes` | 1847–1864 | `cjk_emphasis::apply_cjk_emphasis_fixes` | 演算法改寫：JS 每個 transform 都重新 join、改寫、split 整個段落，是 O(transform 數 × 段落長度)；Rust 在整份文件上原地改寫每個 transform 的範圍，前提不成立時退回逐一套用（`apply_transforms_sequentially`）。測試專用的 `naive::apply_naive` 是直接移植，`linear_equivalence_tests` 比對兩者 |
+| `CJK_ADJACENT_RE` | 976 | `cjk_emphasis::is_cjk_adjacent` | |
+| `MOVABLE_PUNCT_RE` | 979 | `cjk_emphasis::is_movable_punct` | |
+| `isEmphasisProseLine` | 1658–1660 | `cjk_emphasis::is_emphasis_prose_line` | |
+| `startsInlineBlockBoundary` | 1662–1664 | `cjk_emphasis::starts_inline_block_boundary` | |
+| `forEachEmphasisParagraph` | 1666–1684 | `cjk_emphasis::emphasis_paragraphs` | 回傳 `(from, to)` 清單，取代 callback |
+| `findStarDelimiterRuns` | 1686–1711 | `cjk_emphasis::find_star_delimiter_runs` | |
+| `matchEmphasisRuns` | 1717–1750 | `cjk_emphasis::leftover_runs` | 以索引取代物件身分。演算法改寫：JS 每個 closer 往回逐一掃描，是 O(n²)；Rust 把候選 opener 依 `(len % 3, can_close)` 分成 6 個 stack，dropped 區間用差分陣列最後一次標記，攤銷 O(n)。測試專用的 `leftover_runs_naive` 是直接移植，`leftover_equivalence_tests` 以 20,000 組隨機 run 序列比對兩者結果相同 |
+| `analyzeCjkEmphasis` | 1752–1868 | `cjk_emphasis::analyze` | 沒有 `*` 的段落直接略過。演算法改寫：JS 對每個候選 closer 重掃全部 leftovers 找 opener、用 `runs.some` 找中間的 run、反向線性找行號，大量 `**X：**Y` 時是 O(n²)；Rust 事先算好每個 leftover 之前最後一個合格 opener，中間有沒有 run 改成比較 run 索引，行號用二分搜尋，每段 O(n log n)。測試專用的 `naive::analyze_naive` 是直接移植 |
+| `computeCjkEmphasis` | 1870–1878 | `cjk_emphasis::compute_cjk_emphasis` | MDX042 |
+| `applyCjkEmphasisFixes` | 1880–1897 | `cjk_emphasis::apply_cjk_emphasis_fixes` | 演算法改寫：JS 每個 transform 都重新 join、改寫、split 整個段落，是 O(transform 數 × 段落長度)；Rust 在整份文件上原地改寫每個 transform 的範圍，前提不成立時退回逐一套用（`apply_transforms_sequentially`）。測試專用的 `naive::apply_naive` 是直接移植，`linear_equivalence_tests` 比對兩者 |
 
-`analyzeCjkEmphasis` 第 1808 行的 `run !== opener && run !== closer` 比較的是原始 run 與複本 item，永遠為真；但 opener、closer 本身不會落在 `[opener.end, closer.start]` 裡，所以 Rust 直接省略這兩個條件，結果相同。同一段落有多個 transform 時，JS 會把以原始段落計算的偏移量套用在已被前一個 transform 改過的行上。Rust 的結果與此相同，但不逐一重組段落：
+`analyzeCjkEmphasis` 第 1841 行的 `run !== opener && run !== closer` 比較的是原始 run 與複本 item，永遠為真；但 opener、closer 本身不會落在 `[opener.end, closer.start]` 裡，所以 Rust 直接省略這兩個條件，結果相同。同一段落有多個 transform 時，JS 會把以原始段落計算的偏移量套用在已被前一個 transform 改過的行上。Rust 的結果與此相同，但不逐一重組段落：
 
 - 每個 transform 只有兩個 edit，刪除 `[p, c)`，再在 `e` 插入原本的標點 `T`（`c <= e`，`T` 長度為 `c - p`）。依 start 由大到小套用在任何目前內容 `buf` 上，結果都是 `buf[..p] + buf[c..e] + T + buf[e..]`：長度不變，只動到 `[p, e)`。
 - `buf[p..e]` 與 `T` 都沒有 `\n` 時，段落的行數與每行長度也不變，所以 JS 的 join、改寫、split、寫回各行，等於直接改寫整份文件中「段落起點加偏移量」的那一段，後面的 transform 看到的內容也與 JS 相同。
@@ -147,39 +148,39 @@ oracle 用了大量 lookbehind、lookahead、惰性量詞與回溯語意，而�
 
 | JS | JS 行號 | Rust | 備註 |
 | --- | --- | --- | --- |
-| `computeBlankLineFixes` | 1872–1949 | `blank_lines::compute_blank_line_fixes`、`BlankLineFixes` | MDX013、MDX052、MDX062、MDX082；`issues` 給 `diagnose` 用。v1.1.0：引言裡的 fence 以 `fill` 記錄要插入的 `>` 行 |
-| `isQuoteBlankLine` | 1867–1870 | `blank_lines::is_quote_blank_line` | v1.1.0 |
-| `applyBlankLineFixes` | 1951–1971 | `blank_lines::apply_blank_line_fixes` | |
-| `applyTrailingWhitespace` | 1987–2003 | `blank_lines::apply_trailing_whitespace` | 剛好兩個空格的 hard break 保留 |
-| `applyBlankLineNormalization` | 2086–2130 | `blank_lines::apply_blank_line_normalization` | `replace(/\n*$/, '\n')` 手寫為「去掉結尾連續 `\n` 再補一個」 |
+| `computeBlankLineFixes` | 1905–1982 | `blank_lines::compute_blank_line_fixes`、`BlankLineFixes` | MDX013、MDX052、MDX062、MDX082；`issues` 給 `diagnose` 用。v1.1.0：引言裡的 fence 以 `fill` 記錄要插入的 `>` 行 |
+| `isQuoteBlankLine` | 1900–1903 | `blank_lines::is_quote_blank_line` | v1.1.0 |
+| `applyBlankLineFixes` | 1984–2004 | `blank_lines::apply_blank_line_fixes` | |
+| `applyTrailingWhitespace` | 2020–2036 | `blank_lines::apply_trailing_whitespace` | 剛好兩個空格的 hard break 保留 |
+| `applyBlankLineNormalization` | 2119–2163 | `blank_lines::apply_blank_line_normalization` | `replace(/\n*$/, '\n')` 手寫為「去掉結尾連續 `\n` 再補一個」 |
 
 ## 修正主流程（fix.rs）
 
 | JS | JS 行號 | Rust | 備註 |
 | --- | --- | --- | --- |
-| `BLOCKING_RULES` | 2291 | `fix::blocking_reason` | v1.1.0 加入 MDX086 |
-| `FRONTMATTER_TRAP` | 2293 | `fix::FRONTMATTER_TRAP` | |
-| `fixDocument` | 2295–2353 | `fix::fix_document`、`lib::fix_document` | 最多 6 輪；blocking 規則（MDX081、MDX083、MDX053、MDX085、MDX086）不受 `ignore_rules` 影響。v1.1.0 不再呼叫 `fixListStyle`（MDX031 只回報） |
-| blocking 判斷 | 2305、2316 | `fix::blocking_reason` | |
+| `BLOCKING_RULES` | 2324 | `fix::blocking_reason` | v1.1.0 加入 MDX086 |
+| `FRONTMATTER_TRAP` | 2326 | `fix::FRONTMATTER_TRAP` | |
+| `fixDocument` | 2328–2386 | `fix::fix_document`、`lib::fix_document` | 最多 6 輪；blocking 規則（MDX081、MDX083、MDX053、MDX085、MDX086）不受 `ignore_rules` 影響。v1.1.0 不再呼叫 `fixListStyle`（MDX031 只回報） |
+| blocking 判斷 | 2338、2349 | `fix::blocking_reason` | |
 
 ## 結構診斷與 diagnose（diag 負責）
 
 | JS 函式 | JS 行號 | Rust | 備註 |
 | --- | --- | --- | --- |
-| `computeHeadingStructure` | 1323–1379 | `structure::compute_heading_structure` | MDX014–MDX019。標題比對改用線性的 `match_atx_heading` 與 `strip_closing_hashes`；`/[.:;!?。：；！？]$/` 改成檢查最後一個 code unit |
-| `computeListStructure` | 1381–1457 | `structure::compute_list_structure` | MDX031、MDX035、MDX032。bullet 比對改用線性的 `match_bullet`；MDX032 的項目判斷用 `scan::is_list_line`（同一個 regex） |
-| `computeTableStructure` | 1459–1507 | `structure::compute_table_structure` | MDX061、MDX063、MDX060。MDX060 欄號的 `parts.slice(0, k).join('\|').length + (k > 0 ? 1 : 0)` 等於第 k 段的起點，以累加長度計算 |
-| `computeReferenceStructure` | 1509–1574 | `structure::compute_reference_structure` | MDX074、MDX071、MDX075、MDX072、MDX073。定義行用 `scan::match_definition`；MDX071、MDX072、MDX073 改用線性比對器；label 正規化用 `table::normalize_label`，以 `JsString` 為 `HashSet` 鍵 |
-| `computeSetextAmbiguity` | 1576–1599 | `structure::compute_setext_ambiguity` | MDX080。regex 原樣移植（都是錨定的線性樣式） |
-| `computeFullwidthSyntax` | 1601–1616 | `structure::compute_fullwidth_syntax` | MDX084。前兩個錨定樣式原樣移植；連結樣式改用線性的 `has_fullwidth_link` |
-| `computeTrailingWhitespace` | 1973–1985 | `structure::compute_trailing_whitespace` | MDX004。`/[ \t]+$/` 等於行尾連續空格與 tab，手寫計數 |
-| `computeNbspInUrls` | 2005–2020 | `structure::compute_nbsp_in_urls` | MDX008。遮罩選項 `{ maskBareUrls: false, maskLinkDestinations: false }`，URL 樣式用 `mask::url_re` |
-| `computeZeroWidth` | 2022–2040 | `structure::compute_zero_width` | MDX009。每行只回報第一個未保護區段中的 U+200B、U+2060、U+FEFF |
-| `computeBlankLineRuns` | 2042–2084 | `structure::compute_blank_line_runs` | MDX006、MDX005、MDX003。在第一次 scan（行內修正前）上執行。v1.1.0：空行後那一行以 U+FEFF 開頭時 MDX006 以 `fixable: false` 回報 |
-| `computeLineLength` | 2132–2148 | `structure::compute_line_length` | MDX090。長度用 `jsstr::code_point_len`；表格行略過 |
-| `dedupeProblems` | 2150–2161 | `diagnose::dedupe_problems` | 以 `rule:line:column:message` 去重；`sort_by` 是穩定排序，規則 ID 為 ASCII，`localeCompare` 等同位元組比較 |
-| `pushAll` | 2178–2180 | `Vec::extend` | v1.1.0 取代 `issues.push(...spread)`，避免問題很多時 `RangeError` |
-| `diagnose` | 2182–2287 | `diagnose::diagnose` | 問題串接順序與 JS 相同。MDX007、MDX070、MDX050、MDX041 迴圈寫在函式內；MDX041 的 lookbehind 樣式原樣交給 `jsregex`，只在單一區段內比對，與 JS 相同 |
+| `computeHeadingStructure` | 1356–1412 | `structure::compute_heading_structure` | MDX014–MDX019。標題比對改用線性的 `match_atx_heading` 與 `strip_closing_hashes`；`/[.:;!?。：；！？]$/` 改成檢查最後一個 code unit |
+| `computeListStructure` | 1414–1490 | `structure::compute_list_structure` | MDX031、MDX035、MDX032。bullet 比對改用線性的 `match_bullet`；MDX032 的項目判斷用 `scan::is_list_line`（同一個 regex） |
+| `computeTableStructure` | 1492–1540 | `structure::compute_table_structure` | MDX061、MDX063、MDX060。MDX060 欄號的 `parts.slice(0, k).join('\|').length + (k > 0 ? 1 : 0)` 等於第 k 段的起點，以累加長度計算 |
+| `computeReferenceStructure` | 1542–1607 | `structure::compute_reference_structure` | MDX074、MDX071、MDX075、MDX072、MDX073。定義行用 `scan::match_definition`；MDX071、MDX072、MDX073 改用線性比對器；label 正規化用 `table::normalize_label`，以 `JsString` 為 `HashSet` 鍵 |
+| `computeSetextAmbiguity` | 1609–1632 | `structure::compute_setext_ambiguity` | MDX080。regex 原樣移植（都是錨定的線性樣式） |
+| `computeFullwidthSyntax` | 1634–1649 | `structure::compute_fullwidth_syntax` | MDX084。前兩個錨定樣式原樣移植；連結樣式改用線性的 `has_fullwidth_link` |
+| `computeTrailingWhitespace` | 2006–2018 | `structure::compute_trailing_whitespace` | MDX004。`/[ \t]+$/` 等於行尾連續空格與 tab，手寫計數 |
+| `computeNbspInUrls` | 2038–2053 | `structure::compute_nbsp_in_urls` | MDX008。遮罩選項 `{ maskBareUrls: false, maskLinkDestinations: false }`，URL 樣式用 `mask::url_re` |
+| `computeZeroWidth` | 2055–2073 | `structure::compute_zero_width` | MDX009。每行只回報第一個未保護區段中的 U+200B、U+2060、U+FEFF |
+| `computeBlankLineRuns` | 2075–2117 | `structure::compute_blank_line_runs` | MDX006、MDX005、MDX003。在第一次 scan（行內修正前）上執行。v1.1.0：空行後那一行以 U+FEFF 開頭時 MDX006 以 `fixable: false` 回報 |
+| `computeLineLength` | 2165–2181 | `structure::compute_line_length` | MDX090。長度用 `jsstr::code_point_len`；表格行略過 |
+| `dedupeProblems` | 2183–2194 | `diagnose::dedupe_problems` | 以 `rule:line:column:message` 去重；`sort_by` 是穩定排序，規則 ID 為 ASCII，`localeCompare` 等同位元組比較 |
+| `pushAll` | 2211–2213 | `Vec::extend` | v1.1.0 取代 `issues.push(...spread)`，避免問題很多時 `RangeError` |
+| `diagnose` | 2215–2320 | `diagnose::diagnose` | 問題串接順序與 JS 相同。MDX007、MDX070、MDX050、MDX041 迴圈寫在函式內；MDX041 的 lookbehind 樣式原樣交給 `jsregex`，只在單一區段內比對，與 JS 相同 |
 
 ### diag 的線性比對器
 
@@ -187,19 +188,19 @@ oracle 的這幾個 regex 在回溯式引擎上是平方時間，下列函式都
 
 | 原 regex（JS 行號） | Rust | 做法 |
 | --- | --- | --- |
-| `/^( {0,3})(#{1,6})[ \t]+(.*?)[ \t]*$/`（1334） | `match_atx_heading` | 空白段貪婪吃完；剩餘部分含行終止字元（U+000A、U+000D、U+2028、U+2029）就失敗；第 3 組是去掉行尾空白後的剩餘部分 |
-| `/[ \t]+#+[ \t]*$/` 取代（1338） | `strip_closing_hashes` | 去掉行尾空白後，取結尾的 `#` 段與它前面的空白段；兩段都非空才移除 |
-| `/^( {0,3})([-*+])([ \t]+)(.*)$/`（1396） | `match_bullet` | 縮排至多 3、marker、至少一個空白，其後不得有行終止字元 |
-| `/\[[ \t]*\]\([^)]*\)\|\][ \t]*\([ \t]*\)\|!\[[ \t]*\]\([^)]*\)/`（1542） | `find_empty_link` | `[^)]*\)` 等於「位置 p 之後還有 `)`」，用最後一個 `)` 的位置判斷；只需要起點 |
-| `/\]\s+\([^)]*\)/`（1554） | `find_spaced_link` | `\s` 用 `jsstr::is_js_space` |
-| `/!?\[([^\]\n]*)\]\[([^\]\n]*)\]/g`（1560） | `find_full_references` | 預先算出每個位置之後第一個 `]` 或 `\n`，每個起點 O(1)；與 `exec` 迴圈相同的不重疊全域比對 |
-| `/！?［[^］\n]+］（[^）\n]+）/`（1610） | `has_fullwidth_link` | 兩個 next-stop 陣列；`！?` 不影響是否比對成功 |
+| `/^( {0,3})(#{1,6})[ \t]+(.*?)[ \t]*$/`（1367） | `match_atx_heading` | 空白段貪婪吃完；剩餘部分含行終止字元（U+000A、U+000D、U+2028、U+2029）就失敗；第 3 組是去掉行尾空白後的剩餘部分 |
+| `/[ \t]+#+[ \t]*$/` 取代（1371） | `strip_closing_hashes` | 去掉行尾空白後，取結尾的 `#` 段與它前面的空白段；兩段都非空才移除 |
+| `/^( {0,3})([-*+])([ \t]+)(.*)$/`（1429） | `match_bullet` | 縮排至多 3、marker、至少一個空白，其後不得有行終止字元 |
+| `/\[[ \t]*\]\([^)]*\)\|\][ \t]*\([ \t]*\)\|!\[[ \t]*\]\([^)]*\)/`（1575） | `find_empty_link` | `[^)]*\)` 等於「位置 p 之後還有 `)`」，用最後一個 `)` 的位置判斷；只需要起點 |
+| `/\]\s+\([^)]*\)/`（1587） | `find_spaced_link` | `\s` 用 `jsstr::is_js_space` |
+| `/!?\[([^\]\n]*)\]\[([^\]\n]*)\]/g`（1593） | `find_full_references` | 預先算出每個位置之後第一個 `]` 或 `\n`，每個起點 O(1)；與 `exec` 迴圈相同的不重疊全域比對 |
+| `/！?［[^］\n]+］（[^）\n]+）/`（1643） | `has_fullwidth_link` | 兩個 next-stop 陣列；`！?` 不影響是否比對成功 |
 
 **等價性測試**：`structure::matchers` 模組在小字母表上窮舉所有短字串（長度 6–8，字母表含 U+2028、NBSP、U+3000、`\n` 等邊界字元），與 `jsregex` 執行原樣式的結果比對起點與 capture 範圍；MDX073 比對整個 `find_iter` 序列。
 
 ## 已知的效能特性
 
-- **連結目的地掃描**：`buildMask` 的 `](` 掃描（JS 701–731 行）在 `[](` 重複數千次、括號永遠不閉合的行上是平方時間，與 oracle 相同；10k code unit 約 30 ms（release）。正常文件不受影響。
+- **連結目的地掃描**：`buildMask` 的 `](` 掃描（JS 734–764 行）在 `[](` 重複數千次、括號永遠不閉合的行上是平方時間，與 oracle 相同；10k code unit 約 30 ms（release）。正常文件不受影響。
 - **1 MB 文件**：`fix_document` 約 145 ms、`diagnose` 約 60 ms（Apple M 系列、release）。量測方式見 `regex_hazards::one_megabyte_fix_document`（ignored）。
 
 ## 測試與探針

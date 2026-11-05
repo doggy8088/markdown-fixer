@@ -287,7 +287,7 @@ fn to_json(text: &str) -> serde_json::Result<String> {
 
 - 處理時間與輸入長度大致成線性。實測約 1.16 MB 的文件，release build 在 Apple M5 Max 上 `fix_document` 約 136 ms、`diagnose` 約 65 ms（PRD 目標是 1 MB 低於 200 ms）。量測方式見 [architecture.md](architecture.md#效能)。
 - `fix_document` 最多跑 6 輪修正，每輪都會重新掃描文件，所以比 `diagnose` 慢幾倍。只需要知道「有沒有問題」時用 `diagnose`。
-- 渲染保護在修正改變渲染時要多跑幾次修正與一次 `diagnose`。以語料拼成的 1 MB 文件，開啟後約 270 ms（關閉時約 100 ms）；刻意製造的最壞情況見 [architecture.md](architecture.md#渲染保護的成本)。對延遲很敏感又確定只處理可信的輸入時，可以關閉。
+- 渲染保護在修正改變渲染時要多跑幾次修正與一次 `diagnose`。以語料拼成的 1 MB 文件，開啟後約 380 ms（關閉時約 115 ms）；刻意製造的最壞情況見 [architecture.md](architecture.md#渲染保護的成本)。對延遲很敏感又確定只處理可信的輸入時，可以關閉。
 - CLI 對每個檔案會呼叫 `diagnose` 兩次、`fix_document` 一次。嵌入時可以依需求只呼叫需要的部分。
 - 呼叫端只需要一份規則目錄時，`rules()` 回傳的是 `&'static` 切片，不會配置記憶體。
 

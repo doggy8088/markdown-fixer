@@ -46,9 +46,21 @@ jobs:
       - uses: rust-lang/crates-io-auth-action@v1
         id: auth
 
-      # --workspace 會依相依順序先發佈 markdown-fixer，再發佈 markdown-fixer-cli；
+      # 依相依順序逐一發佈：先 markdown-fixer，再 markdown-fixer-cli。已經在 crates.io 上的
+      # 版本會跳過（例如第一版是用 API token 手動發佈，之後才設定 trusted publishing）。
       # markdown-fixer-ffi 設了 publish = false，不會上傳。
       - name: cargo publish
-        run: cargo publish --workspace --locked
         env:
           CARGO_REGISTRY_TOKEN: ${{ steps.auth.outputs.token }}
+        run: |
+          version=$(grep -m1 '^version' Cargo.toml | sed -E 's/.*"(.*)".*/\1/')
+          for crate in markdown-fixer markdown-fixer-cli; do
+            status=$(curl -s -o /dev/null -w '%{http_code}' \
+              -A "markdown-fixer-release (https://github.com/doggy8088/markdown-fixer)" \
+              "https://crates.io/api/v1/crates/$crate/$version")
+            if [ "$status" = "200" ]; then
+              echo "$crate $version is already on crates.io; skipping."
+              continue
+            fi
+            cargo publish -p "$crate" --locked
+          done
