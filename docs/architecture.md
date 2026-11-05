@@ -281,6 +281,16 @@ PRD〈7〉的目標：1 MB 的 Markdown，`fix_document` 在 Apple M 系列上�
 cargo test --release -p markdown-fixer --lib -- --ignored one_megabyte --nocapture
 ```
 
-修正迴圈每一輪都會重新掃描好幾次，最壞情況是 6 輪乘上每輪的掃描次數，但每次掃描都是線性的。實作時避免在迴圈裡做「對每一行重新組整份文字」這類二次方運算。
+修正迴圈每一輪都會重新掃描好幾次，最壞情況是 6 輪乘上每輪的掃描次數。每次掃描在一般輸入上是線性的，實作時要避免在迴圈裡做「對每一行重新組整份文字」這類二次方運算。
 
-已知的非線性情況：一行裡有大量 `[](` 時，`buildMask` 的連結目的地掃描是平方時間，和 oracle 相同（10k 字元的病態行，`diagnose` 約 30 ms）。`regex_hazards` 測試以約 340 種病態輸入檢查每個正規表示式與遮罩，時間上限只在 release build 斷言，避免慢速的 debug CI 誤報。
+oracle 本身有幾處在病態輸入上不是線性的。Rust 的輸出照 oracle，但能做到線性的地方就換成線性演算法：
+
+| 位置 | oracle | Rust |
+| --- | --- | --- |
+| MDX042 的 delimiter 配對（`matchEmphasisRuns`） | 平方時間：每個 closer 往回逐一找 opener，`a* ` 重複 4 萬次（117 KB）約 0.9 秒，輸入加倍時間約變 4 倍 | 攤銷 O(n)：`cjk_emphasis::leftover_runs` 以 6 個 stack 加差分陣列實作，1 MB 的 `a* ` 整個 CLI `--stdin --write` 約 0.3 秒 |
+| 深層引言的參考定義 regex | 指數級回溯，40 層 `>` 會卡住 | `jsregex` 的記憶化回溯，200 層以內毫秒級 |
+| 一行裡大量 `[](` 的連結目的地遮罩（`buildMask`） | 平方時間 | 照 oracle，仍是平方時間：10k 字元的病態行，`diagnose` 約 30 ms |
+
+演算法換掉的地方都保留一份直接移植的舊版，只在測試中編譯，用來比對兩者結果相同。oracle 的這些行為記錄在 [parity.md](parity.md#oracle-疑似問題)。
+
+`regex_hazards` 測試以約 340 種病態輸入檢查每個正規表示式與遮罩，時間上限只在 release build 斷言，避免慢速的 debug CI 誤報。

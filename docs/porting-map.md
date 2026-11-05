@@ -125,7 +125,7 @@ oracle 用了大量 lookbehind、lookahead、惰性量詞與回溯語意，而�
 | `startsInlineBlockBoundary` | 1444–1446 | `cjk_emphasis::starts_inline_block_boundary` | |
 | `forEachEmphasisParagraph` | 1448–1466 | `cjk_emphasis::emphasis_paragraphs` | 回傳 `(from, to)` 清單，取代 callback |
 | `findStarDelimiterRuns` | 1468–1493 | `cjk_emphasis::find_star_delimiter_runs` | |
-| `matchEmphasisRuns` | 1499–1532 | `cjk_emphasis::leftover_runs` | 以索引取代物件身分 |
+| `matchEmphasisRuns` | 1499–1532 | `cjk_emphasis::leftover_runs` | 以索引取代物件身分。演算法改寫：JS 每個 closer 往回逐一掃描，是 O(n²)；Rust 把候選 opener 依 `(len % 3, can_close)` 分成 6 個 stack，dropped 區間用差分陣列最後一次標記，攤銷 O(n)。測試專用的 `leftover_runs_naive` 是直接移植，`leftover_equivalence_tests` 以 20,000 組隨機 run 序列比對兩者結果相同 |
 | `analyzeCjkEmphasis` | 1534–1648 | `cjk_emphasis::analyze` | 沒有 `*` 的段落直接略過 |
 | `computeCjkEmphasis` | 1650–1658 | `cjk_emphasis::compute_cjk_emphasis` | MDX042 |
 | `applyCjkEmphasisFixes` | 1660–1677 | `cjk_emphasis::apply_cjk_emphasis_fixes` | |

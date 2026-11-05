@@ -176,3 +176,11 @@ node scripts/gen-golden.mjs --check    # 只檢查：golden 過期、缺少或�
 - **位置**：第 1621 行。core 回報。
 - **oracle 行為**：`matchEmphasisRuns` 回傳的 leftovers 是 `{ ...run }` 的複本，與 `runs` 裡的原物件比較永遠不相等，所以排除 opener 與 closer 的條件形同虛設。
 - **實際影響**：沒有。後面的位置條件（`run.start >= opener.end && run.end <= closer.start`）本來就排除了 opener 與 closer 本身。Rust 照位置條件實作即可。
+
+### 10. `matchEmphasisRuns` 在大量 closer 上是平方時間
+
+- **位置**：`matchEmphasisRuns`（第 1499 到 1532 行），由 `analyzeCjkEmphasis` 呼叫（MDX042）。review 回報。
+- **oracle 行為**：每遇到一個能當 closer 的 run，就從它往回逐一檢查前面所有的 run 找 opener。只有 closer、沒有可用 opener 的段落（例如 `a* ` 重複很多次，每個 `*` 前面是文字、後面是空白，只能收尾）每次都要掃到段落開頭，總共是 O(n²)。
+- **重現**：`'a* '.repeat(n)` 單一段落，只啟用 MDX042。實測 n = 10,000（29 KB）約 60 ms、20,000（59 KB）約 230 ms、40,000（117 KB）約 900 ms，輸入加倍時間約變 4 倍；1 MB 會花上數十秒。
+- **影響**：只影響執行時間，不影響結果。剪貼簿或 CI 遇到這種輸入時，Node 版會明顯停頓。
+- **Rust**：輸出照 oracle，演算法改成攤銷 O(n)（`cjk_emphasis::leftover_runs`，細節見 [porting-map.md](porting-map.md)）。舊的逐一反向掃描保留為測試專用的 `leftover_runs_naive`，以 20,000 組隨機 run 序列驗證兩者結果相同。1 MB 的 `a* ` 整個 CLI `--stdin --write` 約 0.3 秒。
