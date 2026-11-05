@@ -59,11 +59,13 @@ read_clipboard() {
     esac
 }
 
+# wl-copy 與 xclip 都會留一個背景行程持有剪貼簿，直到別的程式取得剪貼簿；
+# 把它們的 stdout／stderr 導到 /dev/null，否則呼叫端讀這支腳本的輸出時會一直等到
+# 那個背景行程結束。
 write_clipboard() {
     case $backend in
-        wayland) wl-copy -t 'text/plain;charset=utf-8' <"$1" ;;
-        # xclip 會在背景持有選取內容，直到別的程式取得剪貼簿。
-        x11) xclip -selection clipboard -t UTF8_STRING -i <"$1" ;;
+        wayland) wl-copy -t 'text/plain;charset=utf-8' <"$1" >/dev/null 2>&1 ;;
+        x11) xclip -selection clipboard -t UTF8_STRING -i <"$1" >/dev/null 2>&1 ;;
     esac
 }
 

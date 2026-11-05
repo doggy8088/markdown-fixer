@@ -2,7 +2,8 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    # ci/** 讓 CI 專用分支不必開 PR 也能在 runner 上驗證。
+    branches: [main, 'ci/**']
   pull_request:
 
 permissions:

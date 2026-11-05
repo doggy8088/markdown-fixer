@@ -18,7 +18,7 @@ make fuzz COUNT=10000 # 隨機文件差異測試（需要 Node）
 make ffi-example      # C 範例
 ```
 
-CI（`.github/workflows/ci.yml`）在每次 push 與 PR 跑同樣的檢查：
+CI（`.github/workflows/ci.yml`）在 push 到 `main` 或 `ci/**` 分支，以及每個 PR 時跑同樣的檢查：
 
 | Job | 內容 |
 | --- | --- |
@@ -27,6 +27,8 @@ CI（`.github/workflows/ci.yml`）在每次 push 與 PR 跑同樣的檢查：
 | `msrv` | 以 Rust 1.85 建置 |
 | `shellcheck` | 範例腳本的 shellcheck 與 Karabiner JSON 驗證 |
 | `parity` | 有 Node 的環境：oracle 自己的測試、`gen-golden.mjs --check`、`gen-cli-golden.mjs --check`、`parity.sh fixtures/corpus`、`fuzz-parity.mjs --count 2000 --seed 1 --no-save` |
+
+`.github/workflows/clipboard.yml` 在 `examples/**`、`crates/markdown-fixer-cli/**` 或 workflow 本身變動時，於 Linux（X11 與 Wayland）、Windows、macOS runner 上以真正的剪貼簿測試剪貼簿腳本，也可以手動觸發。驗證範圍見 [`clipboard.md`](clipboard.md)〈CI 驗證〉。
 
 ## 發佈步驟
 
