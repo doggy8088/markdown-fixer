@@ -92,7 +92,7 @@ node .agents/skills/markdown-autocorrect/scripts/markdown-fixer.mjs --list-rules
 | MDX004 | 移除行尾空白；保留兩個空格的 hard break |
 | MDX005 | 多個連續空行縮成一個 |
 | MDX006 | 移除檔首空行；空行後的那一行以 U+FEFF 開頭時不修（否則它會變成 BOM），只報告 |
-| MDX008 | 把 code/URL 以外的 NBSP 換成普通空格；NBSP 是整行或清單項目唯一的內容時不換 |
+| MDX008 | 把 code/URL 以外的 NBSP 換成普通空格；NBSP 是整行或清單項目唯一的內容時不換；緊接在清單標記後的 NBSP（`*<NBSP>文字`）只報告 |
 | MDX010 | `#Title` → `# Title` |
 | MDX011 | 標題標記後只留一個空格 |
 | MDX012 | 移除 ATX 標題尾端的 `###` |

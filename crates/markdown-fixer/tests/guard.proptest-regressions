@@ -9,3 +9,5 @@ cc c91fc1d7953846b31bf0b29bfcd56cfdf62e4cbebc4d6e0ffa81f9be3cf2f955 # shrinks to
 cc 4221c1ea200458ce30463346922f8f7815c39ceaf4f9bfb68310c47a8b10e5fd # shrinks to text = "## T # \t\n* star"
 cc ff3fa855bf1c3859184869dac77075748d57db2abc8999e6ddb452733a4dbbf4 # shrinks to text = "> ```\n```\n> ```\n# 標題"
 cc 85526854431886c2babe10fb720586699653dafd54e00fc5ac9866c3cc4d0050 # shrinks to text = "$$\n```$$\n    \n\n#"
+cc f3684c9ae0e5320c7eefb8e8cd64d154c5a03c000c91d1ad01f6c1aa35a02bfb # shrinks to text = "- <!-- >\n\t "
+cc 847f7b9af5616aeafb43447c84bf7ae4893e95e5ac355825e13c58dc8729dab2 # shrinks to text = "---\u{3000}\n- #\n```\n---"

@@ -191,7 +191,8 @@ enum Pending {
 ///
 /// - 一般內文：相鄰的文字與軟換行合併，連續空白摺成一個空格（瀏覽器本來就會摺疊）。
 /// - 程式碼區塊：內容保留，只去掉每行行尾空白與結尾空行（`<pre>` 裡看不見）。
-/// - raw HTML：每行去掉行尾空白與結尾空行。
+/// - raw HTML 區塊：整個區塊合成一段（含 tab 展開產生的 `Text`），只去掉每行行尾空白與
+///   區塊結尾的空行；區塊內部的空行數照原樣比對。
 ///
 /// 硬換行（`<br />`）、NBSP、程式碼內容與所有標籤都照原樣比對。
 fn visible_events(text: &str) -> Vec<(Event<'static>, Range<usize>)> {
@@ -201,6 +202,7 @@ fn visible_events(text: &str) -> Vec<(Event<'static>, Range<usize>)> {
     let mut buffer_range = 0..0;
     let mut pending: Option<Pending> = None;
     let mut code_depth = 0usize;
+    let mut html_depth = 0usize;
     let flush = |out: &mut Vec<(Event<'static>, Range<usize>)>,
                  buffer: &mut String,
                  pending: &mut Option<Pending>,
@@ -223,6 +225,9 @@ fn visible_events(text: &str) -> Vec<(Event<'static>, Range<usize>)> {
     };
     for (event, range) in Parser::new_ext(&text, parser_options()).into_offset_iter() {
         let (kind, piece): (Pending, &str) = match &event {
+            // raw HTML 區塊裡，pulldown-cmark 會把 tab 展開剩下的欄位另外送成 `Text`。
+            // 整個區塊合成一段逐字比對，不能拆段，否則各段的「結尾空行」會被當成看不見的差異去掉。
+            Event::Text(t) | Event::Html(t) if html_depth > 0 => (Pending::Html, t),
             Event::Text(t) if code_depth > 0 => (Pending::Code, t),
             Event::Text(t) => (Pending::Text, t),
             Event::SoftBreak if code_depth == 0 => (Pending::Text, " "),
@@ -234,6 +239,10 @@ fn visible_events(text: &str) -> Vec<(Event<'static>, Range<usize>)> {
                     Event::Start(pulldown_cmark::Tag::CodeBlock(_)) => code_depth += 1,
                     Event::End(pulldown_cmark::TagEnd::CodeBlock) => {
                         code_depth = code_depth.saturating_sub(1)
+                    }
+                    Event::Start(pulldown_cmark::Tag::HtmlBlock) => html_depth += 1,
+                    Event::End(pulldown_cmark::TagEnd::HtmlBlock) => {
+                        html_depth = html_depth.saturating_sub(1)
                     }
                     _ => {}
                 }
@@ -1224,6 +1233,22 @@ mod tests {
         assert!(render("x\n\n---\n* a\n---\n").contains("<hr />"));
         let blocks = top_level_blocks("---\na: 1\n---\n\n# T\n");
         assert_eq!(blocks[1].lines, 4..5);
+    }
+
+    #[test]
+    fn blank_lines_inside_raw_html_are_visible() {
+        // pulldown-cmark 在 HTML 區塊裡把 tab 展開剩下的欄位送成 `Text`；區塊內部的空行數
+        // 仍要逐字比對（CI 上 property test 找到的案例）。
+        assert_ne!(render("- <!-- >\n    \n\n\t#"), render("- <!-- >\n\n\t#"));
+        assert_eq!(
+            render("<div>\nx  \n</div>\n\n"),
+            render("<div>\nx\n</div>\n")
+        );
+        let result = fix_document("- <!-- >\n    \n\n\t#", &Options::default());
+        // MDX004 只清掉空白行上的空白（看不見），MDX005 合併空行會改變 HTML 內容，被擋下。
+        assert_eq!(result.text, "- <!-- >\n\n\n\t#\n");
+        let rules: Vec<&str> = result.skipped.iter().map(|s| s.rule).collect();
+        assert_eq!(rules, ["MDX005"]);
     }
 
     #[test]

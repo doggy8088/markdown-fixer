@@ -42,9 +42,11 @@ fn normalize(text: &str) -> String {
         .replace("\r\n", "\n")
         .replace('\r', "\n");
     let mut lines: Vec<String> = text.split('\n').map(str::to_string).collect();
-    if lines.first().map(|l| l.trim_end()) == Some("---") {
+    // frontmatter 的分隔線後面只容許空格與 tab（U+3000 等其他空白不算）。
+    let bare = |l: &str| l.trim_end_matches([' ', '\t']).to_string();
+    if lines.first().map(|l| bare(l)).as_deref() == Some("---") {
         if let Some(close) =
-            (1..lines.len()).find(|&i| matches!(lines[i].trim_end(), "---" | "..."))
+            (1..lines.len()).find(|&i| matches!(bare(&lines[i]).as_str(), "---" | "..."))
         {
             let fence = "`".repeat(
                 3 + lines[..close]
@@ -648,8 +650,37 @@ fn chaotic_document() -> impl Strategy<Value = String> {
     .prop_map(|parts| parts.into_iter().flat_map(|(a, b)| [a, b]).collect())
 }
 
+fn cases() -> u32 {
+    std::env::var("PROPTEST_CASES")
+        .ok()
+        .and_then(|v| v.parse().ok())
+        .unwrap_or(400)
+}
+
+/// property test 找到、已修正的案例，固定在這裡重跑（種子也記在 `guard.proptest-regressions`）。
+#[test]
+fn property_regressions() {
+    for text in [
+        // CI（macos-latest，run 42032175558）：清單項目裡未關閉的 HTML comment，tab 展開剩下的
+        // 欄位讓 guard 把 HTML 區塊拆段，內部空行被當成看不見的差異，MDX005 的合併因此沒被擋下。
+        "- <!-- >\n    \n\n\t#",
+        "- <!-- >\n\t ",
+        // 測試自己的比對器曾把 `---` 後的 U+3000 當成空白，誤判成 frontmatter。
+        "---\u{3000}\n- #\n```\n---",
+        "$$\n```$$\n    \n\n#",
+        "* star\n> ```\n",
+        "a \t \n\n---\n* star\n\n>quote\n---",
+        "## T # \t\n* star",
+        "> ```\n```\n> ```\n# 標題",
+    ] {
+        check_guard(text, &Options::default()).unwrap();
+        check_guard(text, &ignoring(&["MDX002", "MDX003"])).unwrap();
+    }
+}
+
 proptest! {
-    #![proptest_config(ProptestConfig::with_cases(400))]
+    // 預設 400 個案例；`PROPTEST_CASES=20000 cargo test --test guard` 可以加大。
+    #![proptest_config(ProptestConfig::with_cases(cases()))]
 
     #[test]
     fn guard_properties_on_chaotic_input(text in chaotic_document()) {
