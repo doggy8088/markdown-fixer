@@ -11,7 +11,7 @@
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");
 
 /// 對齊的 JS 參考實作版本（`reference/js/markdown-fixer.mjs` 的 `VERSION`）。
-pub const REFERENCE_VERSION: &str = "1.1.0";
+pub const REFERENCE_VERSION: &str = "1.2.0";
 
 /// 問題嚴重度。
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]

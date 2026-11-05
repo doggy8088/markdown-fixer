@@ -1,6 +1,6 @@
 {
   "source": "regressions/oracle-mdx018-setext-h1.md",
-  "referenceVersion": "1.1.0",
+  "referenceVersion": "1.2.0",
   "cases": [
     {
       "name": "default",

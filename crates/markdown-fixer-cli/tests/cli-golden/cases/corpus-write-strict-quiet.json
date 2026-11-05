@@ -14,12 +14,12 @@
     {
       "path": "corpus",
       "copyDir": "fixtures/corpus",
-      "fingerprint": "b9b4321f8e82a478"
+      "fingerprint": "8d528fb04f302563"
     }
   ],
   "expected": {
     "status": 1,
-    "stdout": "Fixed 342 issue(s) in 92 file(s).\n486 problem(s) remain: 10 fixable, 22 error(s), 183 warning(s), 281 info.\n17 file(s) were not modified because of structural or frontmatter ambiguity.\n",
+    "stdout": "Fixed 348 issue(s) in 93 file(s).\n494 problem(s) remain: 10 fixable, 22 error(s), 191 warning(s), 281 info.\n17 file(s) were not modified because of structural or frontmatter ambiguity.\n",
     "stderr": "",
     "files": [
       {
@@ -80,7 +80,7 @@
       },
       {
         "path": "corpus/edge/emphasis-flanking.md",
-        "fnv": "6459e7fc9a432ed1"
+        "fnv": "47a94ce005a84635"
       },
       {
         "path": "corpus/edge/empty.md",
@@ -301,6 +301,10 @@
       {
         "path": "corpus/regressions/oracle-mdx042-multiple-transforms.md",
         "fnv": "b8983c985b093516"
+      },
+      {
+        "path": "corpus/regressions/oracle-mdx042-quoted-span.md",
+        "fnv": "508f92cd59328195"
       },
       {
         "path": "corpus/regressions/oracle-mdx052-quoted-fence.md",
@@ -528,7 +532,7 @@
       },
       {
         "path": "corpus/rules/MDX042/trigger.md",
-        "fnv": "e5c843f193a0f498"
+        "fnv": "f5b71e7cbd337be4"
       },
       {
         "path": "corpus/rules/MDX050/negative.md",

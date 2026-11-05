@@ -2,7 +2,7 @@
 
 `fixtures/corpus/` 是 golden 差異測試的語料，`fixtures/golden/` 是由 `scripts/gen-golden.mjs` 以 oracle 產生的預期輸出（不可手改）。這份索引本身不在語料目錄裡，不參與比對。測試怎麼跑見 [docs/testing.md](../docs/testing.md)，golden 格式見 [docs/parity.md](../docs/parity.md)。
 
-- **規模**：187 份文件、4,359 行（2026-11-05）。
+- **規模**：209 份文件、4,642 行（2026-11-06）。
 - **位元組**：`fixtures/.gitattributes` 設定 `* -text`，git 不會改寫 CRLF、CR 與 BOM。含 BOM、NBSP、零寬字元、CRLF 或沒有檔尾換行的檔案以 Node 寫入，不要用會自動正規化的編輯器修改。
 - **自我檢查**：`gen-golden.mjs` 會確認 `rules/<ID>/trigger.md` 回報該規則、`negative.md` 不回報，`edge/blocking-*` 與 `edge/frontmatter-trap-*` 被拒絕修正，且 48 條規則都至少被回報一次。
 
@@ -165,6 +165,7 @@
 | `regressions/js-mixed-idempotent.md` | oracle 測試「is idempotent on a mixed document」的輸入 |
 | `regressions/mdx040-cjk-bold-already-paired.md` | oracle 測試：跨 CJK 標點已配對的粗體不可改寫 |
 | `regressions/mdx042-money-amounts.md` | oracle 測試：金額 `$` 不可被當成未配對強調 |
+| `regressions/oracle-mdx042-quoted-span.md` | v1.2.0：成對全形引號包住的 `**「X」**` 改為 `「**X**」`；單邊引號、同段多組與跨行只報告 |
 | `regressions/oracle-mdx052-quoted-fence.md` | oracle 疑似問題 2：引言裡的 fence 被插入空行 |
 | `regressions/oracle-mdx016-hashes-only.md` | oracle 疑似問題 3：`## ##` 不回報 MDX016 |
 | `regressions/oracle-mdx084-inline-code.md` | oracle 疑似問題 4：inline code 裡的全形語法被回報 |

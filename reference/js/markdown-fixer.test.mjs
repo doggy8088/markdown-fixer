@@ -45,7 +45,7 @@ function runCli(args, options = {}) {
 }
 
 test('rule catalog is well formed and unique', () => {
-  assert.equal(VERSION, '1.1.0');
+  assert.equal(VERSION, '1.2.0');
   const ids = RULES.map((rule) => rule.id);
   assert.equal(new Set(ids).size, ids.length);
   for (const rule of RULES) {
@@ -511,7 +511,7 @@ test('parseArgs handles modes, rule lists, limits, and errors', () => {
 test('CLI reports version, rules, and check results', (t) => {
   const version = runCli(['--version']);
   assert.equal(version.status, 0);
-  assert.match(version.stdout, /markdown-fixer 1\.1\.0/);
+  assert.match(version.stdout, /markdown-fixer 1\.2\.0/);
 
   const list = runCli(['--list-rules']);
   assert.equal(list.status, 0);
@@ -642,12 +642,45 @@ test('MDX042 leaves working emphasis, ASCII cases, code, and escapes alone', () 
   assert.equal(fixed('標籤：**內容**\n'), '標籤：**內容**\n');
 });
 
-test('MDX042 reports opening-side problems without rewriting them', () => {
+test('MDX042 fixes the quoted opening-side form when both quote marks match', () => {
   const line = '這是**「引號」**文字\n';
   const problems = diagnose(line).filter((problem) => problem.rule === 'MDX042');
   assert.ok(problems.length > 0);
+  assert.ok(problems.every((problem) => problem.fixable));
+  assert.equal(fixed(line), '這是「**引號**」文字\n');
+
+  // Real paragraph: only the broken pair moves; the already-correct spans and
+  // the list boundary stay untouched.
+  const para = '如果您的 Microsoft 帳戶啟用了**「無密碼帳戶」**，請先為帳戶建立密碼：\n' +
+    '1. 前往 [account.microsoft.com/security](https://account.microsoft.com/security) 並登入。\n' +
+    '2. 在「**證明您身分的方式**」（或「**其他安全性選項**」）下方，檢查「**無密碼帳戶 (Passwordless account)**」是否為開啟。若是開啟狀態，請將其**關閉**並設定一組 Microsoft 帳戶密碼。\n';
+  const want = '如果您的 Microsoft 帳戶啟用了「**無密碼帳戶**」，請先為帳戶建立密碼：\n' +
+    '1. 前往 [account.microsoft.com/security](https://account.microsoft.com/security) 並登入。\n' +
+    '2. 在「**證明您身分的方式**」（或「**其他安全性選項**」）下方，檢查「**無密碼帳戶 (Passwordless account)**」是否為開啟。若是開啟狀態，請將其**關閉**並設定一組 Microsoft 帳戶密碼。\n';
+  assert.equal(fixed(para), want);
+  assert.equal(fixed(want), want);
+
+  // The other full-width pairs behave the same.
+  assert.equal(fixed('讀了**《書名》**之後\n'), '讀了《**書名**》之後\n');
+  assert.equal(fixed('備註**（已確認）**完\n'), '備註（**已確認**）完\n');
+
+  const once = fixed(line);
+  assert.equal(fixed(once), once);
+});
+
+test('MDX042 keeps one-sided and cross-line opening-side shapes report-only', () => {
+  const oneSideOpen = '這是**「引號**文字\n';
+  const problems = diagnose(oneSideOpen).filter((problem) => problem.rule === 'MDX042');
+  assert.ok(problems.length > 0);
   assert.ok(problems.every((problem) => problem.fixable === false));
-  assert.equal(fixed(line), line);
+  assert.equal(fixed(oneSideOpen), oneSideOpen);
+  // A closing mark without its opening partner also stays report-only.
+  assert.equal(fixed('這是**引號」**文字\n'), '這是**引號」**文字\n');
+
+  // A quoted span across lines keeps its quotes where they are.
+  const twoLines = '這是**「引號\n段落」**文字\n';
+  assert.ok(rulesOf(twoLines).includes('MDX042'));
+  assert.equal(fixed(twoLines), twoLines);
 
   // Single-star leftovers are reported but never auto-rewritten.
   const star = '*標籤：*內容\n';

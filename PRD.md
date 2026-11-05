@@ -151,7 +151,7 @@
 | MDX086 | `resource-limit` | structure | error | no |
 | MDX090 | `line-length` | style | info | no |
 
-個別問題可以覆寫 severity 或 fixable（例如 MDX008 在 URL 內是 report-only，MDX042 開頭端只報告），覆寫邏輯與 JS `makeProblem(..., overrides)` 相同。
+個別問題可以覆寫 severity 或 fixable（例如 MDX008 在 URL 內是 report-only，MDX042 其他開頭端只報告），覆寫邏輯與 JS `makeProblem(..., overrides)` 相同。
 
 ### 6.2 安全契約
 
@@ -172,7 +172,7 @@
 
 ```rust
 pub const VERSION: &str;            // crate 版本
-pub const REFERENCE_VERSION: &str;  // 對齊的 oracle 版本，目前 "1.0.0"
+pub const REFERENCE_VERSION: &str;  // 對齊的 oracle 版本，目前 "1.2.0"
 
 pub enum Severity { Error, Warning, Info }
 pub struct Rule { id, name, category, severity, fixable, summary }

@@ -100,7 +100,7 @@ node .agents/skills/markdown-autocorrect/scripts/markdown-fixer.mjs --list-rules
 | MDX020 | blockquote 的 `>` 之間與之後只留一個空格；只移除一般內容前多出的一個空格，保留可能是清單延續的兩到三個空格、fence 與清單標記前的空格，以及縮排 code |
 | MDX030 | `-item` → `- item`、`1.item` → `1. item` |
 | MDX040 | 移除 `**`、`__`、`*`、`_` 內側多餘空白（單一 `*`/`_` 只修非對稱情況；開頭 delimiter 前面緊鄰文字或標點時不修；行首當作清單標記的 `*` 不算） |
-| MDX042 | 部分：CJK／全形標點旁配對不成立的強調，收尾端 `**X：**Y` → `**X**：Y`；開頭端問題只報告 |
+| MDX042 | 部分：CJK／全形標點旁配對不成立的強調，收尾端 `**X：**Y` → `**X**：Y`、成對引號 `**「X」**` → `「**X**」`；其他開頭端問題只報告 |
 | MDX052 | 頂層 fenced code 與相鄰 block 之間補空行；引言裡的 fence 補 `>`（依深度 `> >`…）空行，標記後還有縮排的 fence（可能在清單項目裡）不處理 |
 | MDX060 | 表格分隔列每格至少三個 `-`；表頭與分隔列的儲存格數（以 GFM 規則分割，code span 裡的直線符號也算）不同時不是表格，不處理 |
 | MDX062 | 頂層表格與相鄰 block 之間補空行 |
@@ -111,7 +111,7 @@ node .agents/skills/markdown-autocorrect/scripts/markdown-fixer.mjs --list-rules
 ## 只報告、不自動修正的規則
 
 - **標題與結構：** MDX014 縮排標題、MDX015 跳級、MDX016 空標題、MDX017 標題尾端標點、MDX018 第一個標題不是 H1、MDX019 多個 H1、MDX080 Setext 歧義、MDX081 未關閉 frontmatter、MDX083 未關閉 HTML comment、MDX084 全形 Markdown 語法、MDX085 未關閉的 `$$` 數學區塊。
-- **清單與強調：** MDX031 同一層清單混用 bullet（CommonMark 裡換一種 bullet 就是新的清單，統一後會合併成一個清單，所以 v1.1.0 起只報告）、MDX032 清單與段落之間缺空行、MDX035 空清單項目、MDX041 可能未配對的強調符號、MDX042 只報告的部分（開頭端配對不成立的 `**`／`*`，或單一 `*`；收尾端 `**X：**Y` 會自動修）。
+- **清單與強調：** MDX031 同一層清單混用 bullet（CommonMark 裡換一種 bullet 就是新的清單，統一後會合併成一個清單，所以 v1.1.0 起只報告）、MDX032 清單與段落之間缺空行、MDX035 空清單項目、MDX041 可能未配對的強調符號、MDX042 只報告的部分（其他開頭端配對不成立的 `**`／`*`，或單一 `*`；收尾端 `**X：**Y` 與成對引號 `**「X」**` 會自動修）。
 - **Code fence：** MDX050 缺少語言、MDX051 未關閉 fence、MDX053 非法 fence info。
 - **表格：** MDX061 欄數不一致、MDX063 表格 cell 內的 code/URL 含未轉義的 `|`。
 - **連結與圖片：** MDX070 裸 URL、MDX071 空連結、MDX072 `] (` 的空格、MDX073 缺少 reference definition、MDX074 重複定義、MDX075 圖片缺 alt。

@@ -36,7 +36,7 @@ MSRV 是 Rust 1.85（edition 2024）。
 | 項目 | 說明 |
 | --- | --- |
 | `VERSION` | crate 版本 |
-| `REFERENCE_VERSION` | 對齊的 oracle 版本，目前是 `"1.1.0"` |
+| `REFERENCE_VERSION` | 對齊的 oracle 版本，目前是 `"1.2.0"` |
 | `DEFAULT_MAX_QUOTE_DEPTH` | 引言巢狀深度上限的預設值 32 |
 | `rules()` | 完整規則目錄，順序與 oracle 相同 |
 | `rule(id)` | 依 ID 查規則，找不到回傳 `None` |
@@ -220,7 +220,7 @@ fn list_fixable() {
 }
 ```
 
-每條規則的中文說明在 [rules.md](rules.md)。注意 `Rule::fixable` 是規則的預設值，個別 `Problem::fixable` 可能不同：URL 裡的 NBSP（MDX008）與開頭端的 MDX042 問題會以 `fixable: false` 回報。
+每條規則的中文說明在 [rules.md](rules.md)。注意 `Rule::fixable` 是規則的預設值，個別 `Problem::fixable` 可能不同：URL 裡的 NBSP（MDX008）與其他開頭端的 MDX042 問題會以 `fixable: false` 回報。
 
 ## 處理片段：剪貼簿與使用者輸入
 

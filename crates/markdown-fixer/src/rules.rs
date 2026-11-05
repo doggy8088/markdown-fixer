@@ -221,7 +221,7 @@ pub(crate) static RULES: &[Rule] = &[
         category: "emphasis",
         severity: Severity::Warning,
         fixable: true,
-        summary: "Report ** or * that cannot pair next to CJK or full-width punctuation; move closing-side punctuation outside when safe.",
+        summary: "Report ** or * that cannot pair next to CJK or full-width punctuation; move full-width punctuation outside the delimiters when safe.",
     },
     Rule {
         id: "MDX050",

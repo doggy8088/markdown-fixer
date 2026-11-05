@@ -129,18 +129,19 @@ oracle 用了大量 lookbehind、lookahead、惰性量詞與回溯語意，而�
 | --- | --- | --- | --- |
 | `CJK_ADJACENT_RE` | 976 | `cjk_emphasis::is_cjk_adjacent` | |
 | `MOVABLE_PUNCT_RE` | 979 | `cjk_emphasis::is_movable_punct` | |
-| `isEmphasisProseLine` | 1658–1660 | `cjk_emphasis::is_emphasis_prose_line` | |
-| `startsInlineBlockBoundary` | 1662–1664 | `cjk_emphasis::starts_inline_block_boundary` | |
-| `forEachEmphasisParagraph` | 1666–1684 | `cjk_emphasis::emphasis_paragraphs` | 回傳 `(from, to)` 清單，取代 callback |
-| `findStarDelimiterRuns` | 1686–1711 | `cjk_emphasis::find_star_delimiter_runs` | |
-| `matchEmphasisRuns` | 1717–1750 | `cjk_emphasis::leftover_runs` | 以索引取代物件身分。演算法改寫：JS 每個 closer 往回逐一掃描，是 O(n²)；Rust 把候選 opener 依 `(len % 3, can_close)` 分成 6 個 stack，dropped 區間用差分陣列最後一次標記，攤銷 O(n)。測試專用的 `leftover_runs_naive` 是直接移植，`leftover_equivalence_tests` 以 20,000 組隨機 run 序列比對兩者結果相同 |
-| `analyzeCjkEmphasis` | 1752–1868 | `cjk_emphasis::analyze` | 沒有 `*` 的段落直接略過。演算法改寫：JS 對每個候選 closer 重掃全部 leftovers 找 opener、用 `runs.some` 找中間的 run、反向線性找行號，大量 `**X：**Y` 時是 O(n²)；Rust 事先算好每個 leftover 之前最後一個合格 opener，中間有沒有 run 改成比較 run 索引，行號用二分搜尋，每段 O(n log n)。測試專用的 `naive::analyze_naive` 是直接移植 |
-| `computeCjkEmphasis` | 1870–1878 | `cjk_emphasis::compute_cjk_emphasis` | MDX042 |
-| `applyCjkEmphasisFixes` | 1880–1897 | `cjk_emphasis::apply_cjk_emphasis_fixes` | 演算法改寫：JS 每個 transform 都重新 join、改寫、split 整個段落，是 O(transform 數 × 段落長度)；Rust 在整份文件上原地改寫每個 transform 的範圍，前提不成立時退回逐一套用（`apply_transforms_sequentially`）。測試專用的 `naive::apply_naive` 是直接移植，`linear_equivalence_tests` 比對兩者 |
+| `QUOTE_OPEN_BY_CLOSE` | 984–991 | `cjk_emphasis::quote_open_of` | v1.2.0。成對全形引號括號，以收尾標點對應開頭標點 |
+| `isEmphasisProseLine` | 1666–1668 | `cjk_emphasis::is_emphasis_prose_line` | |
+| `startsInlineBlockBoundary` | 1670–1672 | `cjk_emphasis::starts_inline_block_boundary` | |
+| `forEachEmphasisParagraph` | 1674–1692 | `cjk_emphasis::emphasis_paragraphs` | 回傳 `(from, to)` 清單，取代 callback |
+| `findStarDelimiterRuns` | 1694–1719 | `cjk_emphasis::find_star_delimiter_runs` | |
+| `matchEmphasisRuns` | 1725–1758 | `cjk_emphasis::leftover_runs` | 以索引取代物件身分。演算法改寫：JS 每個 closer 往回逐一掃描，是 O(n²)；Rust 把候選 opener 依 `(len % 3, can_close)` 分成 6 個 stack，dropped 區間用差分陣列最後一次標記，攤銷 O(n)。測試專用的 `leftover_runs_naive` 是直接移植，`leftover_equivalence_tests` 以 20,000 組隨機 run 序列比對兩者結果相同 |
+| `analyzeCjkEmphasis` | 1760–1920 | `cjk_emphasis::analyze` | 沒有 `*` 的段落直接略過。兩個安全修正：收尾端標點（`**X：**Y`）與成對引號（`**「X」**`，v1.2.0）。演算法改寫：JS 對每個候選 closer 重掃全部 leftovers 找 opener、用 `runs.some` 找中間的 run、反向線性找行號，大量 `**X：**Y` 時是 O(n²)；Rust 事先算好每個 leftover 之前最後一個合格 opener，收尾端的「中間沒有 run」改成比較 run 索引、引號形狀直接要求 run 索引相鄰，行號用二分搜尋，每段 O(n log n)。測試專用的 `naive::analyze_naive` 是直接移植 |
+| `computeCjkEmphasis` | 1922–1930 | `cjk_emphasis::compute_cjk_emphasis` | MDX042 |
+| `applyCjkEmphasisFixes` | 1932–1949 | `cjk_emphasis::apply_cjk_emphasis_fixes` | 演算法改寫：JS 每個 transform 都重新 join、改寫、split 整個段落，是 O(transform 數 × 段落長度)；Rust 在整份文件上原地改寫每個 transform 的範圍，前提不成立時退回逐一套用（`apply_transforms_sequentially`）。測試專用的 `naive::apply_naive` 是直接移植，`linear_equivalence_tests` 比對兩者 |
 
-`analyzeCjkEmphasis` 第 1841 行的 `run !== opener && run !== closer` 比較的是原始 run 與複本 item，永遠為真；但 opener、closer 本身不會落在 `[opener.end, closer.start]` 裡，所以 Rust 直接省略這兩個條件，結果相同。同一段落有多個 transform 時，JS 會把以原始段落計算的偏移量套用在已被前一個 transform 改過的行上。Rust 的結果與此相同，但不逐一重組段落：
+`analyzeCjkEmphasis` 第 1849、1885 行的 `run !== opener && run !== closer` 比較的是原始 run 與複本 item，永遠為真；但 opener、closer 本身不會落在 `[opener.end, closer.start]` 裡，所以 Rust 直接省略這兩個條件，結果相同。同一段落有多個 transform 時，JS 會把以原始段落計算的偏移量套用在已被前一個 transform 改過的行上。Rust 的結果與此相同，但不逐一重組段落：
 
-- 每個 transform 只有兩個 edit，刪除 `[p, c)`，再在 `e` 插入原本的標點 `T`（`c <= e`，`T` 長度為 `c - p`）。依 start 由大到小套用在任何目前內容 `buf` 上，結果都是 `buf[..p] + buf[c..e] + T + buf[e..]`：長度不變，只動到 `[p, e)`。
+- 每個 transform 只有兩個 edit，刪除 `[p, c)`，再在 `e` 插入原本的內容 `T`（`c <= e`，`T` 長度為 `c - p`）。依 start 由大到小套用在任何目前內容 `buf` 上，結果都是 `buf[..p] + buf[c..e] + T + buf[e..]`：長度不變，只動到 `[p, e)`。收尾端標點是把標點移到 `**` 後；成對引號是每邊一個 transform，把 `**` 越過引號旋轉（`**「`→`「**`、`」**`→`**」`）。
 - `buf[p..e]` 與 `T` 都沒有 `\n` 時，段落的行數與每行長度也不變，所以 JS 的 join、改寫、split、寫回各行，等於直接改寫整份文件中「段落起點加偏移量」的那一段，後面的 transform 看到的內容也與 JS 相同。
 - `rotate_in_place` 在每個 transform 套用前檢查上述前提（edit 形狀、長度、沒有換行、不超出段落）。不成立時把目前結果切回各行，剩下的 transform 改用與 JS 相同的 `apply_transforms_sequentially`。`analyze` 產生的 transform 一定符合前提；`fallback_matches_sequential_application` 以手造的不合格 transform 驗證退回路徑。
 

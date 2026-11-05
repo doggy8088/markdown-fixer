@@ -40,6 +40,22 @@ fn is_movable_punct(c: u16) -> bool {
     )
 }
 
+/// JS `QUOTE_OPEN_BY_CLOSE`：成對的全形引號括號，以收尾標點對應開頭標點
+/// （「」『』《》〈〉【】〔〕（））。兩個引號一起包住整段強調（`**「X」**`）時可以
+/// 一起移到 `**` 外（`「**X**」`）；單邊的引號括號不動。
+fn quote_open_of(close: u16) -> Option<u16> {
+    Some(match close {
+        0x300D => 0x300C,
+        0x300F => 0x300E,
+        0x300B => 0x300A,
+        0x3009 => 0x3008,
+        0x3011 => 0x3010,
+        0x3015 => 0x3014,
+        0xFF09 => 0xFF08,
+        _ => return None,
+    })
+}
+
 /// JS `isEmphasisProseLine`。
 fn is_emphasis_prose_line(line: &[u16], info: &LineInfo) -> bool {
     !is_blank(line) && !is_protected_line(info) && !info.fence
@@ -420,6 +436,78 @@ fn analyze(lines: &[JsString], info: &[LineInfo]) -> (Vec<Finding>, Vec<Transfor
             });
         }
 
+        // 第二個安全修正（JS `analyzeCjkEmphasis` 的引號形狀）：成對全形引號括號
+        // 包住整段強調（`**「X」**`）時，兩個引號一起移到 `**` 外（`「**X**」`）。
+        // JS 對每個 closer 重掃 leftovers 找「start < closer.start、len == 2、
+        // `text[end]` 是對應開頭引號」中最靠右的候選，再要求中間沒有其他 run、
+        // 引號內的文字緊貼、整段同行。run 互不重疊且排序，「中間沒有其他 run」
+        // 等於兩者在 runs 中索引相鄰，所以候選就是 leftovers 中緊鄰 closer 的
+        // 前一個；不相鄰或字元不合時 JS 也只會跳過，不會改用更早的候選。
+        // 每一邊各是一個長度不變的 transform（rotate 形狀）。
+        for (k, &closer_idx) in leftovers.iter().enumerate() {
+            let closer = &runs[closer_idx];
+            if closer.len != 2 || !reportable[closer_idx] || !cjk_adjacent(closer) {
+                continue;
+            }
+            let Some(close_quote) = closer.start.checked_sub(1).map(|i| text[i]) else {
+                continue;
+            };
+            let Some(open_quote) = quote_open_of(close_quote) else {
+                continue;
+            };
+            if k == 0 {
+                continue;
+            }
+            let opener_idx = leftovers[k - 1];
+            if opener_idx + 1 != closer_idx {
+                continue;
+            }
+            let opener = &runs[opener_idx];
+            if opener.len != 2 || at(&text, opener.end) != Some(open_quote) {
+                continue;
+            }
+            if !attached(jsstr::slice(&text, opener.end + 1, closer.start - 1)) {
+                continue;
+            }
+            if line_offset_of(opener.start) != line_offset_of(closer.end) {
+                continue;
+            }
+            fixable[opener_idx] = true;
+            fixable[closer_idx] = true;
+            transforms.push(Transform {
+                from,
+                to,
+                edits: vec![
+                    Edit {
+                        start: opener.start,
+                        end: opener.end,
+                        text: Vec::new(),
+                    },
+                    Edit {
+                        start: opener.end + 1,
+                        end: opener.end + 1,
+                        text: vec![STAR, STAR],
+                    },
+                ],
+            });
+            transforms.push(Transform {
+                from,
+                to,
+                edits: vec![
+                    Edit {
+                        start: closer.start - 1,
+                        end: closer.start,
+                        text: Vec::new(),
+                    },
+                    Edit {
+                        start: closer.end,
+                        end: closer.end,
+                        text: vec![close_quote],
+                    },
+                ],
+            });
+        }
+
         for &idx in &leftovers {
             let run = &runs[idx];
             if !reportable[idx] || !cjk_adjacent(run) {
@@ -718,6 +806,89 @@ mod naive {
                 });
             }
 
+            // JS 的第二個安全修正：成對全形引號括住整段強調（`**「X」**`）時，
+            // 兩個引號一起移到 `**` 外（`「**X**」`）。逐一重掃 leftovers 找
+            // 「start < closer.start、len == 2、`text[end]` 是對應開頭引號」中
+            // 最靠右的候選，再檢查中間沒有其他 run。每邊各一個長度不變的
+            // transform（rotate 形狀）。
+            for &closer_idx in &leftovers {
+                let closer = &runs[closer_idx];
+                if closer.len != 2 || !reportable[closer_idx] || !cjk_adjacent(closer) {
+                    continue;
+                }
+                let Some(close_quote) = closer.start.checked_sub(1).map(|i| text[i]) else {
+                    continue;
+                };
+                let Some(open_quote) = quote_open_of(close_quote) else {
+                    continue;
+                };
+                let mut opener: Option<usize> = None;
+                for &cand_idx in &leftovers {
+                    let candidate = &runs[cand_idx];
+                    if cand_idx == closer_idx || candidate.start >= closer.start {
+                        continue;
+                    }
+                    if candidate.len != 2 || at(&text, candidate.end) != Some(open_quote) {
+                        continue;
+                    }
+                    if opener.is_none_or(|o| candidate.start > runs[o].start) {
+                        opener = Some(cand_idx);
+                    }
+                }
+                let Some(opener_idx) = opener else {
+                    continue;
+                };
+                let opener = &runs[opener_idx];
+                if !attached(jsstr::slice(&text, opener.end + 1, closer.start - 1)) {
+                    continue;
+                }
+                // 中間有其他 run（JS `runs.some(...)`；opener／closer 本身不會落在
+                // [opener.end, closer.start] 之內）。
+                if runs
+                    .iter()
+                    .any(|run| run.start >= opener.end && run.end <= closer.start)
+                {
+                    continue;
+                }
+                if line_offset_of(opener.start) != line_offset_of(closer.end) {
+                    continue;
+                }
+                fixable[opener_idx] = true;
+                fixable[closer_idx] = true;
+                transforms.push(Transform {
+                    from,
+                    to,
+                    edits: vec![
+                        Edit {
+                            start: opener.start,
+                            end: opener.end,
+                            text: Vec::new(),
+                        },
+                        Edit {
+                            start: opener.end + 1,
+                            end: opener.end + 1,
+                            text: vec![STAR, STAR],
+                        },
+                    ],
+                });
+                transforms.push(Transform {
+                    from,
+                    to,
+                    edits: vec![
+                        Edit {
+                            start: closer.start - 1,
+                            end: closer.start,
+                            text: Vec::new(),
+                        },
+                        Edit {
+                            start: closer.end,
+                            end: closer.end,
+                            text: vec![close_quote],
+                        },
+                    ],
+                });
+            }
+
             for &idx in &leftovers {
                 let run = &runs[idx];
                 if !reportable[idx] || !cjk_adjacent(run) {
@@ -874,6 +1045,8 @@ mod linear_equivalence_tests {
         "*甲：*乙",
         "**甲：**乙：**丙",
         "**「引號」**文字",
+        "**「引號」**文字",
+        "**（括號）**文字",
         "**",
         "*",
         "***",
@@ -890,6 +1063,8 @@ mod linear_equivalence_tests {
         "「",
         "」",
         "（",
+        "）",
+        "》",
         " ",
         " ",
         "\t",

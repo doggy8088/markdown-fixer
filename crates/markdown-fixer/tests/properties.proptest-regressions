@@ -5,3 +5,4 @@
 # It is recommended to check this file in to source control so that
 # everyone who runs the test benefits from these saved cases.
 cc 38400e812137c951dfbca5d932ea22817e24721248b10606624aa06faebbab2e # shrinks to text = "\n\u{feff}"
+cc 81e1631c8ae5425cdee7c0bc13cf38b53843501a5cd867c22d8c4e35d972ece0 # shrinks to text = "\n\n\r$\n\n\r\u{a0}<div>\n#\n#\r\n$\n#\r###\u{feff}"

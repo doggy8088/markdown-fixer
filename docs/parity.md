@@ -71,6 +71,12 @@ node scripts/gen-golden.mjs --check    # 只檢查：golden 過期、缺少或�
 
 ## 目前狀態
 
+2026-11-06 的結果（oracle v1.2.0）：
+
+- 語料 209 份文件、4,642 行，六組選項共 1,254 個案例，`golden.rs` 與 `scripts/parity.sh fixtures/corpus` 都與 oracle 全部一致。
+- `scripts/fuzz-parity.mjs --count 10000 --seed 1`：1 萬份隨機文件（六組選項共 6 萬個案例），沒有差異。
+- Rust 的 `fix_is_idempotent` property（六組選項、含 v1.2.0 的引號形狀）冪等；渲染保護擋下 MDX001/MDX002 的情況見〈v1.2.0 的變更〉〈測試修正〉。
+
 2026-11-05 的結果（oracle v1.1.0）：
 
 - 語料 203 份文件、4,569 行，六組選項共 1,218 個案例，`golden.rs` 與 `scripts/parity.sh fixtures/corpus` 都與 oracle 全部一致。
@@ -104,6 +110,21 @@ oracle 的原始碼在 GitHub `doggy8088/skills` repo 的 `skills/markdown-autoc
 5. 渲染保護（PRD〈6.9〉）：`render_guard` 預設開啟，CLI 以 `--no-render-guard` 關閉。開啟時，會意外改變渲染結果的版面類修正，以及超出範圍的修復類修正不套用，記錄在 `FixResult::skipped` 與 CLI 的 `skippedFixes`；對應的問題仍出現在診斷中。關閉時與 oracle 逐位元組相同。
 
 函式庫層級在 `render_guard = false` 時沒有刻意差異。效能上 Rust 不得有 oracle 的平方或指數時間（見〈oracle 疑似問題〉），但輸出必須相同。
+
+## v1.2.0 的變更
+
+oracle 從 v1.1.0 升到 v1.2.0 時變更了下列行為。每一項都有 regression 語料與移植測試，golden 已反映新行為。
+
+| 項目 | 變更 | 語料 |
+| --- | --- | --- |
+| MDX042 | 新的安全自動修正形狀：成對全形引號括號包住整段強調（`**「X」**`）時改成 `「**X**」`。只處理成對引號括號（「」『』《》〈〉【】〔〕（））、緊貼的內容、同一行、中間沒有其他 run；單邊引號、單一 `*`、跨行仍然只報告。規則訊息不變 | `regressions/oracle-mdx042-quoted-span.md` |
+| MDX042 目錄 | `--list-rules` 的 summary 從「move closing-side punctuation outside when safe」改成「move full-width punctuation outside the delimiters when safe」 | `golden/rules.json` |
+
+引號形狀每組修正會產生兩個長度不變的 transform（每邊各一），所以〈oracle 疑似問題〉第 8 項（同一段落多個 transform 以原始偏移量套用）的觸發機會變多；JS 與 Rust 的行為仍完全相同，`linear_analyze_and_apply_equal_naive_port` 的每段落 transform 數上限斷言也隨之更嚴格。
+
+### 測試修正（與 oracle 無關）
+
+`properties.rs` 的 `encoding_is_normalized_when_rules_are_enabled` 用 `Options::default()`（渲染保護開啟）驗證「啟用規則時輸出沒有 BOM 與 CR」，但渲染保護擋下 MDX001/MDX002 時輸出會合法保留 BOM 與 CR（`FixResult::skipped`）。這與 oracle 無關（oracle 沒有渲染保護）；斷言改成只在沒有擋下編碼類修正時成立，對應的 regression seed 存在 `properties.proptest-regressions`。
 
 ## v1.1.0 的變更
 

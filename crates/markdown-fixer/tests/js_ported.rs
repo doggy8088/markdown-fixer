@@ -64,7 +64,7 @@ fn has(text: &str, rule: &str) -> bool {
 // 1. 'rule catalog is well formed and unique'
 #[test]
 fn rule_catalog_is_well_formed_and_unique() {
-    assert_eq!(markdown_fixer::REFERENCE_VERSION, "1.1.0");
+    assert_eq!(markdown_fixer::REFERENCE_VERSION, "1.2.0");
     let ids: Vec<&str> = rules().iter().map(|r| r.id).collect();
     let mut unique = ids.clone();
     unique.sort_unstable();
@@ -704,17 +704,55 @@ fn mdx042_leaves_working_emphasis_ascii_cases_code_and_escapes_alone() {
     assert_eq!(fixed("標籤：**內容**\n"), "標籤：**內容**\n");
 }
 
-// 42. 'MDX042 reports opening-side problems without rewriting them'
+// 42. 'MDX042 fixes the quoted opening-side form when both quote marks match'
 #[test]
-fn mdx042_reports_opening_side_problems_without_rewriting_them() {
+fn mdx042_fixes_the_quoted_opening_side_form_when_both_quote_marks_match() {
     let line = "這是**「引號」**文字\n";
     let problems: Vec<_> = diagnose(line, &opts())
         .into_iter()
         .filter(|p| p.rule == "MDX042")
         .collect();
     assert!(!problems.is_empty());
+    assert!(problems.iter().all(|p| p.fixable));
+    assert_eq!(fixed(line), "這是「**引號**」文字\n");
+
+    // Real paragraph: only the broken pair moves; the already-correct spans and
+    // the list boundary stay untouched.
+    let para = "如果您的 Microsoft 帳戶啟用了**「無密碼帳戶」**，請先為帳戶建立密碼：\n\
+        1. 前往 [account.microsoft.com/security](https://account.microsoft.com/security) 並登入。\n\
+        2. 在「**證明您身分的方式**」（或「**其他安全性選項**」）下方，檢查「**無密碼帳戶 (Passwordless account)**」是否為開啟。若是開啟狀態，請將其**關閉**並設定一組 Microsoft 帳戶密碼。\n";
+    let want = "如果您的 Microsoft 帳戶啟用了「**無密碼帳戶**」，請先為帳戶建立密碼：\n\
+        1. 前往 [account.microsoft.com/security](https://account.microsoft.com/security) 並登入。\n\
+        2. 在「**證明您身分的方式**」（或「**其他安全性選項**」）下方，檢查「**無密碼帳戶 (Passwordless account)**」是否為開啟。若是開啟狀態，請將其**關閉**並設定一組 Microsoft 帳戶密碼。\n";
+    assert_eq!(fixed(para), want);
+    assert_eq!(fixed(want), want);
+
+    // The other full-width pairs behave the same.
+    assert_eq!(fixed("讀了**《書名》**之後\n"), "讀了《**書名**》之後\n");
+    assert_eq!(fixed("備註**（已確認）**完\n"), "備註（**已確認**）完\n");
+
+    let once = fixed(line);
+    assert_eq!(fixed(&once), once);
+}
+
+// 43. 'MDX042 keeps one-sided and cross-line opening-side shapes report-only'
+#[test]
+fn mdx042_keeps_one_sided_and_cross_line_opening_side_shapes_report_only() {
+    let one_side_open = "這是**「引號**文字\n";
+    let problems: Vec<_> = diagnose(one_side_open, &opts())
+        .into_iter()
+        .filter(|p| p.rule == "MDX042")
+        .collect();
+    assert!(!problems.is_empty());
     assert!(problems.iter().all(|p| !p.fixable));
-    assert_eq!(fixed(line), line);
+    assert_eq!(fixed(one_side_open), one_side_open);
+    // A closing mark without its opening partner also stays report-only.
+    assert_eq!(fixed("這是**引號」**文字\n"), "這是**引號」**文字\n");
+
+    // A quoted span across lines keeps its quotes where they are.
+    let two_lines = "這是**「引號\n段落」**文字\n";
+    assert!(has(two_lines, "MDX042"));
+    assert_eq!(fixed(two_lines), two_lines);
 
     let star = "*標籤：*內容\n";
     assert!(has(star, "MDX042"));

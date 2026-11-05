@@ -6,7 +6,7 @@
 //!   「`>  >` 每輪只合併一層」已在 v1.1.0 修正）。若這個 property 失敗，先用 oracle 跑同一份
 //!   輸入，oracle 也不冪等時記到 docs/parity.md。
 //! - 拒絕修正時輸出等於輸入。
-//! - 停用 MDX001／MDX002 時保留 BOM 與行尾；啟用時輸出沒有 BOM 與 CR。
+//! - 停用 MDX001／MDX002 時保留 BOM 與行尾；啟用且渲染保護沒擋下時輸出沒有 BOM 與 CR。
 //! - 病態輸入（深層巢狀、超長的分隔符號行）在時間上限內完成，不得有指數級回溯
 //!   （PRD 7）。上限可用 `MDFIX_PATHOLOGICAL_BUDGET_MS` 調整。
 //!
@@ -257,13 +257,18 @@ proptest! {
         }
     }
 
+    // `Options::default()` 開啟渲染保護；MDX001/MDX002 被擋下時輸出合法保留 BOM 與
+    // CR（見 `FixResult::skipped`），斷言只在編碼類修正真的套用時成立。
     #[test]
     fn encoding_is_normalized_when_rules_are_enabled(text in markdownish()) {
         let result = fix_document(&text, &Options::default());
-        if !result.refused {
-            prop_assert!(!result.text.starts_with('\u{FEFF}'), "{:?}", result.text);
-            prop_assert!(!result.text.contains('\r'), "{:?}", result.text);
+        if result.refused
+            || result.skipped.iter().any(|s| matches!(s.rule, "MDX001" | "MDX002"))
+        {
+            return Ok(());
         }
+        prop_assert!(!result.text.starts_with('\u{FEFF}'), "{:?}", result.text);
+        prop_assert!(!result.text.contains('\r'), "{:?}", result.text);
     }
 }
 

@@ -1,6 +1,6 @@
 {
   "source": "edge/emphasis-flanking.md",
-  "referenceVersion": "1.1.0",
+  "referenceVersion": "1.2.0",
   "cases": [
     {
       "name": "default",
@@ -10,7 +10,7 @@
           "rule": "MDX042",
           "name": "cjk-emphasis-unpaired",
           "severity": "warning",
-          "fixable": false,
+          "fixable": true,
           "line": 7,
           "column": 3,
           "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
@@ -19,7 +19,7 @@
           "rule": "MDX042",
           "name": "cjk-emphasis-unpaired",
           "severity": "warning",
-          "fixable": false,
+          "fixable": true,
           "line": 7,
           "column": 9,
           "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
@@ -188,7 +188,7 @@
         }
       ],
       "fix": {
-        "text": "# 強調邊界\n\n**狀態：** 已完成\n\n**Note:**text\n\n這是**「引號」**文字\n\n*標籤：*內容\n\n**甲：****乙：**丙\n\n***粗斜體：***內容\n\n**跨行開頭\n中文結尾**：內容\n\n**A**：B **C**：D **E**：F\n\na**b**c 與 a__b__c\n\n**前空白** 與 **後空白**\n\n__底線__\n\n$10 **$20 ** $30\n",
+        "text": "# 強調邊界\n\n**狀態：** 已完成\n\n**Note:**text\n\n這是「**引號**」文字\n\n*標籤：*內容\n\n**甲：****乙：**丙\n\n***粗斜體：***內容\n\n**跨行開頭\n中文結尾**：內容\n\n**A**：B **C**：D **E**：F\n\na**b**c 與 a__b__c\n\n**前空白** 與 **後空白**\n\n__底線__\n\n$10 **$20 ** $30\n",
         "changed": true,
         "refused": false,
         "reason": ""
@@ -206,7 +206,7 @@
           "rule": "MDX042",
           "name": "cjk-emphasis-unpaired",
           "severity": "warning",
-          "fixable": false,
+          "fixable": true,
           "line": 7,
           "column": 3,
           "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
@@ -215,7 +215,7 @@
           "rule": "MDX042",
           "name": "cjk-emphasis-unpaired",
           "severity": "warning",
-          "fixable": false,
+          "fixable": true,
           "line": 7,
           "column": 9,
           "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
@@ -384,7 +384,7 @@
         }
       ],
       "fix": {
-        "text": "# 強調邊界\n\n**狀態：** 已完成\n\n**Note:**text\n\n這是**「引號」**文字\n\n*標籤：*內容\n\n**甲：****乙：**丙\n\n***粗斜體：***內容\n\n**跨行開頭\n中文結尾**：內容\n\n**A**：B **C**：D **E**：F\n\na**b**c 與 a__b__c\n\n**前空白** 與 **後空白**\n\n__底線__\n\n$10 **$20 ** $30\n",
+        "text": "# 強調邊界\n\n**狀態：** 已完成\n\n**Note:**text\n\n這是「**引號**」文字\n\n*標籤：*內容\n\n**甲：****乙：**丙\n\n***粗斜體：***內容\n\n**跨行開頭\n中文結尾**：內容\n\n**A**：B **C**：D **E**：F\n\na**b**c 與 a__b__c\n\n**前空白** 與 **後空白**\n\n__底線__\n\n$10 **$20 ** $30\n",
         "changed": true,
         "refused": false,
         "reason": ""
@@ -400,7 +400,7 @@
           "rule": "MDX042",
           "name": "cjk-emphasis-unpaired",
           "severity": "warning",
-          "fixable": false,
+          "fixable": true,
           "line": 7,
           "column": 3,
           "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
@@ -409,7 +409,7 @@
           "rule": "MDX042",
           "name": "cjk-emphasis-unpaired",
           "severity": "warning",
-          "fixable": false,
+          "fixable": true,
           "line": 7,
           "column": 9,
           "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
@@ -578,7 +578,7 @@
         }
       ],
       "fix": {
-        "text": "# 強調邊界\n\n**狀態：** 已完成\n\n**Note:**text\n\n這是**「引號」**文字\n\n*標籤：*內容\n\n**甲：****乙：**丙\n\n***粗斜體：***內容\n\n**跨行開頭\n中文結尾**：內容\n\n**A**：B **C**：D **E**：F\n\na**b**c 與 a__b__c\n\n**前空白** 與 **後空白**\n\n__底線__\n\n$10 **$20 ** $30\n",
+        "text": "# 強調邊界\n\n**狀態：** 已完成\n\n**Note:**text\n\n這是「**引號**」文字\n\n*標籤：*內容\n\n**甲：****乙：**丙\n\n***粗斜體：***內容\n\n**跨行開頭\n中文結尾**：內容\n\n**A**：B **C**：D **E**：F\n\na**b**c 與 a__b__c\n\n**前空白** 與 **後空白**\n\n__底線__\n\n$10 **$20 ** $30\n",
         "changed": true,
         "refused": false,
         "reason": ""
@@ -597,7 +597,7 @@
           "rule": "MDX042",
           "name": "cjk-emphasis-unpaired",
           "severity": "warning",
-          "fixable": false,
+          "fixable": true,
           "line": 7,
           "column": 3,
           "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
@@ -606,7 +606,7 @@
           "rule": "MDX042",
           "name": "cjk-emphasis-unpaired",
           "severity": "warning",
-          "fixable": false,
+          "fixable": true,
           "line": 7,
           "column": 9,
           "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
@@ -775,7 +775,7 @@
         }
       ],
       "fix": {
-        "text": "# 強調邊界\n\n**狀態：** 已完成\n\n**Note:**text\n\n這是**「引號」**文字\n\n*標籤：*內容\n\n**甲：****乙：**丙\n\n***粗斜體：***內容\n\n**跨行開頭\n中文結尾**：內容\n\n**A**：B **C**：D **E**：F\n\na**b**c 與 a__b__c\n\n**前空白** 與 **後空白**\n\n__底線__\n\n$10 **$20 ** $30\n",
+        "text": "# 強調邊界\n\n**狀態：** 已完成\n\n**Note:**text\n\n這是「**引號**」文字\n\n*標籤：*內容\n\n**甲：****乙：**丙\n\n***粗斜體：***內容\n\n**跨行開頭\n中文結尾**：內容\n\n**A**：B **C**：D **E**：F\n\na**b**c 與 a__b__c\n\n**前空白** 與 **後空白**\n\n__底線__\n\n$10 **$20 ** $30\n",
         "changed": true,
         "refused": false,
         "reason": ""
@@ -810,7 +810,7 @@
           "rule": "MDX042",
           "name": "cjk-emphasis-unpaired",
           "severity": "warning",
-          "fixable": false,
+          "fixable": true,
           "line": 7,
           "column": 3,
           "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
@@ -819,7 +819,7 @@
           "rule": "MDX042",
           "name": "cjk-emphasis-unpaired",
           "severity": "warning",
-          "fixable": false,
+          "fixable": true,
           "line": 7,
           "column": 9,
           "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
@@ -988,7 +988,7 @@
         }
       ],
       "fix": {
-        "text": "# 強調邊界\n\n**狀態：** 已完成\n\n**Note:**text\n\n這是**「引號」**文字\n\n*標籤：*內容\n\n**甲：****乙：**丙\n\n***粗斜體：***內容\n\n**跨行開頭\n中文結尾**：內容\n\n**A**：B **C**：D **E**：F\n\na**b**c 與 a__b__c\n\n**前空白** 與 **後空白**\n\n__底線__\n\n$10 **$20 ** $30\n",
+        "text": "# 強調邊界\n\n**狀態：** 已完成\n\n**Note:**text\n\n這是「**引號**」文字\n\n*標籤：*內容\n\n**甲：****乙：**丙\n\n***粗斜體：***內容\n\n**跨行開頭\n中文結尾**：內容\n\n**A**：B **C**：D **E**：F\n\na**b**c 與 a__b__c\n\n**前空白** 與 **後空白**\n\n__底線__\n\n$10 **$20 ** $30\n",
         "changed": true,
         "refused": false,
         "reason": ""

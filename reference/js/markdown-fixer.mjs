@@ -5,7 +5,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 
-const VERSION = '1.1.0';
+const VERSION = '1.2.0';
 
 const RULES = [
   // Encoding and whitespace
@@ -43,7 +43,7 @@ const RULES = [
   // Emphasis
   { id: 'MDX040', name: 'emphasis-inner-space', category: 'emphasis', severity: 'warning', fixable: true, summary: 'Remove spaces just inside emphasis delimiters.' },
   { id: 'MDX041', name: 'unmatched-emphasis', category: 'emphasis', severity: 'warning', fixable: false, summary: 'Check for a possible unmatched strong or strikethrough delimiter.' },
-  { id: 'MDX042', name: 'cjk-emphasis-unpaired', category: 'emphasis', severity: 'warning', fixable: true, summary: 'Report ** or * that cannot pair next to CJK or full-width punctuation; move closing-side punctuation outside when safe.' },
+  { id: 'MDX042', name: 'cjk-emphasis-unpaired', category: 'emphasis', severity: 'warning', fixable: true, summary: 'Report ** or * that cannot pair next to CJK or full-width punctuation; move full-width punctuation outside the delimiters when safe.' },
 
   // Fenced code
   { id: 'MDX050', name: 'fence-language', category: 'fence', severity: 'info', fixable: false, summary: 'Add a language to fenced code blocks when one is known.' },
@@ -977,6 +977,14 @@ const CJK_ADJACENT_RE = /[\u2E80-\u2FFF\u3000-\u303F\u3040-\u30FF\u31C0-\u31EF\u
 // Trailing sentence punctuation that can safely move outside a closing
 // delimiter without changing meaning. Brackets and quotes stay inside.
 const MOVABLE_PUNCT_RE = /[、。，．：；！？…‥]/u;
+// Matching full-width quote and bracket pairs, keyed by the closing mark.
+// When both marks wrap a leftover emphasis span (**「X」**) they can both move
+// outside the delimiters (「**X**」) without changing meaning; one-sided marks
+// stay inside.
+const QUOTE_OPEN_BY_CLOSE = new Map([
+  ['」', '「'], ['』', '『'], ['》', '《'], ['〉', '〈'],
+  ['】', '【'], ['〕', '〔'], ['）', '（']
+]);
 
 function isBoundaryOrWhitespace(ch) {
   return ch === null || ch === undefined || /\s/u.test(ch);
@@ -1819,8 +1827,8 @@ function analyzeCjkEmphasis(lines, info) {
 
     // Safe auto-fix: a leftover closing ** whose only problem is a run of
     // movable full-width punctuation glued to its inside. Moving that
-    // punctuation outside keeps the meaning (**X：**Y -> **X**：Y). The
-    // opening-side shape (for example 這是**「引號」**文字) is only reported.
+    // punctuation outside keeps the meaning (**X：**Y -> **X**：Y). One-sided
+    // brackets and quotes stay inside and are only reported.
     const fixable = new Set();
     for (const closer of leftovers) {
       if (closer.len !== 2 || !reportable.has(closer) || !cjkAdjacent(closer)) continue;
@@ -1848,6 +1856,50 @@ function analyzeCjkEmphasis(lines, info) {
         edits: [
           { start: punctStart, end: closer.start, text: '' },
           { start: closer.end, end: closer.end, text: text.slice(punctStart, closer.start) }
+        ]
+      });
+    }
+
+    // Second safe auto-fix: the pair wraps a whole full-width-quoted span
+    // (這是**「引號」**文字). Both quote marks sit inside the delimiters, which
+    // keeps the run from flanking; moving them outside (這是「**引號**」文字)
+    // makes the pair work and keeps the meaning. Only matching quote marks
+    // with attached, run-free content on one line are moved; every other
+    // opening-side shape (one-sided quotes, single `*`, spans across lines or
+    // other runs) is still just reported. Each side is its own length
+    // preserving transform.
+    for (const closer of leftovers) {
+      if (closer.len !== 2 || !reportable.has(closer) || !cjkAdjacent(closer)) continue;
+      const closeQuote = closer.start > 0 ? text[closer.start - 1] : null;
+      const openQuote = closeQuote === null ? null : QUOTE_OPEN_BY_CLOSE.get(closeQuote);
+      if (!openQuote) continue;
+      let opener = null;
+      for (const candidate of leftovers) {
+        if (candidate === closer || candidate.start >= closer.start) continue;
+        if (candidate.len !== 2 || text[candidate.end] !== openQuote) continue;
+        if (!opener || candidate.start > opener.start) opener = candidate;
+      }
+      if (!opener) continue;
+      const inner = text.slice(opener.end + 1, closer.start - 1);
+      if (inner === '' || /\s/u.test(inner[0]) || /\s/u.test(inner[inner.length - 1])) continue;
+      if (runs.some((run) => run !== opener && run !== closer && run.start >= opener.end && run.end <= closer.start)) continue;
+      if (lineOffsetOf(opener.start) !== lineOffsetOf(closer.end)) continue;
+      fixable.add(opener);
+      fixable.add(closer);
+      transforms.push({
+        from,
+        to,
+        edits: [
+          { start: opener.start, end: opener.end, text: '' },
+          { start: opener.end + 1, end: opener.end + 1, text: '**' }
+        ]
+      });
+      transforms.push({
+        from,
+        to,
+        edits: [
+          { start: closer.start - 1, end: closer.start, text: '' },
+          { start: closer.end, end: closer.end, text: closeQuote }
         ]
       });
     }
