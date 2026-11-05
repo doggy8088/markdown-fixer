@@ -1,6 +1,6 @@
 {
   "source": "synthetic/onboarding-mixed-lang.md",
-  "referenceVersion": "1.0.0",
+  "referenceVersion": "1.1.0",
   "cases": [
     {
       "name": "default",
@@ -273,6 +273,66 @@
       "fix": {
         "text": "# 新人 Onboarding Guide\n\nWelcome aboard! 這份文件幫你在第一週把開發環境建好。If anything is unclear, ping #dev-help on Slack.\n\n## Day 1：帳號與權限\n\n- [ ] 申請 GitHub org 權限（找你的 buddy）\n- [ ] 加入 Slack channels：`#dev`、`#dev-help`、`#deploy`\n- [ ] 設定 2FA\n- [ ] 領取筆電，開機後跑 `./scripts/bootstrap.sh`\n\n## Day 2：本機環境\n\n### Prerequisites\n* Docker Desktop >= 4.30\n* Node.js 22 LTS（建議用 `fnm` 管理）\n* Rust stable（`rustup default stable`）\n\n### Clone & run\n```bash\ngit clone git@github.com:example/monorepo.git\ncd monorepo\nmake dev\n```\nOpen http://localhost:8080 — 看到登入頁就成功了。\n\n> **Tip:** `make dev` 第一次會下載約 3 GB 的 Docker image，建議接有線網路。\n\n## Day 3–5：第一個 PR\n\n挑一張標了 `good first issue` 的票。Workflow：\n\n1. 開 branch：`feat/<ticket-id>-short-desc`\n2. Commit message 遵守 [Conventional Commits](https://www.conventionalcommits.org/)\n3. 開 PR，填寫 template 裡的 **What / Why / How to test**\n4. 至少一位 reviewer approve 後才能 merge\n\n### Code style\n| Language | Formatter | Linter |\n| --- | --- | --- |\n| TypeScript | prettier | eslint |\n| Rust | rustfmt | clippy |\n| Markdown | markdown-fixer | markdown-fixer --check |\n\n## 常見問題 FAQ\n\n**Q: VPN 連不上？**\nA: 先確認 Okta 有登入。還是不行就找 IT（分機 1234）。\n\n**Q:  Docker 很慢怎麼辦？**\nA: Settings → Resources，把 CPU 調到 6、記憶體調到 8 GB。\n\n## Useful links\n- 架構文件：[docs/architecture.md](docs/architecture.md)\n- On-call 手冊：[runbook][]\n- Grafana：https://grafana.example.com/d/overview\n\n[runbook]: https://wiki.example.com/oncall\n",
         "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "quote-depth-3-ignore",
+      "options": {
+        "maxQuoteDepth": 3,
+        "onLimit": "ignore"
+      },
+      "diagnose": [
+        {
+          "rule": "MDX052",
+          "name": "fence-blank-lines",
+          "severity": "warning",
+          "fixable": true,
+          "line": 20,
+          "column": 1,
+          "message": "Fenced code block starts directly after another block. Add a blank line before it."
+        },
+        {
+          "rule": "MDX052",
+          "name": "fence-blank-lines",
+          "severity": "warning",
+          "fixable": true,
+          "line": 24,
+          "column": 1,
+          "message": "Fenced code block ends directly before another block. Add a blank line after it."
+        },
+        {
+          "rule": "MDX070",
+          "name": "bare-url",
+          "severity": "info",
+          "fixable": false,
+          "line": 25,
+          "column": 6,
+          "message": "Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text."
+        },
+        {
+          "rule": "MDX062",
+          "name": "table-blank-lines",
+          "severity": "warning",
+          "fixable": true,
+          "line": 39,
+          "column": 1,
+          "message": "Table starts directly after another block. Add a blank line before it."
+        },
+        {
+          "rule": "MDX070",
+          "name": "bare-url",
+          "severity": "info",
+          "fixable": false,
+          "line": 56,
+          "column": 11,
+          "message": "Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text."
+        }
+      ],
+      "fix": {
+        "text": "# 新人 Onboarding Guide\n\nWelcome aboard! 這份文件幫你在第一週把開發環境建好。If anything is unclear, ping #dev-help on Slack.\n\n## Day 1：帳號與權限\n\n- [ ] 申請 GitHub org 權限（找你的 buddy）\n- [ ] 加入 Slack channels：`#dev`、`#dev-help`、`#deploy`\n- [ ] 設定 2FA\n- [ ] 領取筆電，開機後跑 `./scripts/bootstrap.sh`\n\n## Day 2：本機環境\n\n### Prerequisites\n* Docker Desktop >= 4.30\n* Node.js 22 LTS（建議用 `fnm` 管理）\n* Rust stable（`rustup default stable`）\n\n### Clone & run\n\n```bash\ngit clone git@github.com:example/monorepo.git\ncd monorepo\nmake dev\n```\n\nOpen http://localhost:8080 — 看到登入頁就成功了。\n\n> **Tip:** `make dev` 第一次會下載約 3 GB 的 Docker image，建議接有線網路。\n\n## Day 3–5：第一個 PR\n\n挑一張標了 `good first issue` 的票。Workflow：\n\n1. 開 branch：`feat/<ticket-id>-short-desc`\n2. Commit message 遵守 [Conventional Commits](https://www.conventionalcommits.org/)\n3. 開 PR，填寫 template 裡的 **What / Why / How to test**\n4. 至少一位 reviewer approve 後才能 merge\n\n### Code style\n\n| Language | Formatter | Linter |\n| --- | --- | --- |\n| TypeScript | prettier | eslint |\n| Rust | rustfmt | clippy |\n| Markdown | markdown-fixer | markdown-fixer --check |\n\n## 常見問題 FAQ\n\n**Q: VPN 連不上？**\nA: 先確認 Okta 有登入。還是不行就找 IT（分機 1234）。\n\n**Q:  Docker 很慢怎麼辦？**\nA: Settings → Resources，把 CPU 調到 6、記憶體調到 8 GB。\n\n## Useful links\n- 架構文件：[docs/architecture.md](docs/architecture.md)\n- On-call 手冊：[runbook][]\n- Grafana：https://grafana.example.com/d/overview\n\n[runbook]: https://wiki.example.com/oncall\n",
+        "changed": true,
         "refused": false,
         "reason": ""
       }

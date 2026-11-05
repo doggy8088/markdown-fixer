@@ -1,6 +1,6 @@
 {
   "source": "edge/only-spaces.md",
-  "referenceVersion": "1.0.0",
+  "referenceVersion": "1.1.0",
   "cases": [
     {
       "name": "default",
@@ -219,6 +219,57 @@
       "fix": {
         "text": "   \n\t\n",
         "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "quote-depth-3-ignore",
+      "options": {
+        "maxQuoteDepth": 3,
+        "onLimit": "ignore"
+      },
+      "diagnose": [
+        {
+          "rule": "MDX004",
+          "name": "trailing-whitespace",
+          "severity": "warning",
+          "fixable": true,
+          "line": 1,
+          "column": 1,
+          "message": "Trailing whitespace. Exactly two trailing spaces create a hard line break; other trailing whitespace is noise."
+        },
+        {
+          "rule": "MDX006",
+          "name": "leading-blank-lines",
+          "severity": "warning",
+          "fixable": true,
+          "line": 1,
+          "column": 1,
+          "message": "File starts with blank lines. Remove them so the first block starts at line 1."
+        },
+        {
+          "rule": "MDX004",
+          "name": "trailing-whitespace",
+          "severity": "warning",
+          "fixable": true,
+          "line": 2,
+          "column": 1,
+          "message": "Trailing whitespace. Exactly two trailing spaces create a hard line break; other trailing whitespace is noise."
+        },
+        {
+          "rule": "MDX007",
+          "name": "hard-tab",
+          "severity": "warning",
+          "fixable": false,
+          "line": 2,
+          "column": 1,
+          "message": "Tab character found. Use spaces for indentation and alignment; tabs render at different widths."
+        }
+      ],
+      "fix": {
+        "text": "",
+        "changed": true,
         "refused": false,
         "reason": ""
       }

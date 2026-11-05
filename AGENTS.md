@@ -6,7 +6,9 @@
 
 `markdown-fixer` 是 `markdown-autocorrect` skill 裡 `markdown-fixer.mjs` 的 Rust 移植版：一個安全、行導向的 Markdown 語法檢查與自動修正工具，提供函式庫、CLI 與 C ABI 共用函式庫。
 
-最重要的一件事：**JS 參考實作（oracle）是行為的唯一標準。** `reference/js/markdown-fixer.mjs` 怎麼做，Rust 就怎麼做，連問題的順序、訊息文字、欄號都一樣。看到 oracle 的行為「好像不合理」時，不要在 Rust 裡「順手修正」；先照做，再把觀察記到 `docs/parity.md` 的「oracle 疑似問題」清單。
+最重要的一件事：**JS 參考實作（oracle）是行為的唯一標準。** `reference/js/markdown-fixer.mjs` 怎麼做，Rust 就怎麼做，連問題的順序、訊息文字、欄號都一樣（以 `render_guard = false` 比對；渲染保護是 Rust 專有的，見 PRD〈6.9〉）。看到 oracle 的行為「好像不合理」時，不要在 Rust 裡「順手修正」；先照做，再把觀察記到 `docs/parity.md` 的「oracle 疑似問題」清單。
+
+oracle 的原始碼在 GitHub `doggy8088/skills` repo 的 `skills/markdown-autocorrect/`，不在這個 repo。要改行為時，JS 與 Rust 一起改：先改 skills repo 的 `scripts/markdown-fixer.mjs`（升 `VERSION`）、測試、`SKILL.md` 與 `reference/rules.md`，再複製到這裡的 `reference/`，重新產生 golden。完整步驟見 `docs/parity.md`〈Oracle 升版流程〉。
 
 ## Repo 結構
 
@@ -15,8 +17,8 @@
 | `crates/markdown-fixer/` | 純函式庫，不做 I/O。`diagnose`、`fix_document`、`rules`、`detect` |
 | `crates/markdown-fixer-cli/` | CLI，執行檔名稱 `markdown-fixer`。參數解析照 oracle 手寫，不用 clap |
 | `crates/markdown-fixer-ffi/` | C ABI（`cdylib`／`staticlib`）與 `include/markdown_fixer.h` |
-| `reference/js/` | Oracle：`markdown-fixer.mjs` v1.0.0 與它的 42 個測試。**唯讀** |
-| `reference/rules.md`、`reference/SKILL.md` | 原 skill 的規則說明與使用說明。唯讀 |
+| `reference/js/` | Oracle：`markdown-fixer.mjs` v1.1.0 與它的測試，從 `doggy8088/skills` 複製。**不要直接改**，改 skills repo 再複製 |
+| `reference/rules.md`、`reference/SKILL.md` | 原 skill 的規則說明與使用說明，同樣從 skills repo 複製 |
 | `fixtures/corpus/` | 接近真實的 Markdown 語料 |
 | `fixtures/golden/` | 由 oracle 產生的預期輸出。**不要手改**，用 `scripts/gen-golden.mjs` 重新產生 |
 | `scripts/` | `gen-golden.mjs`、`parity.sh`、`fuzz-parity.mjs` 等工具 |
@@ -113,6 +115,6 @@ node scripts/fuzz-parity.mjs --count 2000          # 隨機文件差異測試
 
 ## 安全注意事項
 
-- 不要修改 `~/.agents/skills/markdown-autocorrect/`，也不要修改 `reference/`（升版流程見 `docs/parity.md`）。
+- 不要修改 `~/.agents/skills/markdown-autocorrect/`（安裝版由維護者在審查後更新）。`reference/` 只能從 skills repo 複製，不要直接改（升版流程見 `docs/parity.md`）。
 - 不要對整個 repo 跑 `markdown-fixer --write .`，會改到 golden 檔與 oracle。
 - Karabiner 範例不得覆蓋使用者既有的 Karabiner 設定。

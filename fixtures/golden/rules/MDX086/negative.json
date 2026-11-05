@@ -1,0 +1,93 @@
+{
+  "source": "rules/MDX086/negative.md",
+  "referenceVersion": "1.1.0",
+  "cases": [
+    {
+      "name": "default",
+      "options": {},
+      "diagnose": [],
+      "fix": {
+        "text": "# 深層引言\n\n> > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > 三十二層剛好在上限內。\n\n```text\n> > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > 程式碼裡的 > 不是引言。\n```\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "snippet",
+      "options": {
+        "ignoreRules": [
+          "MDX003"
+        ]
+      },
+      "diagnose": [],
+      "fix": {
+        "text": "# 深層引言\n\n> > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > 三十二層剛好在上限內。\n\n```text\n> > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > 程式碼裡的 > 不是引言。\n```\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "line-length-80",
+      "options": {
+        "maxLineLength": 80
+      },
+      "diagnose": [],
+      "fix": {
+        "text": "# 深層引言\n\n> > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > 三十二層剛好在上限內。\n\n```text\n> > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > 程式碼裡的 > 不是引言。\n```\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "keep-encoding",
+      "options": {
+        "ignoreRules": [
+          "MDX001",
+          "MDX002"
+        ]
+      },
+      "diagnose": [],
+      "fix": {
+        "text": "# 深層引言\n\n> > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > 三十二層剛好在上限內。\n\n```text\n> > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > 程式碼裡的 > 不是引言。\n```\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "headings-only",
+      "options": {
+        "rules": [
+          "MDX010",
+          "MDX011",
+          "MDX012",
+          "MDX013"
+        ]
+      },
+      "diagnose": [],
+      "fix": {
+        "text": "# 深層引言\n\n> > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > 三十二層剛好在上限內。\n\n```text\n> > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > 程式碼裡的 > 不是引言。\n```\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "quote-depth-3-ignore",
+      "options": {
+        "maxQuoteDepth": 3,
+        "onLimit": "ignore"
+      },
+      "diagnose": [],
+      "fix": {
+        "text": "# 深層引言\n\n> > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > 三十二層剛好在上限內。\n\n```text\n> > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > 程式碼裡的 > 不是引言。\n```\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    }
+  ]
+}

@@ -1,11 +1,10 @@
 //! Property test（proptest）：函式庫的安全契約（PRD 6.2）在任意輸入下都成立。
 //!
 //! - 任意字串與「像 Markdown」的隨機文件都不會 panic。
-//! - `fix_document` 冪等。oracle 在 `scripts/fuzz-parity.mjs --idempotence` 的約 6 萬組
-//!   （文件, 選項）與整個語料上都冪等，唯一已知例外是「移除檔首空行後露出行首 BOM」
-//!   （見 docs/parity.md 的 oracle 疑似問題與 `regressions/oracle-bom-exposed-by-leading-blanks.md`），
-//!   這裡排除該情況。若這個 property 失敗，先用 oracle 跑同一份輸入，oracle 也不冪等時
-//!   記到 docs/parity.md 並在此排除。
+//! - `fix_document` 冪等。oracle v1.1.0 在 `scripts/fuzz-parity.mjs --idempotence` 的約 7 萬組
+//!   （文件, 選項）與整個語料上都冪等（v1.0.0 的「移除檔首空行後露出行首 BOM」與
+//!   「`>  >` 每輪只合併一層」已在 v1.1.0 修正）。若這個 property 失敗，先用 oracle 跑同一份
+//!   輸入，oracle 也不冪等時記到 docs/parity.md。
 //! - 拒絕修正時輸出等於輸入。
 //! - 停用 MDX001／MDX002 時保留 BOM 與行尾；啟用時輸出沒有 BOM 與 CR。
 //! - 病態輸入（深層巢狀、超長的分隔符號行）在時間上限內完成，不得有指數級回溯
@@ -17,24 +16,32 @@ use std::sync::mpsc;
 use std::thread;
 use std::time::{Duration, Instant};
 
-use markdown_fixer::{FixResult, Options, diagnose, fix_document};
+use markdown_fixer::{FixResult, LimitPolicy, Options, diagnose, fix_document};
 use proptest::prelude::*;
 
-fn ignore(ids: &[&str]) -> Options {
+/// 與 oracle 比較的選項基底：關閉 Rust 專有的渲染保護（PRD 6.9）。
+fn parity() -> Options {
     Options {
-        ignore_rules: Some(ids.iter().map(|s| (*s).to_owned()).collect()),
+        render_guard: false,
         ..Options::default()
     }
 }
 
-/// 與 scripts/gen-golden.mjs 的 OPTION_SETS 相同的五組選項。
+fn ignore(ids: &[&str]) -> Options {
+    Options {
+        ignore_rules: Some(ids.iter().map(|s| (*s).to_owned()).collect()),
+        ..parity()
+    }
+}
+
+/// 與 scripts/gen-golden.mjs 的 OPTION_SETS 相同的六組選項。
 fn option_sets() -> Vec<Options> {
     vec![
-        Options::default(),
+        parity(),
         ignore(&["MDX003"]),
         Options {
             max_line_length: 80,
-            ..Options::default()
+            ..parity()
         },
         ignore(&["MDX001", "MDX002"]),
         Options {
@@ -44,7 +51,12 @@ fn option_sets() -> Vec<Options> {
                     .map(|s| (*s).to_owned())
                     .collect(),
             ),
-            ..Options::default()
+            ..parity()
+        },
+        Options {
+            max_quote_depth: 3,
+            on_limit: LimitPolicy::Ignore,
+            ..parity()
         },
     ]
 }
@@ -179,25 +191,6 @@ fn assert_refusal_contract(input: &str, result: &FixResult) {
     }
 }
 
-/// oracle 的已知例外：MDX006 移除檔首空行後，原本在後面行首的 U+FEFF 變成檔首
-/// （MDX001 只在修正前處理過），所以輸出會以 BOM 開頭，再修一次又會被移除。
-fn bom_exposed_by_leading_blank_removal(text: &str) -> bool {
-    let normalized = text
-        .trim_start_matches('\u{FEFF}')
-        .replace("\r\n", "\n")
-        .replace('\r', "\n");
-    let mut lines = normalized.split('\n');
-    let mut skipped = false;
-    for line in lines.by_ref() {
-        if line.chars().all(|c| c == ' ' || c == '\t') {
-            skipped = true;
-            continue;
-        }
-        return skipped && line.starts_with('\u{FEFF}');
-    }
-    false
-}
-
 fn leading_boms(text: &str) -> &str {
     let rest = text.trim_start_matches('\u{FEFF}');
     &text[..text.len() - rest.len()]
@@ -233,7 +226,7 @@ proptest! {
     fn fix_is_idempotent(text in markdownish()) {
         for options in option_sets() {
             let once = fix_document(&text, &options);
-            if once.refused || bom_exposed_by_leading_blank_removal(&text) {
+            if once.refused {
                 continue;
             }
             let twice = fix_document(&once.text, &options);
@@ -252,9 +245,7 @@ proptest! {
             prop_assert_eq!(&result.text, &text);
             return Ok(());
         }
-        if !bom_exposed_by_leading_blank_removal(&text) {
-            prop_assert_eq!(leading_boms(&result.text), leading_boms(&text));
-        }
+        prop_assert_eq!(leading_boms(&result.text), leading_boms(&text));
         let body = result.text.trim_start_matches('\u{FEFF}');
         if text.contains("\r\n") {
             prop_assert_eq!(body.replace("\r\n", "").matches(['\r', '\n']).count(), 0,
@@ -270,9 +261,7 @@ proptest! {
     fn encoding_is_normalized_when_rules_are_enabled(text in markdownish()) {
         let result = fix_document(&text, &Options::default());
         if !result.refused {
-            if !bom_exposed_by_leading_blank_removal(&text) {
-                prop_assert!(!result.text.starts_with('\u{FEFF}'), "{:?}", result.text);
-            }
+            prop_assert!(!result.text.starts_with('\u{FEFF}'), "{:?}", result.text);
             prop_assert!(!result.text.contains('\r'), "{:?}", result.text);
         }
     }
@@ -299,10 +288,19 @@ fn assert_finishes(name: &str, text: String) {
     let (tx, rx) = mpsc::channel();
     let started = Instant::now();
     thread::spawn(move || {
-        let options = Options::default();
-        let problems = diagnose(&text, &options);
-        let result = fix_document(&text, &options);
-        let _ = tx.send((problems.len(), result.refused));
+        // 預設的引言深度上限會讓深層引言直接被 MDX086 拒絕；`max_quote_depth: 0` 才會真的
+        // 走完掃描與修正，檢查它們是線性時間。
+        let unlimited = Options {
+            max_quote_depth: 0,
+            ..parity()
+        };
+        let mut problems = 0;
+        let mut refused = false;
+        for options in [Options::default(), unlimited] {
+            problems += diagnose(&text, &options).len();
+            refused |= fix_document(&text, &options).refused;
+        }
+        let _ = tx.send((problems, refused));
     });
     match rx.recv_timeout(limit) {
         Ok(_) => {}
@@ -317,7 +315,7 @@ fn assert_finishes(name: &str, text: String) {
 
 #[test]
 fn deep_blockquotes_finish_in_time() {
-    // oracle 的 reference definition regex 在這類輸入上會指數級回溯（docs/parity.md）。
+    // oracle v1.0.0 的 reference definition regex 在這類輸入上會指數級回溯（docs/parity.md）。
     assert_finishes("200-deep '> ' quote", format!("{}q\n", "> ".repeat(200)));
     assert_finishes("200-deep '>' quote", format!("{} q\n", ">".repeat(200)));
     assert_finishes(

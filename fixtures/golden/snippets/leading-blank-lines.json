@@ -1,6 +1,6 @@
 {
   "source": "snippets/leading-blank-lines.md",
-  "referenceVersion": "1.0.0",
+  "referenceVersion": "1.1.0",
   "cases": [
     {
       "name": "default",
@@ -111,6 +111,30 @@
       "fix": {
         "text": "\n\n\n- 項目一\n- 項目二\n",
         "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "quote-depth-3-ignore",
+      "options": {
+        "maxQuoteDepth": 3,
+        "onLimit": "ignore"
+      },
+      "diagnose": [
+        {
+          "rule": "MDX006",
+          "name": "leading-blank-lines",
+          "severity": "warning",
+          "fixable": true,
+          "line": 1,
+          "column": 1,
+          "message": "File starts with blank lines. Remove them so the first block starts at line 1."
+        }
+      ],
+      "fix": {
+        "text": "- 項目一\n- 項目二\n",
+        "changed": true,
         "refused": false,
         "reason": ""
       }

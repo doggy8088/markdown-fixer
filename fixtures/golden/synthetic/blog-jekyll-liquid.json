@@ -1,6 +1,6 @@
 {
   "source": "synthetic/blog-jekyll-liquid.md",
-  "referenceVersion": "1.0.0",
+  "referenceVersion": "1.1.0",
   "cases": [
     {
       "name": "default",
@@ -219,6 +219,57 @@
       "fix": {
         "text": "---\nlayout: post\ntitle:  \"Jekyll 的 Liquid 模板入門\"\ndate:   2026-04-03 10:00:00 +0800\ncategories: jekyll liquid\npermalink: /:categories/:year/:month/:title/\n---\n\nJekyll 用 [Liquid](https://shopify.github.io/liquid/) 當模板語言。這篇整理我最常用的語法。\n\n## 變數輸出\n\n用兩個大括號輸出變數：{{ page.title }}，網站網址是 {{ site.url }}{{ site.baseurl }}。\n\n## 迴圈\n\n{% for post in site.posts limit:5 %}\n- [{{ post.title }}]({{ post.url | relative_url }})\n{% endfor %}\n\n## 條件判斷\n\n{% if page.comments %}\n<div id=\"disqus_thread\"></div>\n{% endif %}\n\n## 程式碼高亮\n\n舊的寫法：\n\n{% highlight ruby linenos %}\ndef greet(name)\n  puts \"Hello, #{name}\"\nend\n{% endhighlight %}\n\n新的寫法直接用 fenced code：\n\n```ruby\ndef greet(name)\n  puts \"Hello, #{name}\"\nend\n```\n\n## Front matter 預設值\n\n在 `_config.yml` 設定：\n\n```yaml\ndefaults:\n  - scope:\n      path: \"\"\n      type: \"posts\"\n    values:\n      layout: \"post\"\n      comments: true\n```\n\n## 小技巧\n- `{{ content | number_of_words }}` 算字數\n-`{{ page.date | date: \"%Y-%m-%d\" }}` 格式化日期\n- `{% raw %}` 與 `{% endraw %}` 可以讓 Liquid 不處理某段文字\n\n---\n本文最後更新：2026-04-05\n",
         "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "quote-depth-3-ignore",
+      "options": {
+        "maxQuoteDepth": 3,
+        "onLimit": "ignore"
+      },
+      "diagnose": [
+        {
+          "rule": "MDX018",
+          "name": "first-heading-h1",
+          "severity": "info",
+          "fixable": false,
+          "line": 11,
+          "column": 1,
+          "message": "The first heading is not an H1. Start the outline with one H1 unless the document intentionally starts in a section."
+        },
+        {
+          "rule": "MDX032",
+          "name": "list-blank-lines",
+          "severity": "warning",
+          "fixable": false,
+          "line": 18,
+          "column": 1,
+          "message": "List starts directly after a paragraph. Add a blank line before it so the list boundary is unambiguous."
+        },
+        {
+          "rule": "MDX032",
+          "name": "list-blank-lines",
+          "severity": "warning",
+          "fixable": false,
+          "line": 19,
+          "column": 1,
+          "message": "List ends directly before a paragraph, which may be read as a lazy continuation of the last item. Add a blank line after the list."
+        },
+        {
+          "rule": "MDX030",
+          "name": "list-marker-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 61,
+          "column": 2,
+          "message": "Add a space after the \"-\" list marker."
+        }
+      ],
+      "fix": {
+        "text": "---\nlayout: post\ntitle:  \"Jekyll 的 Liquid 模板入門\"\ndate:   2026-04-03 10:00:00 +0800\ncategories: jekyll liquid\npermalink: /:categories/:year/:month/:title/\n---\n\nJekyll 用 [Liquid](https://shopify.github.io/liquid/) 當模板語言。這篇整理我最常用的語法。\n\n## 變數輸出\n\n用兩個大括號輸出變數：{{ page.title }}，網站網址是 {{ site.url }}{{ site.baseurl }}。\n\n## 迴圈\n\n{% for post in site.posts limit:5 %}\n- [{{ post.title }}]({{ post.url | relative_url }})\n{% endfor %}\n\n## 條件判斷\n\n{% if page.comments %}\n<div id=\"disqus_thread\"></div>\n{% endif %}\n\n## 程式碼高亮\n\n舊的寫法：\n\n{% highlight ruby linenos %}\ndef greet(name)\n  puts \"Hello, #{name}\"\nend\n{% endhighlight %}\n\n新的寫法直接用 fenced code：\n\n```ruby\ndef greet(name)\n  puts \"Hello, #{name}\"\nend\n```\n\n## Front matter 預設值\n\n在 `_config.yml` 設定：\n\n```yaml\ndefaults:\n  - scope:\n      path: \"\"\n      type: \"posts\"\n    values:\n      layout: \"post\"\n      comments: true\n```\n\n## 小技巧\n- `{{ content | number_of_words }}` 算字數\n- `{{ page.date | date: \"%Y-%m-%d\" }}` 格式化日期\n- `{% raw %}` 與 `{% endraw %}` 可以讓 Liquid 不處理某段文字\n\n---\n本文最後更新：2026-04-05\n",
+        "changed": true,
         "refused": false,
         "reason": ""
       }

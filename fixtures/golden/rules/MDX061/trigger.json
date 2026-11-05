@@ -1,6 +1,6 @@
 {
   "source": "rules/MDX061/trigger.md",
-  "referenceVersion": "1.0.0",
+  "referenceVersion": "1.1.0",
   "cases": [
     {
       "name": "default",
@@ -144,6 +144,39 @@
         ]
       },
       "diagnose": [],
+      "fix": {
+        "text": "# 表格\n\n| 名稱 | 說明 |\n| --- | --- |\n| a | b | c |\n| d |\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "quote-depth-3-ignore",
+      "options": {
+        "maxQuoteDepth": 3,
+        "onLimit": "ignore"
+      },
+      "diagnose": [
+        {
+          "rule": "MDX061",
+          "name": "table-column-count",
+          "severity": "error",
+          "fixable": false,
+          "line": 5,
+          "column": 1,
+          "message": "Table row has 3 cell(s) but the table has 2 column(s)."
+        },
+        {
+          "rule": "MDX061",
+          "name": "table-column-count",
+          "severity": "error",
+          "fixable": false,
+          "line": 6,
+          "column": 1,
+          "message": "Table row has 1 cell(s) but the table has 2 column(s)."
+        }
+      ],
       "fix": {
         "text": "# 表格\n\n| 名稱 | 說明 |\n| --- | --- |\n| a | b | c |\n| d |\n",
         "changed": false,

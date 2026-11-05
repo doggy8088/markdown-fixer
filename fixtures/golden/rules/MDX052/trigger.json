@@ -1,6 +1,6 @@
 {
   "source": "rules/MDX052/trigger.md",
-  "referenceVersion": "1.0.0",
+  "referenceVersion": "1.1.0",
   "cases": [
     {
       "name": "default",
@@ -147,6 +147,39 @@
       "fix": {
         "text": "# 範例\n\n執行以下指令：\n```sh\nmake test\n```\n接著檢查輸出。\n",
         "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "quote-depth-3-ignore",
+      "options": {
+        "maxQuoteDepth": 3,
+        "onLimit": "ignore"
+      },
+      "diagnose": [
+        {
+          "rule": "MDX052",
+          "name": "fence-blank-lines",
+          "severity": "warning",
+          "fixable": true,
+          "line": 4,
+          "column": 1,
+          "message": "Fenced code block starts directly after another block. Add a blank line before it."
+        },
+        {
+          "rule": "MDX052",
+          "name": "fence-blank-lines",
+          "severity": "warning",
+          "fixable": true,
+          "line": 6,
+          "column": 1,
+          "message": "Fenced code block ends directly before another block. Add a blank line after it."
+        }
+      ],
+      "fix": {
+        "text": "# 範例\n\n執行以下指令：\n\n```sh\nmake test\n```\n\n接著檢查輸出。\n",
+        "changed": true,
         "refused": false,
         "reason": ""
       }

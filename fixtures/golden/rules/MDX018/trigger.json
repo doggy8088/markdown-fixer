@@ -1,6 +1,6 @@
 {
   "source": "rules/MDX018/trigger.md",
-  "referenceVersion": "1.0.0",
+  "referenceVersion": "1.1.0",
   "cases": [
     {
       "name": "default",
@@ -108,6 +108,30 @@
         ]
       },
       "diagnose": [],
+      "fix": {
+        "text": "## 從二級標題開始\n\n內容。\n\n### 小節\n\n更多內容。\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "quote-depth-3-ignore",
+      "options": {
+        "maxQuoteDepth": 3,
+        "onLimit": "ignore"
+      },
+      "diagnose": [
+        {
+          "rule": "MDX018",
+          "name": "first-heading-h1",
+          "severity": "info",
+          "fixable": false,
+          "line": 1,
+          "column": 1,
+          "message": "The first heading is not an H1. Start the outline with one H1 unless the document intentionally starts in a section."
+        }
+      ],
       "fix": {
         "text": "## 從二級標題開始\n\n內容。\n\n### 小節\n\n更多內容。\n",
         "changed": false,

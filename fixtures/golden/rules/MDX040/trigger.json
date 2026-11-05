@@ -1,6 +1,6 @@
 {
   "source": "rules/MDX040/trigger.md",
-  "referenceVersion": "1.0.0",
+  "referenceVersion": "1.1.0",
   "cases": [
     {
       "name": "default",
@@ -39,7 +39,7 @@
           "severity": "warning",
           "fixable": true,
           "line": 5,
-          "column": 1,
+          "column": 9,
           "message": "Remove the space just inside the italic (*) delimiter. Single-star spacing is fixed only when the other side is attached."
         },
         {
@@ -48,21 +48,12 @@
           "severity": "warning",
           "fixable": true,
           "line": 5,
-          "column": 8,
-          "message": "Remove the space just inside the italic (*) delimiter. Single-star spacing is fixed only when the other side is attached."
-        },
-        {
-          "rule": "MDX040",
-          "name": "emphasis-inner-space",
-          "severity": "warning",
-          "fixable": true,
-          "line": 5,
-          "column": 15,
+          "column": 16,
           "message": "Remove the space just inside the italic (_) delimiter. Single-underscore spacing is fixed only when the other side is attached."
         }
       ],
       "fix": {
-        "text": "# 強調\n\n這是 **粗體** 與 **粗體** 與 __底線__。\n\n*斜體* 與 *斜體* 與 _斜體_。\n",
+        "text": "# 強調\n\n這是 **粗體** 與 **粗體** 與 __底線__。\n\n* 斜體* 與 *斜體* 與 _斜體_。\n",
         "changed": true,
         "refused": false,
         "reason": ""
@@ -109,7 +100,7 @@
           "severity": "warning",
           "fixable": true,
           "line": 5,
-          "column": 1,
+          "column": 9,
           "message": "Remove the space just inside the italic (*) delimiter. Single-star spacing is fixed only when the other side is attached."
         },
         {
@@ -118,21 +109,12 @@
           "severity": "warning",
           "fixable": true,
           "line": 5,
-          "column": 8,
-          "message": "Remove the space just inside the italic (*) delimiter. Single-star spacing is fixed only when the other side is attached."
-        },
-        {
-          "rule": "MDX040",
-          "name": "emphasis-inner-space",
-          "severity": "warning",
-          "fixable": true,
-          "line": 5,
-          "column": 15,
+          "column": 16,
           "message": "Remove the space just inside the italic (_) delimiter. Single-underscore spacing is fixed only when the other side is attached."
         }
       ],
       "fix": {
-        "text": "# 強調\n\n這是 **粗體** 與 **粗體** 與 __底線__。\n\n*斜體* 與 *斜體* 與 _斜體_。\n",
+        "text": "# 強調\n\n這是 **粗體** 與 **粗體** 與 __底線__。\n\n* 斜體* 與 *斜體* 與 _斜體_。\n",
         "changed": true,
         "refused": false,
         "reason": ""
@@ -177,7 +159,7 @@
           "severity": "warning",
           "fixable": true,
           "line": 5,
-          "column": 1,
+          "column": 9,
           "message": "Remove the space just inside the italic (*) delimiter. Single-star spacing is fixed only when the other side is attached."
         },
         {
@@ -186,21 +168,12 @@
           "severity": "warning",
           "fixable": true,
           "line": 5,
-          "column": 8,
-          "message": "Remove the space just inside the italic (*) delimiter. Single-star spacing is fixed only when the other side is attached."
-        },
-        {
-          "rule": "MDX040",
-          "name": "emphasis-inner-space",
-          "severity": "warning",
-          "fixable": true,
-          "line": 5,
-          "column": 15,
+          "column": 16,
           "message": "Remove the space just inside the italic (_) delimiter. Single-underscore spacing is fixed only when the other side is attached."
         }
       ],
       "fix": {
-        "text": "# 強調\n\n這是 **粗體** 與 **粗體** 與 __底線__。\n\n*斜體* 與 *斜體* 與 _斜體_。\n",
+        "text": "# 強調\n\n這是 **粗體** 與 **粗體** 與 __底線__。\n\n* 斜體* 與 *斜體* 與 _斜體_。\n",
         "changed": true,
         "refused": false,
         "reason": ""
@@ -248,7 +221,7 @@
           "severity": "warning",
           "fixable": true,
           "line": 5,
-          "column": 1,
+          "column": 9,
           "message": "Remove the space just inside the italic (*) delimiter. Single-star spacing is fixed only when the other side is attached."
         },
         {
@@ -257,21 +230,12 @@
           "severity": "warning",
           "fixable": true,
           "line": 5,
-          "column": 8,
-          "message": "Remove the space just inside the italic (*) delimiter. Single-star spacing is fixed only when the other side is attached."
-        },
-        {
-          "rule": "MDX040",
-          "name": "emphasis-inner-space",
-          "severity": "warning",
-          "fixable": true,
-          "line": 5,
-          "column": 15,
+          "column": 16,
           "message": "Remove the space just inside the italic (_) delimiter. Single-underscore spacing is fixed only when the other side is attached."
         }
       ],
       "fix": {
-        "text": "# 強調\n\n這是 **粗體** 與 **粗體** 與 __底線__。\n\n*斜體* 與 *斜體* 與 _斜體_。\n",
+        "text": "# 強調\n\n這是 **粗體** 與 **粗體** 與 __底線__。\n\n* 斜體* 與 *斜體* 與 _斜體_。\n",
         "changed": true,
         "refused": false,
         "reason": ""
@@ -291,6 +255,66 @@
       "fix": {
         "text": "# 強調\n\n這是 **  粗體  ** 與 **粗體 ** 與 __ 底線 __。\n\n* 斜體* 與 *斜體 * 與 _ 斜體_。\n",
         "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "quote-depth-3-ignore",
+      "options": {
+        "maxQuoteDepth": 3,
+        "onLimit": "ignore"
+      },
+      "diagnose": [
+        {
+          "rule": "MDX040",
+          "name": "emphasis-inner-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 3,
+          "column": 4,
+          "message": "Remove spaces just inside the bold (**) delimiters."
+        },
+        {
+          "rule": "MDX040",
+          "name": "emphasis-inner-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 3,
+          "column": 13,
+          "message": "Remove spaces just inside the bold (**) delimiters."
+        },
+        {
+          "rule": "MDX040",
+          "name": "emphasis-inner-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 3,
+          "column": 22,
+          "message": "Remove spaces just inside the bold (__) delimiters."
+        },
+        {
+          "rule": "MDX040",
+          "name": "emphasis-inner-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 5,
+          "column": 9,
+          "message": "Remove the space just inside the italic (*) delimiter. Single-star spacing is fixed only when the other side is attached."
+        },
+        {
+          "rule": "MDX040",
+          "name": "emphasis-inner-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 5,
+          "column": 16,
+          "message": "Remove the space just inside the italic (_) delimiter. Single-underscore spacing is fixed only when the other side is attached."
+        }
+      ],
+      "fix": {
+        "text": "# 強調\n\n這是 **粗體** 與 **粗體** 與 __底線__。\n\n* 斜體* 與 *斜體* 與 _斜體_。\n",
+        "changed": true,
         "refused": false,
         "reason": ""
       }

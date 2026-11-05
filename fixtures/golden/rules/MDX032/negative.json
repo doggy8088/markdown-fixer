@@ -1,6 +1,6 @@
 {
   "source": "rules/MDX032/negative.md",
-  "referenceVersion": "1.0.0",
+  "referenceVersion": "1.1.0",
   "cases": [
     {
       "name": "default",
@@ -66,6 +66,20 @@
           "MDX012",
           "MDX013"
         ]
+      },
+      "diagnose": [],
+      "fix": {
+        "text": "# 步驟\n\n請依序執行：\n\n- 安裝\n- 設定\n\n完成後重新啟動。\n\n## 清單緊接標題\n- 不是段落後的清單\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "quote-depth-3-ignore",
+      "options": {
+        "maxQuoteDepth": 3,
+        "onLimit": "ignore"
       },
       "diagnose": [],
       "fix": {

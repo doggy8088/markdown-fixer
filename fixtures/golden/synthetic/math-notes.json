@@ -1,6 +1,6 @@
 {
   "source": "synthetic/math-notes.md",
-  "referenceVersion": "1.0.0",
+  "referenceVersion": "1.1.0",
   "cases": [
     {
       "name": "default",
@@ -147,6 +147,39 @@
       "fix": {
         "text": "# 機器學習筆記：線性迴歸\n\n## 模型\n\n給定資料集 $\\{(x_i, y_i)\\}_{i=1}^n$，線性迴歸假設\n\n$$\n\\hat{y} = w^\\top x + b\n$$\n\n其中 $w \\in \\mathbb{R}^d$ 是權重，$b$ 是偏差。\n\n## 損失函數\n\n均方誤差（MSE）定義為：\n\n$$\nL(w, b) = \\frac{1}{n} \\sum_{i=1}^{n} (y_i - w^\\top x_i - b)^2\n$$\n\n注意 $x_i^*$ 與 $y_*$ 的星號在數學式裡不算強調，$a_1 * b_2 * c_3$ 也一樣。\n\n## 閉式解\n\n令 $X$ 為設計矩陣，則\n$$w^* = (X^\\top X)^{-1} X^\\top y$$\n\n**條件：**$X^\\top X$ 必須可逆。\n\n## 梯度下降\n\n更新規則：\n\n$$\n\\begin{aligned}\nw &\\leftarrow w - \\eta \\nabla_w L \\\\\nb &\\leftarrow b - \\eta \\frac{\\partial L}{\\partial b}\n\\end{aligned}\n$$\n\n學習率 $\\eta$ 太大會發散，太小會收斂很慢。實務上常用 $\\eta = 10^{-3}$。\n\n> 引言裡的數學式：\n> $$\n> \\nabla_w L = -\\frac{2}{n} X^\\top (y - Xw)\n> $$\n\n- 清單裡的數學式：\n  $$\n  R^2 = 1 - \\frac{SS_{res}}{SS_{tot}}\n  $$\n\n## 費用估算\n\nGPU 每小時 $2.5，跑 40 小時約 $100。這裡的金額不是數學式，**總計 $100 ** 左右。\n\n## 參考資料\n- Bishop, *Pattern Recognition and Machine Learning*, 2006\n- https://en.wikipedia.org/wiki/Linear_regression\n",
         "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "quote-depth-3-ignore",
+      "options": {
+        "maxQuoteDepth": 3,
+        "onLimit": "ignore"
+      },
+      "diagnose": [
+        {
+          "rule": "MDX040",
+          "name": "emphasis-inner-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 55,
+          "column": 39,
+          "message": "Remove spaces just inside the bold (**) delimiters."
+        },
+        {
+          "rule": "MDX070",
+          "name": "bare-url",
+          "severity": "info",
+          "fixable": false,
+          "line": 59,
+          "column": 3,
+          "message": "Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text."
+        }
+      ],
+      "fix": {
+        "text": "# 機器學習筆記：線性迴歸\n\n## 模型\n\n給定資料集 $\\{(x_i, y_i)\\}_{i=1}^n$，線性迴歸假設\n\n$$\n\\hat{y} = w^\\top x + b\n$$\n\n其中 $w \\in \\mathbb{R}^d$ 是權重，$b$ 是偏差。\n\n## 損失函數\n\n均方誤差（MSE）定義為：\n\n$$\nL(w, b) = \\frac{1}{n} \\sum_{i=1}^{n} (y_i - w^\\top x_i - b)^2\n$$\n\n注意 $x_i^*$ 與 $y_*$ 的星號在數學式裡不算強調，$a_1 * b_2 * c_3$ 也一樣。\n\n## 閉式解\n\n令 $X$ 為設計矩陣，則\n$$w^* = (X^\\top X)^{-1} X^\\top y$$\n\n**條件：**$X^\\top X$ 必須可逆。\n\n## 梯度下降\n\n更新規則：\n\n$$\n\\begin{aligned}\nw &\\leftarrow w - \\eta \\nabla_w L \\\\\nb &\\leftarrow b - \\eta \\frac{\\partial L}{\\partial b}\n\\end{aligned}\n$$\n\n學習率 $\\eta$ 太大會發散，太小會收斂很慢。實務上常用 $\\eta = 10^{-3}$。\n\n> 引言裡的數學式：\n> $$\n> \\nabla_w L = -\\frac{2}{n} X^\\top (y - Xw)\n> $$\n\n- 清單裡的數學式：\n  $$\n  R^2 = 1 - \\frac{SS_{res}}{SS_{tot}}\n  $$\n\n## 費用估算\n\nGPU 每小時 $2.5，跑 40 小時約 $100。這裡的金額不是數學式，**總計 $100** 左右。\n\n## 參考資料\n- Bishop, *Pattern Recognition and Machine Learning*, 2006\n- https://en.wikipedia.org/wiki/Linear_regression\n",
+        "changed": true,
         "refused": false,
         "reason": ""
       }

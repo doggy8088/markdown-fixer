@@ -4,7 +4,7 @@
 
 use std::io::{self, Write};
 
-use markdown_fixer::{Problem, Rule, Severity};
+use markdown_fixer::{Problem, Rule, Severity, SkippedFix};
 use serde::Serialize;
 
 use crate::args::{CliOptions, Mode};
@@ -32,6 +32,8 @@ pub fn help_text() -> String {
         "  --rule <ids>        Only enable these rules (comma-separated, repeatable).",
         "  --ignore-rule <ids> Disable these rules (comma-separated, repeatable).",
         "  --max-line-length N Enable MDX090 with a line-length limit.",
+        "  --max-quote-depth N Limit blockquote nesting depth (default 32, 0 = no limit).",
+        "  --on-limit <mode>   When a limit is exceeded: error (MDX086, default) or ignore.",
         "  --list-rules        Print the rule catalog and exit.",
         "  --version           Print the script version and exit.",
         "  -h, --help          Print this help and exit.",
@@ -64,7 +66,9 @@ Rust-only options (not in the reference markdown-fixer.mjs):
                       the report to stderr.
   --exit-zero         Exit 0 unless a usage or I/O error occurs (exit 2).
   --detect            Only report whether standard input looks like Markdown:
-                      print markdown or not-markdown (exit 0 or 1).";
+                      print markdown or not-markdown (exit 0 or 1).
+  --no-render-guard   Apply every safe fix even if it would change how the
+                      document renders (byte-identical to the reference).";
 
 /// oracle 的 `printRules`。
 pub fn rules_text(rules: &[Rule]) -> String {
@@ -98,6 +102,18 @@ pub fn format_problem(problem: &Problem) -> String {
         problem.rule,
         problem.message,
         fixable
+    )
+}
+
+/// 渲染保護擋下的修正（Rust 版專有），格式對齊 [`format_problem`]：位置欄只有行號，
+/// 嚴重度欄固定是 `skipped`。
+pub fn format_skipped(skip: &SkippedFix) -> String {
+    format!(
+        "  {} {} {}  Fix not applied: {}",
+        pad_end(&skip.line.to_string(), 10),
+        pad_end("skipped", 7),
+        skip.rule,
+        skip.reason
     )
 }
 
@@ -138,6 +154,8 @@ pub struct FileResult {
     pub shown: Vec<Problem>,
     pub fixed: usize,
     pub would_fix: usize,
+    /// 渲染保護擋下的修正（Rust 版專有）；`--no-render-guard` 時一律為空。
+    pub skipped: Vec<SkippedFix>,
 }
 
 /// 是否有讓結束碼為 1 的結果。
@@ -174,6 +192,9 @@ struct JsonFile<'a> {
     fixed: usize,
     would_fix: usize,
     problems: Vec<JsonProblem<'a>>,
+    // Rust 版專有：渲染保護擋下的修正，空陣列時省略，讓 JSON 形狀與 oracle 相同。
+    #[serde(skip_serializing_if = "<[_]>::is_empty")]
+    skipped_fixes: &'a [SkippedFix],
 }
 
 #[derive(Serialize)]
@@ -227,6 +248,7 @@ pub fn json_report(results: &[FileResult], mode: Mode) -> String {
                         message: &problem.message,
                     })
                     .collect(),
+                skipped_fixes: &result.skipped,
             })
             .collect(),
         summary: JsonSummary {
@@ -269,6 +291,9 @@ pub fn write_text_report(
                 for problem in &result.shown {
                     writeln!(out, "{}", format_problem(problem))?;
                 }
+            }
+            for skip in &result.skipped {
+                writeln!(out, "{}", format_skipped(skip))?;
             }
             if write_mode && result.changed && !result.refused {
                 writeln!(out, "  Fixed {} issue(s).", result.fixed)?;
@@ -314,6 +339,15 @@ pub fn write_text_report(
             out,
             "No Markdown issues found in {} file(s).",
             results.len()
+        )?;
+    }
+
+    let skipped_count: usize = results.iter().map(|r| r.skipped.len()).sum();
+    if skipped_count > 0 {
+        let skipped_files = results.iter().filter(|r| !r.skipped.is_empty()).count();
+        writeln!(
+            out,
+            "Render guard skipped {skipped_count} fix(es) in {skipped_files} file(s) that would change how the document renders; fix them manually or rerun with --no-render-guard."
         )?;
     }
 
@@ -372,6 +406,7 @@ mod tests {
             shown,
             fixed: 0,
             would_fix: 0,
+            skipped: Vec::new(),
         }
     }
 

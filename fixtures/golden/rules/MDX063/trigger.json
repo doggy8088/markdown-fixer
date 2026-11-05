@@ -1,6 +1,6 @@
 {
   "source": "rules/MDX063/trigger.md",
-  "referenceVersion": "1.0.0",
+  "referenceVersion": "1.1.0",
   "cases": [
     {
       "name": "default",
@@ -108,6 +108,30 @@
         ]
       },
       "diagnose": [],
+      "fix": {
+        "text": "# 表格\n\n| 指令 | 說明 |\n| --- | --- |\n| `ls | grep md` | 管線 |\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "quote-depth-3-ignore",
+      "options": {
+        "maxQuoteDepth": 3,
+        "onLimit": "ignore"
+      },
+      "diagnose": [
+        {
+          "rule": "MDX063",
+          "name": "table-pipe-in-code",
+          "severity": "warning",
+          "fixable": false,
+          "line": 5,
+          "column": 3,
+          "message": "A pipe inside code or a URL in a table cell still splits the cell. Escape it as \\| in code, or use %7C in a URL."
+        }
+      ],
       "fix": {
         "text": "# 表格\n\n| 指令 | 說明 |\n| --- | --- |\n| `ls | grep md` | 管線 |\n",
         "changed": false,

@@ -1,6 +1,6 @@
 {
   "source": "rules/MDX002/trigger.md",
-  "referenceVersion": "1.0.0",
+  "referenceVersion": "1.1.0",
   "cases": [
     {
       "name": "default",
@@ -101,6 +101,30 @@
       "fix": {
         "text": "# 會議紀錄\r\n\r\n- 日期：2026-11-05\r\n- 與會者：Alice、Bob\r\n\r\n從 Outlook 複製出來的內容常常是 CRLF。\r\n",
         "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "quote-depth-3-ignore",
+      "options": {
+        "maxQuoteDepth": 3,
+        "onLimit": "ignore"
+      },
+      "diagnose": [
+        {
+          "rule": "MDX002",
+          "name": "line-endings",
+          "severity": "warning",
+          "fixable": true,
+          "line": 1,
+          "column": 1,
+          "message": "File uses CRLF or CR line endings. Normalize them to LF."
+        }
+      ],
+      "fix": {
+        "text": "# 會議紀錄\n\n- 日期：2026-11-05\n- 與會者：Alice、Bob\n\n從 Outlook 複製出來的內容常常是 CRLF。\n",
+        "changed": true,
         "refused": false,
         "reason": ""
       }

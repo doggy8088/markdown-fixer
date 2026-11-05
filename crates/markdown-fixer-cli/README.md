@@ -15,6 +15,8 @@ pbpaste | markdown-fixer --stdin --write --quiet --exit-zero --ignore-rule MDX00
 
 結束碼：`0` 沒有需要處理的問題；`1` 仍有 warning／error；`2` 用法、I/O 或解析錯誤。
 
+預設開啟渲染保護：會意外改變渲染結果的修正不套用，在輸出中列為 `skipped`（JSON 是 `skippedFixes`）。加上 `--no-render-guard` 時，輸出與 JS 版逐位元組相同。
+
 完整說明、剪貼簿熱鍵範例與規則參考見 [GitHub repo](https://github.com/doggy8088/markdown-fixer)。
 
 授權：MIT。

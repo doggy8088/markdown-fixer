@@ -1,6 +1,6 @@
 {
   "source": "rules/MDX075/trigger.md",
-  "referenceVersion": "1.0.0",
+  "referenceVersion": "1.1.0",
   "cases": [
     {
       "name": "default",
@@ -216,6 +216,57 @@
         ]
       },
       "diagnose": [],
+      "fix": {
+        "text": "# 圖片\n\n![](images/screenshot.png)\n\n![ ](images/logo.png)\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "quote-depth-3-ignore",
+      "options": {
+        "maxQuoteDepth": 3,
+        "onLimit": "ignore"
+      },
+      "diagnose": [
+        {
+          "rule": "MDX071",
+          "name": "empty-link",
+          "severity": "warning",
+          "fixable": false,
+          "line": 3,
+          "column": 1,
+          "message": "Link or image has empty text or an empty destination."
+        },
+        {
+          "rule": "MDX075",
+          "name": "image-alt",
+          "severity": "warning",
+          "fixable": false,
+          "line": 3,
+          "column": 1,
+          "message": "Image has no alt text. Add a short description, or confirm that an empty alt is correct for a decorative image."
+        },
+        {
+          "rule": "MDX071",
+          "name": "empty-link",
+          "severity": "warning",
+          "fixable": false,
+          "line": 5,
+          "column": 1,
+          "message": "Link or image has empty text or an empty destination."
+        },
+        {
+          "rule": "MDX075",
+          "name": "image-alt",
+          "severity": "warning",
+          "fixable": false,
+          "line": 5,
+          "column": 1,
+          "message": "Image has no alt text. Add a short description, or confirm that an empty alt is correct for a decorative image."
+        }
+      ],
       "fix": {
         "text": "# 圖片\n\n![](images/screenshot.png)\n\n![ ](images/logo.png)\n",
         "changed": false,

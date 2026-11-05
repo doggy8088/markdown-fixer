@@ -19,12 +19,12 @@
   ],
   "expected": {
     "status": 2,
-    "stdout": "ok.md\n  No problems.\n  Fixed 18 issue(s).\n\nFixed 18 issue(s) in 1 file(s).\nSome files could not be read or written; see the errors above.\n",
+    "stdout": "ok.md\n  7:1        warning MDX031  List uses \"-\" but the first item in this list uses \"*\". A different bullet marker starts a new list in CommonMark, so this is not fixed automatically; use one marker if this is one list.\n  8:1        warning MDX031  List uses \"-\" but the first item in this list uses \"*\". A different bullet marker starts a new list in CommonMark, so this is not fixed automatically; use one marker if this is one list.\n  Fixed 16 issue(s).\n\nFixed 16 issue(s) in 1 file(s).\n2 problem(s) remain: 0 fixable, 0 error(s), 2 warning(s), 0 info.\nSome files could not be read or written; see the errors above.\n",
     "stderr": "Error: secret.md: EACCES: permission denied, open '<TMP>/secret.md'\n",
     "files": [
       {
         "path": "ok.md",
-        "text": "# Project Notes  \n\nIntro paragraph with trailing spaces.  \n\n## Setup\n* first item\n* second item\n* third item\n\nSome **bold** text and a [link](https://example.com).\n\n| Name | Value |\n| --- | --- |\n| a | 1 |\n\n> quote without space\n> no space here\n\n**標籤**：內容說明\nFinal line without newline.\n"
+        "text": "# Project Notes  \n\nIntro paragraph with trailing spaces.  \n\n## Setup\n* first item\n- second item\n- third item\n\nSome **bold** text and a [link](https://example.com).\n\n| Name | Value |\n| --- | --- |\n| a | 1 |\n\n> quote without space\n> no space here\n\n**標籤**：內容說明\nFinal line without newline.\n"
       },
       {
         "path": "secret.md",

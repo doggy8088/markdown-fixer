@@ -14,12 +14,12 @@
     {
       "path": "corpus",
       "copyDir": "fixtures/corpus",
-      "fingerprint": "1eec800b91afd733"
+      "fingerprint": "b874ff9f958cf97a"
     }
   ],
   "expected": {
     "status": 1,
-    "stdout": "Fixed 330 issue(s) in 82 file(s).\n449 problem(s) remain: 15 fixable, 18 error(s), 156 warning(s), 275 info.\n14 file(s) were not modified because of structural or frontmatter ambiguity.\n",
+    "stdout": "Fixed 336 issue(s) in 90 file(s).\n480 problem(s) remain: 10 fixable, 21 error(s), 178 warning(s), 281 info.\n16 file(s) were not modified because of structural or frontmatter ambiguity.\n",
     "stderr": "",
     "files": [
       {
@@ -41,6 +41,10 @@
       {
         "path": "corpus/edge/blocking-math-unclosed.md",
         "fnv": "3fe0ec32d9cdbf52"
+      },
+      {
+        "path": "corpus/edge/blocking-quote-depth.md",
+        "fnv": "1555d15679b1f5ac"
       },
       {
         "path": "corpus/edge/blocking-quoted-fence-invalid.md",
@@ -116,7 +120,7 @@
       },
       {
         "path": "corpus/edge/nested-containers.md",
-        "fnv": "8bc7f4269438b1a5"
+        "fnv": "3f8d2abbfd6c99a1"
       },
       {
         "path": "corpus/edge/only-newlines.md",
@@ -195,28 +199,76 @@
         "fnv": "4b271af03446da79"
       },
       {
+        "path": "corpus/regressions/definition-deep-quotes-30.md",
+        "fnv": "d37ac2a4fb1fb409"
+      },
+      {
         "path": "corpus/regressions/definition-deep-quotes.md",
-        "fnv": "54fe8ea28c89dd55"
+        "fnv": "f57b608f14b91f27"
       },
       {
         "path": "corpus/regressions/definition-quote-prefixes.md",
-        "fnv": "b0296e277d085a60"
+        "fnv": "cbf0c46fb4c81726"
+      },
+      {
+        "path": "corpus/regressions/html-raw-tag-at-eol.md",
+        "fnv": "aed884915c57d4c0"
       },
       {
         "path": "corpus/regressions/js-mixed-idempotent.md",
-        "fnv": "0ecb57269f4317e3"
+        "fnv": "ba4458ba4a860f24"
+      },
+      {
+        "path": "corpus/regressions/mdx008-nbsp-after-list-marker.md",
+        "fnv": "9468143f126701df"
+      },
+      {
+        "path": "corpus/regressions/mdx008-nbsp-only-content.md",
+        "fnv": "f25b1b3705152ae2"
+      },
+      {
+        "path": "corpus/regressions/mdx020-significant-gaps.md",
+        "fnv": "db818c50c9bae269"
+      },
+      {
+        "path": "corpus/regressions/mdx031-adjacent-lists.md",
+        "fnv": "08ee510ba1c8815d"
       },
       {
         "path": "corpus/regressions/mdx040-cjk-bold-already-paired.md",
         "fnv": "9d93b38d9db4009d"
       },
       {
+        "path": "corpus/regressions/mdx040-list-marker-star.md",
+        "fnv": "38b8de742e678664"
+      },
+      {
         "path": "corpus/regressions/mdx042-money-amounts.md",
         "fnv": "ece0f6ed1a6b9eb1"
       },
       {
+        "path": "corpus/regressions/mdx052-quoted-fence-in-list.md",
+        "fnv": "704be9d26b176483"
+      },
+      {
+        "path": "corpus/regressions/mdx052-quoted-fence-lazy.md",
+        "fnv": "d9cf68df65a21b89"
+      },
+      {
+        "path": "corpus/regressions/mdx052-quoted-fence-nested.md",
+        "fnv": "04dc92225b1db6a9"
+      },
+      {
+        "path": "corpus/regressions/mdx052-quoted-fence-separated.md",
+        "fnv": "38dc00360e1aa7ef"
+      },
+      {
+        "path": "corpus/regressions/mdx060-gfm-not-a-table.md",
+        "fnv": "049466dd579f364e"
+      },
+      {
         "path": "corpus/regressions/oracle-bom-exposed-by-leading-blanks.md",
-        "fnv": "2602decb1f5963d5"
+        "fnv": "bbc7792a20f8b93d"
       },
       {
         "path": "corpus/regressions/oracle-mdx016-hashes-only.md",
@@ -236,11 +288,15 @@
       },
       {
         "path": "corpus/regressions/oracle-mdx052-quoted-fence.md",
-        "fnv": "8f8228a7075a9a0f"
+        "fnv": "ec6a5d0337f500a1"
       },
       {
         "path": "corpus/regressions/oracle-mdx084-inline-code.md",
         "fnv": "cedcfae0ec628aa0"
+      },
+      {
+        "path": "corpus/regressions/quote-depth-ignore.md",
+        "fnv": "7ff0db05ca9a392c"
       },
       {
         "path": "corpus/rules/MDX001/negative.md",
@@ -408,7 +464,7 @@
       },
       {
         "path": "corpus/rules/MDX030/trigger.md",
-        "fnv": "306e829e7d49738a"
+        "fnv": "b4d14854901fe63f"
       },
       {
         "path": "corpus/rules/MDX031/negative.md",
@@ -416,7 +472,7 @@
       },
       {
         "path": "corpus/rules/MDX031/trigger.md",
-        "fnv": "1e7ecce20eb9f214"
+        "fnv": "c0e896cf4d0a9da9"
       },
       {
         "path": "corpus/rules/MDX032/negative.md",
@@ -440,7 +496,7 @@
       },
       {
         "path": "corpus/rules/MDX040/trigger.md",
-        "fnv": "14106a68a622a480"
+        "fnv": "30ea2806d4a251be"
       },
       {
         "path": "corpus/rules/MDX041/negative.md",
@@ -619,6 +675,14 @@
         "fnv": "f8c77021e971c9c4"
       },
       {
+        "path": "corpus/rules/MDX086/negative.md",
+        "fnv": "2f30fb8dcb0f69bd"
+      },
+      {
+        "path": "corpus/rules/MDX086/trigger.md",
+        "fnv": "ce63fa49f8bfadb1"
+      },
+      {
         "path": "corpus/rules/MDX090/negative.md",
         "fnv": "e58f853461bfec59"
       },
@@ -692,7 +756,7 @@
       },
       {
         "path": "corpus/synthetic/api-reference-zh.md",
-        "fnv": "f9d0e04ec1f0af6d"
+        "fnv": "03f42501cde93fd8"
       },
       {
         "path": "corpus/synthetic/blog-hugo-frontmatter.md",
@@ -704,11 +768,11 @@
       },
       {
         "path": "corpus/synthetic/changelog-keepachangelog.md",
-        "fnv": "8423ffba5062b627"
+        "fnv": "bd6a02fe6318b356"
       },
       {
         "path": "corpus/synthetic/code-review-report-ai.md",
-        "fnv": "c5dba6f976e45f3d"
+        "fnv": "97f4995deb182c50"
       },
       {
         "path": "corpus/synthetic/config-guide.md",
@@ -732,7 +796,7 @@
       },
       {
         "path": "corpus/synthetic/meeting-notes-outlook.md",
-        "fnv": "9d703f9a5d310cd3"
+        "fnv": "d62015feea9199c4"
       },
       {
         "path": "corpus/synthetic/obsidian-note.md",
@@ -748,11 +812,11 @@
       },
       {
         "path": "corpus/synthetic/release-notes-zh.md",
-        "fnv": "18b673e07831b6fd"
+        "fnv": "1ba7655e621f253e"
       },
       {
         "path": "corpus/synthetic/spec-prd-ai-generated.md",
-        "fnv": "fb834c76423ac57e"
+        "fnv": "3a5f94182a08982b"
       },
       {
         "path": "corpus/synthetic/storybook-mdx.markdown",

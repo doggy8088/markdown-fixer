@@ -1,6 +1,6 @@
 {
   "source": "rules/MDX050/trigger.md",
-  "referenceVersion": "1.0.0",
+  "referenceVersion": "1.1.0",
   "cases": [
     {
       "name": "default",
@@ -144,6 +144,39 @@
         ]
       },
       "diagnose": [],
+      "fix": {
+        "text": "# 範例\n\n```\nnpm install\n```\n\n~~~\nplain\n~~~\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "quote-depth-3-ignore",
+      "options": {
+        "maxQuoteDepth": 3,
+        "onLimit": "ignore"
+      },
+      "diagnose": [
+        {
+          "rule": "MDX050",
+          "name": "fence-language",
+          "severity": "info",
+          "fixable": false,
+          "line": 3,
+          "column": 1,
+          "message": "Fenced code block has no language. Add one when the language is known, for example ```js."
+        },
+        {
+          "rule": "MDX050",
+          "name": "fence-language",
+          "severity": "info",
+          "fixable": false,
+          "line": 7,
+          "column": 1,
+          "message": "Fenced code block has no language. Add one when the language is known, for example ```js."
+        }
+      ],
       "fix": {
         "text": "# 範例\n\n```\nnpm install\n```\n\n~~~\nplain\n~~~\n",
         "changed": false,

@@ -19,7 +19,7 @@ use std::any::Any;
 use std::ffi::{CStr, CString, c_char};
 use std::panic::{AssertUnwindSafe, catch_unwind};
 
-use markdown_fixer::{Options, Problem, Rule};
+use markdown_fixer::{LimitPolicy, Options, Problem, Rule};
 use serde::{Deserialize, Serialize};
 
 /// 以 NUL 結尾的版本字串，給 [`mdfix_version`] 回傳。
@@ -41,6 +41,12 @@ struct FfiOptions {
     ignore_rules: Option<Vec<String>>,
     /// MDX090 行長上限；`null`、省略或 0 表示停用 MDX090。必須是非負整數。
     max_line_length: Option<usize>,
+    /// 引言巢狀深度上限；`null` 或省略表示預設 32，0 表示不限制。必須是非負整數。
+    max_quote_depth: Option<usize>,
+    /// 超過上限時的處理方式：`"error"`（預設，回報 MDX086 並拒絕修正）或 `"ignore"`。
+    on_limit: Option<LimitPolicy>,
+    /// 渲染保護（Rust 專有）；`null` 或省略表示開啟。`false` 時與 JS 參考實作逐位元組相同。
+    render_guard: Option<bool>,
 }
 
 impl From<FfiOptions> for Options {
@@ -49,7 +55,11 @@ impl From<FfiOptions> for Options {
             rules: value.rules,
             ignore_rules: value.ignore_rules,
             max_line_length: value.max_line_length.unwrap_or(0),
-            ..Options::default()
+            max_quote_depth: value
+                .max_quote_depth
+                .unwrap_or(markdown_fixer::DEFAULT_MAX_QUOTE_DEPTH),
+            on_limit: value.on_limit.unwrap_or_default(),
+            render_guard: value.render_guard.unwrap_or(true),
         }
     }
 }
@@ -192,6 +202,9 @@ pub unsafe extern "C" fn mdfix_diagnose(
 
 /// 套用安全修正，回傳 `{"text":...,"changed":...,"refused":...,"reason":...}`，
 /// 與 JS `fixDocument(text, options)` 相同；未拒絕時 `reason` 是空字串。
+///
+/// 渲染保護擋下修正時，多一個 `"skipped":[{"rule":...,"line":...,"reason":...}]`；
+/// 沒有被擋下的修正時省略這個鍵，JSON 形狀與 JS 相同。
 ///
 /// 失敗時回傳 `{"error":"..."}`。
 ///
@@ -361,6 +374,18 @@ mod tests {
         let parsed: FfiOptions =
             serde_json::from_str(r#"{"rules":null,"maxLineLength":null}"#).unwrap();
         assert_eq!(Options::from(parsed), Options::default());
+
+        let parsed: FfiOptions =
+            serde_json::from_str(r#"{"maxQuoteDepth":0,"onLimit":"ignore","renderGuard":false}"#)
+                .unwrap();
+        let options = Options::from(parsed);
+        assert_eq!(options.max_quote_depth, 0);
+        assert_eq!(options.on_limit, LimitPolicy::Ignore);
+        assert!(!options.render_guard);
+        let parsed: FfiOptions =
+            serde_json::from_str(r#"{"maxQuoteDepth":null,"onLimit":null,"renderGuard":null}"#)
+                .unwrap();
+        assert_eq!(Options::from(parsed), Options::default());
     }
 
     #[test]
@@ -369,5 +394,9 @@ mod tests {
         assert!(serde_json::from_str::<FfiOptions>(r#"{"maxLineLength":-1}"#).is_err());
         assert!(serde_json::from_str::<FfiOptions>(r#"{"maxLineLength":1.5}"#).is_err());
         assert!(serde_json::from_str::<FfiOptions>(r#"{"rules":"MDX001"}"#).is_err());
+        assert!(serde_json::from_str::<FfiOptions>(r#"{"maxQuoteDepth":-1}"#).is_err());
+        assert!(serde_json::from_str::<FfiOptions>(r#"{"onLimit":"Ignore"}"#).is_err());
+        assert!(serde_json::from_str::<FfiOptions>(r#"{"onLimit":"warn"}"#).is_err());
+        assert!(serde_json::from_str::<FfiOptions>(r#"{"renderGuard":"no"}"#).is_err());
     }
 }

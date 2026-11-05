@@ -1,0 +1,26 @@
+{
+  "name": "quote-depth-unlimited",
+  "args": [
+    "--max-quote-depth=0",
+    "deep.md"
+  ],
+  "cwd": "",
+  "nonRoot": false,
+  "setup": [
+    {
+      "path": "deep.md",
+      "text": "# 深層引言\n\n> 一層\n> > 兩層\n> > > 三層\n> > > > 四層 #沒空白\n\n-item\n"
+    }
+  ],
+  "expected": {
+    "status": 1,
+    "stdout": "deep.md\n  8:2        warning MDX030  Add a space after the \"-\" list marker. (fixable)\n\n1 problem(s) in 1 file(s): 1 fixable, 0 error(s), 1 warning(s), 0 info.\n",
+    "stderr": "",
+    "files": [
+      {
+        "path": "deep.md",
+        "text": "# 深層引言\n\n> 一層\n> > 兩層\n> > > 三層\n> > > > 四層 #沒空白\n\n-item\n"
+      }
+    ]
+  }
+}

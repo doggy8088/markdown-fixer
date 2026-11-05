@@ -1,6 +1,6 @@
 {
   "source": "rules/MDX001/trigger.md",
-  "referenceVersion": "1.0.0",
+  "referenceVersion": "1.1.0",
   "cases": [
     {
       "name": "default",
@@ -101,6 +101,30 @@
       "fix": {
         "text": "\uFEFF# 從 Windows 記事本存檔的說明\n\n這份檔案開頭有 UTF-8 BOM，常見於舊版記事本或 Excel 匯出的 CSV 轉 Markdown。\n",
         "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "quote-depth-3-ignore",
+      "options": {
+        "maxQuoteDepth": 3,
+        "onLimit": "ignore"
+      },
+      "diagnose": [
+        {
+          "rule": "MDX001",
+          "name": "bom",
+          "severity": "warning",
+          "fixable": true,
+          "line": 1,
+          "column": 1,
+          "message": "File starts with a UTF-8 BOM. Remove it so the first Markdown block starts at byte 0."
+        }
+      ],
+      "fix": {
+        "text": "# 從 Windows 記事本存檔的說明\n\n這份檔案開頭有 UTF-8 BOM，常見於舊版記事本或 Excel 匯出的 CSV 轉 Markdown。\n",
+        "changed": true,
         "refused": false,
         "reason": ""
       }

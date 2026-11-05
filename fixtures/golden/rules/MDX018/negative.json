@@ -1,6 +1,6 @@
 {
   "source": "rules/MDX018/negative.md",
-  "referenceVersion": "1.0.0",
+  "referenceVersion": "1.1.0",
   "cases": [
     {
       "name": "default",
@@ -108,6 +108,30 @@
         ]
       },
       "diagnose": [],
+      "fix": {
+        "text": "---\ntitle: 有 frontmatter\n---\n\n  ## 縮排標題不算第一個\n\n# 真正的 H1\n\n內容。\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "quote-depth-3-ignore",
+      "options": {
+        "maxQuoteDepth": 3,
+        "onLimit": "ignore"
+      },
+      "diagnose": [
+        {
+          "rule": "MDX014",
+          "name": "heading-indent",
+          "severity": "info",
+          "fixable": false,
+          "line": 5,
+          "column": 1,
+          "message": "Heading is indented. Confirm it is not a top-level heading with accidental indentation; inside a list item the indent may be intentional."
+        }
+      ],
       "fix": {
         "text": "---\ntitle: 有 frontmatter\n---\n\n  ## 縮排標題不算第一個\n\n# 真正的 H1\n\n內容。\n",
         "changed": false,

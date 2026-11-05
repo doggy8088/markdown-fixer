@@ -1,6 +1,6 @@
 {
   "source": "synthetic/meeting-notes-outlook.md",
-  "referenceVersion": "1.0.0",
+  "referenceVersion": "1.1.0",
   "cases": [
     {
       "name": "default",
@@ -172,10 +172,10 @@
           "rule": "MDX031",
           "name": "list-marker-style",
           "severity": "warning",
-          "fixable": true,
+          "fixable": false,
           "line": 33,
           "column": 1,
-          "message": "List uses \"-\" but the first item in this list uses \"*\". Use one bullet marker per list."
+          "message": "List uses \"-\" but the first item in this list uses \"*\". A different bullet marker starts a new list in CommonMark, so this is not fixed automatically; use one marker if this is one list."
         },
         {
           "rule": "MDX004",
@@ -206,7 +206,7 @@
         }
       ],
       "fix": {
-        "text": "# 產品週會紀錄（2026-11-03）\n\n**時間**：2026-11-03（一）14:00–15:00\n**地點**：3F 大會議室／Teams\n**主持人**：林經理\n**記錄**：陳小美\n**與會者**：王大明、李小華、張工程師、Alice（遠端）\n\n## 一、上週待辦追蹤\n\n| 項目 | 負責人 | 狀態 |\n| --- | --- | --- |\n| 結帳頁改版 | 王大明 | 已完成 |\n| 會員等級規則 | 李小華 | 進行中 |\n| 效能監控告警 | 張工程師 | 卡關 （等 SRE 回覆） |\n\n## 二、本週討論事項\n\n1. 結帳頁改版上線後的轉換率\n   - 桌機：+3.2%\n   - 手機：+5.8%\n   - 平板：持平\n2. 會員等級規則\n   - 金卡門檻從 NT$ 30,000 調整為 NT$ 25,000\n   - **待確認**：是否追溯既有會員？\n3. 效能監控\n   - 目前 P95 延遲 820ms ，目標 500ms\n   - 張工程師建議先加 cache\n\n## 三、決議\n* 會員等級新規則 12/1 生效，不追溯\n* 效能優化列為下個 sprint 的最高優先\n* 結帳頁 A/B 測試延長一週\n\n## 四、待辦事項\n\n- [ ] 王大明：整理轉換率報表，週三前寄出\n- [ ] 李小華：更新會員條款文案\n- [x] 張工程師：申請 Redis 資源\n- [ ]\n- [ ] 陳小美：預約下週會議室  \n\n## 五、下次會議\n\n2026-11-10（一）14:00，同一間會議室。\n",
+        "text": "# 產品週會紀錄（2026-11-03）\n\n**時間**：2026-11-03（一）14:00–15:00\n**地點**：3F 大會議室／Teams\n**主持人**：林經理\n**記錄**：陳小美\n**與會者**：王大明、李小華、張工程師、Alice（遠端）\n\n## 一、上週待辦追蹤\n\n| 項目 | 負責人 | 狀態 |\n| --- | --- | --- |\n| 結帳頁改版 | 王大明 | 已完成 |\n| 會員等級規則 | 李小華 | 進行中 |\n| 效能監控告警 | 張工程師 | 卡關 （等 SRE 回覆） |\n\n## 二、本週討論事項\n\n1. 結帳頁改版上線後的轉換率\n   - 桌機：+3.2%\n   - 手機：+5.8%\n   - 平板：持平\n2. 會員等級規則\n   - 金卡門檻從 NT$ 30,000 調整為 NT$ 25,000\n   - **待確認**：是否追溯既有會員？\n3. 效能監控\n   - 目前 P95 延遲 820ms ，目標 500ms\n   - 張工程師建議先加 cache\n\n## 三、決議\n* 會員等級新規則 12/1 生效，不追溯\n* 效能優化列為下個 sprint 的最高優先\n- 結帳頁 A/B 測試延長一週\n\n## 四、待辦事項\n\n- [ ] 王大明：整理轉換率報表，週三前寄出\n- [ ] 李小華：更新會員條款文案\n- [x] 張工程師：申請 Redis 資源\n- [ ]\n- [ ] 陳小美：預約下週會議室  \n\n## 五、下次會議\n\n2026-11-10（一）14:00，同一間會議室。\n",
         "changed": true,
         "refused": false,
         "reason": ""
@@ -386,10 +386,10 @@
           "rule": "MDX031",
           "name": "list-marker-style",
           "severity": "warning",
-          "fixable": true,
+          "fixable": false,
           "line": 33,
           "column": 1,
-          "message": "List uses \"-\" but the first item in this list uses \"*\". Use one bullet marker per list."
+          "message": "List uses \"-\" but the first item in this list uses \"*\". A different bullet marker starts a new list in CommonMark, so this is not fixed automatically; use one marker if this is one list."
         },
         {
           "rule": "MDX004",
@@ -420,7 +420,7 @@
         }
       ],
       "fix": {
-        "text": "# 產品週會紀錄（2026-11-03）\n\n**時間**：2026-11-03（一）14:00–15:00\n**地點**：3F 大會議室／Teams\n**主持人**：林經理\n**記錄**：陳小美\n**與會者**：王大明、李小華、張工程師、Alice（遠端）\n\n## 一、上週待辦追蹤\n\n| 項目 | 負責人 | 狀態 |\n| --- | --- | --- |\n| 結帳頁改版 | 王大明 | 已完成 |\n| 會員等級規則 | 李小華 | 進行中 |\n| 效能監控告警 | 張工程師 | 卡關 （等 SRE 回覆） |\n\n## 二、本週討論事項\n\n1. 結帳頁改版上線後的轉換率\n   - 桌機：+3.2%\n   - 手機：+5.8%\n   - 平板：持平\n2. 會員等級規則\n   - 金卡門檻從 NT$ 30,000 調整為 NT$ 25,000\n   - **待確認**：是否追溯既有會員？\n3. 效能監控\n   - 目前 P95 延遲 820ms ，目標 500ms\n   - 張工程師建議先加 cache\n\n## 三、決議\n* 會員等級新規則 12/1 生效，不追溯\n* 效能優化列為下個 sprint 的最高優先\n* 結帳頁 A/B 測試延長一週\n\n## 四、待辦事項\n\n- [ ] 王大明：整理轉換率報表，週三前寄出\n- [ ] 李小華：更新會員條款文案\n- [x] 張工程師：申請 Redis 資源\n- [ ]\n- [ ] 陳小美：預約下週會議室  \n\n## 五、下次會議\n\n2026-11-10（一）14:00，同一間會議室。\n",
+        "text": "# 產品週會紀錄（2026-11-03）\n\n**時間**：2026-11-03（一）14:00–15:00\n**地點**：3F 大會議室／Teams\n**主持人**：林經理\n**記錄**：陳小美\n**與會者**：王大明、李小華、張工程師、Alice（遠端）\n\n## 一、上週待辦追蹤\n\n| 項目 | 負責人 | 狀態 |\n| --- | --- | --- |\n| 結帳頁改版 | 王大明 | 已完成 |\n| 會員等級規則 | 李小華 | 進行中 |\n| 效能監控告警 | 張工程師 | 卡關 （等 SRE 回覆） |\n\n## 二、本週討論事項\n\n1. 結帳頁改版上線後的轉換率\n   - 桌機：+3.2%\n   - 手機：+5.8%\n   - 平板：持平\n2. 會員等級規則\n   - 金卡門檻從 NT$ 30,000 調整為 NT$ 25,000\n   - **待確認**：是否追溯既有會員？\n3. 效能監控\n   - 目前 P95 延遲 820ms ，目標 500ms\n   - 張工程師建議先加 cache\n\n## 三、決議\n* 會員等級新規則 12/1 生效，不追溯\n* 效能優化列為下個 sprint 的最高優先\n- 結帳頁 A/B 測試延長一週\n\n## 四、待辦事項\n\n- [ ] 王大明：整理轉換率報表，週三前寄出\n- [ ] 李小華：更新會員條款文案\n- [x] 張工程師：申請 Redis 資源\n- [ ]\n- [ ] 陳小美：預約下週會議室  \n\n## 五、下次會議\n\n2026-11-10（一）14:00，同一間會議室。\n",
         "changed": true,
         "refused": false,
         "reason": ""
@@ -598,10 +598,10 @@
           "rule": "MDX031",
           "name": "list-marker-style",
           "severity": "warning",
-          "fixable": true,
+          "fixable": false,
           "line": 33,
           "column": 1,
-          "message": "List uses \"-\" but the first item in this list uses \"*\". Use one bullet marker per list."
+          "message": "List uses \"-\" but the first item in this list uses \"*\". A different bullet marker starts a new list in CommonMark, so this is not fixed automatically; use one marker if this is one list."
         },
         {
           "rule": "MDX004",
@@ -632,7 +632,7 @@
         }
       ],
       "fix": {
-        "text": "# 產品週會紀錄（2026-11-03）\n\n**時間**：2026-11-03（一）14:00–15:00\n**地點**：3F 大會議室／Teams\n**主持人**：林經理\n**記錄**：陳小美\n**與會者**：王大明、李小華、張工程師、Alice（遠端）\n\n## 一、上週待辦追蹤\n\n| 項目 | 負責人 | 狀態 |\n| --- | --- | --- |\n| 結帳頁改版 | 王大明 | 已完成 |\n| 會員等級規則 | 李小華 | 進行中 |\n| 效能監控告警 | 張工程師 | 卡關 （等 SRE 回覆） |\n\n## 二、本週討論事項\n\n1. 結帳頁改版上線後的轉換率\n   - 桌機：+3.2%\n   - 手機：+5.8%\n   - 平板：持平\n2. 會員等級規則\n   - 金卡門檻從 NT$ 30,000 調整為 NT$ 25,000\n   - **待確認**：是否追溯既有會員？\n3. 效能監控\n   - 目前 P95 延遲 820ms ，目標 500ms\n   - 張工程師建議先加 cache\n\n## 三、決議\n* 會員等級新規則 12/1 生效，不追溯\n* 效能優化列為下個 sprint 的最高優先\n* 結帳頁 A/B 測試延長一週\n\n## 四、待辦事項\n\n- [ ] 王大明：整理轉換率報表，週三前寄出\n- [ ] 李小華：更新會員條款文案\n- [x] 張工程師：申請 Redis 資源\n- [ ]\n- [ ] 陳小美：預約下週會議室  \n\n## 五、下次會議\n\n2026-11-10（一）14:00，同一間會議室。\n",
+        "text": "# 產品週會紀錄（2026-11-03）\n\n**時間**：2026-11-03（一）14:00–15:00\n**地點**：3F 大會議室／Teams\n**主持人**：林經理\n**記錄**：陳小美\n**與會者**：王大明、李小華、張工程師、Alice（遠端）\n\n## 一、上週待辦追蹤\n\n| 項目 | 負責人 | 狀態 |\n| --- | --- | --- |\n| 結帳頁改版 | 王大明 | 已完成 |\n| 會員等級規則 | 李小華 | 進行中 |\n| 效能監控告警 | 張工程師 | 卡關 （等 SRE 回覆） |\n\n## 二、本週討論事項\n\n1. 結帳頁改版上線後的轉換率\n   - 桌機：+3.2%\n   - 手機：+5.8%\n   - 平板：持平\n2. 會員等級規則\n   - 金卡門檻從 NT$ 30,000 調整為 NT$ 25,000\n   - **待確認**：是否追溯既有會員？\n3. 效能監控\n   - 目前 P95 延遲 820ms ，目標 500ms\n   - 張工程師建議先加 cache\n\n## 三、決議\n* 會員等級新規則 12/1 生效，不追溯\n* 效能優化列為下個 sprint 的最高優先\n- 結帳頁 A/B 測試延長一週\n\n## 四、待辦事項\n\n- [ ] 王大明：整理轉換率報表，週三前寄出\n- [ ] 李小華：更新會員條款文案\n- [x] 張工程師：申請 Redis 資源\n- [ ]\n- [ ] 陳小美：預約下週會議室  \n\n## 五、下次會議\n\n2026-11-10（一）14:00，同一間會議室。\n",
         "changed": true,
         "refused": false,
         "reason": ""
@@ -804,10 +804,10 @@
           "rule": "MDX031",
           "name": "list-marker-style",
           "severity": "warning",
-          "fixable": true,
+          "fixable": false,
           "line": 33,
           "column": 1,
-          "message": "List uses \"-\" but the first item in this list uses \"*\". Use one bullet marker per list."
+          "message": "List uses \"-\" but the first item in this list uses \"*\". A different bullet marker starts a new list in CommonMark, so this is not fixed automatically; use one marker if this is one list."
         },
         {
           "rule": "MDX004",
@@ -838,7 +838,7 @@
         }
       ],
       "fix": {
-        "text": "# 產品週會紀錄（2026-11-03）\r\n\r\n**時間**：2026-11-03（一）14:00–15:00\r\n**地點**：3F 大會議室／Teams\r\n**主持人**：林經理\r\n**記錄**：陳小美\r\n**與會者**：王大明、李小華、張工程師、Alice（遠端）\r\n\r\n## 一、上週待辦追蹤\r\n\r\n| 項目 | 負責人 | 狀態 |\r\n| --- | --- | --- |\r\n| 結帳頁改版 | 王大明 | 已完成 |\r\n| 會員等級規則 | 李小華 | 進行中 |\r\n| 效能監控告警 | 張工程師 | 卡關 （等 SRE 回覆） |\r\n\r\n## 二、本週討論事項\r\n\r\n1. 結帳頁改版上線後的轉換率\r\n   - 桌機：+3.2%\r\n   - 手機：+5.8%\r\n   - 平板：持平\r\n2. 會員等級規則\r\n   - 金卡門檻從 NT$ 30,000 調整為 NT$ 25,000\r\n   - **待確認**：是否追溯既有會員？\r\n3. 效能監控\r\n   - 目前 P95 延遲 820ms ，目標 500ms\r\n   - 張工程師建議先加 cache\r\n\r\n## 三、決議\r\n* 會員等級新規則 12/1 生效，不追溯\r\n* 效能優化列為下個 sprint 的最高優先\r\n* 結帳頁 A/B 測試延長一週\r\n\r\n## 四、待辦事項\r\n\r\n- [ ] 王大明：整理轉換率報表，週三前寄出\r\n- [ ] 李小華：更新會員條款文案\r\n- [x] 張工程師：申請 Redis 資源\r\n- [ ]\r\n- [ ] 陳小美：預約下週會議室  \r\n\r\n## 五、下次會議\r\n\r\n2026-11-10（一）14:00，同一間會議室。\r\n",
+        "text": "# 產品週會紀錄（2026-11-03）\r\n\r\n**時間**：2026-11-03（一）14:00–15:00\r\n**地點**：3F 大會議室／Teams\r\n**主持人**：林經理\r\n**記錄**：陳小美\r\n**與會者**：王大明、李小華、張工程師、Alice（遠端）\r\n\r\n## 一、上週待辦追蹤\r\n\r\n| 項目 | 負責人 | 狀態 |\r\n| --- | --- | --- |\r\n| 結帳頁改版 | 王大明 | 已完成 |\r\n| 會員等級規則 | 李小華 | 進行中 |\r\n| 效能監控告警 | 張工程師 | 卡關 （等 SRE 回覆） |\r\n\r\n## 二、本週討論事項\r\n\r\n1. 結帳頁改版上線後的轉換率\r\n   - 桌機：+3.2%\r\n   - 手機：+5.8%\r\n   - 平板：持平\r\n2. 會員等級規則\r\n   - 金卡門檻從 NT$ 30,000 調整為 NT$ 25,000\r\n   - **待確認**：是否追溯既有會員？\r\n3. 效能監控\r\n   - 目前 P95 延遲 820ms ，目標 500ms\r\n   - 張工程師建議先加 cache\r\n\r\n## 三、決議\r\n* 會員等級新規則 12/1 生效，不追溯\r\n* 效能優化列為下個 sprint 的最高優先\r\n- 結帳頁 A/B 測試延長一週\r\n\r\n## 四、待辦事項\r\n\r\n- [ ] 王大明：整理轉換率報表，週三前寄出\r\n- [ ] 李小華：更新會員條款文案\r\n- [x] 張工程師：申請 Redis 資源\r\n- [ ]\r\n- [ ] 陳小美：預約下週會議室  \r\n\r\n## 五、下次會議\r\n\r\n2026-11-10（一）14:00，同一間會議室。\r\n",
         "changed": true,
         "refused": false,
         "reason": ""
@@ -867,6 +867,219 @@
       ],
       "fix": {
         "text": "# 產品週會紀錄（2026-11-03）\r\n\r\n**時間：**2026-11-03（一）14:00–15:00\r\n**地點：**3F 大會議室／Teams\r\n**主持人：**林經理\r\n**記錄：**陳小美\r\n**與會者：**王大明、李小華、張工程師、Alice（遠端）\r\n\r\n## 一、上週待辦追蹤\r\n\r\n| 項目 | 負責人 | 狀態 |\r\n| -- | -- | -- |\r\n| 結帳頁改版 | 王大明 | 已完成 |\r\n| 會員等級規則 | 李小華 | 進行中 |\r\n| 效能監控告警 | 張工程師 | 卡關\u00A0（等 SRE 回覆） |\r\n\r\n## 二、本週討論事項\r\n\r\n1. 結帳頁改版上線後的轉換率\r\n   - 桌機：+3.2%\r\n   - 手機：+5.8%\r\n   - 平板：持平\r\n2. 會員等級規則\r\n   - 金卡門檻從 NT$\u00A030,000 調整為 NT$\u00A025,000\r\n   - **待確認：**是否追溯既有會員？\r\n3.效能監控\r\n   - 目前 P95 延遲 820ms ，目標 500ms\r\n   - 張工程師建議先加 cache\r\n\r\n## 三、決議\r\n* 會員等級新規則 12/1 生效，不追溯\r\n* 效能優化列為下個 sprint 的最高優先\r\n- 結帳頁 A/B 測試延長一週\r\n\r\n## 四、待辦事項\r\n\r\n- [ ] 王大明：整理轉換率報表，週三前寄出 \r\n- [ ] 李小華：更新會員條款文案\r\n- [x] 張工程師：申請 Redis 資源\r\n- [ ]\r\n- [ ] 陳小美：預約下週會議室   \r\n\r\n## 五、下次會議\r\n\r\n\r\n2026-11-10（一）14:00，同一間會議室。\r\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "quote-depth-3-ignore",
+      "options": {
+        "maxQuoteDepth": 3,
+        "onLimit": "ignore"
+      },
+      "diagnose": [
+        {
+          "rule": "MDX002",
+          "name": "line-endings",
+          "severity": "warning",
+          "fixable": true,
+          "line": 1,
+          "column": 1,
+          "message": "File uses CRLF or CR line endings. Normalize them to LF."
+        },
+        {
+          "rule": "MDX011",
+          "name": "atx-multiple-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 1,
+          "column": 2,
+          "message": "Use exactly one space after the ATX heading marker."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": true,
+          "line": 3,
+          "column": 1,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": true,
+          "line": 3,
+          "column": 6,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": true,
+          "line": 4,
+          "column": 1,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": true,
+          "line": 4,
+          "column": 6,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": true,
+          "line": 5,
+          "column": 1,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": true,
+          "line": 5,
+          "column": 7,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": true,
+          "line": 6,
+          "column": 1,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": true,
+          "line": 6,
+          "column": 6,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": true,
+          "line": 7,
+          "column": 1,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": true,
+          "line": 7,
+          "column": 7,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX060",
+          "name": "table-delimiter-width",
+          "severity": "warning",
+          "fixable": true,
+          "line": 12,
+          "column": 3,
+          "message": "Table delimiter cell has fewer than three hyphens."
+        },
+        {
+          "rule": "MDX008",
+          "name": "non-breaking-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 15,
+          "column": 21,
+          "message": "Replace non-breaking spaces (U+00A0) with normal spaces; they usually come from Word or a web page paste."
+        },
+        {
+          "rule": "MDX008",
+          "name": "non-breaking-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 24,
+          "column": 15,
+          "message": "Replace non-breaking spaces (U+00A0) with normal spaces; they usually come from Word or a web page paste."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": true,
+          "line": 25,
+          "column": 6,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": true,
+          "line": 25,
+          "column": 12,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX030",
+          "name": "list-marker-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 26,
+          "column": 3,
+          "message": "Add a space after the \"3.\" list marker."
+        },
+        {
+          "rule": "MDX031",
+          "name": "list-marker-style",
+          "severity": "warning",
+          "fixable": false,
+          "line": 33,
+          "column": 1,
+          "message": "List uses \"-\" but the first item in this list uses \"*\". A different bullet marker starts a new list in CommonMark, so this is not fixed automatically; use one marker if this is one list."
+        },
+        {
+          "rule": "MDX004",
+          "name": "trailing-whitespace",
+          "severity": "warning",
+          "fixable": true,
+          "line": 37,
+          "column": 24,
+          "message": "Trailing whitespace. Exactly two trailing spaces create a hard line break; other trailing whitespace is noise."
+        },
+        {
+          "rule": "MDX004",
+          "name": "trailing-whitespace",
+          "severity": "warning",
+          "fixable": true,
+          "line": 41,
+          "column": 18,
+          "message": "Trailing whitespace. Exactly two trailing spaces create a hard line break; other trailing whitespace is noise."
+        },
+        {
+          "rule": "MDX005",
+          "name": "multiple-blank-lines",
+          "severity": "warning",
+          "fixable": true,
+          "line": 45,
+          "column": 1,
+          "message": "Multiple consecutive blank lines. Use one blank line between blocks."
+        }
+      ],
+      "fix": {
+        "text": "# 產品週會紀錄（2026-11-03）\n\n**時間**：2026-11-03（一）14:00–15:00\n**地點**：3F 大會議室／Teams\n**主持人**：林經理\n**記錄**：陳小美\n**與會者**：王大明、李小華、張工程師、Alice（遠端）\n\n## 一、上週待辦追蹤\n\n| 項目 | 負責人 | 狀態 |\n| --- | --- | --- |\n| 結帳頁改版 | 王大明 | 已完成 |\n| 會員等級規則 | 李小華 | 進行中 |\n| 效能監控告警 | 張工程師 | 卡關 （等 SRE 回覆） |\n\n## 二、本週討論事項\n\n1. 結帳頁改版上線後的轉換率\n   - 桌機：+3.2%\n   - 手機：+5.8%\n   - 平板：持平\n2. 會員等級規則\n   - 金卡門檻從 NT$ 30,000 調整為 NT$ 25,000\n   - **待確認**：是否追溯既有會員？\n3. 效能監控\n   - 目前 P95 延遲 820ms ，目標 500ms\n   - 張工程師建議先加 cache\n\n## 三、決議\n* 會員等級新規則 12/1 生效，不追溯\n* 效能優化列為下個 sprint 的最高優先\n- 結帳頁 A/B 測試延長一週\n\n## 四、待辦事項\n\n- [ ] 王大明：整理轉換率報表，週三前寄出\n- [ ] 李小華：更新會員條款文案\n- [x] 張工程師：申請 Redis 資源\n- [ ]\n- [ ] 陳小美：預約下週會議室  \n\n## 五、下次會議\n\n2026-11-10（一）14:00，同一間會議室。\n",
         "changed": true,
         "refused": false,
         "reason": ""

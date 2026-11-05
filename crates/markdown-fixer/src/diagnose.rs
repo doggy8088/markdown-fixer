@@ -11,7 +11,7 @@ use crate::jsstr::{JsString, join_lines, u};
 use crate::line_fix::transform_line;
 use crate::mask::{MaskOptions, build_mask, split_masked, url_re};
 use crate::rules::{Enabled, Overrides, make_problem};
-use crate::scan::{LineInfo, Scan, is_protected_line, normalize_for_analysis, scan_document};
+use crate::scan::{LineInfo, Scan, is_protected_line, normalize_for_analysis, scan_document_with};
 use crate::structure::{
     compute_blank_line_runs, compute_fullwidth_syntax, compute_heading_structure,
     compute_line_length, compute_list_structure, compute_nbsp_in_urls, compute_reference_structure,
@@ -89,7 +89,7 @@ pub(crate) fn diagnose(text: &str, options: &Options) -> Vec<Problem> {
         }
     }
 
-    let scan = scan_document(&normalized);
+    let scan = scan_document_with(&normalized, enabled.limits);
     issues.extend(scan.issues.iter().filter(|p| enabled.is(p.rule)).cloned());
 
     let line_results: Vec<_> = scan
@@ -113,7 +113,7 @@ pub(crate) fn diagnose(text: &str, options: &Options) -> Vec<Problem> {
     issues.extend(compute_blank_line_runs(&normalized, &scan, &enabled));
 
     let lines: Vec<JsString> = line_results.into_iter().map(|r| r.line).collect();
-    let normalized_scan = scan_document(&join_lines(&lines));
+    let normalized_scan = scan_document_with(&join_lines(&lines), enabled.limits);
     let info = &normalized_scan.info;
 
     issues.extend(compute_heading_structure(&lines, info, &enabled));

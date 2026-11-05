@@ -1,0 +1,15 @@
+{
+  "name": "on-limit-invalid",
+  "args": [
+    "--on-limit=Ignore"
+  ],
+  "cwd": "",
+  "nonRoot": false,
+  "setup": [],
+  "expected": {
+    "status": 2,
+    "stdout": "",
+    "stderr": "Error: --on-limit requires error or ignore.\nRun with --help for usage.\n",
+    "files": []
+  }
+}

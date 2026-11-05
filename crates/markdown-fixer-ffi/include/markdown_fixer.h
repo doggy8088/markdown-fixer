@@ -9,12 +9,18 @@
  *   - 輸入文字以「指標＋長度」傳入，必須是 UTF-8，不需要 NUL 結尾，可以含 NUL 位元組。
  *     text 為 NULL 時 len 必須是 0（代表空字串）。
  *   - options_json 是 NUL 結尾的 UTF-8 JSON，NULL 表示全部預設。格式：
- *       {"rules":["MDX001",...],"ignoreRules":["MDX003",...],"maxLineLength":120}
- *     三個鍵都可以省略或設成 null；鍵名與 JS 的 options 相同。
+ *       {"rules":["MDX001",...],"ignoreRules":["MDX003",...],"maxLineLength":120,
+ *        "maxQuoteDepth":32,"onLimit":"error","renderGuard":true}
+ *     每個鍵都可以省略或設成 null（表示預設值）；鍵名與 JS 的 options 相同。
  *       - rules：只啟用這些規則。空陣列表示全部停用（與 JS 相同）。
  *       - ignoreRules：停用這些規則。
  *       - maxLineLength：MDX090 行長上限，非負整數，0 表示停用。與 CLI 不同，
  *         rules 指定 MDX090 時不會自動套用 120。
+ *       - maxQuoteDepth：引言巢狀深度上限，非負整數，預設 32，0 表示不限制。
+ *       - onLimit："error"（預設：超過上限的行回報 MDX086，並拒絕修正整份文件）
+ *         或 "ignore"（超過上限的行不修改、不診斷）。大小寫有別。
+ *       - renderGuard：渲染保護，預設 true（Rust 專有）。會意外改變渲染結果的修正
+ *         不套用，改列在 mdfix_fix 結果的 skipped。false 時輸出與 JS 逐位元組相同。
  *     未知的鍵、型別錯誤與未知的規則 ID 都是錯誤。
  *   - 回傳的 char * 一律是 NUL 結尾的 UTF-8 JSON 物件，永遠不是 NULL。
  *     失敗時是 {"error":"訊息"}；請先檢查有沒有 "error" 鍵。
@@ -47,7 +53,12 @@ char *mdfix_diagnose(const char *text, size_t len, const char *options_json);
  *
  * 成功時回傳 {"text":"...","changed":true,"refused":false,"reason":""}，
  * 與 JS fixDocument(text, options) 相同。refused 為 true 時 text 等於原文，
- * reason 說明拒絕原因（結構錯誤或 frontmatter 陷阱）；未拒絕時 reason 是空字串。
+ * reason 說明拒絕原因（結構錯誤、資源上限或 frontmatter 陷阱）；未拒絕時 reason
+ * 是空字串。
+ *
+ * 渲染保護擋下修正時，多一個鍵：
+ *   "skipped":[{"rule":"MDX052","line":3,"reason":"..."}]
+ * line 是原文的行號（從 1 起算），reason 是英文說明。沒有被擋下的修正時省略這個鍵。
  */
 char *mdfix_fix(const char *text, size_t len, const char *options_json);
 

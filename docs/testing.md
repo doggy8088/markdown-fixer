@@ -63,7 +63,7 @@ node scripts/fuzz-parity.mjs --count 2000 --seed 7     # 隨機文件差異測�
 
 - `diagnose` 與 `fix_document` 不 panic；`diagnose` 結果具決定性，行號與欄號至少為 1。
 - 拒絕修正時輸出等於輸入、`changed` 為 false、`reason` 不是空字串；沒拒絕時 `changed` 等於「輸出不等於輸入」。
-- `fix_document` 冪等。oracle 的唯一已知例外記錄在 [parity.md](parity.md) 的〈oracle 疑似問題〉第 7 項，測試排除該情況。
+- `fix_document` 冪等。oracle v1.0.0 的兩個已知例外（檔首空行後露出 BOM、`>  >` 引言鏈一次只修一層）在 v1.1.0 已修正，測試不再排除任何情況。
 - 停用 MDX001／MDX002 時保留原本整串 BOM，行尾還原成原文的行尾（CRLF 優先，其次 CR）；啟用時輸出沒有檔首 BOM 與 CR。
 - 病態輸入在時間上限內完成：200 層引言、200 層清單、每種分隔符號 1 萬字元的長行、2 萬行空行等。上限預設 debug 10 秒、release 2 秒，可用 `MDFIX_PATHOLOGICAL_BUDGET_MS` 調整。
 

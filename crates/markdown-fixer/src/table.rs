@@ -5,7 +5,7 @@ use crate::jsstr::{self, JsString, trim};
 use crate::rules::Enabled;
 use crate::scan::{
     LineInfo, is_atx_heading, is_blank, is_indented_code_line, is_list_line, is_protected_line,
-    is_thematic_break, parse_quote_prefix, scan_document,
+    is_thematic_break, parse_quote_prefix, scan_document_with,
 };
 
 const PIPE: u16 = b'|' as u16;
@@ -221,14 +221,47 @@ pub(crate) fn normalize_label(label: &[u16]) -> JsString {
     jsstr::to_lower_case(&collapsed)
 }
 
+/// JS `gfmCellCount`：GFM 以每一個沒有反斜線跳脫的 `|` 分割儲存格，inline code 裡的也算。
+fn gfm_cell_count(line: &[u16]) -> usize {
+    let mut value = trim(line);
+    if value.first() == Some(&PIPE) {
+        value = &value[1..];
+    }
+    if value.last() == Some(&PIPE) && !value.ends_with(&[BACKSLASH, PIPE]) {
+        value = &value[..value.len() - 1];
+    }
+    let mut count = 1;
+    let mut i = 0;
+    while i < value.len() {
+        if value[i] == BACKSLASH {
+            i += 1;
+        } else if value[i] == PIPE {
+            count += 1;
+        }
+        i += 1;
+    }
+    count
+}
+
+/// JS `isGfmTable`：表頭與分隔列的 GFM 儲存格數相同；不同時 GFM 根本不把它當成表格（MDX060 不處理）。
+pub(crate) fn is_gfm_table(lines: &[JsString], table: &Table) -> bool {
+    match (lines.get(table.start), lines.get(table.start + 1)) {
+        (Some(header), Some(delimiter)) => gfm_cell_count(header) == gfm_cell_count(delimiter),
+        _ => false,
+    }
+}
+
 /// JS `applyTableDelimiterFixes(text, isEnabled)`。
 pub(crate) fn apply_table_delimiter_fixes(text: &[u16], enabled: &Enabled) -> JsString {
     if !enabled.is("MDX060") {
         return text.to_vec();
     }
-    let scan = scan_document(text);
+    let scan = scan_document_with(text, enabled.limits);
     let mut lines = scan.lines.clone();
     for table in find_tables(&scan.lines, &scan.info) {
+        if !is_gfm_table(&scan.lines, &table) {
+            continue;
+        }
         let index = table.start + 1;
         if let Some(fix) = lines
             .get(index)

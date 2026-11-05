@@ -5,7 +5,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 
-const VERSION = '1.0.0';
+const VERSION = '1.1.0';
 
 const RULES = [
   // Encoding and whitespace
@@ -36,7 +36,7 @@ const RULES = [
 
   // Lists
   { id: 'MDX030', name: 'list-marker-space', category: 'list', severity: 'warning', fixable: true, summary: 'Add a space between a list marker and its content.' },
-  { id: 'MDX031', name: 'list-marker-style', category: 'list', severity: 'warning', fixable: true, summary: 'Use one bullet marker per list.' },
+  { id: 'MDX031', name: 'list-marker-style', category: 'list', severity: 'warning', fixable: false, summary: 'Use one bullet marker per list; a different marker starts a new list, so this is reported, not fixed.' },
   { id: 'MDX032', name: 'list-blank-lines', category: 'list', severity: 'warning', fixable: false, summary: 'Separate lists from surrounding paragraphs with blank lines.' },
   { id: 'MDX035', name: 'empty-list-item', category: 'list', severity: 'warning', fixable: false, summary: 'Remove empty list items or give them content.' },
 
@@ -72,6 +72,7 @@ const RULES = [
   { id: 'MDX083', name: 'html-comment-unclosed', category: 'structure', severity: 'error', fixable: false, summary: 'Close every HTML comment.' },
   { id: 'MDX084', name: 'fullwidth-markdown-syntax', category: 'structure', severity: 'warning', fixable: false, summary: 'Use ASCII punctuation for Markdown syntax.' },
   { id: 'MDX085', name: 'math-unclosed', category: 'structure', severity: 'error', fixable: false, summary: 'Close every $$ math block.' },
+  { id: 'MDX086', name: 'resource-limit', category: 'structure', severity: 'error', fixable: false, summary: 'Keep blockquote nesting within the configured depth limit (maxQuoteDepth).' },
   { id: 'MDX090', name: 'line-length', category: 'style', severity: 'info', fixable: false, summary: 'Keep prose lines within the configured limit.' }
 ];
 
@@ -117,15 +118,29 @@ function makeProblem(ruleId, line, column, message, overrides = {}) {
   };
 }
 
+const DEFAULT_MAX_QUOTE_DEPTH = 32;
+
+// Resource limits shared by every scan of one diagnose/fixDocument call.
+// maxQuoteDepth 0 means no limit; onLimit is 'error' (MDX086, blocking) or 'ignore'.
+function createLimits(options = {}) {
+  const depth = options.maxQuoteDepth ?? DEFAULT_MAX_QUOTE_DEPTH;
+  return {
+    maxQuoteDepth: typeof depth === 'number' && depth >= 0 ? Math.floor(depth) : DEFAULT_MAX_QUOTE_DEPTH,
+    onLimit: options.onLimit === 'ignore' ? 'ignore' : 'error'
+  };
+}
+
 function createEnabled(options = {}) {
   const include = options.rules ? new Set(options.rules) : null;
   const ignore = options.ignoreRules ? new Set(options.ignoreRules) : null;
-  return function isEnabled(ruleId) {
+  const isEnabled = function (ruleId) {
     if (include && !include.has(ruleId)) return false;
     if (ignore && ignore.has(ruleId)) return false;
     if (ruleId === 'MDX090' && !(options.maxLineLength > 0)) return false;
     return true;
   };
+  isEnabled.limits = createLimits(options);
+  return isEnabled;
 }
 
 function normalizeForAnalysis(text) {
@@ -189,7 +204,7 @@ function isParagraphLike(line, lineInfo) {
 }
 
 function detectHtmlBlockStart(line) {
-  let match = line.match(new RegExp(`^ {0,3}<(${RAW_HTML_TAGS})(?=[\\s>])`, 'i'));
+  let match = line.match(new RegExp(`^ {0,3}<(${RAW_HTML_TAGS})(?=[\\s>]|$)`, 'i'));
   if (match) {
     const closeRe = new RegExp(`</${match[1]}\\s*>`, 'i');
     return {
@@ -297,7 +312,53 @@ function isClosingFence(line, fence) {
   return Boolean(match && match[1][0] === fence.char && match[1].length >= fence.len);
 }
 
-function scanDocument(text) {
+// Count blockquote markers the way /^(?: {0,3}>[ \t]?)*/ consumes them greedily:
+// up to three spaces, `>`, then one optional space or tab. Greedy consumption
+// reaches every marker any backtracking path can reach, so `depth` is the
+// maximum and `end` is the furthest position. Linear time.
+function scanQuoteMarkers(line) {
+  let pos = 0;
+  let depth = 0;
+  for (;;) {
+    let p = pos;
+    while (p - pos < 3 && line[p] === ' ') p++;
+    if (line[p] !== '>') break;
+    p++;
+    if (line[p] === ' ' || line[p] === '\t') p++;
+    pos = p;
+    depth++;
+  }
+  return { depth, end: pos };
+}
+
+function isJsWhitespace(ch) {
+  return ch !== undefined && /\s/.test(ch);
+}
+
+// Linear equivalent of
+// /^(?: {0,3}>[ \t]?)* {0,3}\[([^\]\n]+)\]:[ \t]*(?:<[^>\n]*>|\S+)/,
+// which backtracks exponentially on deep quote prefixes in v1.0.0. Returns the
+// label (group 1) and its start index, or null.
+function matchDefinition(line) {
+  let pos = scanQuoteMarkers(line).end;
+  const indentStart = pos;
+  while (pos - indentStart < 3 && line[pos] === ' ') pos++;
+  if (line[pos] !== '[') return null;
+  const labelStart = pos + 1;
+  let close = labelStart;
+  while (close < line.length && line[close] !== ']' && line[close] !== '\n') close++;
+  if (close === labelStart || line[close] !== ']' || line[close + 1] !== ':') return null;
+  let dest = close + 2;
+  while (line[dest] === ' ' || line[dest] === '\t') dest++;
+  if (dest >= line.length || isJsWhitespace(line[dest])) return null;
+  return { label: line.slice(labelStart, close), index: labelStart };
+}
+
+function resourceLimitMessage(depth, limit) {
+  return `Blockquote nesting depth ${depth} exceeds the limit of ${limit}. Reduce the nesting, raise --max-quote-depth (0 = no limit), or use --on-limit ignore to leave such lines untouched.`;
+}
+
+function scanDocument(text, limits = createLimits()) {
   const lines = text.split('\n');
   const info = lines.map((line, index) => ({
     index,
@@ -318,7 +379,8 @@ function scanDocument(text) {
     definition: false,
     mathBlock: false,
     mathOpen: false,
-    mathClose: false
+    mathClose: false,
+    opaque: false
   }));
   const issues = [];
   let frontmatterEnd = -1;
@@ -434,6 +496,20 @@ function scanDocument(text) {
       inIndented = false;
     }
 
+    // Lines nested deeper than maxQuoteDepth are opaque: never a block start or
+    // definition, never modified, never diagnosed. In 'error' mode MDX086 also
+    // blocks fixDocument.
+    if (limits.maxQuoteDepth > 0) {
+      const depth = scanQuoteMarkers(line).depth;
+      if (depth > limits.maxQuoteDepth) {
+        lineInfo.opaque = true;
+        if (limits.onLimit !== 'ignore') {
+          issues.push(makeProblem('MDX086', i + 1, 1, resourceLimitMessage(depth, limits.maxQuoteDepth)));
+        }
+        continue;
+      }
+    }
+
     const previousInfo = i > 0 ? info[i - 1] : null;
     const previousIsIndentedContinuation = i > 0 &&
       isIndentedCodeLine(lines[i - 1]) &&
@@ -512,7 +588,7 @@ function scanDocument(text) {
       continue;
     }
 
-    if (/^(?: {0,3}>[ \t]?)* {0,3}\[[^\]\n]+\]:[ \t]*(?:<[^>\n]*>|\S+)/.test(line)) {
+    if (matchDefinition(line)) {
       lineInfo.definition = true;
     }
   }
@@ -537,7 +613,8 @@ function isProtectedLine(lineInfo) {
     lineInfo.htmlBlock ||
     lineInfo.indentedCode ||
     lineInfo.mathBlock ||
-    lineInfo.definition
+    lineInfo.definition ||
+    lineInfo.opaque
   );
 }
 
@@ -739,21 +816,43 @@ function fixHeading(line, isEnabled = () => true) {
   return { line: `${indent}${hashes}${gap}${content}`, changes };
 }
 
+// Blocks whose meaning depends on their indentation inside a blockquote.
+function startsIndentSensitiveBlock(content) {
+  return /^(?:`{3,}|~{3,}|(?:[-*+]|\d{1,9}[.)])(?:[ \t]|$))/.test(content);
+}
+
 function fixBlockquote(line, isEnabled = () => true) {
   if (!isEnabled('MDX020')) return null;
   const quote = parseQuotePrefix(line);
   if (!quote) return null;
 
+  // parseQuotePrefix stops at `>  >`; one extra space before another marker is
+  // still the same nesting, so take the whole chain in one pass. Otherwise each
+  // fixDocument pass would merge only one level and the result would not be
+  // idempotent.
+  let depth = quote.depth;
   let content = quote.rest;
+  while (content[0] === ' ' && content[1] === '>') {
+    const inner = parseQuotePrefix(content.slice(1));
+    depth += inner.depth;
+    content = inner.rest;
+  }
   const contentGap = content.match(/^[ \t]*/)[0];
   if (contentGap.includes('\t')) {
     return { line, changes: [] };
   }
-  if (contentGap.length <= 3) {
+  // Spaces after the marker's own space are significant when two or more of
+  // them could continue a list item, and for fences (they set how much
+  // indentation is removed from the code) and list markers (they set the item's
+  // content column). Only a single space before other content, or up to three
+  // spaces with nothing after them, are removed.
+  const blankContent = contentGap.length === content.length;
+  if ((blankContent && contentGap.length <= 3) ||
+    (contentGap.length === 1 && !startsIndentSensitiveBlock(content.slice(1)))) {
     content = content.slice(contentGap.length);
   }
 
-  const markerPrefix = new Array(quote.depth).fill('>').join(' ');
+  const markerPrefix = new Array(depth).fill('>').join(' ');
   const fixed = content === ''
     ? `${quote.leading}${markerPrefix}`
     : `${quote.leading}${markerPrefix} ${content}`;
@@ -853,8 +952,26 @@ function delimiterFlanking(before, after) {
   };
 }
 
+// Blockquote and list markers at the start of a line: `end` is where the
+// content starts, `stars` holds the indices of `*` bullet markers.
+function containerPrefix(line) {
+  const stars = new Set();
+  let pos = scanQuoteMarkers(line).end;
+  for (;;) {
+    const match = line.slice(pos).match(/^[ \t]*([-*+]|\d{1,9}[.)])(?:[ \t]+|$)/);
+    if (!match) break;
+    const markerStart = pos + match[0].indexOf(match[1]);
+    if (match[1] === '*') stars.add(markerStart);
+    pos += match[0].length;
+  }
+  return { end: pos, stars };
+}
+
 function fixEmphasis(line, lineNo, isEnabled = () => true) {
   if (!isEnabled('MDX040')) return { line, changes: [] };
+  // A bullet `*` is not an emphasis delimiter; trimming the space after it
+  // would turn the list item into a paragraph.
+  const markerStars = containerPrefix(line).stars;
   const mask = buildMask(line, { maskBareUrls: false });
   const segments = splitMasked(line, mask);
   const changes = [];
@@ -897,7 +1014,8 @@ function fixEmphasis(line, lineNo, isEnabled = () => true) {
         const openerRepaired = delimiterFlanking(openerBefore, content[0]);
         const closerOriginal = delimiterFlanking(match[wsIndex][match[wsIndex].length - 1], closerAfter);
         const closerRepaired = delimiterFlanking(content[content.length - 1], closerAfter);
-        const allowed = openerRepaired.leftFlanking && closerRepaired.rightFlanking &&
+        const allowed = !markerStars.has(segment.start + start) &&
+          openerRepaired.leftFlanking && closerRepaired.rightFlanking &&
           (wsSide === 'after' ? !openerOriginal.rightFlanking : !closerOriginal.leftFlanking);
         if (!allowed) return match[0];
         changes.push({
@@ -975,21 +1093,53 @@ function fixNbsp(line, isEnabled = () => true) {
   const mask = buildMask(line);
   const segments = splitMasked(line, mask);
   const changes = [];
+  // NBSP is not whitespace for a list marker, so `*<NBSP>text` is a paragraph.
+  // A normal space there would turn it into a list item: report, do not fix.
+  const prefixEnd = containerPrefix(line).end;
+  const marker = line.slice(prefixEnd).match(/^[ \t]*(?:[-*+]|\d{1,9}[.)])(\u00A0+)/);
+  const keepEnd = marker ? prefixEnd + marker[0].length : -1;
+  const keepStart = marker ? keepEnd - marker[1].length : -1;
   let output = '';
   for (const segment of segments) {
     if (segment.protected) {
       output += segment.text;
       continue;
     }
-    const matches = [...segment.text.matchAll(/\u00A0/g)];
-    if (matches.length > 0) {
+    let first = -1;
+    let text = '';
+    for (let i = 0; i < segment.text.length; i++) {
+      const ch = segment.text[i];
+      const index = segment.start + i;
+      if (ch !== '\u00A0') {
+        text += ch;
+      } else if (index >= keepStart && index < keepEnd) {
+        if (index === keepStart) {
+          changes.push({
+            rule: 'MDX008',
+            column: index + 1,
+            message: 'NBSP right after a list marker. Replacing it with a space would turn this paragraph into a list item; use a normal space if a list was intended.',
+            overrides: { fixable: false }
+          });
+        }
+        text += ch;
+      } else {
+        if (first === -1) first = i;
+        text += ' ';
+      }
+    }
+    if (first !== -1) {
       changes.push({
         rule: 'MDX008',
-        column: segment.start + matches[0].index + 1,
+        column: segment.start + first + 1,
         message: 'Replace non-breaking spaces (U+00A0) with normal spaces; they usually come from Word or a web page paste.'
       });
     }
-    output += segment.text.replace(/\u00A0/g, ' ');
+    output += text;
+  }
+  // An NBSP that is the only content of a line or list item keeps it from
+  // being blank; a normal space would end the paragraph or empty the item.
+  if (output !== line && isBlank(output.slice(containerPrefix(line).end))) {
+    return { line, changes: [] };
   }
   return { line: output, changes };
 }
@@ -1058,6 +1208,25 @@ function splitTableCells(line) {
   }
   cells.push(current.trim());
   return cells;
+}
+
+// GFM splits cells on every pipe that is not backslash-escaped, including
+// pipes inside code spans; a header and delimiter row with different counts
+// are not a table at all.
+function gfmCellCount(line) {
+  let value = line.trim();
+  if (value.startsWith('|')) value = value.slice(1);
+  if (value.endsWith('|') && !value.endsWith('\\|')) value = value.slice(0, -1);
+  let count = 1;
+  for (let i = 0; i < value.length; i++) {
+    if (value[i] === '\\') i++;
+    else if (value[i] === '|') count++;
+  }
+  return count;
+}
+
+function isGfmTable(lines, table) {
+  return gfmCellCount(lines[table.start]) === gfmCellCount(lines[table.start + 1]);
 }
 
 function isTableDelimiterRow(line) {
@@ -1221,7 +1390,7 @@ function computeListStructure(lines, info, isEnabled) {
     }
     const run = runs.get(indent);
     if (run.marker !== match[2] && isEnabled('MDX031')) {
-      issues.push(makeProblem('MDX031', i + 1, indent + 1, `List uses "${match[2]}" but the first item in this list uses "${run.marker}". Use one bullet marker per list.`));
+      issues.push(makeProblem('MDX031', i + 1, indent + 1, `List uses "${match[2]}" but the first item in this list uses "${run.marker}". A different bullet marker starts a new list in CommonMark, so this is not fixed automatically; use one marker if this is one list.`));
     }
   }
 
@@ -1275,7 +1444,7 @@ function computeListStructure(lines, info, isEnabled) {
 function computeTableStructure(lines, info, isEnabled) {
   const issues = [];
   const tables = findTables(lines, info);
-  const delimiterLines = new Set(tables.map((table) => table.start + 1));
+  const delimiterLines = new Set(tables.filter((table) => isGfmTable(lines, table)).map((table) => table.start + 1));
 
   for (const table of tables) {
     const headerCells = splitTableCells(lines[table.start]);
@@ -1327,9 +1496,10 @@ function computeReferenceStructure(lines, info, isEnabled) {
   const definitions = new Map();
 
   for (let i = 0; i < lines.length; i++) {
-    if (info[i].frontmatter || info[i].fenceContent || info[i].htmlBlock || info[i].indentedCode || info[i].mathBlock) continue;
-    const match = lines[i].match(/^(?: {0,3}>[ \t]?)* {0,3}\[([^\]\n]+)\]:[ \t]*(?:<[^>\n]*>|\S+)/);
-    if (!match) continue;
+    if (info[i].frontmatter || info[i].fenceContent || info[i].htmlBlock || info[i].indentedCode || info[i].mathBlock || info[i].opaque) continue;
+    const definition = matchDefinition(lines[i]);
+    if (!definition) continue;
+    const match = [null, definition.label];
     const label = normalizeLabel(match[1]);
     if (!label) continue;
     if (definitions.has(label)) {
@@ -1546,7 +1716,9 @@ function analyzeCjkEmphasis(lines, info) {
       }
       lineStarts.push(text.length);
       text += lines[i];
-      mask.push(...buildMask(lines[i]));
+      // A loop, not push(...spread): spreading a long line's mask exceeds V8's
+      // argument limit (RangeError) at about 120k code units.
+      for (const masked of buildMask(lines[i])) mask.push(masked);
     }
 
     const locate = function (pos) {
@@ -1659,7 +1831,7 @@ function computeCjkEmphasis(lines, info, isEnabled) {
 
 function applyCjkEmphasisFixes(text, isEnabled) {
   if (!isEnabled('MDX042')) return text;
-  const scan = scanDocument(text);
+  const scan = scanDocument(text, isEnabled.limits);
   const transforms = analyzeCjkEmphasis(scan.lines, scan.info).transforms;
   if (transforms.length === 0) return text;
 
@@ -1676,9 +1848,19 @@ function applyCjkEmphasisFixes(text, isEnabled) {
   return lines.join('\n');
 }
 
+// A blank line inside a blockquote: `>`, `> >`, ... with nothing after the markers.
+function isQuoteBlankLine(line) {
+  const quote = parseQuotePrefix(line);
+  return Boolean(quote) && quote.rest.trim() === '';
+}
+
 function computeBlankLineFixes(lines, info, scan, isEnabled) {
   const before = new Set();
   const after = new Set();
+  // Line to insert instead of '' for a fence inside a blockquote, keyed by the
+  // fence's opening (before) or closing (after) line. A fully blank line would
+  // end the blockquote and split it in two.
+  const fill = new Map();
   const issues = [];
 
   if (isEnabled('MDX013')) {
@@ -1699,15 +1881,26 @@ function computeBlankLineFixes(lines, info, scan, isEnabled) {
   if (isEnabled('MDX052')) {
     for (let i = 0; i < lines.length; i++) {
       if (!info[i].fenceOpen || !isTopLevelLine(lines[i])) continue;
-      if (i > 0 && lines[i - 1].trim() !== '') {
+      // A fence inside a blockquote is separated by a `>` line at the fence's
+      // depth. When the fence is indented after the markers it may belong to a
+      // list item, where any blank line would make the list loose, so skip it.
+      const quote = lines[i][0] === '>' ? parseQuotePrefix(lines[i]) : null;
+      if (quote && /^[ \t]/.test(quote.rest)) continue;
+      const quoteFill = quote ? new Array(quote.depth).fill('>').join(' ') : '';
+      const separated = function (line) {
+        return line.trim() === '' || (quote !== null && isQuoteBlankLine(line));
+      };
+      if (i > 0 && !separated(lines[i - 1])) {
         before.add(i);
+        if (quote) fill.set(i, quoteFill);
         issues.push(makeProblem('MDX052', i + 1, 1, 'Fenced code block starts directly after another block. Add a blank line before it.'));
       }
       let close = i + 1;
       while (close < lines.length && !info[close].fenceClose) close++;
       if (close < lines.length) {
-        if (close + 1 < lines.length && lines[close + 1].trim() !== '') {
+        if (close + 1 < lines.length && !separated(lines[close + 1])) {
           after.add(close);
+          if (quote) fill.set(close, quoteFill);
           issues.push(makeProblem('MDX052', close + 1, 1, 'Fenced code block ends directly before another block. Add a blank line after it.'));
         }
         i = close;
@@ -1737,22 +1930,26 @@ function computeBlankLineFixes(lines, info, scan, isEnabled) {
     }
   }
 
-  return { before, after, issues };
+  return { before, after, fill, issues };
 }
 
 function applyBlankLineFixes(text, isEnabled) {
-  const scan = scanDocument(text);
-  const { before, after } = computeBlankLineFixes(scan.lines, scan.info, scan, isEnabled);
+  const scan = scanDocument(text, isEnabled.limits);
+  const { before, after, fill } = computeBlankLineFixes(scan.lines, scan.info, scan, isEnabled);
   if (before.size === 0 && after.size === 0) return text;
 
+  const needsSeparator = function (line, i) {
+    if (line.trim() === '') return false;
+    return !(fill.has(i) && isQuoteBlankLine(line));
+  };
   const output = [];
   for (let i = 0; i < scan.lines.length; i++) {
-    if (before.has(i) && output.length > 0 && output[output.length - 1].trim() !== '') {
-      output.push('');
+    if (before.has(i) && output.length > 0 && needsSeparator(output[output.length - 1], i)) {
+      output.push(fill.get(i) ?? '');
     }
     output.push(scan.lines[i]);
-    if (after.has(i) && i + 1 < scan.lines.length && scan.lines[i + 1].trim() !== '') {
-      output.push('');
+    if (after.has(i) && i + 1 < scan.lines.length && needsSeparator(scan.lines[i + 1], i)) {
+      output.push(fill.get(i) ?? '');
     }
   }
   return output.join('\n');
@@ -1763,7 +1960,7 @@ function computeTrailingWhitespace(lines, info, isEnabled) {
   const issues = [];
   for (let i = 0; i < lines.length; i++) {
     const lineInfo = info[i];
-    if (lineInfo.frontmatter || lineInfo.fenceContent || lineInfo.htmlBlock || lineInfo.indentedCode || lineInfo.mathBlock) continue;
+    if (lineInfo.frontmatter || lineInfo.fenceContent || lineInfo.htmlBlock || lineInfo.indentedCode || lineInfo.mathBlock || lineInfo.opaque) continue;
     const match = lines[i].match(/[ \t]+$/);
     if (!match) continue;
     if (!isBlank(lines[i]) && /^ {2}$/.test(match[0])) continue;
@@ -1774,10 +1971,10 @@ function computeTrailingWhitespace(lines, info, isEnabled) {
 
 function applyTrailingWhitespace(text, isEnabled) {
   if (!isEnabled('MDX004')) return text;
-  const scan = scanDocument(text);
+  const scan = scanDocument(text, isEnabled.limits);
   const lines = scan.lines.map((line, i) => {
     const lineInfo = scan.info[i];
-    if (lineInfo.frontmatter || lineInfo.fenceContent || lineInfo.htmlBlock || lineInfo.indentedCode || lineInfo.mathBlock) return line;
+    if (lineInfo.frontmatter || lineInfo.fenceContent || lineInfo.htmlBlock || lineInfo.indentedCode || lineInfo.mathBlock || lineInfo.opaque) return line;
     const match = line.match(/[ \t]+$/);
     if (!match) return line;
     if (!isBlank(line) && /^ {2}$/.test(match[0])) return line;
@@ -1812,7 +2009,7 @@ function computeZeroWidth(lines, info, isEnabled) {
   const issues = [];
   for (let i = 0; i < lines.length; i++) {
     const lineInfo = info[i];
-    if (lineInfo.frontmatter || lineInfo.fenceContent || lineInfo.htmlBlock || lineInfo.indentedCode || lineInfo.mathBlock) continue;
+    if (lineInfo.frontmatter || lineInfo.fenceContent || lineInfo.htmlBlock || lineInfo.indentedCode || lineInfo.mathBlock || lineInfo.opaque) continue;
     const mask = buildMask(lines[i], { maskBareUrls: false, maskLinkDestinations: false });
     const segments = splitMasked(lines[i], mask);
     for (const segment of segments) {
@@ -1833,7 +2030,7 @@ function computeBlankLineRuns(text, scan, isEnabled) {
   const lines = scan.lines;
   const protectedBlank = function (i) {
     const lineInfo = scan.info[i];
-    return Boolean(lineInfo.frontmatter || lineInfo.fenceContent || lineInfo.htmlBlock || lineInfo.indentedCode || lineInfo.mathBlock);
+    return Boolean(lineInfo.frontmatter || lineInfo.fenceContent || lineInfo.htmlBlock || lineInfo.indentedCode || lineInfo.mathBlock || lineInfo.opaque);
   };
 
   let i = 0;
@@ -1848,7 +2045,11 @@ function computeBlankLineRuns(text, scan, isEnabled) {
     const hasAfter = j < lines.length;
 
     if (!hasBefore && isEnabled('MDX006')) {
-      issues.push(makeProblem('MDX006', 1, 1, 'File starts with blank lines. Remove them so the first block starts at line 1.'));
+      if (hasAfter && lines[j].startsWith('\uFEFF')) {
+        issues.push(makeProblem('MDX006', 1, 1, 'File starts with blank lines before a line that begins with U+FEFF. Remove the U+FEFF first; removing only the blank lines would turn it into a BOM.', { fixable: false }));
+      } else {
+        issues.push(makeProblem('MDX006', 1, 1, 'File starts with blank lines. Remove them so the first block starts at line 1.'));
+      }
     }
     if (hasBefore && hasAfter && j - i >= 2 && isEnabled('MDX005')) {
       issues.push(makeProblem('MDX005', i + 2, 1, 'Multiple consecutive blank lines. Use one blank line between blocks.'));
@@ -1868,11 +2069,11 @@ function computeBlankLineRuns(text, scan, isEnabled) {
 }
 
 function applyBlankLineNormalization(text, isEnabled) {
-  const scan = scanDocument(text);
+  const scan = scanDocument(text, isEnabled.limits);
   const lines = scan.lines;
   const protectedBlank = function (i) {
     const lineInfo = scan.info[i];
-    return Boolean(lineInfo.frontmatter || lineInfo.fenceContent || lineInfo.htmlBlock || lineInfo.indentedCode || lineInfo.mathBlock);
+    return Boolean(lineInfo.frontmatter || lineInfo.fenceContent || lineInfo.htmlBlock || lineInfo.indentedCode || lineInfo.mathBlock || lineInfo.opaque);
   };
 
   const output = [];
@@ -1880,6 +2081,9 @@ function applyBlankLineNormalization(text, isEnabled) {
 
   if (isEnabled('MDX006')) {
     while (i < lines.length && isBlank(lines[i]) && !protectedBlank(i)) i++;
+    // Removing the blank lines would move a U+FEFF to the start of the file,
+    // where it becomes a BOM and the line's meaning changes.
+    if (i < lines.length && lines[i].startsWith('\uFEFF')) i = 0;
   }
 
   while (i < lines.length) {
@@ -1943,9 +2147,10 @@ function dedupeProblems(problems) {
 
 function applyTableDelimiterFixes(text, isEnabled) {
   if (!isEnabled('MDX060')) return text;
-  const scan = scanDocument(text);
+  const scan = scanDocument(text, isEnabled.limits);
   const lines = [...scan.lines];
   for (const table of findTables(lines, scan.info)) {
+    if (!isGfmTable(lines, table)) continue;
     const index = table.start + 1;
     const result = fixTableDelimiter(lines[index], isEnabled);
     if (result) lines[index] = result.line;
@@ -1953,40 +2158,10 @@ function applyTableDelimiterFixes(text, isEnabled) {
   return lines.join('\n');
 }
 
-function fixListStyle(text, isEnabled) {
-  if (!isEnabled('MDX031')) return text;
-  const scan = scanDocument(text);
-  const lines = [...scan.lines];
-  const runs = new Map();
-
-  for (let i = 0; i < lines.length; i++) {
-    if (isProtectedLine(scan.info[i])) {
-      if (isTopLevelLine(lines[i]) && !scan.info[i].fenceContent && !scan.info[i].indentedCode) {
-        runs.clear();
-      }
-      continue;
-    }
-    if (isThematicBreak(lines[i])) {
-      runs.clear();
-      continue;
-    }
-    const match = lines[i].match(/^( {0,3})([-*+])([ \t]+)(.*)$/);
-    if (!match) {
-      if (lines[i].trim() !== '' && !/^[ \t]/.test(lines[i])) runs.clear();
-      continue;
-    }
-    const indent = match[1].length;
-    if (!runs.has(indent)) {
-      runs.set(indent, match[2]);
-      continue;
-    }
-    const canonical = runs.get(indent);
-    if (match[2] !== canonical) {
-      lines[i] = `${match[1]}${canonical}${match[3]}${match[4]}`;
-    }
-  }
-
-  return lines.join('\n');
+// Append without push(...items): spreading a large array exceeds V8's argument
+// limit (RangeError) on documents with many problems.
+function pushAll(target, items) {
+  for (const item of items) target.push(item);
 }
 
 function diagnose(text, options = {}) {
@@ -2003,34 +2178,34 @@ function diagnose(text, options = {}) {
     issues.push(makeProblem('MDX002', before.length, 1, 'File uses CRLF or CR line endings. Normalize them to LF.'));
   }
 
-  const scan = scanDocument(normalized);
+  const scan = scanDocument(normalized, isEnabled.limits);
   for (const issue of scan.issues) {
     if (isEnabled(issue.rule)) issues.push(issue);
   }
 
   const lineResults = scan.lines.map((line, i) => transformLine(line, scan.info[i], i + 1, isEnabled));
   for (const result of lineResults) {
-    issues.push(...result.issues);
+    pushAll(issues, result.issues);
   }
 
-  issues.push(...computeTrailingWhitespace(scan.lines, scan.info, isEnabled));
-  issues.push(...computeNbspInUrls(scan.lines, scan.info, isEnabled));
-  issues.push(...computeZeroWidth(scan.lines, scan.info, isEnabled));
-  issues.push(...computeBlankLineRuns(normalized, scan, isEnabled));
+  pushAll(issues, computeTrailingWhitespace(scan.lines, scan.info, isEnabled));
+  pushAll(issues, computeNbspInUrls(scan.lines, scan.info, isEnabled));
+  pushAll(issues, computeZeroWidth(scan.lines, scan.info, isEnabled));
+  pushAll(issues, computeBlankLineRuns(normalized, scan, isEnabled));
 
   const normalizedLines = lineResults.map((result) => result.line);
   const normalizedText = normalizedLines.join('\n');
-  const normalizedScan = scanDocument(normalizedText);
+  const normalizedScan = scanDocument(normalizedText, isEnabled.limits);
 
-  issues.push(...computeHeadingStructure(normalizedLines, normalizedScan.info, isEnabled));
-  issues.push(...computeListStructure(normalizedLines, normalizedScan.info, isEnabled));
-  issues.push(...computeTableStructure(normalizedLines, normalizedScan.info, isEnabled));
-  issues.push(...computeReferenceStructure(normalizedLines, normalizedScan.info, isEnabled));
-  issues.push(...computeSetextAmbiguity(normalizedLines, normalizedScan.info, isEnabled));
-  issues.push(...computeFullwidthSyntax(normalizedLines, normalizedScan.info, isEnabled));
-  issues.push(...computeCjkEmphasis(normalizedLines, normalizedScan.info, isEnabled));
-  issues.push(...computeBlankLineFixes(normalizedLines, normalizedScan.info, normalizedScan, isEnabled).issues);
-  issues.push(...computeLineLength(normalizedLines, normalizedScan.info, isEnabled, options.maxLineLength || 0));
+  pushAll(issues, computeHeadingStructure(normalizedLines, normalizedScan.info, isEnabled));
+  pushAll(issues, computeListStructure(normalizedLines, normalizedScan.info, isEnabled));
+  pushAll(issues, computeTableStructure(normalizedLines, normalizedScan.info, isEnabled));
+  pushAll(issues, computeReferenceStructure(normalizedLines, normalizedScan.info, isEnabled));
+  pushAll(issues, computeSetextAmbiguity(normalizedLines, normalizedScan.info, isEnabled));
+  pushAll(issues, computeFullwidthSyntax(normalizedLines, normalizedScan.info, isEnabled));
+  pushAll(issues, computeCjkEmphasis(normalizedLines, normalizedScan.info, isEnabled));
+  pushAll(issues, computeBlankLineFixes(normalizedLines, normalizedScan.info, normalizedScan, isEnabled).issues);
+  pushAll(issues, computeLineLength(normalizedLines, normalizedScan.info, isEnabled, options.maxLineLength || 0));
 
   if (isEnabled('MDX007')) {
     for (let i = 0; i < normalizedLines.length; i++) {
@@ -2096,6 +2271,10 @@ function diagnose(text, options = {}) {
   return dedupeProblems(issues.filter((issue) => isEnabled(issue.rule)));
 }
 
+// Structural problems that make fixDocument refuse the whole document,
+// regardless of rules/ignoreRules.
+const BLOCKING_RULES = new Set(['MDX081', 'MDX083', 'MDX053', 'MDX085', 'MDX086']);
+
 const FRONTMATTER_TRAP = 'A fix would turn a leading --- into YAML frontmatter. Fix the first lines manually; use *** if the line was meant as a horizontal rule.';
 
 function fixDocument(text, options = {}) {
@@ -2106,9 +2285,9 @@ function fixDocument(text, options = {}) {
   const normalizedOriginal = normalizeForAnalysis(text);
   const encodingChanged = (hadBom && isEnabled('MDX001')) || (/\r/.test(text) && isEnabled('MDX002'));
   let working = normalizedOriginal;
-  const initialScan = scanDocument(working);
+  const initialScan = scanDocument(working, isEnabled.limits);
   const hadFrontmatter = initialScan.frontmatterEnd >= 0;
-  const blocking = initialScan.issues.find((issue) => issue.rule === 'MDX081' || issue.rule === 'MDX083' || issue.rule === 'MDX053' || issue.rule === 'MDX085');
+  const blocking = initialScan.issues.find((issue) => BLOCKING_RULES.has(issue.rule));
   if (blocking) {
     return { text, changed: false, refused: true, reason: blocking.message };
   }
@@ -2118,8 +2297,8 @@ function fixDocument(text, options = {}) {
 
   for (let pass = 0; pass < 6; pass++) {
     const before = working;
-    const scan = scanDocument(working);
-    const blocking = scan.issues.find((issue) => issue.rule === 'MDX081' || issue.rule === 'MDX083' || issue.rule === 'MDX053' || issue.rule === 'MDX085');
+    const scan = scanDocument(working, isEnabled.limits);
+    const blocking = scan.issues.find((issue) => BLOCKING_RULES.has(issue.rule));
     if (blocking) {
       return { text, changed: false, refused: true, reason: blocking.message };
     }
@@ -2133,14 +2312,13 @@ function fixDocument(text, options = {}) {
     working = lines.join('\n');
     working = applyCjkEmphasisFixes(working, isEnabled);
     working = applyTableDelimiterFixes(working, isEnabled);
-    working = fixListStyle(working, isEnabled);
     working = applyBlankLineFixes(working, isEnabled);
     working = applyTrailingWhitespace(working, isEnabled);
     working = applyBlankLineNormalization(working, isEnabled);
     if (working === before) break;
   }
 
-  if (!hadFrontmatter && scanDocument(working).frontmatterEnd >= 0) {
+  if (!hadFrontmatter && scanDocument(working, isEnabled.limits).frontmatterEnd >= 0) {
     return { text, changed: false, refused: true, reason: FRONTMATTER_TRAP };
   }
   if (!hadFrontmatter && isEnabled('MDX006') && startsFrontmatterAfterLeadingBlanks(working)) {
@@ -2258,6 +2436,8 @@ function printHelp() {
     '  --rule <ids>        Only enable these rules (comma-separated, repeatable).',
     '  --ignore-rule <ids> Disable these rules (comma-separated, repeatable).',
     '  --max-line-length N Enable MDX090 with a line-length limit.',
+    '  --max-quote-depth N Limit blockquote nesting depth (default 32, 0 = no limit).',
+    '  --on-limit <mode>   When a limit is exceeded: error (MDX086, default) or ignore.',
     '  --list-rules        Print the rule catalog and exit.',
     '  --version           Print the script version and exit.',
     '  -h, --help          Print this help and exit.',
@@ -2300,7 +2480,22 @@ function parseArgs(argv) {
     rules: null,
     ignoreRules: null,
     maxLineLength: 0,
+    maxQuoteDepth: DEFAULT_MAX_QUOTE_DEPTH,
+    onLimit: 'error',
     paths: []
+  };
+
+  const parseQuoteDepth = function (value) {
+    if (typeof value !== 'string' || !/^\d{1,9}$/.test(value)) {
+      throw new Error('--max-quote-depth requires a non-negative integer.');
+    }
+    return Number(value);
+  };
+  const parseOnLimit = function (value) {
+    if (value !== 'error' && value !== 'ignore') {
+      throw new Error('--on-limit requires error or ignore.');
+    }
+    return value;
   };
 
   const addRules = function (value, target) {
@@ -2336,6 +2531,14 @@ function parseArgs(argv) {
       const value = Number(arg.slice('--max-line-length='.length));
       if (!Number.isInteger(value) || value <= 0) throw new Error('--max-line-length requires a positive integer.');
       options.maxLineLength = value;
+    } else if (arg === '--max-quote-depth') {
+      options.maxQuoteDepth = parseQuoteDepth(argv[++i]);
+    } else if (arg.startsWith('--max-quote-depth=')) {
+      options.maxQuoteDepth = parseQuoteDepth(arg.slice('--max-quote-depth='.length));
+    } else if (arg === '--on-limit') {
+      options.onLimit = parseOnLimit(argv[++i]);
+    } else if (arg.startsWith('--on-limit=')) {
+      options.onLimit = parseOnLimit(arg.slice('--on-limit='.length));
     } else if (arg === '--') {
       options.paths.push(...argv.slice(i + 1));
       break;
@@ -2566,5 +2769,6 @@ export {
   buildMask,
   splitTableCells,
   scanDocument,
+  matchDefinition,
   parseArgs
 };

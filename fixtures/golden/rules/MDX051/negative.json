@@ -1,6 +1,6 @@
 {
   "source": "rules/MDX051/negative.md",
-  "referenceVersion": "1.0.0",
+  "referenceVersion": "1.1.0",
   "cases": [
     {
       "name": "default",
@@ -108,6 +108,30 @@
         ]
       },
       "diagnose": [],
+      "fix": {
+        "text": "# 長度不同的 fence\n\n````md\n```js\n內層 fence\n```\n````\n\n~~~\n```\n~~~\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "quote-depth-3-ignore",
+      "options": {
+        "maxQuoteDepth": 3,
+        "onLimit": "ignore"
+      },
+      "diagnose": [
+        {
+          "rule": "MDX050",
+          "name": "fence-language",
+          "severity": "info",
+          "fixable": false,
+          "line": 9,
+          "column": 1,
+          "message": "Fenced code block has no language. Add one when the language is known, for example ```js."
+        }
+      ],
       "fix": {
         "text": "# 長度不同的 fence\n\n````md\n```js\n內層 fence\n```\n````\n\n~~~\n```\n~~~\n",
         "changed": false,

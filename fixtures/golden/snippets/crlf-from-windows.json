@@ -1,6 +1,6 @@
 {
   "source": "snippets/crlf-from-windows.md",
-  "referenceVersion": "1.0.0",
+  "referenceVersion": "1.1.0",
   "cases": [
     {
       "name": "default",
@@ -165,6 +165,48 @@
       "fix": {
         "text": "# 會議重點\r\n\r\n- 預算核准\r\n- 下週交付 Demo\r\n-追加兩位人力",
         "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "quote-depth-3-ignore",
+      "options": {
+        "maxQuoteDepth": 3,
+        "onLimit": "ignore"
+      },
+      "diagnose": [
+        {
+          "rule": "MDX002",
+          "name": "line-endings",
+          "severity": "warning",
+          "fixable": true,
+          "line": 1,
+          "column": 1,
+          "message": "File uses CRLF or CR line endings. Normalize them to LF."
+        },
+        {
+          "rule": "MDX003",
+          "name": "final-newline",
+          "severity": "warning",
+          "fixable": true,
+          "line": 5,
+          "column": 1,
+          "message": "File does not end with a newline."
+        },
+        {
+          "rule": "MDX030",
+          "name": "list-marker-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 5,
+          "column": 2,
+          "message": "Add a space after the \"-\" list marker."
+        }
+      ],
+      "fix": {
+        "text": "# 會議重點\n\n- 預算核准\n- 下週交付 Demo\n- 追加兩位人力\n",
+        "changed": true,
         "refused": false,
         "reason": ""
       }

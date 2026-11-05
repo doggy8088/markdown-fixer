@@ -1,0 +1,11 @@
+# Seeds for failure cases proptest has generated in the past. It is
+# automatically read and these particular cases re-run before any
+# novel cases are generated.
+#
+# It is recommended to check this file in to source control so that
+# everyone who runs the test benefits from these saved cases.
+cc a53cf37912746d851c1f84635ed488c67b53f25eb20b9dacaf510184e32de1de # shrinks to text = "* star\n> ```\n"
+cc c91fc1d7953846b31bf0b29bfcd56cfdf62e4cbebc4d6e0ffa81f9be3cf2f955 # shrinks to text = "a \t \n\n---\n* star\n\n>quote\n---"
+cc 4221c1ea200458ce30463346922f8f7815c39ceaf4f9bfb68310c47a8b10e5fd # shrinks to text = "## T # \t\n* star"
+cc ff3fa855bf1c3859184869dac77075748d57db2abc8999e6ddb452733a4dbbf4 # shrinks to text = "> ```\n```\n> ```\n# 標題"
+cc 85526854431886c2babe10fb720586699653dafd54e00fc5ac9866c3cc4d0050 # shrinks to text = "$$\n```$$\n    \n\n#"

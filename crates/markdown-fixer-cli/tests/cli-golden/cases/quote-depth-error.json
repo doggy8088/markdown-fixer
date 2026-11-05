@@ -1,0 +1,28 @@
+{
+  "name": "quote-depth-error",
+  "args": [
+    "--check",
+    "--max-quote-depth",
+    "3",
+    "deep.md"
+  ],
+  "cwd": "",
+  "nonRoot": false,
+  "setup": [
+    {
+      "path": "deep.md",
+      "text": "# 深層引言\n\n> 一層\n> > 兩層\n> > > 三層\n> > > > 四層 #沒空白\n\n-item\n"
+    }
+  ],
+  "expected": {
+    "status": 1,
+    "stdout": "deep.md\n  ERROR  Structural error: Blockquote nesting depth 4 exceeds the limit of 3. Reduce the nesting, raise --max-quote-depth (0 = no limit), or use --on-limit ignore to leave such lines untouched.\n  6:1        error   MDX086  Blockquote nesting depth 4 exceeds the limit of 3. Reduce the nesting, raise --max-quote-depth (0 = no limit), or use --on-limit ignore to leave such lines untouched.\n  8:2        warning MDX030  Add a space after the \"-\" list marker. (fixable)\n\n2 problem(s) in 1 file(s): 1 fixable, 1 error(s), 1 warning(s), 0 info.\n1 file(s) need manual review before safe fixes.\n",
+    "stderr": "",
+    "files": [
+      {
+        "path": "deep.md",
+        "text": "# 深層引言\n\n> 一層\n> > 兩層\n> > > 三層\n> > > > 四層 #沒空白\n\n-item\n"
+      }
+    ]
+  }
+}

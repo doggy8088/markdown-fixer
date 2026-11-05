@@ -1,6 +1,6 @@
 //! 空行與行尾空白的修正：`computeBlankLineFixes`、`applyBlankLineFixes`、
-//! `applyTrailingWhitespace`、`applyBlankLineNormalization`、`fixListStyle`
-//! （JS 1679–1759、1775–1791、1870–1911、1956–1990 行）。
+//! `applyTrailingWhitespace`、`applyBlankLineNormalization`。MDX031 自 v1.1.0 起只回報不修正，
+//! 所以沒有 `fixListStyle`。
 
 use std::collections::{BTreeSet, HashMap};
 
@@ -10,11 +10,12 @@ use crate::jsstr::{self, JsString, is_trim_empty};
 use crate::rules::{Enabled, Overrides, make_problem};
 use crate::scan::{
     LineInfo, Scan, is_blank, is_paragraph_like, is_protected_block, is_protected_line,
-    is_thematic_break, is_top_level_line, scan_document,
+    is_top_level_line, parse_quote_prefix, scan_document_with,
 };
 use crate::table::find_tables;
 
 const SPACE: u16 = b' ' as u16;
+const GT: u16 = b'>' as u16;
 const TAB: u16 = b'\t' as u16;
 
 /// `computeBlankLineFixes` 的結果：要在前／後補空行的行索引與對應問題。
@@ -22,7 +23,15 @@ const TAB: u16 = b'\t' as u16;
 pub(crate) struct BlankLineFixes {
     pub(crate) before: BTreeSet<usize>,
     pub(crate) after: BTreeSet<usize>,
+    /// 引言裡的 fence 要插入的行（`>`、`> >`…），以 fence 的開頭行（before）或結尾行（after）
+    /// 為鍵；不在表中的位置插入完全空白的行。完全空白的行會結束引言，把它拆成兩個。
+    pub(crate) fill: HashMap<usize, JsString>,
     pub(crate) issues: Vec<Problem>,
+}
+
+/// JS `isQuoteBlankLine`：引言裡的空行（`>`、`> >`…，標記後面只有空白）。
+fn is_quote_blank_line(line: &[u16]) -> bool {
+    parse_quote_prefix(line).is_some_and(|q| is_trim_empty(q.rest))
 }
 
 fn starts_with_space_or_tab(line: &[u16]) -> bool {
@@ -74,8 +83,40 @@ pub(crate) fn compute_blank_line_fixes(
                 i += 1;
                 continue;
             }
-            if i > 0 && non_empty(i - 1) {
+            // 引言裡的 fence 以該深度的 `>` 行分隔。標記後面還有縮排時 fence 可能屬於清單項目，
+            // 任何空行都會讓清單變鬆散，所以略過。
+            let quote = if lines[i].first() == Some(&GT) {
+                parse_quote_prefix(&lines[i])
+            } else {
+                None
+            };
+            if quote
+                .as_ref()
+                .is_some_and(|q| starts_with_space_or_tab(q.rest))
+            {
+                i += 1;
+                continue;
+            }
+            let quote_fill: Option<JsString> = quote.as_ref().map(|q| {
+                let mut fill = Vec::with_capacity(q.depth * 2);
+                for d in 0..q.depth {
+                    if d > 0 {
+                        fill.push(SPACE);
+                    }
+                    fill.push(GT);
+                }
+                fill
+            });
+            let separated = |k: usize| {
+                lines.get(k).is_none_or(|l| {
+                    is_trim_empty(l) || (quote_fill.is_some() && is_quote_blank_line(l))
+                })
+            };
+            if i > 0 && !separated(i - 1) {
                 fixes.before.insert(i);
+                if let Some(fill) = &quote_fill {
+                    fixes.fill.insert(i, fill.clone());
+                }
                 fixes.issues.push(make_problem(
                     "MDX052",
                     i + 1,
@@ -89,8 +130,11 @@ pub(crate) fn compute_blank_line_fixes(
                 close += 1;
             }
             if close < lines.len() {
-                if non_empty(close + 1) {
+                if close + 1 < lines.len() && !separated(close + 1) {
                     fixes.after.insert(close);
+                    if let Some(fill) = &quote_fill {
+                        fixes.fill.insert(close, fill.clone());
+                    }
                     fixes.issues.push(make_problem(
                         "MDX052",
                         close + 1,
@@ -153,20 +197,24 @@ pub(crate) fn compute_blank_line_fixes(
 
 /// JS `applyBlankLineFixes(text, isEnabled)`。
 pub(crate) fn apply_blank_line_fixes(text: &[u16], enabled: &Enabled) -> JsString {
-    let scan = scan_document(text);
+    let scan = scan_document_with(text, enabled.limits);
     let fixes = compute_blank_line_fixes(&scan.lines, &scan.info, &scan, enabled);
     if fixes.before.is_empty() && fixes.after.is_empty() {
         return text.to_vec();
     }
     let lines = &scan.lines;
+    let needs_separator = |line: &[u16], i: usize| {
+        !is_trim_empty(line) && !(fixes.fill.contains_key(&i) && is_quote_blank_line(line))
+    };
+    let fill_for = |i: usize| fixes.fill.get(&i).cloned().unwrap_or_default();
     let mut output: Vec<JsString> = Vec::with_capacity(lines.len() + 8);
     for i in 0..lines.len() {
-        if fixes.before.contains(&i) && output.last().is_some_and(|l| !is_trim_empty(l)) {
-            output.push(Vec::new());
+        if fixes.before.contains(&i) && output.last().is_some_and(|l| needs_separator(l, i)) {
+            output.push(fill_for(i));
         }
         output.push(lines[i].clone());
-        if fixes.after.contains(&i) && lines.get(i + 1).is_some_and(|l| !is_trim_empty(l)) {
-            output.push(Vec::new());
+        if fixes.after.contains(&i) && lines.get(i + 1).is_some_and(|l| needs_separator(l, i)) {
+            output.push(fill_for(i));
         }
     }
     jsstr::join_lines(&output)
@@ -185,7 +233,7 @@ pub(crate) fn apply_trailing_whitespace(text: &[u16], enabled: &Enabled) -> JsSt
     if !enabled.is("MDX004") {
         return text.to_vec();
     }
-    let scan = scan_document(text);
+    let scan = scan_document_with(text, enabled.limits);
     let lines: Vec<JsString> = scan
         .lines
         .iter()
@@ -218,7 +266,7 @@ pub(crate) fn apply_trailing_whitespace(text: &[u16], enabled: &Enabled) -> JsSt
 
 /// JS `applyBlankLineNormalization(text, isEnabled)`（MDX006、MDX005、MDX003）。
 pub(crate) fn apply_blank_line_normalization(text: &[u16], enabled: &Enabled) -> JsString {
-    let scan = scan_document(text);
+    let scan = scan_document_with(text, enabled.limits);
     let lines = &scan.lines;
     let removable = |i: usize| is_blank(&lines[i]) && !is_protected_block(&scan.info[i]);
 
@@ -227,6 +275,10 @@ pub(crate) fn apply_blank_line_normalization(text: &[u16], enabled: &Enabled) ->
     if enabled.is("MDX006") {
         while i < lines.len() && removable(i) {
             i += 1;
+        }
+        // 移除這些空行會讓 U+FEFF 落在檔首、變成 BOM，該行的意義也跟著改變。
+        if lines.get(i).is_some_and(|l| l.first() == Some(&0xFEFF)) {
+            i = 0;
         }
     }
 
@@ -262,48 +314,4 @@ pub(crate) fn apply_blank_line_normalization(text: &[u16], enabled: &Enabled) ->
         result.push(b'\n' as u16);
     }
     result
-}
-
-/// JS `fixListStyle(text, isEnabled)`（MDX031）：同一層清單統一用第一個項目的符號。
-pub(crate) fn fix_list_style(text: &[u16], enabled: &Enabled) -> JsString {
-    if !enabled.is("MDX031") {
-        return text.to_vec();
-    }
-    let scan = scan_document(text);
-    let mut lines = scan.lines.clone();
-    let mut runs: HashMap<usize, u16> = HashMap::new();
-
-    for (i, info) in scan.info.iter().enumerate() {
-        let line = &scan.lines[i];
-        if is_protected_line(info) {
-            if is_top_level_line(line) && !info.fence_content && !info.indented_code {
-                runs.clear();
-            }
-            continue;
-        }
-        if is_thematic_break(line) {
-            runs.clear();
-            continue;
-        }
-        let Some(caps) = re!(r"^( {0,3})([-*+])([ \t]+)(.*)$").exec(line) else {
-            if !is_trim_empty(line) && !starts_with_space_or_tab(line) {
-                runs.clear();
-            }
-            continue;
-        };
-        let indent = caps.str(line, 1);
-        let marker = caps.str(line, 2).first().copied().unwrap_or(b'-' as u16);
-        match runs.get(&indent.len()) {
-            None => {
-                runs.insert(indent.len(), marker);
-            }
-            Some(&canonical) if canonical != marker => {
-                lines[i] =
-                    jsstr::concat(&[indent, &[canonical], caps.str(line, 3), caps.str(line, 4)]);
-            }
-            Some(_) => {}
-        }
-    }
-
-    jsstr::join_lines(&lines)
 }

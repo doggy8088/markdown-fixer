@@ -90,7 +90,7 @@
   ],
   "expected": {
     "status": 1,
-    "stdout": "45 problem(s) in 6 file(s): 41 fixable, 0 error(s), 43 warning(s), 2 info.\n",
+    "stdout": "45 problem(s) in 6 file(s): 37 fixable, 0 error(s), 43 warning(s), 2 info.\n",
     "stderr": "",
     "files": [
       {

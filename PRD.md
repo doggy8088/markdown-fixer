@@ -97,7 +97,7 @@
 
 ### 6.1 規則目錄
 
-規則目錄共 49 條（20 條 fixable；v0.1 新增 MDX086），必須與 JS `RULES` 陣列完全相同（ID、name、category、severity、fixable、summary、順序）。下表是摘要；英文 summary 原文以 `reference/js/markdown-fixer.mjs` 為準，中文說明見 `docs/rules.md`。
+規則目錄共 49 條（19 條 fixable；v0.1 新增 MDX086，MDX031 改為只報告），必須與 JS `RULES` 陣列完全相同（ID、name、category、severity、fixable、summary、順序）。下表是摘要；英文 summary 原文以 `reference/js/markdown-fixer.mjs` 為準，中文說明見 `docs/rules.md`。
 
 | Rule | Name | Category | Severity | Fixable |
 | --- | --- | --- | --- | --- |
@@ -122,7 +122,7 @@
 | MDX019 | `multiple-h1` | heading | info | no |
 | MDX020 | `blockquote-space` | blockquote | warning | yes |
 | MDX030 | `list-marker-space` | list | warning | yes |
-| MDX031 | `list-marker-style` | list | warning | yes |
+| MDX031 | `list-marker-style` | list | warning | no |
 | MDX032 | `list-blank-lines` | list | warning | no |
 | MDX035 | `empty-list-item` | list | warning | no |
 | MDX040 | `emphasis-inner-space` | emphasis | warning | yes |
@@ -194,7 +194,7 @@ pub mod detect {
 
 要求：
 
-- 預設零依賴。`serde` 是選用 feature，開啟後 `Severity`、`Rule`、`Problem`、`FixResult`、`Detection` 可序列化。可以視需要加入 `regex` 之類的小型相依，但要在 `docs/architecture.md` 說明理由；不得加入會拉進 I/O、執行緒池或 C 相依的套件。
+- 核心規則引擎零依賴。預設啟用的 `render-guard` feature 加入 `pulldown-cmark`（純 Rust，`default-features = false`）作為渲染保護用的 CommonMark/GFM parser；以 `default-features = false` 關閉後函式庫完全零依賴（此時 `render_guard` 沒有作用）。`serde` 是選用 feature，開啟後 `Severity`、`Rule`、`Problem`、`FixResult`、`Detection` 可序列化。不得加入會拉進 I/O、執行緒池或 C 相依的套件。
 - `Options` 的 `max_line_length` 為 0 時停用 MDX090，行為與 JS `createEnabled` 相同。在 `rules` 指定了 MDX090 但沒給行長時預設 120，這個邏輯屬於 CLI 解析層（與 JS `parseArgs` 相同），函式庫保持原樣。
 - 公開型別要有 rustdoc（臺灣正體中文），`cargo doc` 無警告。
 - 內部模組建議切分：`scan`（`scanDocument` 與 line info）、`mask`（`buildMask`、`splitMasked`）、`line_fix`（標題、blockquote、清單、強調、NBSP 的單行修正）、`structure`（各 `compute*Structure` 診斷）、`cjk_emphasis`、`blank_lines`、`table`、`diagnose`、`fix`、`detect`、`jsstr`（JS 字串語意與 UTF-16 code unit 處理）、`jsregex`（JS 語意的 regex 引擎）。JS 函式與 Rust 函式的對照表維護在 `docs/porting-map.md`。
@@ -321,7 +321,7 @@ void mdfix_string_free(char *s);
 
 1. **根因修正**（JS 與 Rust 一起改，oracle 升到 v1.1.0）：已知會改變渲染的修正直接修掉，例如 MDX052 在引言（`>`）或清單裡插入完全空白的行，把一個引言拆成兩個。這類修正改為「插入帶有相同容器前綴的空行」或「不在容器內插入」，以不改變渲染為原則。
 2. **執行期保護**（`render_guard`，預設開啟，需要 `render-guard` feature，以 `pulldown-cmark` 渲染）：
-   - 每條 fixable 規則屬於兩類之一。**版面類**（layout）：MDX001～006、011、012、013、020、031、052、060、082，本身不應改變渲染。**修復類**（repair）：MDX008、010、030、040、042、062，目的就是讓原本壞掉的語法正確渲染。
+   - 每條 fixable 規則屬於兩類之一。**版面類**（layout）：MDX001～006、011、012、013、020、052、060、082，本身不應改變渲染。MDX031 在 v1.1.0 改為只報告：不同的項目符號在 CommonMark 裡本來就是兩個清單，統一符號一定會合併清單，沒有不改變渲染的修法。**修復類**（repair）：MDX008、010、030、040、042、062，目的就是讓原本壞掉的語法正確渲染。
    - 版面類檢查：`render(全部修正)` 必須等於 `render(只套用修復類)`。不相等時，逐條找出造成差異的版面類規則，不套用它們。
    - 修復類檢查：修復類只能改變「被修正的行所在的頂層區塊」以及與它相鄰的一個區塊；其他頂層區塊的 HTML 與行範圍必須完全相同。違反時把該區域的修復還原。
    - 被擋下的修正記錄在 `FixResult::skipped`（規則、行號、原因），CLI 在文字輸出與 `--json`（`skippedFixes`，只在非空時出現）中顯示；對應的問題仍會出現在診斷中，結束碼照常計算。
@@ -335,6 +335,7 @@ void mdfix_string_free(char *s);
 - `on_limit`（JS `onLimit`，CLI `--on-limit error|ignore`）：超過上限時的處理方式。
   - `error`（預設）：在該行回報新規則 **MDX086** `resource-limit`（structure、error、不可修正、blocking），`fix_document` 拒絕修正整份文件。CLI 結束碼依一般規則為 1。
   - `ignore`：超過上限的行視為不透明的保護行，不當成 reference definition、不修改、不診斷。
+  - 兩種模式下，超過上限的行都視為不透明的保護行；`error` 模式另外回報 MDX086 並拒絕修正。
 - reference definition 的偵測改為先手動掃描引言前綴、再比對其餘部分，消除 oracle v1.0.0 的指數級回溯；結果必須與舊 regex 相同（有等價測試）。
 - 同時修正 oracle v1.0.0 單行超過約 12 萬 code unit 時 `mask.push(...)` 拋出 `RangeError` 的問題。
 

@@ -19,7 +19,7 @@
   ],
   "expected": {
     "status": 2,
-    "stdout": "{\n  \"tool\": \"markdown-fixer\",\n  \"version\": \"<VERSION>\",\n  \"mode\": \"write\",\n  \"files\": [\n    {\n      \"path\": \"good.md\",\n      \"changed\": true,\n      \"wouldChange\": true,\n      \"refused\": false,\n      \"fixed\": 18,\n      \"wouldFix\": 18,\n      \"problems\": []\n    }\n  ],\n  \"summary\": {\n    \"files\": 1,\n    \"changed\": 1,\n    \"wouldChange\": 1,\n    \"fixed\": 18,\n    \"refused\": 0,\n    \"problems\": {\n      \"total\": 0,\n      \"errors\": 0,\n      \"warnings\": 0,\n      \"info\": 0,\n      \"fixable\": 0\n    }\n  }\n}\n",
+    "stdout": "{\n  \"tool\": \"markdown-fixer\",\n  \"version\": \"<VERSION>\",\n  \"mode\": \"write\",\n  \"files\": [\n    {\n      \"path\": \"good.md\",\n      \"changed\": true,\n      \"wouldChange\": true,\n      \"refused\": false,\n      \"fixed\": 16,\n      \"wouldFix\": 16,\n      \"problems\": [\n        {\n          \"rule\": \"MDX031\",\n          \"name\": \"list-marker-style\",\n          \"severity\": \"warning\",\n          \"fixable\": false,\n          \"line\": 7,\n          \"column\": 1,\n          \"message\": \"List uses \\\"-\\\" but the first item in this list uses \\\"*\\\". A different bullet marker starts a new list in CommonMark, so this is not fixed automatically; use one marker if this is one list.\"\n        },\n        {\n          \"rule\": \"MDX031\",\n          \"name\": \"list-marker-style\",\n          \"severity\": \"warning\",\n          \"fixable\": false,\n          \"line\": 8,\n          \"column\": 1,\n          \"message\": \"List uses \\\"-\\\" but the first item in this list uses \\\"*\\\". A different bullet marker starts a new list in CommonMark, so this is not fixed automatically; use one marker if this is one list.\"\n        }\n      ]\n    }\n  ],\n  \"summary\": {\n    \"files\": 1,\n    \"changed\": 1,\n    \"wouldChange\": 1,\n    \"fixed\": 16,\n    \"refused\": 0,\n    \"problems\": {\n      \"total\": 2,\n      \"errors\": 0,\n      \"warnings\": 2,\n      \"info\": 0,\n      \"fixable\": 0\n    }\n  }\n}\n",
     "stderr": "Error: bad.md: The encoded data was not valid for encoding utf-8\n",
     "files": [
       {
@@ -28,7 +28,7 @@
       },
       {
         "path": "good.md",
-        "text": "# Project Notes  \n\nIntro paragraph with trailing spaces.  \n\n## Setup\n* first item\n* second item\n* third item\n\nSome **bold** text and a [link](https://example.com).\n\n| Name | Value |\n| --- | --- |\n| a | 1 |\n\n> quote without space\n> no space here\n\n**標籤**：內容說明\nFinal line without newline.\n"
+        "text": "# Project Notes  \n\nIntro paragraph with trailing spaces.  \n\n## Setup\n* first item\n- second item\n- third item\n\nSome **bold** text and a [link](https://example.com).\n\n| Name | Value |\n| --- | --- |\n| a | 1 |\n\n> quote without space\n> no space here\n\n**標籤**：內容說明\nFinal line without newline.\n"
       }
     ]
   }

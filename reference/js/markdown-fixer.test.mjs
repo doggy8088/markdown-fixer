@@ -12,6 +12,7 @@ import {
   buildMask,
   diagnose,
   fixDocument,
+  matchDefinition,
   parseArgs,
   scanDocument,
   splitTableCells
@@ -44,7 +45,7 @@ function runCli(args, options = {}) {
 }
 
 test('rule catalog is well formed and unique', () => {
-  assert.equal(VERSION, '1.0.0');
+  assert.equal(VERSION, '1.1.0');
   const ids = RULES.map((rule) => rule.id);
   assert.equal(new Set(ids).size, ids.length);
   for (const rule of RULES) {
@@ -62,8 +63,10 @@ test('fixes heading spacing, gaps, and closing hashes', () => {
   assert.equal(fixed('#Title #\n'), '# Title\n');
 });
 
-test('fixes list marker spacing and bullet style without touching flags or versions', () => {
-  assert.equal(fixed('- a\n* b\n+ c\n'), '- a\n- b\n- c\n');
+test('fixes list marker spacing and reports bullet style without touching flags or versions', () => {
+  // A different bullet starts a new list in CommonMark, so MDX031 only reports.
+  assert.equal(fixed('- a\n* b\n+ c\n'), '- a\n* b\n+ c\n');
+  assert.deepEqual(diagnose('- a\n* b\n+ c\n').map((problem) => [problem.rule, problem.line, problem.fixable]), [['MDX031', 2, false], ['MDX031', 3, false]]);
   assert.equal(fixed('-item text\n'), '- item text\n');
   assert.equal(fixed('+other text\n'), '+ other text\n');
   assert.equal(fixed('1.item text\n'), '1. item text\n');
@@ -78,7 +81,11 @@ test('does not turn a thematic break into a list item', () => {
 
 test('fixes emphasis inner spacing but keeps symmetric single-delimiter spacing', () => {
   assert.equal(fixed('**  bold  ** and **bold ** and __ x __\n'), '**bold** and **bold** and __x__\n');
-  assert.equal(fixed('* spaced* and *spaced * and * spaced *\n'), '*spaced* and *spaced* and * spaced *\n');
+  assert.equal(fixed('Text * spaced* and *spaced * and * spaced *\n'), 'Text *spaced* and *spaced* and * spaced *\n');
+  // A bullet `*` at the start of a line is a list marker, not a delimiter.
+  assert.equal(fixed('* spaced* and *spaced *\n'), '* spaced* and *spaced*\n');
+  assert.equal(fixed('> - * x*\n'), '> - * x*\n');
+  assert.equal(fixed('* 說明**[](https://example.com)**\n'), '* 說明**[](https://example.com)**\n');
   assert.equal(fixed('_ spaced_ and _spaced _ and _ spaced _\n'), '_spaced_ and _spaced_ and _ spaced _\n');
 });
 
@@ -237,14 +244,14 @@ test('is idempotent on a mixed document', () => {
   assert.equal(twice.changed, false);
   assert.ok(once.text.includes('# Title'));
   assert.ok(once.text.includes('## Sub'));
-  assert.ok(once.text.includes('- other'));
+  assert.ok(once.text.includes('* other'));
   assert.ok(once.text.includes('**bold**'));
   assert.ok(once.text.includes('| --- | --- |'));
 });
 
 test('honors rule selection and ignore lists', () => {
   assert.equal(fixed('- a\n* b\n', { ignoreRules: ['MDX031'] }), '- a\n* b\n');
-  assert.equal(fixed('- a\n* b\n', { rules: ['MDX031'] }), '- a\n- b\n');
+  assert.equal(fixed('- a\n* b\n', { rules: ['MDX031'] }), '- a\n* b\n');
   assert.equal(fixed('| a | b |\n| - | -- |\n', { rules: ['MDX031'] }), '| a | b |\n| - | -- |\n');
   assert.equal(fixed('| a | b |\n| - | -- |\n', { rules: ['MDX060'] }), '| a | b |\n| --- | --- |\n');
 });
@@ -504,7 +511,7 @@ test('parseArgs handles modes, rule lists, limits, and errors', () => {
 test('CLI reports version, rules, and check results', (t) => {
   const version = runCli(['--version']);
   assert.equal(version.status, 0);
-  assert.match(version.stdout, /markdown-fixer 1\.0\.0/);
+  assert.match(version.stdout, /markdown-fixer 1\.1\.0/);
 
   const list = runCli(['--list-rules']);
   assert.equal(list.status, 0);
@@ -646,4 +653,223 @@ test('MDX042 reports opening-side problems without rewriting them', () => {
   const star = '*標籤：*內容\n';
   assert.ok(rulesOf(star).includes('MDX042'));
   assert.equal(fixed(star), star);
+});
+
+test('matchDefinition matches the v1.0.0 reference-definition regex', () => {
+  // The old regex backtracks exponentially, so keep generated quote depth <= 12.
+  const old = /^(?: {0,3}>[ \t]?)* {0,3}\[([^\]\n]+)\]:[ \t]*(?:<[^>\n]*>|\S+)/;
+  const check = function (line) {
+    const expected = line.match(old);
+    const actual = matchDefinition(line);
+    if (!expected) {
+      assert.equal(actual, null, JSON.stringify(line));
+      return;
+    }
+    assert.ok(actual, JSON.stringify(line));
+    assert.equal(actual.label, expected[1], JSON.stringify(line));
+    assert.equal(actual.index, expected[0].indexOf('[') + 1, JSON.stringify(line));
+  };
+
+  // Every short string over an alphabet of the syntax characters.
+  const alphabet = [' ', '\t', '>', '[', ']', ':', 'x', '<', ' ', '\n'];
+  const build = function (prefix, length) {
+    check(prefix);
+    if (length === 0) return;
+    for (const ch of alphabet) build(prefix + ch, length - 1);
+  };
+  build('', 5);
+
+  // Structured lines: a quote prefix, optional indentation, then definition parts.
+  let seed = 1101;
+  const random = function (n) {
+    seed = (seed * 1103515245 + 12345) % 2147483648;
+    return seed % n;
+  };
+  const pick = (items) => items[random(items.length)];
+  for (let n = 0; n < 20000; n++) {
+    let line = '';
+    const depth = random(13);
+    for (let d = 0; d < depth; d++) {
+      line += ' '.repeat(random(5)) + '>' + pick(['', '', ' ', '\t', '  ']);
+    }
+    line += ' '.repeat(random(5));
+    line += pick(['[', '[', '[', '', '>', '\t[']);
+    line += pick(['', 'a', 'label', 'a b', ']', '\n', '　']);
+    line += pick([']:', ']:', ']', ']: ', '] :', '']);
+    line += pick(['', ' ', '\t', '  ', ' ']);
+    line += pick(['https://x', '<>', '<a b>', '<', '', ' ', '　', 'x y']);
+    check(line);
+  }
+});
+
+test('MDX086 reports blockquotes nested deeper than maxQuoteDepth and blocks fixing', () => {
+  const deep = '> '.repeat(33) + 'x';
+  const text = `# T\n\n${deep} \t\n`;
+  const problems = diagnose(text);
+  assert.deepEqual(problems.filter((problem) => problem.rule === 'MDX086').map((problem) => [problem.line, problem.severity, problem.fixable]), [[3, 'error', false]]);
+  assert.match(problems.find((problem) => problem.rule === 'MDX086').message, /depth 33 exceeds the limit of 32/);
+  // The deep line is opaque: no other rule reports it.
+  assert.deepEqual(problems.filter((problem) => problem.line === 3).map((problem) => problem.rule), ['MDX086']);
+
+  const result = fixDocument(text);
+  assert.equal(result.refused, true);
+  assert.equal(result.changed, false);
+  assert.match(result.reason, /Blockquote nesting depth 33/);
+  // Blocking like MDX081/083/053/085: ignoreRules cannot bypass it.
+  assert.equal(fixDocument(text, { ignoreRules: ['MDX086'] }).refused, true);
+  assert.ok(!rulesOf(text, { ignoreRules: ['MDX086'] }).includes('MDX086'));
+
+  // 32 levels is within the default limit; 0 disables the limit.
+  assert.ok(!rulesOf('> '.repeat(32) + 'x\n').includes('MDX086'));
+  assert.ok(!rulesOf(text, { maxQuoteDepth: 0 }).includes('MDX086'));
+  assert.equal(fixDocument(text, { maxQuoteDepth: 0 }).text, `# T\n\n${deep}\n`);
+  assert.ok(rulesOf('>>>> x\n', { maxQuoteDepth: 3 }).includes('MDX086'));
+
+  // Deep lines inside fenced code are code, not blockquotes.
+  assert.ok(!rulesOf('```\n' + deep + '\n```\n').includes('MDX086'));
+});
+
+test('onLimit ignore leaves over-deep lines untouched and undiagnosed', () => {
+  const deep = '>'.repeat(5) + '#Head##  **  x** y\thttps://x  ';
+  const deepDefinition = '>'.repeat(5) + '[a]: https://x';
+  const text = `#Title\n\n${deep}\n${deepDefinition}\n\n[t][a]\n`;
+  const options = { maxQuoteDepth: 4, onLimit: 'ignore' };
+  const problems = diagnose(text, options);
+  assert.ok(problems.every((problem) => problem.line !== 3 && problem.line !== 4), JSON.stringify(problems));
+  const result = fixDocument(text, options);
+  assert.equal(result.refused, false);
+  assert.equal(result.text, `# Title\n\n${deep}\n${deepDefinition}\n\n[t][a]\n`);
+  // The opaque line is not a definition, so [t][a] has none.
+  assert.ok(rulesOf(text, options).includes('MDX073'));
+  assert.ok(!rulesOf(text, { maxQuoteDepth: 0 }).includes('MDX073'));
+  // Without the limit the same line is an ordinary blockquote.
+  assert.notEqual(fixDocument(text, { maxQuoteDepth: 0 }).text.split('\n')[2], deep);
+});
+
+test('fixing blockquote spacing never changes the counted quote depth', () => {
+  let seed = 86;
+  const random = function (n) {
+    seed = (seed * 1103515245 + 12345) % 2147483648;
+    return seed % n;
+  };
+  for (let n = 0; n < 3000; n++) {
+    let line = ' '.repeat(random(4));
+    const depth = 1 + random(8);
+    for (let d = 0; d < depth; d++) line += '>' + ' '.repeat(random(6));
+    line += random(2) ? 'x' : '';
+    for (let limit = 1; limit <= 8; limit++) {
+      const before = rulesOf(`${line}\n`, { maxQuoteDepth: limit }).includes('MDX086');
+      const after = rulesOf(fixed(`${line}\n`, { maxQuoteDepth: 0 }), { maxQuoteDepth: limit }).includes('MDX086');
+      assert.ok(!after || before, JSON.stringify([line, limit]));
+    }
+  }
+});
+
+test('deep blockquotes and very long lines finish without exceptions', () => {
+  const started = Date.now();
+  fixDocument('>'.repeat(200) + ' q\n', { maxQuoteDepth: 0 });
+  diagnose('> '.repeat(200) + 'q\n', { maxQuoteDepth: 0 });
+  assert.ok(Date.now() - started < 2000);
+  const long = 'a'.repeat(200000) + '\n';
+  assert.equal(fixDocument(long).changed, false);
+  assert.deepEqual(diagnose(long), []);
+  assert.equal(diagnose('a \n'.repeat(150000)).length, 150000);
+});
+
+test('MDX052 inside a blockquote inserts a quoted blank line', () => {
+  assert.equal(
+    fixed('# T\n\n> text\n> ```js\n> x\n> ```\n> more\n'),
+    '# T\n\n> text\n>\n> ```js\n> x\n> ```\n>\n> more\n'
+  );
+  // A lazy continuation line stays in the same blockquote.
+  assert.equal(
+    fixed('# T\n\n> para\nlazy\n> ```js\n> x\n> ```\n'),
+    '# T\n\n> para\nlazy\n>\n> ```js\n> x\n> ```\n'
+  );
+  assert.equal(
+    fixed('# T\n\n> > a\n> > ```\n> > x\n> > ```\n> > b\n'),
+    '# T\n\n> > a\n> >\n> > ```\n> > x\n> > ```\n> >\n> > b\n'
+  );
+  // Already separated by a quoted blank line: nothing to report.
+  const separated = '# T\n\n> text\n>\n> ```js\n> x\n> ```\n>\n> more\n';
+  assert.ok(!rulesOf(separated).includes('MDX052'));
+  assert.equal(fixDocument(separated).changed, false);
+  // Top-level fences still get a fully blank line.
+  assert.equal(fixed('# T\n\ntext\n```js\nx\n```\nmore\n'), '# T\n\ntext\n\n```js\nx\n```\n\nmore\n');
+});
+
+test('CLI accepts --max-quote-depth and --on-limit', (t) => {
+  const file = tempFile(t, '# T\n\n>>>> x\n');
+  const strict = runCli(['--check', '--max-quote-depth', '3', file]);
+  assert.equal(strict.status, 1);
+  assert.match(strict.stdout, /MDX086/);
+  assert.match(strict.stdout, /Structural error: Blockquote nesting depth 4 exceeds the limit of 3/);
+  const ignored = runCli(['--check', '--max-quote-depth=3', '--on-limit=ignore', file]);
+  assert.equal(ignored.status, 0, ignored.stdout);
+  const unlimited = runCli(['--check', '--max-quote-depth=0', file]);
+  assert.match(unlimited.stdout, /MDX020/);
+
+  for (const args of [['--max-quote-depth'], ['--max-quote-depth=-1'], ['--max-quote-depth=1e2'], ['--max-quote-depth=']]) {
+    const bad = runCli([...args, file]);
+    assert.equal(bad.status, 2);
+    assert.match(bad.stderr, /--max-quote-depth requires a non-negative integer\./);
+  }
+  for (const args of [['--on-limit'], ['--on-limit=IGNORE'], ['--on-limit', 'skip']]) {
+    const bad = runCli([...args, file]);
+    assert.equal(bad.status, 2);
+    assert.match(bad.stderr, /--on-limit requires error or ignore\./);
+  }
+  assert.deepEqual(
+    [parseArgs([]).maxQuoteDepth, parseArgs([]).onLimit],
+    [32, 'error']
+  );
+});
+
+test('MDX020 keeps spaces after > that are part of the content', () => {
+  assert.equal(fixed('>quote\n>>nested\n>  > x\n>  text\n'), '> quote\n> > nested\n> > x\n> text\n');
+  assert.equal(fixed('> a\n>   \n> b\n'), '> a\n>\n> b\n');
+  // A whole `>  >  >` chain is normalized in one pass, so fixing is idempotent.
+  const chain = '>  '.repeat(12) + 'x\n';
+  assert.equal(fixed(chain), '> '.repeat(12) + 'x\n');
+  assert.equal(fixDocument(fixed(chain)).changed, false);
+  // Two or more spaces may continue a list item; fences and list markers keep their indentation.
+  const kept = '# T\n\n> - item\n>   > nested\n>\n>   continued\n\n>  ```\n>  code\n>  ```\n\n>  - one\n>    two\n';
+  assert.equal(fixed(kept), kept);
+  assert.ok(!rulesOf(kept).includes('MDX020'));
+  // A raw HTML block may open with a tag name at the end of the line.
+  const html = '<iframe\n></iframe>\n';
+  assert.equal(fixed(html), html);
+});
+
+test('MDX060 skips header and delimiter rows that GFM does not treat as a table', () => {
+  const notTable = '| a | `x|y` |\n|:--|--:|\n';
+  assert.equal(fixed(notTable), notTable);
+  assert.ok(!rulesOf(notTable).includes('MDX060'));
+  assert.equal(fixed('| a | `x\\|y` |\n|:--|--:|\n'), '| a | `x\\|y` |\n|:---|---:|\n');
+});
+
+test('MDX006 does not turn a U+FEFF into a BOM by removing leading blank lines', () => {
+  const text = '\n﻿# T\n';
+  assert.equal(fixDocument(text).changed, false);
+  assert.deepEqual(diagnose(text).filter((problem) => problem.rule === 'MDX006').map((problem) => problem.fixable), [false]);
+  assert.equal(fixed('\n\n# T\n'), '# T\n');
+});
+
+test('MDX008 keeps an NBSP that is the only content of a line or list item', () => {
+  for (const text of ['a\n\u00A0\nb\n', '- \u00A0\n', '> \u00A0\u00A0\n']) {
+    assert.equal(fixed(text), text);
+    assert.ok(!rulesOf(text).includes('MDX008'));
+  }
+  assert.equal(fixed('- a\u00A0b\n'), '- a b\n');
+});
+
+test('MDX008 reports but keeps an NBSP right after a list marker', () => {
+  for (const text of ['*\u00A0x\n', '1.\u00A0x\n', '- *\u00A0x\n', '> +\u00A0\u00A0x\n']) {
+    assert.equal(fixed(text), text);
+    const problems = diagnose(text).filter((problem) => problem.rule === 'MDX008');
+    assert.deepEqual(problems.map((problem) => problem.fixable), [false], JSON.stringify(text));
+  }
+  // Other NBSPs on the same line are still replaced.
+  assert.equal(fixed('*\u00A0x\u00A0y\n'), '*\u00A0x y\n');
+  assert.deepEqual(diagnose('*\u00A0x\u00A0y\n').map((problem) => [problem.rule, problem.column, problem.fixable]), [['MDX008', 2, false], ['MDX008', 4, true]]);
 });

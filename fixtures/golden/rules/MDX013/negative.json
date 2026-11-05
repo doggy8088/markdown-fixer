@@ -1,6 +1,6 @@
 {
   "source": "rules/MDX013/negative.md",
-  "referenceVersion": "1.0.0",
+  "referenceVersion": "1.1.0",
   "cases": [
     {
       "name": "default",
@@ -108,6 +108,30 @@
         ]
       },
       "diagnose": [],
+      "fix": {
+        "text": "# 標題\n- 清單緊接標題不算段落\n\n> ## 引言裡的標題\n> 引言內容\n\n- 項目\n  ## 清單裡縮排的標題\n  內容\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "quote-depth-3-ignore",
+      "options": {
+        "maxQuoteDepth": 3,
+        "onLimit": "ignore"
+      },
+      "diagnose": [
+        {
+          "rule": "MDX014",
+          "name": "heading-indent",
+          "severity": "info",
+          "fixable": false,
+          "line": 8,
+          "column": 1,
+          "message": "Heading is indented. Confirm it is not a top-level heading with accidental indentation; inside a list item the indent may be intentional."
+        }
+      ],
       "fix": {
         "text": "# 標題\n- 清單緊接標題不算段落\n\n> ## 引言裡的標題\n> 引言內容\n\n- 項目\n  ## 清單裡縮排的標題\n  內容\n",
         "changed": false,

@@ -11,7 +11,7 @@
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");
 
 /// 對齊的 JS 參考實作版本（`reference/js/markdown-fixer.mjs` 的 `VERSION`）。
-pub const REFERENCE_VERSION: &str = "1.0.0";
+pub const REFERENCE_VERSION: &str = "1.1.0";
 
 /// 問題嚴重度。
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -180,6 +180,10 @@ pub fn diagnose(text: &str, options: &Options) -> Vec<Problem> {
 
 /// 套用安全修正，行為與 JS `fixDocument(text, options)` 相同。
 pub fn fix_document(text: &str, options: &Options) -> FixResult {
+    #[cfg(feature = "render-guard")]
+    if options.render_guard {
+        return guard::fix_document(text, options);
+    }
     fix::fix_document(text, options)
 }
 
@@ -191,6 +195,8 @@ mod blank_lines;
 mod cjk_emphasis;
 mod diagnose;
 mod fix;
+#[cfg(feature = "render-guard")]
+mod guard;
 mod jsregex;
 mod jsstr;
 mod line_fix;

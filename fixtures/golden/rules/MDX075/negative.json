@@ -1,6 +1,6 @@
 {
   "source": "rules/MDX075/negative.md",
-  "referenceVersion": "1.0.0",
+  "referenceVersion": "1.1.0",
   "cases": [
     {
       "name": "default",
@@ -66,6 +66,20 @@
           "MDX012",
           "MDX013"
         ]
+      },
+      "diagnose": [],
+      "fix": {
+        "text": "# 圖片\n\n![應用程式截圖](images/screenshot.png)\n\n`![](x.png)` 在程式碼裡。\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "quote-depth-3-ignore",
+      "options": {
+        "maxQuoteDepth": 3,
+        "onLimit": "ignore"
       },
       "diagnose": [],
       "fix": {

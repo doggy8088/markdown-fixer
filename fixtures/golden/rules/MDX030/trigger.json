@@ -1,6 +1,6 @@
 {
   "source": "rules/MDX030/trigger.md",
-  "referenceVersion": "1.0.0",
+  "referenceVersion": "1.1.0",
   "cases": [
     {
       "name": "default",
@@ -19,10 +19,10 @@
           "rule": "MDX031",
           "name": "list-marker-style",
           "severity": "warning",
-          "fixable": true,
+          "fixable": false,
           "line": 4,
           "column": 1,
-          "message": "List uses \"+\" but the first item in this list uses \"-\". Use one bullet marker per list."
+          "message": "List uses \"+\" but the first item in this list uses \"-\". A different bullet marker starts a new list in CommonMark, so this is not fixed automatically; use one marker if this is one list."
         },
         {
           "rule": "MDX030",
@@ -37,10 +37,10 @@
           "rule": "MDX031",
           "name": "list-marker-style",
           "severity": "warning",
-          "fixable": true,
+          "fixable": false,
           "line": 5,
           "column": 1,
-          "message": "List uses \"*\" but the first item in this list uses \"-\". Use one bullet marker per list."
+          "message": "List uses \"*\" but the first item in this list uses \"-\". A different bullet marker starts a new list in CommonMark, so this is not fixed automatically; use one marker if this is one list."
         },
         {
           "rule": "MDX030",
@@ -71,7 +71,7 @@
         }
       ],
       "fix": {
-        "text": "# 待辦\n\n- 第一項\n- 第二項\n- 第三項\n1. 第四項\n2) 第五項\n",
+        "text": "# 待辦\n\n- 第一項\n+ 第二項\n* 第三項\n1. 第四項\n2) 第五項\n",
         "changed": true,
         "refused": false,
         "reason": ""
@@ -98,10 +98,10 @@
           "rule": "MDX031",
           "name": "list-marker-style",
           "severity": "warning",
-          "fixable": true,
+          "fixable": false,
           "line": 4,
           "column": 1,
-          "message": "List uses \"+\" but the first item in this list uses \"-\". Use one bullet marker per list."
+          "message": "List uses \"+\" but the first item in this list uses \"-\". A different bullet marker starts a new list in CommonMark, so this is not fixed automatically; use one marker if this is one list."
         },
         {
           "rule": "MDX030",
@@ -116,10 +116,10 @@
           "rule": "MDX031",
           "name": "list-marker-style",
           "severity": "warning",
-          "fixable": true,
+          "fixable": false,
           "line": 5,
           "column": 1,
-          "message": "List uses \"*\" but the first item in this list uses \"-\". Use one bullet marker per list."
+          "message": "List uses \"*\" but the first item in this list uses \"-\". A different bullet marker starts a new list in CommonMark, so this is not fixed automatically; use one marker if this is one list."
         },
         {
           "rule": "MDX030",
@@ -150,7 +150,7 @@
         }
       ],
       "fix": {
-        "text": "# 待辦\n\n- 第一項\n- 第二項\n- 第三項\n1. 第四項\n2) 第五項\n",
+        "text": "# 待辦\n\n- 第一項\n+ 第二項\n* 第三項\n1. 第四項\n2) 第五項\n",
         "changed": true,
         "refused": false,
         "reason": ""
@@ -175,10 +175,10 @@
           "rule": "MDX031",
           "name": "list-marker-style",
           "severity": "warning",
-          "fixable": true,
+          "fixable": false,
           "line": 4,
           "column": 1,
-          "message": "List uses \"+\" but the first item in this list uses \"-\". Use one bullet marker per list."
+          "message": "List uses \"+\" but the first item in this list uses \"-\". A different bullet marker starts a new list in CommonMark, so this is not fixed automatically; use one marker if this is one list."
         },
         {
           "rule": "MDX030",
@@ -193,10 +193,10 @@
           "rule": "MDX031",
           "name": "list-marker-style",
           "severity": "warning",
-          "fixable": true,
+          "fixable": false,
           "line": 5,
           "column": 1,
-          "message": "List uses \"*\" but the first item in this list uses \"-\". Use one bullet marker per list."
+          "message": "List uses \"*\" but the first item in this list uses \"-\". A different bullet marker starts a new list in CommonMark, so this is not fixed automatically; use one marker if this is one list."
         },
         {
           "rule": "MDX030",
@@ -227,7 +227,7 @@
         }
       ],
       "fix": {
-        "text": "# 待辦\n\n- 第一項\n- 第二項\n- 第三項\n1. 第四項\n2) 第五項\n",
+        "text": "# 待辦\n\n- 第一項\n+ 第二項\n* 第三項\n1. 第四項\n2) 第五項\n",
         "changed": true,
         "refused": false,
         "reason": ""
@@ -255,10 +255,10 @@
           "rule": "MDX031",
           "name": "list-marker-style",
           "severity": "warning",
-          "fixable": true,
+          "fixable": false,
           "line": 4,
           "column": 1,
-          "message": "List uses \"+\" but the first item in this list uses \"-\". Use one bullet marker per list."
+          "message": "List uses \"+\" but the first item in this list uses \"-\". A different bullet marker starts a new list in CommonMark, so this is not fixed automatically; use one marker if this is one list."
         },
         {
           "rule": "MDX030",
@@ -273,10 +273,10 @@
           "rule": "MDX031",
           "name": "list-marker-style",
           "severity": "warning",
-          "fixable": true,
+          "fixable": false,
           "line": 5,
           "column": 1,
-          "message": "List uses \"*\" but the first item in this list uses \"-\". Use one bullet marker per list."
+          "message": "List uses \"*\" but the first item in this list uses \"-\". A different bullet marker starts a new list in CommonMark, so this is not fixed automatically; use one marker if this is one list."
         },
         {
           "rule": "MDX030",
@@ -307,7 +307,7 @@
         }
       ],
       "fix": {
-        "text": "# 待辦\n\n- 第一項\n- 第二項\n- 第三項\n1. 第四項\n2) 第五項\n",
+        "text": "# 待辦\n\n- 第一項\n+ 第二項\n* 第三項\n1. 第四項\n2) 第五項\n",
         "changed": true,
         "refused": false,
         "reason": ""
@@ -327,6 +327,84 @@
       "fix": {
         "text": "# 待辦\n\n-第一項\n+第二項\n*第三項\n1.第四項\n2)第五項\n",
         "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "quote-depth-3-ignore",
+      "options": {
+        "maxQuoteDepth": 3,
+        "onLimit": "ignore"
+      },
+      "diagnose": [
+        {
+          "rule": "MDX030",
+          "name": "list-marker-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 3,
+          "column": 2,
+          "message": "Add a space after the \"-\" list marker."
+        },
+        {
+          "rule": "MDX031",
+          "name": "list-marker-style",
+          "severity": "warning",
+          "fixable": false,
+          "line": 4,
+          "column": 1,
+          "message": "List uses \"+\" but the first item in this list uses \"-\". A different bullet marker starts a new list in CommonMark, so this is not fixed automatically; use one marker if this is one list."
+        },
+        {
+          "rule": "MDX030",
+          "name": "list-marker-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 4,
+          "column": 2,
+          "message": "Add a space after the \"+\" list marker."
+        },
+        {
+          "rule": "MDX031",
+          "name": "list-marker-style",
+          "severity": "warning",
+          "fixable": false,
+          "line": 5,
+          "column": 1,
+          "message": "List uses \"*\" but the first item in this list uses \"-\". A different bullet marker starts a new list in CommonMark, so this is not fixed automatically; use one marker if this is one list."
+        },
+        {
+          "rule": "MDX030",
+          "name": "list-marker-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 5,
+          "column": 2,
+          "message": "Add a space after the \"*\" list marker."
+        },
+        {
+          "rule": "MDX030",
+          "name": "list-marker-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 6,
+          "column": 3,
+          "message": "Add a space after the \"1.\" list marker."
+        },
+        {
+          "rule": "MDX030",
+          "name": "list-marker-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 7,
+          "column": 3,
+          "message": "Add a space after the \"2)\" list marker."
+        }
+      ],
+      "fix": {
+        "text": "# 待辦\n\n- 第一項\n+ 第二項\n* 第三項\n1. 第四項\n2) 第五項\n",
+        "changed": true,
         "refused": false,
         "reason": ""
       }

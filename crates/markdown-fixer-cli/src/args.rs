@@ -10,6 +10,8 @@ use crate::jsstr::{js_number, js_trim, positive_integer};
 
 const RULE_LIST_REQUIRED: &str = "A rule list is required after --rule/--ignore-rule.";
 const MAX_LINE_LENGTH_INVALID: &str = "--max-line-length requires a positive integer.";
+const MAX_QUOTE_DEPTH_INVALID: &str = "--max-quote-depth requires a non-negative integer.";
+const ON_LIMIT_INVALID: &str = "--on-limit requires error or ignore.";
 
 /// 執行模式。
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -40,6 +42,10 @@ pub struct CliOptions {
     pub rules: Option<Vec<String>>,
     pub ignore_rules: Option<Vec<String>>,
     pub max_line_length: usize,
+    /// `--max-quote-depth`（oracle `maxQuoteDepth`）；0 表示不限制。
+    pub max_quote_depth: usize,
+    /// `--on-limit`（oracle `onLimit`）。
+    pub on_limit: markdown_fixer::LimitPolicy,
     pub paths: Vec<OsString>,
     /// Rust 版專有：從標準輸入讀取。
     pub stdin: bool,
@@ -47,6 +53,8 @@ pub struct CliOptions {
     pub exit_zero: bool,
     /// Rust 版專有：只做 Markdown 偵測。
     pub detect: bool,
+    /// Rust 版專有：`--no-render-guard` 時為 `false`，行為與 oracle 逐位元組相同。
+    pub render_guard: bool,
 }
 
 impl Default for CliOptions {
@@ -62,10 +70,13 @@ impl Default for CliOptions {
             rules: None,
             ignore_rules: None,
             max_line_length: 0,
+            max_quote_depth: markdown_fixer::DEFAULT_MAX_QUOTE_DEPTH,
+            on_limit: markdown_fixer::LimitPolicy::Error,
             paths: Vec::new(),
             stdin: false,
             exit_zero: false,
             detect: false,
+            render_guard: true,
         }
     }
 }
@@ -77,7 +88,9 @@ impl CliOptions {
             rules: self.rules.clone(),
             ignore_rules: self.ignore_rules.clone(),
             max_line_length: self.max_line_length,
-            ..markdown_fixer::Options::default()
+            max_quote_depth: self.max_quote_depth,
+            on_limit: self.on_limit,
+            render_guard: self.render_guard,
         }
     }
 }
@@ -115,6 +128,29 @@ fn parse_max_line_length(value: Option<&str>) -> Result<usize, String> {
     positive_integer(number).ok_or_else(|| MAX_LINE_LENGTH_INVALID.to_string())
 }
 
+/// oracle 的 `parseQuoteDepth`：`/^\d{1,9}$/`（只接受 ASCII 數字，1 到 9 位，可以是 0）。
+fn parse_max_quote_depth(value: Option<&str>) -> Result<usize, String> {
+    match value {
+        Some(value)
+            if (1..=9).contains(&value.len()) && value.bytes().all(|b| b.is_ascii_digit()) =>
+        {
+            value
+                .parse()
+                .map_err(|_| MAX_QUOTE_DEPTH_INVALID.to_string())
+        }
+        _ => Err(MAX_QUOTE_DEPTH_INVALID.to_string()),
+    }
+}
+
+/// oracle 的 `parseOnLimit`：只接受 `error` 與 `ignore`（大小寫有別）。
+fn parse_on_limit(value: Option<&str>) -> Result<markdown_fixer::LimitPolicy, String> {
+    match value {
+        Some("error") => Ok(markdown_fixer::LimitPolicy::Error),
+        Some("ignore") => Ok(markdown_fixer::LimitPolicy::Ignore),
+        _ => Err(ON_LIMIT_INVALID.to_string()),
+    }
+}
+
 /// 解析參數（不含程式名稱）。`is_known_rule` 判斷規則 ID 是否存在。
 ///
 /// 回傳的 `Err` 是不含 `Error: ` 前綴的訊息。
@@ -143,6 +179,7 @@ pub fn parse_args(
             "--stdin" => options.stdin = true,
             "--exit-zero" => options.exit_zero = true,
             "--detect" => options.detect = true,
+            "--no-render-guard" => options.render_guard = false,
             "--rule" => {
                 i += 1;
                 add_rules(
@@ -163,6 +200,14 @@ pub fn parse_args(
                 i += 1;
                 options.max_line_length = parse_max_line_length(text.get(i).map(String::as_str))?;
             }
+            "--max-quote-depth" => {
+                i += 1;
+                options.max_quote_depth = parse_max_quote_depth(text.get(i).map(String::as_str))?;
+            }
+            "--on-limit" => {
+                i += 1;
+                options.on_limit = parse_on_limit(text.get(i).map(String::as_str))?;
+            }
             "--" => {
                 options.paths.extend(argv[i + 1..].iter().cloned());
                 break;
@@ -174,6 +219,10 @@ pub fn parse_args(
                     add_rules(Some(value), &mut options.ignore_rules, is_known_rule)?;
                 } else if let Some(value) = arg.strip_prefix("--max-line-length=") {
                     options.max_line_length = parse_max_line_length(Some(value))?;
+                } else if let Some(value) = arg.strip_prefix("--max-quote-depth=") {
+                    options.max_quote_depth = parse_max_quote_depth(Some(value))?;
+                } else if let Some(value) = arg.strip_prefix("--on-limit=") {
+                    options.on_limit = parse_on_limit(Some(value))?;
                 } else if arg.starts_with('-') {
                     return Err(format!("Unknown option: {arg}"));
                 } else {
@@ -339,5 +388,71 @@ mod tests {
         );
         let parsed = parse(&["--stdin", "--exit-zero", "--detect", "--list-rules"]).unwrap();
         assert!(parsed.stdin && parsed.exit_zero && parsed.detect && parsed.list_rules);
+    }
+
+    #[test]
+    fn max_quote_depth_and_on_limit() {
+        use markdown_fixer::LimitPolicy;
+        let depth = |v: &str| parse(&["--max-quote-depth", v]).map(|o| o.max_quote_depth);
+        assert_eq!(parse(&[]).unwrap().max_quote_depth, 32);
+        assert_eq!(depth("0"), Ok(0));
+        assert_eq!(depth("007"), Ok(7));
+        assert_eq!(depth("999999999"), Ok(999_999_999));
+        for bad in [
+            "",
+            "-1",
+            "1e2",
+            "0x10",
+            " 5",
+            "5 ",
+            "1234567890",
+            "+5",
+            "５",
+        ] {
+            assert_eq!(
+                depth(bad),
+                Err(MAX_QUOTE_DEPTH_INVALID.to_string()),
+                "{bad:?}"
+            );
+        }
+        assert_eq!(
+            parse(&["--max-quote-depth"]).unwrap_err(),
+            MAX_QUOTE_DEPTH_INVALID
+        );
+        assert_eq!(
+            parse(&["--max-quote-depth=4", "--max-quote-depth=9"])
+                .unwrap()
+                .max_quote_depth,
+            9
+        );
+        assert_eq!(parse(&[]).unwrap().on_limit, LimitPolicy::Error);
+        assert_eq!(
+            parse(&["--on-limit", "ignore"]).unwrap().on_limit,
+            LimitPolicy::Ignore
+        );
+        assert_eq!(
+            parse(&["--on-limit=ignore", "--on-limit=error"])
+                .unwrap()
+                .on_limit,
+            LimitPolicy::Error
+        );
+        for bad in [
+            &["--on-limit"][..],
+            &["--on-limit", "Ignore"],
+            &["--on-limit="],
+        ] {
+            assert_eq!(parse(bad).unwrap_err(), ON_LIMIT_INVALID, "{bad:?}");
+        }
+        let options = parse(&[
+            "--max-quote-depth=3",
+            "--on-limit=ignore",
+            "--no-render-guard",
+        ])
+        .unwrap()
+        .library_options();
+        assert_eq!(options.max_quote_depth, 3);
+        assert_eq!(options.on_limit, LimitPolicy::Ignore);
+        assert!(!options.render_guard);
+        assert!(parse(&[]).unwrap().library_options().render_guard);
     }
 }

@@ -1,6 +1,6 @@
 {
   "source": "regressions/oracle-mdx018-setext-h1.md",
-  "referenceVersion": "1.0.0",
+  "referenceVersion": "1.1.0",
   "cases": [
     {
       "name": "default",
@@ -144,6 +144,39 @@
         ]
       },
       "diagnose": [],
+      "fix": {
+        "text": "Title\n=====\n\n## Sub\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "quote-depth-3-ignore",
+      "options": {
+        "maxQuoteDepth": 3,
+        "onLimit": "ignore"
+      },
+      "diagnose": [
+        {
+          "rule": "MDX080",
+          "name": "setext-ambiguity",
+          "severity": "warning",
+          "fixable": false,
+          "line": 2,
+          "column": 1,
+          "message": "This line is a Setext heading underline for the previous paragraph, so it renders as a heading instead of a horizontal rule. Insert a blank line above it, or use *** for a rule."
+        },
+        {
+          "rule": "MDX018",
+          "name": "first-heading-h1",
+          "severity": "info",
+          "fixable": false,
+          "line": 4,
+          "column": 1,
+          "message": "The first heading is not an H1. Start the outline with one H1 unless the document intentionally starts in a section."
+        }
+      ],
       "fix": {
         "text": "Title\n=====\n\n## Sub\n",
         "changed": false,

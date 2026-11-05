@@ -1,6 +1,6 @@
 {
   "source": "rules/MDX072/trigger.md",
-  "referenceVersion": "1.0.0",
+  "referenceVersion": "1.1.0",
   "cases": [
     {
       "name": "default",
@@ -144,6 +144,39 @@
         ]
       },
       "diagnose": [],
+      "fix": {
+        "text": "# 連結\n\n請見 [官方文件] (https://example.com)。\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "quote-depth-3-ignore",
+      "options": {
+        "maxQuoteDepth": 3,
+        "onLimit": "ignore"
+      },
+      "diagnose": [
+        {
+          "rule": "MDX072",
+          "name": "link-space-before-destination",
+          "severity": "info",
+          "fixable": false,
+          "line": 3,
+          "column": 9,
+          "message": "There is whitespace between ] and (. CommonMark does not parse this as a link; remove the space if a link was intended."
+        },
+        {
+          "rule": "MDX070",
+          "name": "bare-url",
+          "severity": "info",
+          "fixable": false,
+          "line": 3,
+          "column": 12,
+          "message": "Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text."
+        }
+      ],
       "fix": {
         "text": "# 連結\n\n請見 [官方文件] (https://example.com)。\n",
         "changed": false,

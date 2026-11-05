@@ -1,0 +1,29 @@
+{
+  "name": "quote-depth-error-write-json",
+  "args": [
+    "--write",
+    "--json",
+    "--max-quote-depth",
+    "3",
+    "deep.md"
+  ],
+  "cwd": "",
+  "nonRoot": false,
+  "setup": [
+    {
+      "path": "deep.md",
+      "text": "# 深層引言\n\n> 一層\n> > 兩層\n> > > 三層\n> > > > 四層 #沒空白\n\n-item\n"
+    }
+  ],
+  "expected": {
+    "status": 1,
+    "stdout": "{\n  \"tool\": \"markdown-fixer\",\n  \"version\": \"<VERSION>\",\n  \"mode\": \"write\",\n  \"files\": [\n    {\n      \"path\": \"deep.md\",\n      \"changed\": false,\n      \"wouldChange\": false,\n      \"refused\": true,\n      \"reason\": \"Blockquote nesting depth 4 exceeds the limit of 3. Reduce the nesting, raise --max-quote-depth (0 = no limit), or use --on-limit ignore to leave such lines untouched.\",\n      \"fixed\": 0,\n      \"wouldFix\": 0,\n      \"problems\": [\n        {\n          \"rule\": \"MDX086\",\n          \"name\": \"resource-limit\",\n          \"severity\": \"error\",\n          \"fixable\": false,\n          \"line\": 6,\n          \"column\": 1,\n          \"message\": \"Blockquote nesting depth 4 exceeds the limit of 3. Reduce the nesting, raise --max-quote-depth (0 = no limit), or use --on-limit ignore to leave such lines untouched.\"\n        },\n        {\n          \"rule\": \"MDX030\",\n          \"name\": \"list-marker-space\",\n          \"severity\": \"warning\",\n          \"fixable\": true,\n          \"line\": 8,\n          \"column\": 2,\n          \"message\": \"Add a space after the \\\"-\\\" list marker.\"\n        }\n      ]\n    }\n  ],\n  \"summary\": {\n    \"files\": 1,\n    \"changed\": 0,\n    \"wouldChange\": 0,\n    \"fixed\": 0,\n    \"refused\": 1,\n    \"problems\": {\n      \"total\": 2,\n      \"errors\": 1,\n      \"warnings\": 1,\n      \"info\": 0,\n      \"fixable\": 1\n    }\n  }\n}\n",
+    "stderr": "",
+    "files": [
+      {
+        "path": "deep.md",
+        "text": "# 深層引言\n\n> 一層\n> > 兩層\n> > > 三層\n> > > > 四層 #沒空白\n\n-item\n"
+      }
+    ]
+  }
+}

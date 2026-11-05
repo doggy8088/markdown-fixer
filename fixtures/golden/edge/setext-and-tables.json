@@ -1,6 +1,6 @@
 {
   "source": "edge/setext-and-tables.md",
-  "referenceVersion": "1.0.0",
+  "referenceVersion": "1.1.0",
   "cases": [
     {
       "name": "default",
@@ -183,6 +183,48 @@
       "fix": {
         "text": "# 表格與 Setext\n\na | b\n--|--\n\n| a |\n|---|\n| b |\n\n| x | y |\n| :-: | -: |\n\nHeader\n------\nnext\n",
         "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "quote-depth-3-ignore",
+      "options": {
+        "maxQuoteDepth": 3,
+        "onLimit": "ignore"
+      },
+      "diagnose": [
+        {
+          "rule": "MDX060",
+          "name": "table-delimiter-width",
+          "severity": "warning",
+          "fixable": true,
+          "line": 4,
+          "column": 1,
+          "message": "Table delimiter cell has fewer than three hyphens."
+        },
+        {
+          "rule": "MDX060",
+          "name": "table-delimiter-width",
+          "severity": "warning",
+          "fixable": true,
+          "line": 11,
+          "column": 3,
+          "message": "Table delimiter cell has fewer than three hyphens."
+        },
+        {
+          "rule": "MDX080",
+          "name": "setext-ambiguity",
+          "severity": "warning",
+          "fixable": false,
+          "line": 14,
+          "column": 1,
+          "message": "This line is a Setext heading underline for the previous paragraph, so it renders as a heading instead of a horizontal rule. Insert a blank line above it, or use *** for a rule."
+        }
+      ],
+      "fix": {
+        "text": "# 表格與 Setext\n\na | b\n---|---\n\n| a |\n|---|\n| b |\n\n| x | y |\n| :---: | ---: |\n\nHeader\n------\nnext\n",
+        "changed": true,
         "refused": false,
         "reason": ""
       }

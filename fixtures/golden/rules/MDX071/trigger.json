@@ -1,6 +1,6 @@
 {
   "source": "rules/MDX071/trigger.md",
-  "referenceVersion": "1.0.0",
+  "referenceVersion": "1.1.0",
   "cases": [
     {
       "name": "default",
@@ -144,6 +144,39 @@
         ]
       },
       "diagnose": [],
+      "fix": {
+        "text": "# 連結\n\n[](https://example.com) 沒有文字。\n\n[說明]() 沒有目的地。\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "quote-depth-3-ignore",
+      "options": {
+        "maxQuoteDepth": 3,
+        "onLimit": "ignore"
+      },
+      "diagnose": [
+        {
+          "rule": "MDX071",
+          "name": "empty-link",
+          "severity": "warning",
+          "fixable": false,
+          "line": 3,
+          "column": 1,
+          "message": "Link or image has empty text or an empty destination."
+        },
+        {
+          "rule": "MDX071",
+          "name": "empty-link",
+          "severity": "warning",
+          "fixable": false,
+          "line": 5,
+          "column": 4,
+          "message": "Link or image has empty text or an empty destination."
+        }
+      ],
       "fix": {
         "text": "# 連結\n\n[](https://example.com) 沒有文字。\n\n[說明]() 沒有目的地。\n",
         "changed": false,

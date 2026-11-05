@@ -1,6 +1,6 @@
 {
   "source": "synthetic/html-heavy-readme.md",
-  "referenceVersion": "1.0.0",
+  "referenceVersion": "1.1.0",
   "cases": [
     {
       "name": "default",
@@ -111,6 +111,30 @@
       "fix": {
         "text": "<!-- 這份 README 由範本產生，請勿手動修改以下區塊 -->\n<!-- BEGIN GENERATED -->\n<div align=\"center\">\n  <img src=\"./assets/banner.png\" alt=\"Banner\" width=\"600\">\n  <br>\n  <sub>Built with ❤︎ in Taipei</sub>\n</div>\n<!-- END GENERATED -->\n\n# 專案名稱\n\n<p>\n  <a href=\"https://example.com\"><img src=\"https://img.shields.io/badge/demo-online-green\" alt=\"demo\"></a>\n</p>\n\n## 截圖\n\n<table>\n  <tr>\n    <td><img src=\"docs/light.png\" alt=\"淺色模式\"></td>\n    <td><img src=\"docs/dark.png\" alt=\"深色模式\"></td>\n  </tr>\n</table>\n\n## 功能\n<details>\n<summary><b>展開完整功能清單</b></summary>\n\n- 支援深色模式\n- 支援**  多國語言 **\n-匯出 PDF\n\n</details>\n\n<!--\n  TODO:\n  - 補上影片示範\n  - 翻譯英文版\n-->\n\n## 鍵盤快捷鍵\n\n| 動作 | macOS | Windows |\n| --- | --- | --- |\n| 儲存 | <kbd>⌘</kbd>+<kbd>S</kbd> | <kbd>Ctrl</kbd>+<kbd>S</kbd> |\n| 搜尋 | <kbd>⌘</kbd>+<kbd>K</kbd> | <kbd>Ctrl</kbd>+<kbd>K</kbd> |\n\n文字中間的 <br> 換行標籤，以及 <span style=\"color:red\">#紅字</span>。\n\n<pre>\n#這是 pre 區塊\n  ** 不會被修 **\n</pre>\n\n<style>\n.banner { margin: 0 auto; }\n</style>\n\n## 授權\n\nMIT © 2026 Example Inc.\n",
         "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "quote-depth-3-ignore",
+      "options": {
+        "maxQuoteDepth": 3,
+        "onLimit": "ignore"
+      },
+      "diagnose": [
+        {
+          "rule": "MDX030",
+          "name": "list-marker-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 31,
+          "column": 2,
+          "message": "Add a space after the \"-\" list marker."
+        }
+      ],
+      "fix": {
+        "text": "<!-- 這份 README 由範本產生，請勿手動修改以下區塊 -->\n<!-- BEGIN GENERATED -->\n<div align=\"center\">\n  <img src=\"./assets/banner.png\" alt=\"Banner\" width=\"600\">\n  <br>\n  <sub>Built with ❤︎ in Taipei</sub>\n</div>\n<!-- END GENERATED -->\n\n# 專案名稱\n\n<p>\n  <a href=\"https://example.com\"><img src=\"https://img.shields.io/badge/demo-online-green\" alt=\"demo\"></a>\n</p>\n\n## 截圖\n\n<table>\n  <tr>\n    <td><img src=\"docs/light.png\" alt=\"淺色模式\"></td>\n    <td><img src=\"docs/dark.png\" alt=\"深色模式\"></td>\n  </tr>\n</table>\n\n## 功能\n<details>\n<summary><b>展開完整功能清單</b></summary>\n\n- 支援深色模式\n- 支援**  多國語言 **\n- 匯出 PDF\n\n</details>\n\n<!--\n  TODO:\n  - 補上影片示範\n  - 翻譯英文版\n-->\n\n## 鍵盤快捷鍵\n\n| 動作 | macOS | Windows |\n| --- | --- | --- |\n| 儲存 | <kbd>⌘</kbd>+<kbd>S</kbd> | <kbd>Ctrl</kbd>+<kbd>S</kbd> |\n| 搜尋 | <kbd>⌘</kbd>+<kbd>K</kbd> | <kbd>Ctrl</kbd>+<kbd>K</kbd> |\n\n文字中間的 <br> 換行標籤，以及 <span style=\"color:red\">#紅字</span>。\n\n<pre>\n#這是 pre 區塊\n  ** 不會被修 **\n</pre>\n\n<style>\n.banner { margin: 0 auto; }\n</style>\n\n## 授權\n\nMIT © 2026 Example Inc.\n",
+        "changed": true,
         "refused": false,
         "reason": ""
       }

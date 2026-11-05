@@ -1,6 +1,6 @@
 {
   "source": "regressions/definition-quote-prefixes.md",
-  "referenceVersion": "1.0.0",
+  "referenceVersion": "1.1.0",
   "cases": [
     {
       "name": "default",
@@ -124,21 +124,12 @@
           "message": "Reference link label \"x12\" has no matching definition."
         },
         {
-          "rule": "MDX020",
-          "name": "blockquote-space",
-          "severity": "warning",
-          "fixable": true,
-          "line": 67,
-          "column": 1,
-          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
-        },
-        {
           "rule": "MDX070",
           "name": "bare-url",
           "severity": "info",
           "fixable": false,
           "line": 67,
-          "column": 11,
+          "column": 13,
           "message": "Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text."
         },
         {
@@ -151,15 +142,6 @@
           "message": "Reference link label \"x16\" has no matching definition."
         },
         {
-          "rule": "MDX020",
-          "name": "blockquote-space",
-          "severity": "warning",
-          "fixable": true,
-          "line": 71,
-          "column": 1,
-          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
-        },
-        {
           "rule": "MDX073",
           "name": "reference-missing-definition",
           "severity": "warning",
@@ -169,21 +151,12 @@
           "message": "Reference link label \"x17\" has no matching definition."
         },
         {
-          "rule": "MDX020",
-          "name": "blockquote-space",
-          "severity": "warning",
-          "fixable": true,
-          "line": 87,
-          "column": 1,
-          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
-        },
-        {
           "rule": "MDX070",
           "name": "bare-url",
           "severity": "info",
           "fixable": false,
           "line": 87,
-          "column": 11,
+          "column": 14,
           "message": "Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text."
         },
         {
@@ -194,15 +167,6 @@
           "line": 89,
           "column": 4,
           "message": "Reference link label \"x21\" has no matching definition."
-        },
-        {
-          "rule": "MDX020",
-          "name": "blockquote-space",
-          "severity": "warning",
-          "fixable": true,
-          "line": 91,
-          "column": 1,
-          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
         },
         {
           "rule": "MDX073",
@@ -602,7 +566,7 @@
         }
       ],
       "fix": {
-        "text": "# 引言裡的 reference definition\n\n>[x0]: https://example.com/x\n\n請見 [文字][x0]。\n\n> [x1] : https://example.com/x\n\n請見 [文字][x1]。\n\n> [x2]:\n\n請見 [文字][x2]。\n\n>[x3]:   <https://example.com/a b>\n\n請見 [文字][x3]。\n\n>[x4]:\thttps://example.com/t\n\n請見 [文字][x4]。\n\n> [x5]: https://example.com/x\n\n請見 [文字][x5]。\n\n> [x6] : https://example.com/x\n\n請見 [文字][x6]。\n\n> [x7]:\n\n請見 [文字][x7]。\n\n> [x8]:   <https://example.com/a b>\n\n請見 [文字][x8]。\n\n> [x9]:\thttps://example.com/t\n\n請見 [文字][x9]。\n\n>  [x10]: https://example.com/x\n\n請見 [文字][x10]。\n\n> [x11] : https://example.com/x\n\n請見 [文字][x11]。\n\n> [x12]:\n\n請見 [文字][x12]。\n\n>  [x13]:   <https://example.com/a b>\n\n請見 [文字][x13]。\n\n>  [x14]:\thttps://example.com/t\n\n請見 [文字][x14]。\n\n>   [x15]: https://example.com/x\n\n請見 [文字][x15]。\n\n> [x16] : https://example.com/x\n\n請見 [文字][x16]。\n\n> [x17]:\n\n請見 [文字][x17]。\n\n>   [x18]:   <https://example.com/a b>\n\n請見 [文字][x18]。\n\n>   [x19]:\thttps://example.com/t\n\n請見 [文字][x19]。\n\n>    [x20]: https://example.com/x\n\n請見 [文字][x20]。\n\n> [x21] : https://example.com/x\n\n請見 [文字][x21]。\n\n> [x22]:\n\n請見 [文字][x22]。\n\n>    [x23]:   <https://example.com/a b>\n\n請見 [文字][x23]。\n\n>    [x24]:\thttps://example.com/t\n\n請見 [文字][x24]。\n\n>     [x25]: https://example.com/x\n\n請見 [文字][x25]。\n\n>     [x26] : https://example.com/x\n\n請見 [文字][x26]。\n\n>     [x27]:\n\n請見 [文字][x27]。\n\n>     [x28]:   <https://example.com/a b>\n\n請見 [文字][x28]。\n\n>     [x29]:\thttps://example.com/t\n\n請見 [文字][x29]。\n\n>\t[x30]: https://example.com/x\n\n請見 [文字][x30]。\n\n>\t[x31] : https://example.com/x\n\n請見 [文字][x31]。\n\n>\t[x32]:\n\n請見 [文字][x32]。\n\n>\t[x33]:   <https://example.com/a b>\n\n請見 [文字][x33]。\n\n>\t[x34]:\thttps://example.com/t\n\n請見 [文字][x34]。\n\n>\t [x35]: https://example.com/x\n\n請見 [文字][x35]。\n\n>\t [x36] : https://example.com/x\n\n請見 [文字][x36]。\n\n>\t [x37]:\n\n請見 [文字][x37]。\n\n>\t [x38]:   <https://example.com/a b>\n\n請見 [文字][x38]。\n\n>\t [x39]:\thttps://example.com/t\n\n請見 [文字][x39]。\n\n> \t[x40]: https://example.com/x\n\n請見 [文字][x40]。\n\n> \t[x41] : https://example.com/x\n\n請見 [文字][x41]。\n\n> \t[x42]:\n\n請見 [文字][x42]。\n\n> \t[x43]:   <https://example.com/a b>\n\n請見 [文字][x43]。\n\n> \t[x44]:\thttps://example.com/t\n\n請見 [文字][x44]。\n\n   > > [x45]: https://example.com/x\n\n請見 [文字][x45]。\n\n   > > [x46] : https://example.com/x\n\n請見 [文字][x46]。\n\n   > > [x47]:\n\n請見 [文字][x47]。\n\n   > > [x48]:   <https://example.com/a b>\n\n請見 [文字][x48]。\n\n   > > [x49]:\thttps://example.com/t\n\n請見 [文字][x49]。\n\n    > [x50]: https://example.com/x\n\n請見 [文字][x50]。\n\n    > [x51] : https://example.com/x\n\n請見 [文字][x51]。\n\n    > [x52]:\n\n請見 [文字][x52]。\n\n    > [x53]:   <https://example.com/a b>\n\n請見 [文字][x53]。\n\n    > [x54]:\thttps://example.com/t\n\n請見 [文字][x54]。\n\n >  > [x55]: https://example.com/x\n\n請見 [文字][x55]。\n\n > > [x56] : https://example.com/x\n\n請見 [文字][x56]。\n\n > > [x57]:\n\n請見 [文字][x57]。\n\n >  > [x58]:   <https://example.com/a b>\n\n請見 [文字][x58]。\n\n >  > [x59]:\thttps://example.com/t\n\n請見 [文字][x59]。\n\n>>[x60]: https://example.com/x\n\n請見 [文字][x60]。\n\n> > [x61] : https://example.com/x\n\n請見 [文字][x61]。\n\n> > [x62]:\n\n請見 [文字][x62]。\n\n>>[x63]:   <https://example.com/a b>\n\n請見 [文字][x63]。\n\n>>[x64]:\thttps://example.com/t\n\n請見 [文字][x64]。\n\n> >  > [x65]: https://example.com/x\n\n請見 [文字][x65]。\n\n> > > [x66] : https://example.com/x\n\n請見 [文字][x66]。\n\n> > > [x67]:\n\n請見 [文字][x67]。\n\n> >  > [x68]:   <https://example.com/a b>\n\n請見 [文字][x68]。\n\n> >  > [x69]:\thttps://example.com/t\n\n請見 [文字][x69]。\n",
+        "text": "# 引言裡的 reference definition\n\n>[x0]: https://example.com/x\n\n請見 [文字][x0]。\n\n> [x1] : https://example.com/x\n\n請見 [文字][x1]。\n\n> [x2]:\n\n請見 [文字][x2]。\n\n>[x3]:   <https://example.com/a b>\n\n請見 [文字][x3]。\n\n>[x4]:\thttps://example.com/t\n\n請見 [文字][x4]。\n\n> [x5]: https://example.com/x\n\n請見 [文字][x5]。\n\n> [x6] : https://example.com/x\n\n請見 [文字][x6]。\n\n> [x7]:\n\n請見 [文字][x7]。\n\n> [x8]:   <https://example.com/a b>\n\n請見 [文字][x8]。\n\n> [x9]:\thttps://example.com/t\n\n請見 [文字][x9]。\n\n>  [x10]: https://example.com/x\n\n請見 [文字][x10]。\n\n> [x11] : https://example.com/x\n\n請見 [文字][x11]。\n\n> [x12]:\n\n請見 [文字][x12]。\n\n>  [x13]:   <https://example.com/a b>\n\n請見 [文字][x13]。\n\n>  [x14]:\thttps://example.com/t\n\n請見 [文字][x14]。\n\n>   [x15]: https://example.com/x\n\n請見 [文字][x15]。\n\n>   [x16] : https://example.com/x\n\n請見 [文字][x16]。\n\n>   [x17]:\n\n請見 [文字][x17]。\n\n>   [x18]:   <https://example.com/a b>\n\n請見 [文字][x18]。\n\n>   [x19]:\thttps://example.com/t\n\n請見 [文字][x19]。\n\n>    [x20]: https://example.com/x\n\n請見 [文字][x20]。\n\n>    [x21] : https://example.com/x\n\n請見 [文字][x21]。\n\n>    [x22]:\n\n請見 [文字][x22]。\n\n>    [x23]:   <https://example.com/a b>\n\n請見 [文字][x23]。\n\n>    [x24]:\thttps://example.com/t\n\n請見 [文字][x24]。\n\n>     [x25]: https://example.com/x\n\n請見 [文字][x25]。\n\n>     [x26] : https://example.com/x\n\n請見 [文字][x26]。\n\n>     [x27]:\n\n請見 [文字][x27]。\n\n>     [x28]:   <https://example.com/a b>\n\n請見 [文字][x28]。\n\n>     [x29]:\thttps://example.com/t\n\n請見 [文字][x29]。\n\n>\t[x30]: https://example.com/x\n\n請見 [文字][x30]。\n\n>\t[x31] : https://example.com/x\n\n請見 [文字][x31]。\n\n>\t[x32]:\n\n請見 [文字][x32]。\n\n>\t[x33]:   <https://example.com/a b>\n\n請見 [文字][x33]。\n\n>\t[x34]:\thttps://example.com/t\n\n請見 [文字][x34]。\n\n>\t [x35]: https://example.com/x\n\n請見 [文字][x35]。\n\n>\t [x36] : https://example.com/x\n\n請見 [文字][x36]。\n\n>\t [x37]:\n\n請見 [文字][x37]。\n\n>\t [x38]:   <https://example.com/a b>\n\n請見 [文字][x38]。\n\n>\t [x39]:\thttps://example.com/t\n\n請見 [文字][x39]。\n\n> \t[x40]: https://example.com/x\n\n請見 [文字][x40]。\n\n> \t[x41] : https://example.com/x\n\n請見 [文字][x41]。\n\n> \t[x42]:\n\n請見 [文字][x42]。\n\n> \t[x43]:   <https://example.com/a b>\n\n請見 [文字][x43]。\n\n> \t[x44]:\thttps://example.com/t\n\n請見 [文字][x44]。\n\n   > > [x45]: https://example.com/x\n\n請見 [文字][x45]。\n\n   > > [x46] : https://example.com/x\n\n請見 [文字][x46]。\n\n   > > [x47]:\n\n請見 [文字][x47]。\n\n   > > [x48]:   <https://example.com/a b>\n\n請見 [文字][x48]。\n\n   > > [x49]:\thttps://example.com/t\n\n請見 [文字][x49]。\n\n    > [x50]: https://example.com/x\n\n請見 [文字][x50]。\n\n    > [x51] : https://example.com/x\n\n請見 [文字][x51]。\n\n    > [x52]:\n\n請見 [文字][x52]。\n\n    > [x53]:   <https://example.com/a b>\n\n請見 [文字][x53]。\n\n    > [x54]:\thttps://example.com/t\n\n請見 [文字][x54]。\n\n >  > [x55]: https://example.com/x\n\n請見 [文字][x55]。\n\n > > [x56] : https://example.com/x\n\n請見 [文字][x56]。\n\n > > [x57]:\n\n請見 [文字][x57]。\n\n >  > [x58]:   <https://example.com/a b>\n\n請見 [文字][x58]。\n\n >  > [x59]:\thttps://example.com/t\n\n請見 [文字][x59]。\n\n>>[x60]: https://example.com/x\n\n請見 [文字][x60]。\n\n> > [x61] : https://example.com/x\n\n請見 [文字][x61]。\n\n> > [x62]:\n\n請見 [文字][x62]。\n\n>>[x63]:   <https://example.com/a b>\n\n請見 [文字][x63]。\n\n>>[x64]:\thttps://example.com/t\n\n請見 [文字][x64]。\n\n> >  > [x65]: https://example.com/x\n\n請見 [文字][x65]。\n\n> > > [x66] : https://example.com/x\n\n請見 [文字][x66]。\n\n> > > [x67]:\n\n請見 [文字][x67]。\n\n> >  > [x68]:   <https://example.com/a b>\n\n請見 [文字][x68]。\n\n> >  > [x69]:\thttps://example.com/t\n\n請見 [文字][x69]。\n",
         "changed": true,
         "refused": false,
         "reason": ""
@@ -734,21 +698,12 @@
           "message": "Reference link label \"x12\" has no matching definition."
         },
         {
-          "rule": "MDX020",
-          "name": "blockquote-space",
-          "severity": "warning",
-          "fixable": true,
-          "line": 67,
-          "column": 1,
-          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
-        },
-        {
           "rule": "MDX070",
           "name": "bare-url",
           "severity": "info",
           "fixable": false,
           "line": 67,
-          "column": 11,
+          "column": 13,
           "message": "Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text."
         },
         {
@@ -761,15 +716,6 @@
           "message": "Reference link label \"x16\" has no matching definition."
         },
         {
-          "rule": "MDX020",
-          "name": "blockquote-space",
-          "severity": "warning",
-          "fixable": true,
-          "line": 71,
-          "column": 1,
-          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
-        },
-        {
           "rule": "MDX073",
           "name": "reference-missing-definition",
           "severity": "warning",
@@ -779,21 +725,12 @@
           "message": "Reference link label \"x17\" has no matching definition."
         },
         {
-          "rule": "MDX020",
-          "name": "blockquote-space",
-          "severity": "warning",
-          "fixable": true,
-          "line": 87,
-          "column": 1,
-          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
-        },
-        {
           "rule": "MDX070",
           "name": "bare-url",
           "severity": "info",
           "fixable": false,
           "line": 87,
-          "column": 11,
+          "column": 14,
           "message": "Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text."
         },
         {
@@ -804,15 +741,6 @@
           "line": 89,
           "column": 4,
           "message": "Reference link label \"x21\" has no matching definition."
-        },
-        {
-          "rule": "MDX020",
-          "name": "blockquote-space",
-          "severity": "warning",
-          "fixable": true,
-          "line": 91,
-          "column": 1,
-          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
         },
         {
           "rule": "MDX073",
@@ -1212,7 +1140,7 @@
         }
       ],
       "fix": {
-        "text": "# 引言裡的 reference definition\n\n>[x0]: https://example.com/x\n\n請見 [文字][x0]。\n\n> [x1] : https://example.com/x\n\n請見 [文字][x1]。\n\n> [x2]:\n\n請見 [文字][x2]。\n\n>[x3]:   <https://example.com/a b>\n\n請見 [文字][x3]。\n\n>[x4]:\thttps://example.com/t\n\n請見 [文字][x4]。\n\n> [x5]: https://example.com/x\n\n請見 [文字][x5]。\n\n> [x6] : https://example.com/x\n\n請見 [文字][x6]。\n\n> [x7]:\n\n請見 [文字][x7]。\n\n> [x8]:   <https://example.com/a b>\n\n請見 [文字][x8]。\n\n> [x9]:\thttps://example.com/t\n\n請見 [文字][x9]。\n\n>  [x10]: https://example.com/x\n\n請見 [文字][x10]。\n\n> [x11] : https://example.com/x\n\n請見 [文字][x11]。\n\n> [x12]:\n\n請見 [文字][x12]。\n\n>  [x13]:   <https://example.com/a b>\n\n請見 [文字][x13]。\n\n>  [x14]:\thttps://example.com/t\n\n請見 [文字][x14]。\n\n>   [x15]: https://example.com/x\n\n請見 [文字][x15]。\n\n> [x16] : https://example.com/x\n\n請見 [文字][x16]。\n\n> [x17]:\n\n請見 [文字][x17]。\n\n>   [x18]:   <https://example.com/a b>\n\n請見 [文字][x18]。\n\n>   [x19]:\thttps://example.com/t\n\n請見 [文字][x19]。\n\n>    [x20]: https://example.com/x\n\n請見 [文字][x20]。\n\n> [x21] : https://example.com/x\n\n請見 [文字][x21]。\n\n> [x22]:\n\n請見 [文字][x22]。\n\n>    [x23]:   <https://example.com/a b>\n\n請見 [文字][x23]。\n\n>    [x24]:\thttps://example.com/t\n\n請見 [文字][x24]。\n\n>     [x25]: https://example.com/x\n\n請見 [文字][x25]。\n\n>     [x26] : https://example.com/x\n\n請見 [文字][x26]。\n\n>     [x27]:\n\n請見 [文字][x27]。\n\n>     [x28]:   <https://example.com/a b>\n\n請見 [文字][x28]。\n\n>     [x29]:\thttps://example.com/t\n\n請見 [文字][x29]。\n\n>\t[x30]: https://example.com/x\n\n請見 [文字][x30]。\n\n>\t[x31] : https://example.com/x\n\n請見 [文字][x31]。\n\n>\t[x32]:\n\n請見 [文字][x32]。\n\n>\t[x33]:   <https://example.com/a b>\n\n請見 [文字][x33]。\n\n>\t[x34]:\thttps://example.com/t\n\n請見 [文字][x34]。\n\n>\t [x35]: https://example.com/x\n\n請見 [文字][x35]。\n\n>\t [x36] : https://example.com/x\n\n請見 [文字][x36]。\n\n>\t [x37]:\n\n請見 [文字][x37]。\n\n>\t [x38]:   <https://example.com/a b>\n\n請見 [文字][x38]。\n\n>\t [x39]:\thttps://example.com/t\n\n請見 [文字][x39]。\n\n> \t[x40]: https://example.com/x\n\n請見 [文字][x40]。\n\n> \t[x41] : https://example.com/x\n\n請見 [文字][x41]。\n\n> \t[x42]:\n\n請見 [文字][x42]。\n\n> \t[x43]:   <https://example.com/a b>\n\n請見 [文字][x43]。\n\n> \t[x44]:\thttps://example.com/t\n\n請見 [文字][x44]。\n\n   > > [x45]: https://example.com/x\n\n請見 [文字][x45]。\n\n   > > [x46] : https://example.com/x\n\n請見 [文字][x46]。\n\n   > > [x47]:\n\n請見 [文字][x47]。\n\n   > > [x48]:   <https://example.com/a b>\n\n請見 [文字][x48]。\n\n   > > [x49]:\thttps://example.com/t\n\n請見 [文字][x49]。\n\n    > [x50]: https://example.com/x\n\n請見 [文字][x50]。\n\n    > [x51] : https://example.com/x\n\n請見 [文字][x51]。\n\n    > [x52]:\n\n請見 [文字][x52]。\n\n    > [x53]:   <https://example.com/a b>\n\n請見 [文字][x53]。\n\n    > [x54]:\thttps://example.com/t\n\n請見 [文字][x54]。\n\n >  > [x55]: https://example.com/x\n\n請見 [文字][x55]。\n\n > > [x56] : https://example.com/x\n\n請見 [文字][x56]。\n\n > > [x57]:\n\n請見 [文字][x57]。\n\n >  > [x58]:   <https://example.com/a b>\n\n請見 [文字][x58]。\n\n >  > [x59]:\thttps://example.com/t\n\n請見 [文字][x59]。\n\n>>[x60]: https://example.com/x\n\n請見 [文字][x60]。\n\n> > [x61] : https://example.com/x\n\n請見 [文字][x61]。\n\n> > [x62]:\n\n請見 [文字][x62]。\n\n>>[x63]:   <https://example.com/a b>\n\n請見 [文字][x63]。\n\n>>[x64]:\thttps://example.com/t\n\n請見 [文字][x64]。\n\n> >  > [x65]: https://example.com/x\n\n請見 [文字][x65]。\n\n> > > [x66] : https://example.com/x\n\n請見 [文字][x66]。\n\n> > > [x67]:\n\n請見 [文字][x67]。\n\n> >  > [x68]:   <https://example.com/a b>\n\n請見 [文字][x68]。\n\n> >  > [x69]:\thttps://example.com/t\n\n請見 [文字][x69]。\n",
+        "text": "# 引言裡的 reference definition\n\n>[x0]: https://example.com/x\n\n請見 [文字][x0]。\n\n> [x1] : https://example.com/x\n\n請見 [文字][x1]。\n\n> [x2]:\n\n請見 [文字][x2]。\n\n>[x3]:   <https://example.com/a b>\n\n請見 [文字][x3]。\n\n>[x4]:\thttps://example.com/t\n\n請見 [文字][x4]。\n\n> [x5]: https://example.com/x\n\n請見 [文字][x5]。\n\n> [x6] : https://example.com/x\n\n請見 [文字][x6]。\n\n> [x7]:\n\n請見 [文字][x7]。\n\n> [x8]:   <https://example.com/a b>\n\n請見 [文字][x8]。\n\n> [x9]:\thttps://example.com/t\n\n請見 [文字][x9]。\n\n>  [x10]: https://example.com/x\n\n請見 [文字][x10]。\n\n> [x11] : https://example.com/x\n\n請見 [文字][x11]。\n\n> [x12]:\n\n請見 [文字][x12]。\n\n>  [x13]:   <https://example.com/a b>\n\n請見 [文字][x13]。\n\n>  [x14]:\thttps://example.com/t\n\n請見 [文字][x14]。\n\n>   [x15]: https://example.com/x\n\n請見 [文字][x15]。\n\n>   [x16] : https://example.com/x\n\n請見 [文字][x16]。\n\n>   [x17]:\n\n請見 [文字][x17]。\n\n>   [x18]:   <https://example.com/a b>\n\n請見 [文字][x18]。\n\n>   [x19]:\thttps://example.com/t\n\n請見 [文字][x19]。\n\n>    [x20]: https://example.com/x\n\n請見 [文字][x20]。\n\n>    [x21] : https://example.com/x\n\n請見 [文字][x21]。\n\n>    [x22]:\n\n請見 [文字][x22]。\n\n>    [x23]:   <https://example.com/a b>\n\n請見 [文字][x23]。\n\n>    [x24]:\thttps://example.com/t\n\n請見 [文字][x24]。\n\n>     [x25]: https://example.com/x\n\n請見 [文字][x25]。\n\n>     [x26] : https://example.com/x\n\n請見 [文字][x26]。\n\n>     [x27]:\n\n請見 [文字][x27]。\n\n>     [x28]:   <https://example.com/a b>\n\n請見 [文字][x28]。\n\n>     [x29]:\thttps://example.com/t\n\n請見 [文字][x29]。\n\n>\t[x30]: https://example.com/x\n\n請見 [文字][x30]。\n\n>\t[x31] : https://example.com/x\n\n請見 [文字][x31]。\n\n>\t[x32]:\n\n請見 [文字][x32]。\n\n>\t[x33]:   <https://example.com/a b>\n\n請見 [文字][x33]。\n\n>\t[x34]:\thttps://example.com/t\n\n請見 [文字][x34]。\n\n>\t [x35]: https://example.com/x\n\n請見 [文字][x35]。\n\n>\t [x36] : https://example.com/x\n\n請見 [文字][x36]。\n\n>\t [x37]:\n\n請見 [文字][x37]。\n\n>\t [x38]:   <https://example.com/a b>\n\n請見 [文字][x38]。\n\n>\t [x39]:\thttps://example.com/t\n\n請見 [文字][x39]。\n\n> \t[x40]: https://example.com/x\n\n請見 [文字][x40]。\n\n> \t[x41] : https://example.com/x\n\n請見 [文字][x41]。\n\n> \t[x42]:\n\n請見 [文字][x42]。\n\n> \t[x43]:   <https://example.com/a b>\n\n請見 [文字][x43]。\n\n> \t[x44]:\thttps://example.com/t\n\n請見 [文字][x44]。\n\n   > > [x45]: https://example.com/x\n\n請見 [文字][x45]。\n\n   > > [x46] : https://example.com/x\n\n請見 [文字][x46]。\n\n   > > [x47]:\n\n請見 [文字][x47]。\n\n   > > [x48]:   <https://example.com/a b>\n\n請見 [文字][x48]。\n\n   > > [x49]:\thttps://example.com/t\n\n請見 [文字][x49]。\n\n    > [x50]: https://example.com/x\n\n請見 [文字][x50]。\n\n    > [x51] : https://example.com/x\n\n請見 [文字][x51]。\n\n    > [x52]:\n\n請見 [文字][x52]。\n\n    > [x53]:   <https://example.com/a b>\n\n請見 [文字][x53]。\n\n    > [x54]:\thttps://example.com/t\n\n請見 [文字][x54]。\n\n >  > [x55]: https://example.com/x\n\n請見 [文字][x55]。\n\n > > [x56] : https://example.com/x\n\n請見 [文字][x56]。\n\n > > [x57]:\n\n請見 [文字][x57]。\n\n >  > [x58]:   <https://example.com/a b>\n\n請見 [文字][x58]。\n\n >  > [x59]:\thttps://example.com/t\n\n請見 [文字][x59]。\n\n>>[x60]: https://example.com/x\n\n請見 [文字][x60]。\n\n> > [x61] : https://example.com/x\n\n請見 [文字][x61]。\n\n> > [x62]:\n\n請見 [文字][x62]。\n\n>>[x63]:   <https://example.com/a b>\n\n請見 [文字][x63]。\n\n>>[x64]:\thttps://example.com/t\n\n請見 [文字][x64]。\n\n> >  > [x65]: https://example.com/x\n\n請見 [文字][x65]。\n\n> > > [x66] : https://example.com/x\n\n請見 [文字][x66]。\n\n> > > [x67]:\n\n請見 [文字][x67]。\n\n> >  > [x68]:   <https://example.com/a b>\n\n請見 [文字][x68]。\n\n> >  > [x69]:\thttps://example.com/t\n\n請見 [文字][x69]。\n",
         "changed": true,
         "refused": false,
         "reason": ""
@@ -1342,21 +1270,12 @@
           "message": "Reference link label \"x12\" has no matching definition."
         },
         {
-          "rule": "MDX020",
-          "name": "blockquote-space",
-          "severity": "warning",
-          "fixable": true,
-          "line": 67,
-          "column": 1,
-          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
-        },
-        {
           "rule": "MDX070",
           "name": "bare-url",
           "severity": "info",
           "fixable": false,
           "line": 67,
-          "column": 11,
+          "column": 13,
           "message": "Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text."
         },
         {
@@ -1369,15 +1288,6 @@
           "message": "Reference link label \"x16\" has no matching definition."
         },
         {
-          "rule": "MDX020",
-          "name": "blockquote-space",
-          "severity": "warning",
-          "fixable": true,
-          "line": 71,
-          "column": 1,
-          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
-        },
-        {
           "rule": "MDX073",
           "name": "reference-missing-definition",
           "severity": "warning",
@@ -1387,21 +1297,12 @@
           "message": "Reference link label \"x17\" has no matching definition."
         },
         {
-          "rule": "MDX020",
-          "name": "blockquote-space",
-          "severity": "warning",
-          "fixable": true,
-          "line": 87,
-          "column": 1,
-          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
-        },
-        {
           "rule": "MDX070",
           "name": "bare-url",
           "severity": "info",
           "fixable": false,
           "line": 87,
-          "column": 11,
+          "column": 14,
           "message": "Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text."
         },
         {
@@ -1412,15 +1313,6 @@
           "line": 89,
           "column": 4,
           "message": "Reference link label \"x21\" has no matching definition."
-        },
-        {
-          "rule": "MDX020",
-          "name": "blockquote-space",
-          "severity": "warning",
-          "fixable": true,
-          "line": 91,
-          "column": 1,
-          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
         },
         {
           "rule": "MDX073",
@@ -1820,7 +1712,7 @@
         }
       ],
       "fix": {
-        "text": "# 引言裡的 reference definition\n\n>[x0]: https://example.com/x\n\n請見 [文字][x0]。\n\n> [x1] : https://example.com/x\n\n請見 [文字][x1]。\n\n> [x2]:\n\n請見 [文字][x2]。\n\n>[x3]:   <https://example.com/a b>\n\n請見 [文字][x3]。\n\n>[x4]:\thttps://example.com/t\n\n請見 [文字][x4]。\n\n> [x5]: https://example.com/x\n\n請見 [文字][x5]。\n\n> [x6] : https://example.com/x\n\n請見 [文字][x6]。\n\n> [x7]:\n\n請見 [文字][x7]。\n\n> [x8]:   <https://example.com/a b>\n\n請見 [文字][x8]。\n\n> [x9]:\thttps://example.com/t\n\n請見 [文字][x9]。\n\n>  [x10]: https://example.com/x\n\n請見 [文字][x10]。\n\n> [x11] : https://example.com/x\n\n請見 [文字][x11]。\n\n> [x12]:\n\n請見 [文字][x12]。\n\n>  [x13]:   <https://example.com/a b>\n\n請見 [文字][x13]。\n\n>  [x14]:\thttps://example.com/t\n\n請見 [文字][x14]。\n\n>   [x15]: https://example.com/x\n\n請見 [文字][x15]。\n\n> [x16] : https://example.com/x\n\n請見 [文字][x16]。\n\n> [x17]:\n\n請見 [文字][x17]。\n\n>   [x18]:   <https://example.com/a b>\n\n請見 [文字][x18]。\n\n>   [x19]:\thttps://example.com/t\n\n請見 [文字][x19]。\n\n>    [x20]: https://example.com/x\n\n請見 [文字][x20]。\n\n> [x21] : https://example.com/x\n\n請見 [文字][x21]。\n\n> [x22]:\n\n請見 [文字][x22]。\n\n>    [x23]:   <https://example.com/a b>\n\n請見 [文字][x23]。\n\n>    [x24]:\thttps://example.com/t\n\n請見 [文字][x24]。\n\n>     [x25]: https://example.com/x\n\n請見 [文字][x25]。\n\n>     [x26] : https://example.com/x\n\n請見 [文字][x26]。\n\n>     [x27]:\n\n請見 [文字][x27]。\n\n>     [x28]:   <https://example.com/a b>\n\n請見 [文字][x28]。\n\n>     [x29]:\thttps://example.com/t\n\n請見 [文字][x29]。\n\n>\t[x30]: https://example.com/x\n\n請見 [文字][x30]。\n\n>\t[x31] : https://example.com/x\n\n請見 [文字][x31]。\n\n>\t[x32]:\n\n請見 [文字][x32]。\n\n>\t[x33]:   <https://example.com/a b>\n\n請見 [文字][x33]。\n\n>\t[x34]:\thttps://example.com/t\n\n請見 [文字][x34]。\n\n>\t [x35]: https://example.com/x\n\n請見 [文字][x35]。\n\n>\t [x36] : https://example.com/x\n\n請見 [文字][x36]。\n\n>\t [x37]:\n\n請見 [文字][x37]。\n\n>\t [x38]:   <https://example.com/a b>\n\n請見 [文字][x38]。\n\n>\t [x39]:\thttps://example.com/t\n\n請見 [文字][x39]。\n\n> \t[x40]: https://example.com/x\n\n請見 [文字][x40]。\n\n> \t[x41] : https://example.com/x\n\n請見 [文字][x41]。\n\n> \t[x42]:\n\n請見 [文字][x42]。\n\n> \t[x43]:   <https://example.com/a b>\n\n請見 [文字][x43]。\n\n> \t[x44]:\thttps://example.com/t\n\n請見 [文字][x44]。\n\n   > > [x45]: https://example.com/x\n\n請見 [文字][x45]。\n\n   > > [x46] : https://example.com/x\n\n請見 [文字][x46]。\n\n   > > [x47]:\n\n請見 [文字][x47]。\n\n   > > [x48]:   <https://example.com/a b>\n\n請見 [文字][x48]。\n\n   > > [x49]:\thttps://example.com/t\n\n請見 [文字][x49]。\n\n    > [x50]: https://example.com/x\n\n請見 [文字][x50]。\n\n    > [x51] : https://example.com/x\n\n請見 [文字][x51]。\n\n    > [x52]:\n\n請見 [文字][x52]。\n\n    > [x53]:   <https://example.com/a b>\n\n請見 [文字][x53]。\n\n    > [x54]:\thttps://example.com/t\n\n請見 [文字][x54]。\n\n >  > [x55]: https://example.com/x\n\n請見 [文字][x55]。\n\n > > [x56] : https://example.com/x\n\n請見 [文字][x56]。\n\n > > [x57]:\n\n請見 [文字][x57]。\n\n >  > [x58]:   <https://example.com/a b>\n\n請見 [文字][x58]。\n\n >  > [x59]:\thttps://example.com/t\n\n請見 [文字][x59]。\n\n>>[x60]: https://example.com/x\n\n請見 [文字][x60]。\n\n> > [x61] : https://example.com/x\n\n請見 [文字][x61]。\n\n> > [x62]:\n\n請見 [文字][x62]。\n\n>>[x63]:   <https://example.com/a b>\n\n請見 [文字][x63]。\n\n>>[x64]:\thttps://example.com/t\n\n請見 [文字][x64]。\n\n> >  > [x65]: https://example.com/x\n\n請見 [文字][x65]。\n\n> > > [x66] : https://example.com/x\n\n請見 [文字][x66]。\n\n> > > [x67]:\n\n請見 [文字][x67]。\n\n> >  > [x68]:   <https://example.com/a b>\n\n請見 [文字][x68]。\n\n> >  > [x69]:\thttps://example.com/t\n\n請見 [文字][x69]。\n",
+        "text": "# 引言裡的 reference definition\n\n>[x0]: https://example.com/x\n\n請見 [文字][x0]。\n\n> [x1] : https://example.com/x\n\n請見 [文字][x1]。\n\n> [x2]:\n\n請見 [文字][x2]。\n\n>[x3]:   <https://example.com/a b>\n\n請見 [文字][x3]。\n\n>[x4]:\thttps://example.com/t\n\n請見 [文字][x4]。\n\n> [x5]: https://example.com/x\n\n請見 [文字][x5]。\n\n> [x6] : https://example.com/x\n\n請見 [文字][x6]。\n\n> [x7]:\n\n請見 [文字][x7]。\n\n> [x8]:   <https://example.com/a b>\n\n請見 [文字][x8]。\n\n> [x9]:\thttps://example.com/t\n\n請見 [文字][x9]。\n\n>  [x10]: https://example.com/x\n\n請見 [文字][x10]。\n\n> [x11] : https://example.com/x\n\n請見 [文字][x11]。\n\n> [x12]:\n\n請見 [文字][x12]。\n\n>  [x13]:   <https://example.com/a b>\n\n請見 [文字][x13]。\n\n>  [x14]:\thttps://example.com/t\n\n請見 [文字][x14]。\n\n>   [x15]: https://example.com/x\n\n請見 [文字][x15]。\n\n>   [x16] : https://example.com/x\n\n請見 [文字][x16]。\n\n>   [x17]:\n\n請見 [文字][x17]。\n\n>   [x18]:   <https://example.com/a b>\n\n請見 [文字][x18]。\n\n>   [x19]:\thttps://example.com/t\n\n請見 [文字][x19]。\n\n>    [x20]: https://example.com/x\n\n請見 [文字][x20]。\n\n>    [x21] : https://example.com/x\n\n請見 [文字][x21]。\n\n>    [x22]:\n\n請見 [文字][x22]。\n\n>    [x23]:   <https://example.com/a b>\n\n請見 [文字][x23]。\n\n>    [x24]:\thttps://example.com/t\n\n請見 [文字][x24]。\n\n>     [x25]: https://example.com/x\n\n請見 [文字][x25]。\n\n>     [x26] : https://example.com/x\n\n請見 [文字][x26]。\n\n>     [x27]:\n\n請見 [文字][x27]。\n\n>     [x28]:   <https://example.com/a b>\n\n請見 [文字][x28]。\n\n>     [x29]:\thttps://example.com/t\n\n請見 [文字][x29]。\n\n>\t[x30]: https://example.com/x\n\n請見 [文字][x30]。\n\n>\t[x31] : https://example.com/x\n\n請見 [文字][x31]。\n\n>\t[x32]:\n\n請見 [文字][x32]。\n\n>\t[x33]:   <https://example.com/a b>\n\n請見 [文字][x33]。\n\n>\t[x34]:\thttps://example.com/t\n\n請見 [文字][x34]。\n\n>\t [x35]: https://example.com/x\n\n請見 [文字][x35]。\n\n>\t [x36] : https://example.com/x\n\n請見 [文字][x36]。\n\n>\t [x37]:\n\n請見 [文字][x37]。\n\n>\t [x38]:   <https://example.com/a b>\n\n請見 [文字][x38]。\n\n>\t [x39]:\thttps://example.com/t\n\n請見 [文字][x39]。\n\n> \t[x40]: https://example.com/x\n\n請見 [文字][x40]。\n\n> \t[x41] : https://example.com/x\n\n請見 [文字][x41]。\n\n> \t[x42]:\n\n請見 [文字][x42]。\n\n> \t[x43]:   <https://example.com/a b>\n\n請見 [文字][x43]。\n\n> \t[x44]:\thttps://example.com/t\n\n請見 [文字][x44]。\n\n   > > [x45]: https://example.com/x\n\n請見 [文字][x45]。\n\n   > > [x46] : https://example.com/x\n\n請見 [文字][x46]。\n\n   > > [x47]:\n\n請見 [文字][x47]。\n\n   > > [x48]:   <https://example.com/a b>\n\n請見 [文字][x48]。\n\n   > > [x49]:\thttps://example.com/t\n\n請見 [文字][x49]。\n\n    > [x50]: https://example.com/x\n\n請見 [文字][x50]。\n\n    > [x51] : https://example.com/x\n\n請見 [文字][x51]。\n\n    > [x52]:\n\n請見 [文字][x52]。\n\n    > [x53]:   <https://example.com/a b>\n\n請見 [文字][x53]。\n\n    > [x54]:\thttps://example.com/t\n\n請見 [文字][x54]。\n\n >  > [x55]: https://example.com/x\n\n請見 [文字][x55]。\n\n > > [x56] : https://example.com/x\n\n請見 [文字][x56]。\n\n > > [x57]:\n\n請見 [文字][x57]。\n\n >  > [x58]:   <https://example.com/a b>\n\n請見 [文字][x58]。\n\n >  > [x59]:\thttps://example.com/t\n\n請見 [文字][x59]。\n\n>>[x60]: https://example.com/x\n\n請見 [文字][x60]。\n\n> > [x61] : https://example.com/x\n\n請見 [文字][x61]。\n\n> > [x62]:\n\n請見 [文字][x62]。\n\n>>[x63]:   <https://example.com/a b>\n\n請見 [文字][x63]。\n\n>>[x64]:\thttps://example.com/t\n\n請見 [文字][x64]。\n\n> >  > [x65]: https://example.com/x\n\n請見 [文字][x65]。\n\n> > > [x66] : https://example.com/x\n\n請見 [文字][x66]。\n\n> > > [x67]:\n\n請見 [文字][x67]。\n\n> >  > [x68]:   <https://example.com/a b>\n\n請見 [文字][x68]。\n\n> >  > [x69]:\thttps://example.com/t\n\n請見 [文字][x69]。\n",
         "changed": true,
         "refused": false,
         "reason": ""
@@ -1953,21 +1845,12 @@
           "message": "Reference link label \"x12\" has no matching definition."
         },
         {
-          "rule": "MDX020",
-          "name": "blockquote-space",
-          "severity": "warning",
-          "fixable": true,
-          "line": 67,
-          "column": 1,
-          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
-        },
-        {
           "rule": "MDX070",
           "name": "bare-url",
           "severity": "info",
           "fixable": false,
           "line": 67,
-          "column": 11,
+          "column": 13,
           "message": "Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text."
         },
         {
@@ -1980,15 +1863,6 @@
           "message": "Reference link label \"x16\" has no matching definition."
         },
         {
-          "rule": "MDX020",
-          "name": "blockquote-space",
-          "severity": "warning",
-          "fixable": true,
-          "line": 71,
-          "column": 1,
-          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
-        },
-        {
           "rule": "MDX073",
           "name": "reference-missing-definition",
           "severity": "warning",
@@ -1998,21 +1872,12 @@
           "message": "Reference link label \"x17\" has no matching definition."
         },
         {
-          "rule": "MDX020",
-          "name": "blockquote-space",
-          "severity": "warning",
-          "fixable": true,
-          "line": 87,
-          "column": 1,
-          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
-        },
-        {
           "rule": "MDX070",
           "name": "bare-url",
           "severity": "info",
           "fixable": false,
           "line": 87,
-          "column": 11,
+          "column": 14,
           "message": "Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text."
         },
         {
@@ -2023,15 +1888,6 @@
           "line": 89,
           "column": 4,
           "message": "Reference link label \"x21\" has no matching definition."
-        },
-        {
-          "rule": "MDX020",
-          "name": "blockquote-space",
-          "severity": "warning",
-          "fixable": true,
-          "line": 91,
-          "column": 1,
-          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
         },
         {
           "rule": "MDX073",
@@ -2431,7 +2287,7 @@
         }
       ],
       "fix": {
-        "text": "# 引言裡的 reference definition\n\n>[x0]: https://example.com/x\n\n請見 [文字][x0]。\n\n> [x1] : https://example.com/x\n\n請見 [文字][x1]。\n\n> [x2]:\n\n請見 [文字][x2]。\n\n>[x3]:   <https://example.com/a b>\n\n請見 [文字][x3]。\n\n>[x4]:\thttps://example.com/t\n\n請見 [文字][x4]。\n\n> [x5]: https://example.com/x\n\n請見 [文字][x5]。\n\n> [x6] : https://example.com/x\n\n請見 [文字][x6]。\n\n> [x7]:\n\n請見 [文字][x7]。\n\n> [x8]:   <https://example.com/a b>\n\n請見 [文字][x8]。\n\n> [x9]:\thttps://example.com/t\n\n請見 [文字][x9]。\n\n>  [x10]: https://example.com/x\n\n請見 [文字][x10]。\n\n> [x11] : https://example.com/x\n\n請見 [文字][x11]。\n\n> [x12]:\n\n請見 [文字][x12]。\n\n>  [x13]:   <https://example.com/a b>\n\n請見 [文字][x13]。\n\n>  [x14]:\thttps://example.com/t\n\n請見 [文字][x14]。\n\n>   [x15]: https://example.com/x\n\n請見 [文字][x15]。\n\n> [x16] : https://example.com/x\n\n請見 [文字][x16]。\n\n> [x17]:\n\n請見 [文字][x17]。\n\n>   [x18]:   <https://example.com/a b>\n\n請見 [文字][x18]。\n\n>   [x19]:\thttps://example.com/t\n\n請見 [文字][x19]。\n\n>    [x20]: https://example.com/x\n\n請見 [文字][x20]。\n\n> [x21] : https://example.com/x\n\n請見 [文字][x21]。\n\n> [x22]:\n\n請見 [文字][x22]。\n\n>    [x23]:   <https://example.com/a b>\n\n請見 [文字][x23]。\n\n>    [x24]:\thttps://example.com/t\n\n請見 [文字][x24]。\n\n>     [x25]: https://example.com/x\n\n請見 [文字][x25]。\n\n>     [x26] : https://example.com/x\n\n請見 [文字][x26]。\n\n>     [x27]:\n\n請見 [文字][x27]。\n\n>     [x28]:   <https://example.com/a b>\n\n請見 [文字][x28]。\n\n>     [x29]:\thttps://example.com/t\n\n請見 [文字][x29]。\n\n>\t[x30]: https://example.com/x\n\n請見 [文字][x30]。\n\n>\t[x31] : https://example.com/x\n\n請見 [文字][x31]。\n\n>\t[x32]:\n\n請見 [文字][x32]。\n\n>\t[x33]:   <https://example.com/a b>\n\n請見 [文字][x33]。\n\n>\t[x34]:\thttps://example.com/t\n\n請見 [文字][x34]。\n\n>\t [x35]: https://example.com/x\n\n請見 [文字][x35]。\n\n>\t [x36] : https://example.com/x\n\n請見 [文字][x36]。\n\n>\t [x37]:\n\n請見 [文字][x37]。\n\n>\t [x38]:   <https://example.com/a b>\n\n請見 [文字][x38]。\n\n>\t [x39]:\thttps://example.com/t\n\n請見 [文字][x39]。\n\n> \t[x40]: https://example.com/x\n\n請見 [文字][x40]。\n\n> \t[x41] : https://example.com/x\n\n請見 [文字][x41]。\n\n> \t[x42]:\n\n請見 [文字][x42]。\n\n> \t[x43]:   <https://example.com/a b>\n\n請見 [文字][x43]。\n\n> \t[x44]:\thttps://example.com/t\n\n請見 [文字][x44]。\n\n   > > [x45]: https://example.com/x\n\n請見 [文字][x45]。\n\n   > > [x46] : https://example.com/x\n\n請見 [文字][x46]。\n\n   > > [x47]:\n\n請見 [文字][x47]。\n\n   > > [x48]:   <https://example.com/a b>\n\n請見 [文字][x48]。\n\n   > > [x49]:\thttps://example.com/t\n\n請見 [文字][x49]。\n\n    > [x50]: https://example.com/x\n\n請見 [文字][x50]。\n\n    > [x51] : https://example.com/x\n\n請見 [文字][x51]。\n\n    > [x52]:\n\n請見 [文字][x52]。\n\n    > [x53]:   <https://example.com/a b>\n\n請見 [文字][x53]。\n\n    > [x54]:\thttps://example.com/t\n\n請見 [文字][x54]。\n\n >  > [x55]: https://example.com/x\n\n請見 [文字][x55]。\n\n > > [x56] : https://example.com/x\n\n請見 [文字][x56]。\n\n > > [x57]:\n\n請見 [文字][x57]。\n\n >  > [x58]:   <https://example.com/a b>\n\n請見 [文字][x58]。\n\n >  > [x59]:\thttps://example.com/t\n\n請見 [文字][x59]。\n\n>>[x60]: https://example.com/x\n\n請見 [文字][x60]。\n\n> > [x61] : https://example.com/x\n\n請見 [文字][x61]。\n\n> > [x62]:\n\n請見 [文字][x62]。\n\n>>[x63]:   <https://example.com/a b>\n\n請見 [文字][x63]。\n\n>>[x64]:\thttps://example.com/t\n\n請見 [文字][x64]。\n\n> >  > [x65]: https://example.com/x\n\n請見 [文字][x65]。\n\n> > > [x66] : https://example.com/x\n\n請見 [文字][x66]。\n\n> > > [x67]:\n\n請見 [文字][x67]。\n\n> >  > [x68]:   <https://example.com/a b>\n\n請見 [文字][x68]。\n\n> >  > [x69]:\thttps://example.com/t\n\n請見 [文字][x69]。\n",
+        "text": "# 引言裡的 reference definition\n\n>[x0]: https://example.com/x\n\n請見 [文字][x0]。\n\n> [x1] : https://example.com/x\n\n請見 [文字][x1]。\n\n> [x2]:\n\n請見 [文字][x2]。\n\n>[x3]:   <https://example.com/a b>\n\n請見 [文字][x3]。\n\n>[x4]:\thttps://example.com/t\n\n請見 [文字][x4]。\n\n> [x5]: https://example.com/x\n\n請見 [文字][x5]。\n\n> [x6] : https://example.com/x\n\n請見 [文字][x6]。\n\n> [x7]:\n\n請見 [文字][x7]。\n\n> [x8]:   <https://example.com/a b>\n\n請見 [文字][x8]。\n\n> [x9]:\thttps://example.com/t\n\n請見 [文字][x9]。\n\n>  [x10]: https://example.com/x\n\n請見 [文字][x10]。\n\n> [x11] : https://example.com/x\n\n請見 [文字][x11]。\n\n> [x12]:\n\n請見 [文字][x12]。\n\n>  [x13]:   <https://example.com/a b>\n\n請見 [文字][x13]。\n\n>  [x14]:\thttps://example.com/t\n\n請見 [文字][x14]。\n\n>   [x15]: https://example.com/x\n\n請見 [文字][x15]。\n\n>   [x16] : https://example.com/x\n\n請見 [文字][x16]。\n\n>   [x17]:\n\n請見 [文字][x17]。\n\n>   [x18]:   <https://example.com/a b>\n\n請見 [文字][x18]。\n\n>   [x19]:\thttps://example.com/t\n\n請見 [文字][x19]。\n\n>    [x20]: https://example.com/x\n\n請見 [文字][x20]。\n\n>    [x21] : https://example.com/x\n\n請見 [文字][x21]。\n\n>    [x22]:\n\n請見 [文字][x22]。\n\n>    [x23]:   <https://example.com/a b>\n\n請見 [文字][x23]。\n\n>    [x24]:\thttps://example.com/t\n\n請見 [文字][x24]。\n\n>     [x25]: https://example.com/x\n\n請見 [文字][x25]。\n\n>     [x26] : https://example.com/x\n\n請見 [文字][x26]。\n\n>     [x27]:\n\n請見 [文字][x27]。\n\n>     [x28]:   <https://example.com/a b>\n\n請見 [文字][x28]。\n\n>     [x29]:\thttps://example.com/t\n\n請見 [文字][x29]。\n\n>\t[x30]: https://example.com/x\n\n請見 [文字][x30]。\n\n>\t[x31] : https://example.com/x\n\n請見 [文字][x31]。\n\n>\t[x32]:\n\n請見 [文字][x32]。\n\n>\t[x33]:   <https://example.com/a b>\n\n請見 [文字][x33]。\n\n>\t[x34]:\thttps://example.com/t\n\n請見 [文字][x34]。\n\n>\t [x35]: https://example.com/x\n\n請見 [文字][x35]。\n\n>\t [x36] : https://example.com/x\n\n請見 [文字][x36]。\n\n>\t [x37]:\n\n請見 [文字][x37]。\n\n>\t [x38]:   <https://example.com/a b>\n\n請見 [文字][x38]。\n\n>\t [x39]:\thttps://example.com/t\n\n請見 [文字][x39]。\n\n> \t[x40]: https://example.com/x\n\n請見 [文字][x40]。\n\n> \t[x41] : https://example.com/x\n\n請見 [文字][x41]。\n\n> \t[x42]:\n\n請見 [文字][x42]。\n\n> \t[x43]:   <https://example.com/a b>\n\n請見 [文字][x43]。\n\n> \t[x44]:\thttps://example.com/t\n\n請見 [文字][x44]。\n\n   > > [x45]: https://example.com/x\n\n請見 [文字][x45]。\n\n   > > [x46] : https://example.com/x\n\n請見 [文字][x46]。\n\n   > > [x47]:\n\n請見 [文字][x47]。\n\n   > > [x48]:   <https://example.com/a b>\n\n請見 [文字][x48]。\n\n   > > [x49]:\thttps://example.com/t\n\n請見 [文字][x49]。\n\n    > [x50]: https://example.com/x\n\n請見 [文字][x50]。\n\n    > [x51] : https://example.com/x\n\n請見 [文字][x51]。\n\n    > [x52]:\n\n請見 [文字][x52]。\n\n    > [x53]:   <https://example.com/a b>\n\n請見 [文字][x53]。\n\n    > [x54]:\thttps://example.com/t\n\n請見 [文字][x54]。\n\n >  > [x55]: https://example.com/x\n\n請見 [文字][x55]。\n\n > > [x56] : https://example.com/x\n\n請見 [文字][x56]。\n\n > > [x57]:\n\n請見 [文字][x57]。\n\n >  > [x58]:   <https://example.com/a b>\n\n請見 [文字][x58]。\n\n >  > [x59]:\thttps://example.com/t\n\n請見 [文字][x59]。\n\n>>[x60]: https://example.com/x\n\n請見 [文字][x60]。\n\n> > [x61] : https://example.com/x\n\n請見 [文字][x61]。\n\n> > [x62]:\n\n請見 [文字][x62]。\n\n>>[x63]:   <https://example.com/a b>\n\n請見 [文字][x63]。\n\n>>[x64]:\thttps://example.com/t\n\n請見 [文字][x64]。\n\n> >  > [x65]: https://example.com/x\n\n請見 [文字][x65]。\n\n> > > [x66] : https://example.com/x\n\n請見 [文字][x66]。\n\n> > > [x67]:\n\n請見 [文字][x67]。\n\n> >  > [x68]:   <https://example.com/a b>\n\n請見 [文字][x68]。\n\n> >  > [x69]:\thttps://example.com/t\n\n請見 [文字][x69]。\n",
         "changed": true,
         "refused": false,
         "reason": ""
@@ -2451,6 +2307,579 @@
       "fix": {
         "text": "# 引言裡的 reference definition\n\n>[x0]: https://example.com/x\n\n請見 [文字][x0]。\n\n>[x1] : https://example.com/x\n\n請見 [文字][x1]。\n\n>[x2]:\n\n請見 [文字][x2]。\n\n>[x3]:   <https://example.com/a b>\n\n請見 [文字][x3]。\n\n>[x4]:\thttps://example.com/t\n\n請見 [文字][x4]。\n\n> [x5]: https://example.com/x\n\n請見 [文字][x5]。\n\n> [x6] : https://example.com/x\n\n請見 [文字][x6]。\n\n> [x7]:\n\n請見 [文字][x7]。\n\n> [x8]:   <https://example.com/a b>\n\n請見 [文字][x8]。\n\n> [x9]:\thttps://example.com/t\n\n請見 [文字][x9]。\n\n>  [x10]: https://example.com/x\n\n請見 [文字][x10]。\n\n>  [x11] : https://example.com/x\n\n請見 [文字][x11]。\n\n>  [x12]:\n\n請見 [文字][x12]。\n\n>  [x13]:   <https://example.com/a b>\n\n請見 [文字][x13]。\n\n>  [x14]:\thttps://example.com/t\n\n請見 [文字][x14]。\n\n>   [x15]: https://example.com/x\n\n請見 [文字][x15]。\n\n>   [x16] : https://example.com/x\n\n請見 [文字][x16]。\n\n>   [x17]:\n\n請見 [文字][x17]。\n\n>   [x18]:   <https://example.com/a b>\n\n請見 [文字][x18]。\n\n>   [x19]:\thttps://example.com/t\n\n請見 [文字][x19]。\n\n>    [x20]: https://example.com/x\n\n請見 [文字][x20]。\n\n>    [x21] : https://example.com/x\n\n請見 [文字][x21]。\n\n>    [x22]:\n\n請見 [文字][x22]。\n\n>    [x23]:   <https://example.com/a b>\n\n請見 [文字][x23]。\n\n>    [x24]:\thttps://example.com/t\n\n請見 [文字][x24]。\n\n>     [x25]: https://example.com/x\n\n請見 [文字][x25]。\n\n>     [x26] : https://example.com/x\n\n請見 [文字][x26]。\n\n>     [x27]:\n\n請見 [文字][x27]。\n\n>     [x28]:   <https://example.com/a b>\n\n請見 [文字][x28]。\n\n>     [x29]:\thttps://example.com/t\n\n請見 [文字][x29]。\n\n>\t[x30]: https://example.com/x\n\n請見 [文字][x30]。\n\n>\t[x31] : https://example.com/x\n\n請見 [文字][x31]。\n\n>\t[x32]:\n\n請見 [文字][x32]。\n\n>\t[x33]:   <https://example.com/a b>\n\n請見 [文字][x33]。\n\n>\t[x34]:\thttps://example.com/t\n\n請見 [文字][x34]。\n\n>\t [x35]: https://example.com/x\n\n請見 [文字][x35]。\n\n>\t [x36] : https://example.com/x\n\n請見 [文字][x36]。\n\n>\t [x37]:\n\n請見 [文字][x37]。\n\n>\t [x38]:   <https://example.com/a b>\n\n請見 [文字][x38]。\n\n>\t [x39]:\thttps://example.com/t\n\n請見 [文字][x39]。\n\n> \t[x40]: https://example.com/x\n\n請見 [文字][x40]。\n\n> \t[x41] : https://example.com/x\n\n請見 [文字][x41]。\n\n> \t[x42]:\n\n請見 [文字][x42]。\n\n> \t[x43]:   <https://example.com/a b>\n\n請見 [文字][x43]。\n\n> \t[x44]:\thttps://example.com/t\n\n請見 [文字][x44]。\n\n   > > [x45]: https://example.com/x\n\n請見 [文字][x45]。\n\n   > > [x46] : https://example.com/x\n\n請見 [文字][x46]。\n\n   > > [x47]:\n\n請見 [文字][x47]。\n\n   > > [x48]:   <https://example.com/a b>\n\n請見 [文字][x48]。\n\n   > > [x49]:\thttps://example.com/t\n\n請見 [文字][x49]。\n\n    > [x50]: https://example.com/x\n\n請見 [文字][x50]。\n\n    > [x51] : https://example.com/x\n\n請見 [文字][x51]。\n\n    > [x52]:\n\n請見 [文字][x52]。\n\n    > [x53]:   <https://example.com/a b>\n\n請見 [文字][x53]。\n\n    > [x54]:\thttps://example.com/t\n\n請見 [文字][x54]。\n\n >  > [x55]: https://example.com/x\n\n請見 [文字][x55]。\n\n >  > [x56] : https://example.com/x\n\n請見 [文字][x56]。\n\n >  > [x57]:\n\n請見 [文字][x57]。\n\n >  > [x58]:   <https://example.com/a b>\n\n請見 [文字][x58]。\n\n >  > [x59]:\thttps://example.com/t\n\n請見 [文字][x59]。\n\n>>[x60]: https://example.com/x\n\n請見 [文字][x60]。\n\n>>[x61] : https://example.com/x\n\n請見 [文字][x61]。\n\n>>[x62]:\n\n請見 [文字][x62]。\n\n>>[x63]:   <https://example.com/a b>\n\n請見 [文字][x63]。\n\n>>[x64]:\thttps://example.com/t\n\n請見 [文字][x64]。\n\n> >  > [x65]: https://example.com/x\n\n請見 [文字][x65]。\n\n> >  > [x66] : https://example.com/x\n\n請見 [文字][x66]。\n\n> >  > [x67]:\n\n請見 [文字][x67]。\n\n> >  > [x68]:   <https://example.com/a b>\n\n請見 [文字][x68]。\n\n> >  > [x69]:\thttps://example.com/t\n\n請見 [文字][x69]。\n",
         "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "quote-depth-3-ignore",
+      "options": {
+        "maxQuoteDepth": 3,
+        "onLimit": "ignore"
+      },
+      "diagnose": [
+        {
+          "rule": "MDX020",
+          "name": "blockquote-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 7,
+          "column": 1,
+          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
+        },
+        {
+          "rule": "MDX070",
+          "name": "bare-url",
+          "severity": "info",
+          "fixable": false,
+          "line": 7,
+          "column": 10,
+          "message": "Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text."
+        },
+        {
+          "rule": "MDX073",
+          "name": "reference-missing-definition",
+          "severity": "warning",
+          "fixable": false,
+          "line": 9,
+          "column": 4,
+          "message": "Reference link label \"x1\" has no matching definition."
+        },
+        {
+          "rule": "MDX020",
+          "name": "blockquote-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 11,
+          "column": 1,
+          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
+        },
+        {
+          "rule": "MDX073",
+          "name": "reference-missing-definition",
+          "severity": "warning",
+          "fixable": false,
+          "line": 13,
+          "column": 4,
+          "message": "Reference link label \"x2\" has no matching definition."
+        },
+        {
+          "rule": "MDX070",
+          "name": "bare-url",
+          "severity": "info",
+          "fixable": false,
+          "line": 27,
+          "column": 10,
+          "message": "Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text."
+        },
+        {
+          "rule": "MDX073",
+          "name": "reference-missing-definition",
+          "severity": "warning",
+          "fixable": false,
+          "line": 29,
+          "column": 4,
+          "message": "Reference link label \"x6\" has no matching definition."
+        },
+        {
+          "rule": "MDX073",
+          "name": "reference-missing-definition",
+          "severity": "warning",
+          "fixable": false,
+          "line": 33,
+          "column": 4,
+          "message": "Reference link label \"x7\" has no matching definition."
+        },
+        {
+          "rule": "MDX020",
+          "name": "blockquote-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 47,
+          "column": 1,
+          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
+        },
+        {
+          "rule": "MDX070",
+          "name": "bare-url",
+          "severity": "info",
+          "fixable": false,
+          "line": 47,
+          "column": 11,
+          "message": "Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text."
+        },
+        {
+          "rule": "MDX073",
+          "name": "reference-missing-definition",
+          "severity": "warning",
+          "fixable": false,
+          "line": 49,
+          "column": 4,
+          "message": "Reference link label \"x11\" has no matching definition."
+        },
+        {
+          "rule": "MDX020",
+          "name": "blockquote-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 51,
+          "column": 1,
+          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
+        },
+        {
+          "rule": "MDX073",
+          "name": "reference-missing-definition",
+          "severity": "warning",
+          "fixable": false,
+          "line": 53,
+          "column": 4,
+          "message": "Reference link label \"x12\" has no matching definition."
+        },
+        {
+          "rule": "MDX070",
+          "name": "bare-url",
+          "severity": "info",
+          "fixable": false,
+          "line": 67,
+          "column": 13,
+          "message": "Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text."
+        },
+        {
+          "rule": "MDX073",
+          "name": "reference-missing-definition",
+          "severity": "warning",
+          "fixable": false,
+          "line": 69,
+          "column": 4,
+          "message": "Reference link label \"x16\" has no matching definition."
+        },
+        {
+          "rule": "MDX073",
+          "name": "reference-missing-definition",
+          "severity": "warning",
+          "fixable": false,
+          "line": 73,
+          "column": 4,
+          "message": "Reference link label \"x17\" has no matching definition."
+        },
+        {
+          "rule": "MDX070",
+          "name": "bare-url",
+          "severity": "info",
+          "fixable": false,
+          "line": 87,
+          "column": 14,
+          "message": "Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text."
+        },
+        {
+          "rule": "MDX073",
+          "name": "reference-missing-definition",
+          "severity": "warning",
+          "fixable": false,
+          "line": 89,
+          "column": 4,
+          "message": "Reference link label \"x21\" has no matching definition."
+        },
+        {
+          "rule": "MDX073",
+          "name": "reference-missing-definition",
+          "severity": "warning",
+          "fixable": false,
+          "line": 93,
+          "column": 4,
+          "message": "Reference link label \"x22\" has no matching definition."
+        },
+        {
+          "rule": "MDX073",
+          "name": "reference-missing-definition",
+          "severity": "warning",
+          "fixable": false,
+          "line": 105,
+          "column": 4,
+          "message": "Reference link label \"x25\" has no matching definition."
+        },
+        {
+          "rule": "MDX073",
+          "name": "reference-missing-definition",
+          "severity": "warning",
+          "fixable": false,
+          "line": 109,
+          "column": 4,
+          "message": "Reference link label \"x26\" has no matching definition."
+        },
+        {
+          "rule": "MDX073",
+          "name": "reference-missing-definition",
+          "severity": "warning",
+          "fixable": false,
+          "line": 113,
+          "column": 4,
+          "message": "Reference link label \"x27\" has no matching definition."
+        },
+        {
+          "rule": "MDX073",
+          "name": "reference-missing-definition",
+          "severity": "warning",
+          "fixable": false,
+          "line": 117,
+          "column": 4,
+          "message": "Reference link label \"x28\" has no matching definition."
+        },
+        {
+          "rule": "MDX073",
+          "name": "reference-missing-definition",
+          "severity": "warning",
+          "fixable": false,
+          "line": 121,
+          "column": 4,
+          "message": "Reference link label \"x29\" has no matching definition."
+        },
+        {
+          "rule": "MDX073",
+          "name": "reference-missing-definition",
+          "severity": "warning",
+          "fixable": false,
+          "line": 125,
+          "column": 4,
+          "message": "Reference link label \"x30\" has no matching definition."
+        },
+        {
+          "rule": "MDX073",
+          "name": "reference-missing-definition",
+          "severity": "warning",
+          "fixable": false,
+          "line": 129,
+          "column": 4,
+          "message": "Reference link label \"x31\" has no matching definition."
+        },
+        {
+          "rule": "MDX073",
+          "name": "reference-missing-definition",
+          "severity": "warning",
+          "fixable": false,
+          "line": 133,
+          "column": 4,
+          "message": "Reference link label \"x32\" has no matching definition."
+        },
+        {
+          "rule": "MDX073",
+          "name": "reference-missing-definition",
+          "severity": "warning",
+          "fixable": false,
+          "line": 137,
+          "column": 4,
+          "message": "Reference link label \"x33\" has no matching definition."
+        },
+        {
+          "rule": "MDX073",
+          "name": "reference-missing-definition",
+          "severity": "warning",
+          "fixable": false,
+          "line": 141,
+          "column": 4,
+          "message": "Reference link label \"x34\" has no matching definition."
+        },
+        {
+          "rule": "MDX073",
+          "name": "reference-missing-definition",
+          "severity": "warning",
+          "fixable": false,
+          "line": 145,
+          "column": 4,
+          "message": "Reference link label \"x35\" has no matching definition."
+        },
+        {
+          "rule": "MDX073",
+          "name": "reference-missing-definition",
+          "severity": "warning",
+          "fixable": false,
+          "line": 149,
+          "column": 4,
+          "message": "Reference link label \"x36\" has no matching definition."
+        },
+        {
+          "rule": "MDX073",
+          "name": "reference-missing-definition",
+          "severity": "warning",
+          "fixable": false,
+          "line": 153,
+          "column": 4,
+          "message": "Reference link label \"x37\" has no matching definition."
+        },
+        {
+          "rule": "MDX073",
+          "name": "reference-missing-definition",
+          "severity": "warning",
+          "fixable": false,
+          "line": 157,
+          "column": 4,
+          "message": "Reference link label \"x38\" has no matching definition."
+        },
+        {
+          "rule": "MDX073",
+          "name": "reference-missing-definition",
+          "severity": "warning",
+          "fixable": false,
+          "line": 161,
+          "column": 4,
+          "message": "Reference link label \"x39\" has no matching definition."
+        },
+        {
+          "rule": "MDX073",
+          "name": "reference-missing-definition",
+          "severity": "warning",
+          "fixable": false,
+          "line": 165,
+          "column": 4,
+          "message": "Reference link label \"x40\" has no matching definition."
+        },
+        {
+          "rule": "MDX073",
+          "name": "reference-missing-definition",
+          "severity": "warning",
+          "fixable": false,
+          "line": 169,
+          "column": 4,
+          "message": "Reference link label \"x41\" has no matching definition."
+        },
+        {
+          "rule": "MDX073",
+          "name": "reference-missing-definition",
+          "severity": "warning",
+          "fixable": false,
+          "line": 173,
+          "column": 4,
+          "message": "Reference link label \"x42\" has no matching definition."
+        },
+        {
+          "rule": "MDX073",
+          "name": "reference-missing-definition",
+          "severity": "warning",
+          "fixable": false,
+          "line": 177,
+          "column": 4,
+          "message": "Reference link label \"x43\" has no matching definition."
+        },
+        {
+          "rule": "MDX073",
+          "name": "reference-missing-definition",
+          "severity": "warning",
+          "fixable": false,
+          "line": 181,
+          "column": 4,
+          "message": "Reference link label \"x44\" has no matching definition."
+        },
+        {
+          "rule": "MDX070",
+          "name": "bare-url",
+          "severity": "info",
+          "fixable": false,
+          "line": 187,
+          "column": 16,
+          "message": "Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text."
+        },
+        {
+          "rule": "MDX073",
+          "name": "reference-missing-definition",
+          "severity": "warning",
+          "fixable": false,
+          "line": 189,
+          "column": 4,
+          "message": "Reference link label \"x46\" has no matching definition."
+        },
+        {
+          "rule": "MDX073",
+          "name": "reference-missing-definition",
+          "severity": "warning",
+          "fixable": false,
+          "line": 193,
+          "column": 4,
+          "message": "Reference link label \"x47\" has no matching definition."
+        },
+        {
+          "rule": "MDX073",
+          "name": "reference-missing-definition",
+          "severity": "warning",
+          "fixable": false,
+          "line": 205,
+          "column": 4,
+          "message": "Reference link label \"x50\" has no matching definition."
+        },
+        {
+          "rule": "MDX073",
+          "name": "reference-missing-definition",
+          "severity": "warning",
+          "fixable": false,
+          "line": 209,
+          "column": 4,
+          "message": "Reference link label \"x51\" has no matching definition."
+        },
+        {
+          "rule": "MDX073",
+          "name": "reference-missing-definition",
+          "severity": "warning",
+          "fixable": false,
+          "line": 213,
+          "column": 4,
+          "message": "Reference link label \"x52\" has no matching definition."
+        },
+        {
+          "rule": "MDX073",
+          "name": "reference-missing-definition",
+          "severity": "warning",
+          "fixable": false,
+          "line": 217,
+          "column": 4,
+          "message": "Reference link label \"x53\" has no matching definition."
+        },
+        {
+          "rule": "MDX073",
+          "name": "reference-missing-definition",
+          "severity": "warning",
+          "fixable": false,
+          "line": 221,
+          "column": 4,
+          "message": "Reference link label \"x54\" has no matching definition."
+        },
+        {
+          "rule": "MDX020",
+          "name": "blockquote-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 227,
+          "column": 2,
+          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
+        },
+        {
+          "rule": "MDX070",
+          "name": "bare-url",
+          "severity": "info",
+          "fixable": false,
+          "line": 227,
+          "column": 14,
+          "message": "Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text."
+        },
+        {
+          "rule": "MDX073",
+          "name": "reference-missing-definition",
+          "severity": "warning",
+          "fixable": false,
+          "line": 229,
+          "column": 4,
+          "message": "Reference link label \"x56\" has no matching definition."
+        },
+        {
+          "rule": "MDX020",
+          "name": "blockquote-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 231,
+          "column": 2,
+          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
+        },
+        {
+          "rule": "MDX073",
+          "name": "reference-missing-definition",
+          "severity": "warning",
+          "fixable": false,
+          "line": 233,
+          "column": 4,
+          "message": "Reference link label \"x57\" has no matching definition."
+        },
+        {
+          "rule": "MDX020",
+          "name": "blockquote-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 247,
+          "column": 1,
+          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
+        },
+        {
+          "rule": "MDX070",
+          "name": "bare-url",
+          "severity": "info",
+          "fixable": false,
+          "line": 247,
+          "column": 13,
+          "message": "Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text."
+        },
+        {
+          "rule": "MDX073",
+          "name": "reference-missing-definition",
+          "severity": "warning",
+          "fixable": false,
+          "line": 249,
+          "column": 4,
+          "message": "Reference link label \"x61\" has no matching definition."
+        },
+        {
+          "rule": "MDX020",
+          "name": "blockquote-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 251,
+          "column": 1,
+          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
+        },
+        {
+          "rule": "MDX073",
+          "name": "reference-missing-definition",
+          "severity": "warning",
+          "fixable": false,
+          "line": 253,
+          "column": 4,
+          "message": "Reference link label \"x62\" has no matching definition."
+        },
+        {
+          "rule": "MDX020",
+          "name": "blockquote-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 267,
+          "column": 1,
+          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
+        },
+        {
+          "rule": "MDX070",
+          "name": "bare-url",
+          "severity": "info",
+          "fixable": false,
+          "line": 267,
+          "column": 15,
+          "message": "Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text."
+        },
+        {
+          "rule": "MDX073",
+          "name": "reference-missing-definition",
+          "severity": "warning",
+          "fixable": false,
+          "line": 269,
+          "column": 4,
+          "message": "Reference link label \"x66\" has no matching definition."
+        },
+        {
+          "rule": "MDX020",
+          "name": "blockquote-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 271,
+          "column": 1,
+          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
+        },
+        {
+          "rule": "MDX073",
+          "name": "reference-missing-definition",
+          "severity": "warning",
+          "fixable": false,
+          "line": 273,
+          "column": 4,
+          "message": "Reference link label \"x67\" has no matching definition."
+        }
+      ],
+      "fix": {
+        "text": "# 引言裡的 reference definition\n\n>[x0]: https://example.com/x\n\n請見 [文字][x0]。\n\n> [x1] : https://example.com/x\n\n請見 [文字][x1]。\n\n> [x2]:\n\n請見 [文字][x2]。\n\n>[x3]:   <https://example.com/a b>\n\n請見 [文字][x3]。\n\n>[x4]:\thttps://example.com/t\n\n請見 [文字][x4]。\n\n> [x5]: https://example.com/x\n\n請見 [文字][x5]。\n\n> [x6] : https://example.com/x\n\n請見 [文字][x6]。\n\n> [x7]:\n\n請見 [文字][x7]。\n\n> [x8]:   <https://example.com/a b>\n\n請見 [文字][x8]。\n\n> [x9]:\thttps://example.com/t\n\n請見 [文字][x9]。\n\n>  [x10]: https://example.com/x\n\n請見 [文字][x10]。\n\n> [x11] : https://example.com/x\n\n請見 [文字][x11]。\n\n> [x12]:\n\n請見 [文字][x12]。\n\n>  [x13]:   <https://example.com/a b>\n\n請見 [文字][x13]。\n\n>  [x14]:\thttps://example.com/t\n\n請見 [文字][x14]。\n\n>   [x15]: https://example.com/x\n\n請見 [文字][x15]。\n\n>   [x16] : https://example.com/x\n\n請見 [文字][x16]。\n\n>   [x17]:\n\n請見 [文字][x17]。\n\n>   [x18]:   <https://example.com/a b>\n\n請見 [文字][x18]。\n\n>   [x19]:\thttps://example.com/t\n\n請見 [文字][x19]。\n\n>    [x20]: https://example.com/x\n\n請見 [文字][x20]。\n\n>    [x21] : https://example.com/x\n\n請見 [文字][x21]。\n\n>    [x22]:\n\n請見 [文字][x22]。\n\n>    [x23]:   <https://example.com/a b>\n\n請見 [文字][x23]。\n\n>    [x24]:\thttps://example.com/t\n\n請見 [文字][x24]。\n\n>     [x25]: https://example.com/x\n\n請見 [文字][x25]。\n\n>     [x26] : https://example.com/x\n\n請見 [文字][x26]。\n\n>     [x27]:\n\n請見 [文字][x27]。\n\n>     [x28]:   <https://example.com/a b>\n\n請見 [文字][x28]。\n\n>     [x29]:\thttps://example.com/t\n\n請見 [文字][x29]。\n\n>\t[x30]: https://example.com/x\n\n請見 [文字][x30]。\n\n>\t[x31] : https://example.com/x\n\n請見 [文字][x31]。\n\n>\t[x32]:\n\n請見 [文字][x32]。\n\n>\t[x33]:   <https://example.com/a b>\n\n請見 [文字][x33]。\n\n>\t[x34]:\thttps://example.com/t\n\n請見 [文字][x34]。\n\n>\t [x35]: https://example.com/x\n\n請見 [文字][x35]。\n\n>\t [x36] : https://example.com/x\n\n請見 [文字][x36]。\n\n>\t [x37]:\n\n請見 [文字][x37]。\n\n>\t [x38]:   <https://example.com/a b>\n\n請見 [文字][x38]。\n\n>\t [x39]:\thttps://example.com/t\n\n請見 [文字][x39]。\n\n> \t[x40]: https://example.com/x\n\n請見 [文字][x40]。\n\n> \t[x41] : https://example.com/x\n\n請見 [文字][x41]。\n\n> \t[x42]:\n\n請見 [文字][x42]。\n\n> \t[x43]:   <https://example.com/a b>\n\n請見 [文字][x43]。\n\n> \t[x44]:\thttps://example.com/t\n\n請見 [文字][x44]。\n\n   > > [x45]: https://example.com/x\n\n請見 [文字][x45]。\n\n   > > [x46] : https://example.com/x\n\n請見 [文字][x46]。\n\n   > > [x47]:\n\n請見 [文字][x47]。\n\n   > > [x48]:   <https://example.com/a b>\n\n請見 [文字][x48]。\n\n   > > [x49]:\thttps://example.com/t\n\n請見 [文字][x49]。\n\n    > [x50]: https://example.com/x\n\n請見 [文字][x50]。\n\n    > [x51] : https://example.com/x\n\n請見 [文字][x51]。\n\n    > [x52]:\n\n請見 [文字][x52]。\n\n    > [x53]:   <https://example.com/a b>\n\n請見 [文字][x53]。\n\n    > [x54]:\thttps://example.com/t\n\n請見 [文字][x54]。\n\n >  > [x55]: https://example.com/x\n\n請見 [文字][x55]。\n\n > > [x56] : https://example.com/x\n\n請見 [文字][x56]。\n\n > > [x57]:\n\n請見 [文字][x57]。\n\n >  > [x58]:   <https://example.com/a b>\n\n請見 [文字][x58]。\n\n >  > [x59]:\thttps://example.com/t\n\n請見 [文字][x59]。\n\n>>[x60]: https://example.com/x\n\n請見 [文字][x60]。\n\n> > [x61] : https://example.com/x\n\n請見 [文字][x61]。\n\n> > [x62]:\n\n請見 [文字][x62]。\n\n>>[x63]:   <https://example.com/a b>\n\n請見 [文字][x63]。\n\n>>[x64]:\thttps://example.com/t\n\n請見 [文字][x64]。\n\n> >  > [x65]: https://example.com/x\n\n請見 [文字][x65]。\n\n> > > [x66] : https://example.com/x\n\n請見 [文字][x66]。\n\n> > > [x67]:\n\n請見 [文字][x67]。\n\n> >  > [x68]:   <https://example.com/a b>\n\n請見 [文字][x68]。\n\n> >  > [x69]:\thttps://example.com/t\n\n請見 [文字][x69]。\n",
+        "changed": true,
         "refused": false,
         "reason": ""
       }

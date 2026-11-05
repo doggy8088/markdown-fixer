@@ -1,29 +1,11 @@
 {
   "source": "edge/nested-containers.md",
-  "referenceVersion": "1.0.0",
+  "referenceVersion": "1.1.0",
   "cases": [
     {
       "name": "default",
       "options": {},
       "diagnose": [
-        {
-          "rule": "MDX020",
-          "name": "blockquote-space",
-          "severity": "warning",
-          "fixable": true,
-          "line": 4,
-          "column": 1,
-          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
-        },
-        {
-          "rule": "MDX020",
-          "name": "blockquote-space",
-          "severity": "warning",
-          "fixable": true,
-          "line": 5,
-          "column": 1,
-          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
-        },
         {
           "rule": "MDX020",
           "name": "blockquote-space",
@@ -35,7 +17,7 @@
         }
       ],
       "fix": {
-        "text": "# 巢狀容器\n\n> - 引言裡的清單\n> > 再一層引言\n> > #沒空白\n> 1.項目\n\n- > 清單裡的引言\n  > ```js\n  > code\n  > ```\n\n> > > 三層\n> > > > 四層\n",
+        "text": "# 巢狀容器\n\n> - 引言裡的清單\n>   > 再一層引言\n>   >  #沒空白\n> 1.項目\n\n- > 清單裡的引言\n  > ```js\n  > code\n  > ```\n\n> > > 三層\n> > > > 四層\n",
         "changed": true,
         "refused": false,
         "reason": ""
@@ -54,31 +36,13 @@
           "name": "blockquote-space",
           "severity": "warning",
           "fixable": true,
-          "line": 4,
-          "column": 1,
-          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
-        },
-        {
-          "rule": "MDX020",
-          "name": "blockquote-space",
-          "severity": "warning",
-          "fixable": true,
-          "line": 5,
-          "column": 1,
-          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
-        },
-        {
-          "rule": "MDX020",
-          "name": "blockquote-space",
-          "severity": "warning",
-          "fixable": true,
           "line": 14,
           "column": 1,
           "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
         }
       ],
       "fix": {
-        "text": "# 巢狀容器\n\n> - 引言裡的清單\n> > 再一層引言\n> > #沒空白\n> 1.項目\n\n- > 清單裡的引言\n  > ```js\n  > code\n  > ```\n\n> > > 三層\n> > > > 四層\n",
+        "text": "# 巢狀容器\n\n> - 引言裡的清單\n>   > 再一層引言\n>   >  #沒空白\n> 1.項目\n\n- > 清單裡的引言\n  > ```js\n  > code\n  > ```\n\n> > > 三層\n> > > > 四層\n",
         "changed": true,
         "refused": false,
         "reason": ""
@@ -95,31 +59,13 @@
           "name": "blockquote-space",
           "severity": "warning",
           "fixable": true,
-          "line": 4,
-          "column": 1,
-          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
-        },
-        {
-          "rule": "MDX020",
-          "name": "blockquote-space",
-          "severity": "warning",
-          "fixable": true,
-          "line": 5,
-          "column": 1,
-          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
-        },
-        {
-          "rule": "MDX020",
-          "name": "blockquote-space",
-          "severity": "warning",
-          "fixable": true,
           "line": 14,
           "column": 1,
           "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
         }
       ],
       "fix": {
-        "text": "# 巢狀容器\n\n> - 引言裡的清單\n> > 再一層引言\n> > #沒空白\n> 1.項目\n\n- > 清單裡的引言\n  > ```js\n  > code\n  > ```\n\n> > > 三層\n> > > > 四層\n",
+        "text": "# 巢狀容器\n\n> - 引言裡的清單\n>   > 再一層引言\n>   >  #沒空白\n> 1.項目\n\n- > 清單裡的引言\n  > ```js\n  > code\n  > ```\n\n> > > 三層\n> > > > 四層\n",
         "changed": true,
         "refused": false,
         "reason": ""
@@ -139,31 +85,13 @@
           "name": "blockquote-space",
           "severity": "warning",
           "fixable": true,
-          "line": 4,
-          "column": 1,
-          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
-        },
-        {
-          "rule": "MDX020",
-          "name": "blockquote-space",
-          "severity": "warning",
-          "fixable": true,
-          "line": 5,
-          "column": 1,
-          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
-        },
-        {
-          "rule": "MDX020",
-          "name": "blockquote-space",
-          "severity": "warning",
-          "fixable": true,
           "line": 14,
           "column": 1,
           "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
         }
       ],
       "fix": {
-        "text": "# 巢狀容器\n\n> - 引言裡的清單\n> > 再一層引言\n> > #沒空白\n> 1.項目\n\n- > 清單裡的引言\n  > ```js\n  > code\n  > ```\n\n> > > 三層\n> > > > 四層\n",
+        "text": "# 巢狀容器\n\n> - 引言裡的清單\n>   > 再一層引言\n>   >  #沒空白\n> 1.項目\n\n- > 清單裡的引言\n  > ```js\n  > code\n  > ```\n\n> > > 三層\n> > > > 四層\n",
         "changed": true,
         "refused": false,
         "reason": ""
@@ -178,6 +106,20 @@
           "MDX012",
           "MDX013"
         ]
+      },
+      "diagnose": [],
+      "fix": {
+        "text": "# 巢狀容器\n\n> - 引言裡的清單\n>   > 再一層引言\n>   >  #沒空白\n> 1.項目\n\n- > 清單裡的引言\n  > ```js\n  > code\n  > ```\n\n> > > 三層\n>>>>四層\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "quote-depth-3-ignore",
+      "options": {
+        "maxQuoteDepth": 3,
+        "onLimit": "ignore"
       },
       "diagnose": [],
       "fix": {

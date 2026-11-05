@@ -1,0 +1,189 @@
+{
+  "source": "rules/MDX086/trigger.md",
+  "referenceVersion": "1.1.0",
+  "cases": [
+    {
+      "name": "default",
+      "options": {},
+      "diagnose": [
+        {
+          "rule": "MDX086",
+          "name": "resource-limit",
+          "severity": "error",
+          "fixable": false,
+          "line": 3,
+          "column": 1,
+          "message": "Blockquote nesting depth 33 exceeds the limit of 32. Reduce the nesting, raise --max-quote-depth (0 = no limit), or use --on-limit ignore to leave such lines untouched."
+        },
+        {
+          "rule": "MDX010",
+          "name": "atx-missing-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 5,
+          "column": 3,
+          "message": "Add a space after the heading marker: \"## \" rather than \"##\"."
+        }
+      ],
+      "fix": {
+        "text": "# 深層引言\n\n> > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > 三十三層的引言超過預設上限。\n\n##標題缺空白\n",
+        "changed": false,
+        "refused": true,
+        "reason": "Blockquote nesting depth 33 exceeds the limit of 32. Reduce the nesting, raise --max-quote-depth (0 = no limit), or use --on-limit ignore to leave such lines untouched."
+      }
+    },
+    {
+      "name": "snippet",
+      "options": {
+        "ignoreRules": [
+          "MDX003"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX086",
+          "name": "resource-limit",
+          "severity": "error",
+          "fixable": false,
+          "line": 3,
+          "column": 1,
+          "message": "Blockquote nesting depth 33 exceeds the limit of 32. Reduce the nesting, raise --max-quote-depth (0 = no limit), or use --on-limit ignore to leave such lines untouched."
+        },
+        {
+          "rule": "MDX010",
+          "name": "atx-missing-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 5,
+          "column": 3,
+          "message": "Add a space after the heading marker: \"## \" rather than \"##\"."
+        }
+      ],
+      "fix": {
+        "text": "# 深層引言\n\n> > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > 三十三層的引言超過預設上限。\n\n##標題缺空白\n",
+        "changed": false,
+        "refused": true,
+        "reason": "Blockquote nesting depth 33 exceeds the limit of 32. Reduce the nesting, raise --max-quote-depth (0 = no limit), or use --on-limit ignore to leave such lines untouched."
+      }
+    },
+    {
+      "name": "line-length-80",
+      "options": {
+        "maxLineLength": 80
+      },
+      "diagnose": [
+        {
+          "rule": "MDX086",
+          "name": "resource-limit",
+          "severity": "error",
+          "fixable": false,
+          "line": 3,
+          "column": 1,
+          "message": "Blockquote nesting depth 33 exceeds the limit of 32. Reduce the nesting, raise --max-quote-depth (0 = no limit), or use --on-limit ignore to leave such lines untouched."
+        },
+        {
+          "rule": "MDX010",
+          "name": "atx-missing-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 5,
+          "column": 3,
+          "message": "Add a space after the heading marker: \"## \" rather than \"##\"."
+        }
+      ],
+      "fix": {
+        "text": "# 深層引言\n\n> > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > 三十三層的引言超過預設上限。\n\n##標題缺空白\n",
+        "changed": false,
+        "refused": true,
+        "reason": "Blockquote nesting depth 33 exceeds the limit of 32. Reduce the nesting, raise --max-quote-depth (0 = no limit), or use --on-limit ignore to leave such lines untouched."
+      }
+    },
+    {
+      "name": "keep-encoding",
+      "options": {
+        "ignoreRules": [
+          "MDX001",
+          "MDX002"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX086",
+          "name": "resource-limit",
+          "severity": "error",
+          "fixable": false,
+          "line": 3,
+          "column": 1,
+          "message": "Blockquote nesting depth 33 exceeds the limit of 32. Reduce the nesting, raise --max-quote-depth (0 = no limit), or use --on-limit ignore to leave such lines untouched."
+        },
+        {
+          "rule": "MDX010",
+          "name": "atx-missing-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 5,
+          "column": 3,
+          "message": "Add a space after the heading marker: \"## \" rather than \"##\"."
+        }
+      ],
+      "fix": {
+        "text": "# 深層引言\n\n> > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > 三十三層的引言超過預設上限。\n\n##標題缺空白\n",
+        "changed": false,
+        "refused": true,
+        "reason": "Blockquote nesting depth 33 exceeds the limit of 32. Reduce the nesting, raise --max-quote-depth (0 = no limit), or use --on-limit ignore to leave such lines untouched."
+      }
+    },
+    {
+      "name": "headings-only",
+      "options": {
+        "rules": [
+          "MDX010",
+          "MDX011",
+          "MDX012",
+          "MDX013"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX010",
+          "name": "atx-missing-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 5,
+          "column": 3,
+          "message": "Add a space after the heading marker: \"## \" rather than \"##\"."
+        }
+      ],
+      "fix": {
+        "text": "# 深層引言\n\n> > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > 三十三層的引言超過預設上限。\n\n##標題缺空白\n",
+        "changed": false,
+        "refused": true,
+        "reason": "Blockquote nesting depth 33 exceeds the limit of 32. Reduce the nesting, raise --max-quote-depth (0 = no limit), or use --on-limit ignore to leave such lines untouched."
+      }
+    },
+    {
+      "name": "quote-depth-3-ignore",
+      "options": {
+        "maxQuoteDepth": 3,
+        "onLimit": "ignore"
+      },
+      "diagnose": [
+        {
+          "rule": "MDX010",
+          "name": "atx-missing-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 5,
+          "column": 3,
+          "message": "Add a space after the heading marker: \"## \" rather than \"##\"."
+        }
+      ],
+      "fix": {
+        "text": "# 深層引言\n\n> > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > > 三十三層的引言超過預設上限。\n\n## 標題缺空白\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    }
+  ]
+}

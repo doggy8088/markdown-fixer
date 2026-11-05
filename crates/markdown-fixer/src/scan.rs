@@ -2,16 +2,20 @@
 //!
 //! 所有行都以 UTF-16（[`JsString`]）保存，索引與 JS 相同。
 
-use crate::Problem;
 use crate::jsregex::{Regex, re};
 use crate::jsstr::{self, JsString, at, is_blank as js_is_blank, slice_from, trim};
 use crate::rules::{Overrides, make_problem};
+use crate::{DEFAULT_MAX_QUOTE_DEPTH, LimitPolicy, Options, Problem};
 
 const BACKTICK: u16 = b'`' as u16;
 const GT: u16 = b'>' as u16;
 const SPACE: u16 = b' ' as u16;
 const TAB: u16 = b'\t' as u16;
 const BOM: u16 = 0xFEFF;
+const OPEN_BRACKET: u16 = b'[' as u16;
+const CLOSE_BRACKET: u16 = b']' as u16;
+const COLON: u16 = b':' as u16;
+const LF: u16 = b'\n' as u16;
 
 /// JS `RAW_HTML_TAGS`。
 pub(crate) const RAW_HTML_TAGS: &str =
@@ -44,6 +48,9 @@ pub(crate) struct LineInfo {
     pub(crate) math_block: bool,
     pub(crate) math_open: bool,
     pub(crate) math_close: bool,
+    /// 引言深度超過 [`Limits::max_quote_depth`] 的不透明行（JS `opaque`）：不是任何區塊的開頭、
+    /// 不是 definition、不修改也不診斷。
+    pub(crate) opaque: bool,
 }
 
 /// `scanDocument` 的結果。
@@ -204,7 +211,7 @@ struct HtmlStart {
 
 fn raw_html_open_re() -> &'static Regex {
     static RE: std::sync::OnceLock<Regex> = std::sync::OnceLock::new();
-    RE.get_or_init(|| Regex::constant(&format!(r"^ {{0,3}}<({RAW_HTML_TAGS})(?=[\s>])"), "i"))
+    RE.get_or_init(|| Regex::constant(&format!(r"^ {{0,3}}<({RAW_HTML_TAGS})(?=[\s>]|$)"), "i"))
 }
 
 fn html_block_open_re() -> &'static Regex {
@@ -425,7 +432,71 @@ const MSG_MDX053: &str =
     "Invalid fenced-code opener: a backtick fence info string cannot contain backticks.";
 
 /// JS `scanDocument(text)`；`text` 應先經過 [`normalize_for_analysis`]。
+/// 一次 `diagnose`／`fix_document` 共用的資源上限（JS `createLimits`）。
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub(crate) struct Limits {
+    /// 引言巢狀深度上限；0 表示不限制。
+    pub(crate) max_quote_depth: usize,
+    pub(crate) on_limit: LimitPolicy,
+}
+
+impl Default for Limits {
+    fn default() -> Self {
+        Limits {
+            max_quote_depth: DEFAULT_MAX_QUOTE_DEPTH,
+            on_limit: LimitPolicy::Error,
+        }
+    }
+}
+
+impl Limits {
+    pub(crate) fn new(options: &Options) -> Limits {
+        Limits {
+            max_quote_depth: options.max_quote_depth,
+            on_limit: options.on_limit,
+        }
+    }
+}
+
+/// JS `scanQuoteMarkers`：以 `/^(?: {0,3}>[ \t]?)*/` 貪婪的方式數引言標記。
+///
+/// 每一輪是至多 3 個空格、`>`、再一個可有可無的空格或 tab。貪婪吃法能走到任何回溯路徑
+/// 走得到的每一個 `>`，所以回傳的深度是最大值、結束位置是最遠的位置。線性時間。
+pub(crate) fn scan_quote_markers(line: &[u16]) -> (usize, usize) {
+    let mut pos = 0;
+    let mut depth = 0;
+    loop {
+        let mut p = pos;
+        while p - pos < 3 && line.get(p) == Some(&SPACE) {
+            p += 1;
+        }
+        if line.get(p) != Some(&GT) {
+            break;
+        }
+        p += 1;
+        if matches!(line.get(p), Some(&c) if c == SPACE || c == TAB) {
+            p += 1;
+        }
+        pos = p;
+        depth += 1;
+    }
+    (depth, pos)
+}
+
+fn resource_limit_message(depth: usize, limit: usize) -> String {
+    format!(
+        "Blockquote nesting depth {depth} exceeds the limit of {limit}. Reduce the nesting, raise --max-quote-depth (0 = no limit), or use --on-limit ignore to leave such lines untouched."
+    )
+}
+
+/// 以預設資源上限掃描（只給測試用；函式庫內一律用 [`scan_document_with`] 傳入選項的上限）。
+#[cfg(test)]
 pub(crate) fn scan_document(text: &[u16]) -> Scan {
+    scan_document_with(text, Limits::default())
+}
+
+/// JS `scanDocument(text, limits)`。
+pub(crate) fn scan_document_with(text: &[u16], limits: Limits) -> Scan {
     let lines = jsstr::split_lines(text);
     let mut info: Vec<LineInfo> = lines
         .iter()
@@ -564,6 +635,25 @@ pub(crate) fn scan_document(text: &[u16]) -> Scan {
                 continue;
             }
             in_indented = false;
+        }
+
+        // 超過 maxQuoteDepth 的行是不透明的：不是區塊開頭也不是 definition，不修改也不診斷。
+        // `error` 模式另外回報 MDX086，讓 fix_document 拒絕修正。
+        if limits.max_quote_depth > 0 {
+            let (depth, _) = scan_quote_markers(line);
+            if depth > limits.max_quote_depth {
+                info[i].opaque = true;
+                if limits.on_limit != LimitPolicy::Ignore {
+                    issues.push(make_problem(
+                        "MDX086",
+                        i + 1,
+                        1,
+                        resource_limit_message(depth, limits.max_quote_depth),
+                        Overrides::NONE,
+                    ));
+                }
+                continue;
+            }
         }
 
         let can_start_indented_code = if i == 0 {
@@ -722,20 +812,48 @@ pub(crate) fn scan_document(text: &[u16]) -> Scan {
     }
 }
 
-/// 參考定義行的樣式（`scanDocument` 與 `computeReferenceStructure` 共用）。
+/// v1.0.0 的參考定義行樣式（`scanDocument` 與 `computeReferenceStructure` 共用）。
 ///
-/// `(?: {0,3}>[ \t]?)*` 與後面的 ` {0,3}` 互相重疊，在 `> > > … q` 這種輸入上
-/// 純回溯是指數級（oracle 本身就會卡住）；`jsregex` 超過步數預算後會改用
-/// 記憶化回溯，保證 `O(指令數 × 長度)` 而結果不變。請透過 [`match_definition`] 使用。
+/// `(?: {0,3}>[ \t]?)*` 與後面的 ` {0,3}` 互相重疊，在 `> > > … q` 這種輸入上純回溯是
+/// 指數級。v1.1.0 改用線性的 [`match_definition`]；這個樣式只留給等價測試。
+#[cfg(test)]
 pub(crate) fn definition_re() -> &'static Regex {
     re!(r"^(?: {0,3}>[ \t]?)* {0,3}\[([^\]\n]+)\]:[ \t]*(?:<[^>\n]*>|\S+)")
 }
 
-/// 參考定義行（JS `/^(?: {0,3}>[ \t]?)* {0,3}\[([^\]\n]+)\]:[ \t]*(?:<[^>\n]*>|\S+)/`）。
+/// 參考定義行（JS `matchDefinition`，等價於
+/// `/^(?: {0,3}>[ \t]?)* {0,3}\[([^\]\n]+)\]:[ \t]*(?:<[^>\n]*>|\S+)/`）。
 ///
-/// 是定義行時回傳 label（第 1 組）在整行中的 UTF-16 範圍 `(start, end)`。
+/// 先以 [`scan_quote_markers`] 貪婪地吃完引言前綴，再比對其餘部分，線性時間。是定義行時
+/// 回傳 label（第 1 組）在整行中的 UTF-16 範圍 `(start, end)`。
 pub(crate) fn match_definition(line: &[u16]) -> Option<(usize, usize)> {
-    definition_re().exec(line)?.get(1)
+    let (_, mut pos) = scan_quote_markers(line);
+    let indent_start = pos;
+    while pos - indent_start < 3 && line.get(pos) == Some(&SPACE) {
+        pos += 1;
+    }
+    if line.get(pos) != Some(&OPEN_BRACKET) {
+        return None;
+    }
+    let label_start = pos + 1;
+    let mut close = label_start;
+    while close < line.len() && line[close] != CLOSE_BRACKET && line[close] != LF {
+        close += 1;
+    }
+    if close == label_start
+        || line.get(close) != Some(&CLOSE_BRACKET)
+        || line.get(close + 1) != Some(&COLON)
+    {
+        return None;
+    }
+    let mut dest = close + 2;
+    while matches!(line.get(dest), Some(&c) if c == SPACE || c == TAB) {
+        dest += 1;
+    }
+    match line.get(dest) {
+        Some(&c) if !jsstr::is_js_space(c) => Some((label_start, close)),
+        _ => None,
+    }
 }
 
 fn is_definition_line(line: &[u16]) -> bool {
@@ -750,13 +868,118 @@ pub(crate) fn is_protected_line(info: &LineInfo) -> bool {
         || info.indented_code
         || info.math_block
         || info.definition
+        || info.opaque
 }
 
-/// 不含 `definition` 的保護判斷（JS 多處的 `frontmatter || fenceContent || htmlBlock || indentedCode || mathBlock`）。
+/// 不含 `definition` 的保護判斷（JS 多處的 `frontmatter || fenceContent || htmlBlock || indentedCode || mathBlock || opaque`）。
 pub(crate) fn is_protected_block(info: &LineInfo) -> bool {
     info.frontmatter
         || info.fence_content
         || info.html_block
         || info.indented_code
         || info.math_block
+        || info.opaque
+}
+
+#[cfg(test)]
+mod definition_equivalence_tests {
+    //! v1.1.0 的線性 [`match_definition`] 與 v1.0.0 的 regex（[`definition_re`]）逐位相同。
+    //! jsregex 會在步數超過預算後改用記憶化回溯，所以這裡的引言深度可以超過 JS 測試的 12 層。
+    use super::*;
+
+    fn check(line: &[u16]) {
+        let expected = definition_re().exec(line).and_then(|c| c.get(1));
+        assert_eq!(
+            match_definition(line),
+            expected,
+            "{:?}",
+            jsstr::to_string(line)
+        );
+        let greedy = re!(r"^(?: {0,3}>[ \t]?)*")
+            .exec(line)
+            .and_then(|c| c.get(0));
+        let (depth, end) = scan_quote_markers(line);
+        assert_eq!(Some((0, end)), greedy, "{:?}", jsstr::to_string(line));
+        assert_eq!(depth, line[..end].iter().filter(|&&c| c == GT).count());
+    }
+
+    #[test]
+    fn exhaustive_short_lines() {
+        let alphabet: [u16; 10] = [
+            SPACE,
+            TAB,
+            GT,
+            OPEN_BRACKET,
+            CLOSE_BRACKET,
+            COLON,
+            b'x' as u16,
+            b'<' as u16,
+            0xA0,
+            LF,
+        ];
+        let mut line = Vec::new();
+        fn walk(line: &mut Vec<u16>, alphabet: &[u16], depth: usize) {
+            check(line);
+            if depth == 0 {
+                return;
+            }
+            for &c in alphabet {
+                line.push(c);
+                walk(line, alphabet, depth - 1);
+                line.pop();
+            }
+        }
+        walk(&mut line, &alphabet, 5);
+    }
+
+    #[test]
+    fn structured_lines() {
+        let mut seed: u64 = 1101;
+        let mut random = |n: u64| {
+            seed = seed
+                .wrapping_mul(6364136223846793005)
+                .wrapping_add(1442695040888963407);
+            ((seed >> 33) % n) as usize
+        };
+        let pick = |items: &[&str], k: usize| jsstr::u(items[k % items.len()]);
+        for _ in 0..20_000 {
+            let mut line: JsString = Vec::new();
+            for _ in 0..random(25) {
+                line.extend(std::iter::repeat_n(SPACE, random(5)));
+                line.push(GT);
+                line.extend(pick(&["", "", " ", "\t", "  "], random(5)));
+            }
+            line.extend(std::iter::repeat_n(SPACE, random(5)));
+            line.extend(pick(&["[", "[", "[", "", ">", "\t["], random(6)));
+            line.extend(pick(
+                &["", "a", "label", "a b", "]", "\n", "\u{3000}"],
+                random(7),
+            ));
+            line.extend(pick(&["]:", "]:", "]", "]: ", "] :", ""], random(6)));
+            line.extend(pick(&["", " ", "\t", "  ", "\u{a0}"], random(5)));
+            line.extend(pick(
+                &["https://x", "<>", "<a b>", "<", "", " ", "\u{3000}", "x y"],
+                random(8),
+            ));
+            check(&line);
+        }
+    }
+
+    #[test]
+    fn deep_lines_are_linear() {
+        for line in [
+            format!("{}q", "> ".repeat(5000)),
+            format!("{} q", ">".repeat(5000)),
+            format!("{}[a]: https://x", "> ".repeat(5000)),
+        ] {
+            let line = jsstr::u(&line);
+            let started = std::time::Instant::now();
+            let _ = match_definition(&line);
+            assert_eq!(scan_quote_markers(&line).0, 5000);
+            // 時間上限只在 release build 斷言，避免 debug CI 誤報。
+            assert!(
+                cfg!(debug_assertions) || started.elapsed() < std::time::Duration::from_secs(1)
+            );
+        }
+    }
 }

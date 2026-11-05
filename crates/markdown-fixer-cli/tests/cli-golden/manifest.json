@@ -119,6 +119,18 @@
     { "name": "corpus-write-text", "setup": [{ "path": "corpus", "copyDir": "fixtures/corpus" }], "args": ["--write", "corpus"] },
     { "name": "corpus-write-strict-quiet", "setup": [{ "path": "corpus", "copyDir": "fixtures/corpus" }], "args": ["--write", "--quiet", "--strict", "--max-line-length", "100", "corpus"] },
     { "name": "corpus-rule-subset-json", "setup": [{ "path": "corpus", "copyDir": "fixtures/corpus" }], "cwd": "corpus/real", "args": ["--json", "--write", "--rule", "MDX004,MDX005,MDX010,MDX042,MDX090", ".", "../edge"] },
-    { "name": "preserve-permissions", "setup": [{ "path": "x.md", "text": "#Title\n", "mode": "640" }], "args": ["--write", "x.md"] }
+    { "name": "preserve-permissions", "setup": [{ "path": "x.md", "text": "#Title\n", "mode": "640" }], "args": ["--write", "x.md"] },
+    { "name": "quote-depth-ignore", "setup": [{ "path": "deep.md", "text": "# 深層引言\n\n> 一層\n> > 兩層\n> > > 三層\n> > > > 四層 #沒空白\n\n-item\n" }], "args": ["--check", "--max-quote-depth=3", "--on-limit=ignore", "deep.md"] },
+    { "name": "quote-depth-error", "setup": [{ "path": "deep.md", "text": "# 深層引言\n\n> 一層\n> > 兩層\n> > > 三層\n> > > > 四層 #沒空白\n\n-item\n" }], "args": ["--check", "--max-quote-depth", "3", "deep.md"] },
+    { "name": "quote-depth-error-write-json", "setup": [{ "path": "deep.md", "text": "# 深層引言\n\n> 一層\n> > 兩層\n> > > 三層\n> > > > 四層 #沒空白\n\n-item\n" }], "args": ["--write", "--json", "--max-quote-depth", "3", "deep.md"] },
+    { "name": "quote-depth-ignore-write", "setup": [{ "path": "deep.md", "text": "# 深層引言\n\n> 一層\n> > 兩層\n> > > 三層\n> > > > 四層 #沒空白\n\n-item\n" }], "args": ["--write", "--max-quote-depth=3", "--on-limit", "ignore", "deep.md"] },
+    { "name": "quote-depth-unlimited", "setup": [{ "path": "deep.md", "text": "# 深層引言\n\n> 一層\n> > 兩層\n> > > 三層\n> > > > 四層 #沒空白\n\n-item\n" }], "args": ["--max-quote-depth=0", "deep.md"] },
+    { "name": "quote-depth-last-wins", "setup": [{ "path": "deep.md", "text": "# 深層引言\n\n> 一層\n> > 兩層\n> > > 三層\n> > > > 四層 #沒空白\n\n-item\n" }], "args": ["--max-quote-depth=3", "--max-quote-depth=9", "--on-limit=ignore", "--on-limit=error", "deep.md"] },
+    { "name": "max-quote-depth-exponent", "args": ["--max-quote-depth=1e2"] },
+    { "name": "max-quote-depth-negative", "args": ["--max-quote-depth", "-1"] },
+    { "name": "max-quote-depth-missing", "args": ["--max-quote-depth"] },
+    { "name": "max-quote-depth-too-long", "args": ["--max-quote-depth=1234567890"] },
+    { "name": "on-limit-invalid", "args": ["--on-limit=Ignore"] },
+    { "name": "on-limit-missing", "args": ["--on-limit"] }
   ]
 }

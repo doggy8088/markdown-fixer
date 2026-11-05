@@ -1,6 +1,6 @@
 {
   "source": "synthetic/weekly-report.md",
-  "referenceVersion": "1.0.0",
+  "referenceVersion": "1.1.0",
   "cases": [
     {
       "name": "default",
@@ -579,6 +579,147 @@
       "fix": {
         "text": "\n# 第 45 週工作週報（11/03–11/07）\n\n**姓名：**陳工程師\n**部門：**平台組\n\n## 本週完成\n1. **完成：**訂單服務的 cursor 分頁（PR #512 已合併）\n2. **完成：**修正 CI 在 Windows 上偶發失敗的問題\n   - 原因：測試共用了同一個暫存目錄\n   - 解法：每個測試用 `tempfile::tempdir()`\n3. **進行中：**Redis cache 導入，完成度約 60%\n\n## 下週計畫\n- 完成 Redis cache 並上 staging\n- 和 SRE 討論告警門檻\n- 準備技術分享：「Rust 的錯誤處理」\n\n## 遇到的問題\n>Redis 連線池在高併發下會耗盡，目前調大到 64 暫時解決，**根本原因還在查**。\n\n## 數據\n| 指標 | 上週 | 本週 | 變化 |\n| --- | --- | --- | --- |\n| P95 延遲 | 820ms | 610ms | ⬇️ 25.6% |\n| 錯誤率 | 0.42% | 0.18% | ⬇️ |\n| 部署次數 | 6 | 9 | ⬆️ |\n## 需要協助\n- 需要 SRE 開 Redis 監控 dashboard 的權限\n",
         "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "quote-depth-3-ignore",
+      "options": {
+        "maxQuoteDepth": 3,
+        "onLimit": "ignore"
+      },
+      "diagnose": [
+        {
+          "rule": "MDX006",
+          "name": "leading-blank-lines",
+          "severity": "warning",
+          "fixable": true,
+          "line": 1,
+          "column": 1,
+          "message": "File starts with blank lines. Remove them so the first block starts at line 1."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": true,
+          "line": 4,
+          "column": 1,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": true,
+          "line": 4,
+          "column": 6,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": true,
+          "line": 5,
+          "column": 1,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": true,
+          "line": 5,
+          "column": 6,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": true,
+          "line": 8,
+          "column": 4,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": true,
+          "line": 8,
+          "column": 9,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": true,
+          "line": 9,
+          "column": 4,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": true,
+          "line": 9,
+          "column": 9,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": true,
+          "line": 12,
+          "column": 4,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": true,
+          "line": 12,
+          "column": 10,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX020",
+          "name": "blockquote-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 20,
+          "column": 1,
+          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
+        },
+        {
+          "rule": "MDX062",
+          "name": "table-blank-lines",
+          "severity": "warning",
+          "fixable": true,
+          "line": 23,
+          "column": 1,
+          "message": "Table starts directly after another block. Add a blank line before it."
+        },
+        {
+          "rule": "MDX062",
+          "name": "table-blank-lines",
+          "severity": "warning",
+          "fixable": true,
+          "line": 28,
+          "column": 1,
+          "message": "Table ends directly before another block. Add a blank line after it."
+        }
+      ],
+      "fix": {
+        "text": "# 第 45 週工作週報（11/03–11/07）\n\n**姓名**：陳工程師\n**部門**：平台組\n\n## 本週完成\n1. **完成**：訂單服務的 cursor 分頁（PR #512 已合併）\n2. **完成**：修正 CI 在 Windows 上偶發失敗的問題\n   - 原因：測試共用了同一個暫存目錄\n   - 解法：每個測試用 `tempfile::tempdir()`\n3. **進行中**：Redis cache 導入，完成度約 60%\n\n## 下週計畫\n- 完成 Redis cache 並上 staging\n- 和 SRE 討論告警門檻\n- 準備技術分享：「Rust 的錯誤處理」\n\n## 遇到的問題\n> Redis 連線池在高併發下會耗盡，目前調大到 64 暫時解決，**根本原因還在查**。\n\n## 數據\n\n| 指標 | 上週 | 本週 | 變化 |\n| --- | --- | --- | --- |\n| P95 延遲 | 820ms | 610ms | ⬇️ 25.6% |\n| 錯誤率 | 0.42% | 0.18% | ⬇️ |\n| 部署次數 | 6 | 9 | ⬆️ |\n\n## 需要協助\n- 需要 SRE 開 Redis 監控 dashboard 的權限\n",
+        "changed": true,
         "refused": false,
         "reason": ""
       }

@@ -1,0 +1,278 @@
+{
+  "source": "regressions/mdx008-nbsp-after-list-marker.md",
+  "referenceVersion": "1.1.0",
+  "cases": [
+    {
+      "name": "default",
+      "options": {},
+      "diagnose": [
+        {
+          "rule": "MDX008",
+          "name": "non-breaking-space",
+          "severity": "warning",
+          "fixable": false,
+          "line": 3,
+          "column": 2,
+          "message": "NBSP right after a list marker. Replacing it with a space would turn this paragraph into a list item; use a normal space if a list was intended."
+        },
+        {
+          "rule": "MDX008",
+          "name": "non-breaking-space",
+          "severity": "warning",
+          "fixable": false,
+          "line": 5,
+          "column": 3,
+          "message": "NBSP right after a list marker. Replacing it with a space would turn this paragraph into a list item; use a normal space if a list was intended."
+        },
+        {
+          "rule": "MDX008",
+          "name": "non-breaking-space",
+          "severity": "warning",
+          "fixable": false,
+          "line": 7,
+          "column": 4,
+          "message": "NBSP right after a list marker. Replacing it with a space would turn this paragraph into a list item; use a normal space if a list was intended."
+        },
+        {
+          "rule": "MDX008",
+          "name": "non-breaking-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 7,
+          "column": 6,
+          "message": "Replace non-breaking spaces (U+00A0) with normal spaces; they usually come from Word or a web page paste."
+        }
+      ],
+      "fix": {
+        "text": "# T\n\n*\u00A0x\n\n1.\u00A0x\n\n- *\u00A0x y\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "snippet",
+      "options": {
+        "ignoreRules": [
+          "MDX003"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX008",
+          "name": "non-breaking-space",
+          "severity": "warning",
+          "fixable": false,
+          "line": 3,
+          "column": 2,
+          "message": "NBSP right after a list marker. Replacing it with a space would turn this paragraph into a list item; use a normal space if a list was intended."
+        },
+        {
+          "rule": "MDX008",
+          "name": "non-breaking-space",
+          "severity": "warning",
+          "fixable": false,
+          "line": 5,
+          "column": 3,
+          "message": "NBSP right after a list marker. Replacing it with a space would turn this paragraph into a list item; use a normal space if a list was intended."
+        },
+        {
+          "rule": "MDX008",
+          "name": "non-breaking-space",
+          "severity": "warning",
+          "fixable": false,
+          "line": 7,
+          "column": 4,
+          "message": "NBSP right after a list marker. Replacing it with a space would turn this paragraph into a list item; use a normal space if a list was intended."
+        },
+        {
+          "rule": "MDX008",
+          "name": "non-breaking-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 7,
+          "column": 6,
+          "message": "Replace non-breaking spaces (U+00A0) with normal spaces; they usually come from Word or a web page paste."
+        }
+      ],
+      "fix": {
+        "text": "# T\n\n*\u00A0x\n\n1.\u00A0x\n\n- *\u00A0x y\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "line-length-80",
+      "options": {
+        "maxLineLength": 80
+      },
+      "diagnose": [
+        {
+          "rule": "MDX008",
+          "name": "non-breaking-space",
+          "severity": "warning",
+          "fixable": false,
+          "line": 3,
+          "column": 2,
+          "message": "NBSP right after a list marker. Replacing it with a space would turn this paragraph into a list item; use a normal space if a list was intended."
+        },
+        {
+          "rule": "MDX008",
+          "name": "non-breaking-space",
+          "severity": "warning",
+          "fixable": false,
+          "line": 5,
+          "column": 3,
+          "message": "NBSP right after a list marker. Replacing it with a space would turn this paragraph into a list item; use a normal space if a list was intended."
+        },
+        {
+          "rule": "MDX008",
+          "name": "non-breaking-space",
+          "severity": "warning",
+          "fixable": false,
+          "line": 7,
+          "column": 4,
+          "message": "NBSP right after a list marker. Replacing it with a space would turn this paragraph into a list item; use a normal space if a list was intended."
+        },
+        {
+          "rule": "MDX008",
+          "name": "non-breaking-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 7,
+          "column": 6,
+          "message": "Replace non-breaking spaces (U+00A0) with normal spaces; they usually come from Word or a web page paste."
+        }
+      ],
+      "fix": {
+        "text": "# T\n\n*\u00A0x\n\n1.\u00A0x\n\n- *\u00A0x y\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "keep-encoding",
+      "options": {
+        "ignoreRules": [
+          "MDX001",
+          "MDX002"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX008",
+          "name": "non-breaking-space",
+          "severity": "warning",
+          "fixable": false,
+          "line": 3,
+          "column": 2,
+          "message": "NBSP right after a list marker. Replacing it with a space would turn this paragraph into a list item; use a normal space if a list was intended."
+        },
+        {
+          "rule": "MDX008",
+          "name": "non-breaking-space",
+          "severity": "warning",
+          "fixable": false,
+          "line": 5,
+          "column": 3,
+          "message": "NBSP right after a list marker. Replacing it with a space would turn this paragraph into a list item; use a normal space if a list was intended."
+        },
+        {
+          "rule": "MDX008",
+          "name": "non-breaking-space",
+          "severity": "warning",
+          "fixable": false,
+          "line": 7,
+          "column": 4,
+          "message": "NBSP right after a list marker. Replacing it with a space would turn this paragraph into a list item; use a normal space if a list was intended."
+        },
+        {
+          "rule": "MDX008",
+          "name": "non-breaking-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 7,
+          "column": 6,
+          "message": "Replace non-breaking spaces (U+00A0) with normal spaces; they usually come from Word or a web page paste."
+        }
+      ],
+      "fix": {
+        "text": "# T\n\n*\u00A0x\n\n1.\u00A0x\n\n- *\u00A0x y\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "headings-only",
+      "options": {
+        "rules": [
+          "MDX010",
+          "MDX011",
+          "MDX012",
+          "MDX013"
+        ]
+      },
+      "diagnose": [],
+      "fix": {
+        "text": "# T\n\n*\u00A0x\n\n1.\u00A0x\n\n- *\u00A0x\u00A0y\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "quote-depth-3-ignore",
+      "options": {
+        "maxQuoteDepth": 3,
+        "onLimit": "ignore"
+      },
+      "diagnose": [
+        {
+          "rule": "MDX008",
+          "name": "non-breaking-space",
+          "severity": "warning",
+          "fixable": false,
+          "line": 3,
+          "column": 2,
+          "message": "NBSP right after a list marker. Replacing it with a space would turn this paragraph into a list item; use a normal space if a list was intended."
+        },
+        {
+          "rule": "MDX008",
+          "name": "non-breaking-space",
+          "severity": "warning",
+          "fixable": false,
+          "line": 5,
+          "column": 3,
+          "message": "NBSP right after a list marker. Replacing it with a space would turn this paragraph into a list item; use a normal space if a list was intended."
+        },
+        {
+          "rule": "MDX008",
+          "name": "non-breaking-space",
+          "severity": "warning",
+          "fixable": false,
+          "line": 7,
+          "column": 4,
+          "message": "NBSP right after a list marker. Replacing it with a space would turn this paragraph into a list item; use a normal space if a list was intended."
+        },
+        {
+          "rule": "MDX008",
+          "name": "non-breaking-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 7,
+          "column": 6,
+          "message": "Replace non-breaking spaces (U+00A0) with normal spaces; they usually come from Word or a web page paste."
+        }
+      ],
+      "fix": {
+        "text": "# T\n\n*\u00A0x\n\n1.\u00A0x\n\n- *\u00A0x y\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    }
+  ]
+}

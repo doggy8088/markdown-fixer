@@ -1,6 +1,6 @@
 {
   "source": "rules/MDX041/negative.md",
-  "referenceVersion": "1.0.0",
+  "referenceVersion": "1.1.0",
   "cases": [
     {
       "name": "default",
@@ -66,6 +66,20 @@
           "MDX012",
           "MDX013"
         ]
+      },
+      "diagnose": [],
+      "fix": {
+        "text": "# 已配對\n\n**粗體** 與 **另一個粗體**。\n\n~~刪除線~~ 正常。\n\n`**` 在 inline code 裡。\n\nsnake__case__name 不算。\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "quote-depth-3-ignore",
+      "options": {
+        "maxQuoteDepth": 3,
+        "onLimit": "ignore"
       },
       "diagnose": [],
       "fix": {

@@ -224,7 +224,8 @@ export function makeGenerator(rand) {
       });
     },
     quote: () => repeat(1 + int(4), () => {
-      const depth = 1 + (chance(0.2) ? int(10) : int(3));
+      // v1.1.0 的定義行掃描是線性的，偶爾產生超過預設上限 32 的深度來涵蓋 MDX086。
+      const depth = 1 + (chance(0.05) ? int(40) : chance(0.2) ? int(10) : int(3));
       const marker = repeat(depth, () => pick(['>', '> ', '>  '])).join('');
       return `${pick(['', ' '])}${marker}${pick([inline(), '', '    code', '- ' + word(), '```', '$$', '#' + word()])}`;
     }),
@@ -371,8 +372,8 @@ function parseCli(argv) {
   return opts;
 }
 
-// oracle 的已知不冪等情況（docs/parity.md〈oracle 疑似問題〉第 7 項）：移除檔首空行後，
-// 後面行首的 U+FEFF 變成檔首。與 properties.rs 的 bom_exposed_by_leading_blank_removal 相同。
+// oracle v1.0.0 的已知不冪等情況：移除檔首空行後，後面行首的 U+FEFF 變成檔首。v1.1.0 已修正
+// （docs/parity.md〈已在 v1.1.0 修正的疑似問題〉），這裡保留分類，若再出現就能立刻認出來。
 export function bomExposedByLeadingBlankRemoval(text) {
   const lines = text.replace(/^\uFEFF+/, '').replace(/\r\n?/g, '\n').split('\n');
   let skipped = false;

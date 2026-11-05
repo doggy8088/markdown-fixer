@@ -23,6 +23,13 @@ markdown-fixer = { path = "../markdown-syntax-fixer/crates/markdown-fixer" }
 markdown-fixer = { path = "../markdown-syntax-fixer/crates/markdown-fixer", features = ["serde"] }
 ```
 
+| Feature | 預設 | 內容 |
+| --- | --- | --- |
+| `render-guard` | 開 | 渲染保護，相依 `pulldown-cmark`（純 Rust，無 I/O），見〈渲染保護〉 |
+| `serde` | 關 | 公開型別的序列化，見〈serde feature〉 |
+
+完全不要相依時用 `default-features = false`：核心引擎沒有任何相依，`Options::render_guard` 也就沒有作用，`fix_document` 的輸出與 oracle 逐位元組相同。
+
 MSRV 是 Rust 1.85（edition 2024）。
 
 ## API 一覽
@@ -30,7 +37,8 @@ MSRV 是 Rust 1.85（edition 2024）。
 | 項目 | 說明 |
 | --- | --- |
 | `VERSION` | crate 版本 |
-| `REFERENCE_VERSION` | 對齊的 oracle 版本，目前是 `"1.0.0"` |
+| `REFERENCE_VERSION` | 對齊的 oracle 版本，目前是 `"1.1.0"` |
+| `DEFAULT_MAX_QUOTE_DEPTH` | 引言巢狀深度上限的預設值 32 |
 | `rules()` | 完整規則目錄，順序與 oracle 相同 |
 | `rule(id)` | 依 ID 查規則，找不到回傳 `None` |
 | `diagnose(text, &options)` | 檢查文字，回傳 `Vec<Problem>` |
@@ -46,8 +54,10 @@ MSRV 是 Rust 1.85（edition 2024）。
 | `Severity` | `Error`、`Warning`、`Info`；`as_str()` 回傳 `"error"` 等小寫字串 |
 | `Rule` | `id`、`name`、`category`、`severity`、`fixable`、`summary` |
 | `Problem` | `rule`、`name`、`severity`、`fixable`、`line`、`column`、`message` |
-| `Options` | `rules`、`ignore_rules`、`max_line_length` |
-| `FixResult` | `text`、`changed`、`refused`、`reason` |
+| `Options` | `rules`、`ignore_rules`、`max_line_length`、`max_quote_depth`、`on_limit`、`render_guard` |
+| `LimitPolicy` | `Error`（預設）、`Ignore`；超過資源上限時的處理方式 |
+| `FixResult` | `text`、`changed`、`refused`、`reason`、`skipped` |
+| `SkippedFix` | `rule`、`line`、`reason`；渲染保護擋下的修正 |
 | `detect::Detection` | `is_markdown`、`score`、`signals` |
 
 ## 檢查文字
@@ -89,7 +99,7 @@ use markdown_fixer::{Options, fix_document};
 fn normalize(text: &str) -> String {
     let result = fix_document(text, &Options::default());
     if result.refused {
-        // 結構錯誤（MDX081、MDX083、MDX053、MDX085）或 frontmatter 陷阱：
+        // 結構錯誤（MDX081、MDX083、MDX053、MDX085、MDX086）或 frontmatter 陷阱：
         // result.text 是原文，result.reason 是英文原因。
         eprintln!("not fixed: {}", result.reason);
     }
@@ -97,14 +107,15 @@ fn normalize(text: &str) -> String {
 }
 ```
 
-`FixResult` 的四個欄位：
+`FixResult` 的欄位：
 
 | 欄位 | 意思 |
 | --- | --- |
 | `text` | 修正後的文字；拒絕修正或沒有變更時就是原文 |
 | `changed` | `text` 和輸入是否不同 |
-| `refused` | 是否因為結構錯誤或 frontmatter 陷阱而拒絕修正 |
+| `refused` | 是否因為結構錯誤、資源上限或 frontmatter 陷阱而拒絕修正 |
 | `reason` | 拒絕的原因；沒有拒絕時是空字串 |
+| `skipped` | 渲染保護擋下、沒有套用的修正（Rust 專有）；`render_guard` 關閉或拒絕修正時一律是空的 |
 
 `refused` 為 `true` 時，`text` 一定等於輸入，呼叫端可以放心直接使用。只有 report-only 問題（例如 MDX015）的文件，`changed` 是 `false`、`refused` 也是 `false`。
 
@@ -135,7 +146,13 @@ fn options_examples() {
         ..Default::default()
     };
 
-    let _ = (all, headings, relaxed, wrapped);
+    // 與 JS 參考實作逐位元組相同（關閉渲染保護）
+    let parity = Options {
+        render_guard: false,
+        ..Default::default()
+    };
+
+    let _ = (all, headings, relaxed, wrapped, parity);
 }
 ```
 
@@ -144,7 +161,9 @@ fn options_examples() {
 - `rules` 是 `Some` 時，只有列出的規則會啟用。
 - `ignore_rules` 裡的規則一律停用；同時出現在兩邊時以停用為準。
 - `max_line_length` 為 0 時 MDX090 停用，即使 `rules` 指定了 MDX090。CLI 的「`--rule MDX090` 沒給行長就預設 120」是參數解析層的邏輯，函式庫不會自動補。
-- 阻擋規則（MDX081、MDX083、MDX053、MDX085）即使被停用，`fix_document` 仍然會拒絕修正，只是 `diagnose` 不回報它們。
+- 阻擋規則（MDX081、MDX083、MDX053、MDX085、MDX086）即使被停用，`fix_document` 仍然會拒絕修正，只是 `diagnose` 不回報它們。
+- `max_quote_depth`（JS `maxQuoteDepth`）是引言巢狀深度上限，預設 32，0 表示不限制。超過時依 `on_limit` 處理：`LimitPolicy::Error` 在該行回報 MDX086 並拒絕修正整份文件；`LimitPolicy::Ignore` 把超過上限的行當成不透明的保護行，不修改、不診斷。
+- `render_guard` 預設 `true`，見〈渲染保護〉。
 
 `diagnose` 與 `fix_document` 不驗證規則 ID。來自使用者的設定請先呼叫 `validate`：
 
@@ -162,6 +181,30 @@ fn parse_ignore(list: &str) -> Result<Options, OptionsError> {
 ```
 
 `OptionsError::UnknownRule` 的 `Display` 是 `Unknown rule: <id>`，與 CLI 的錯誤訊息相同。
+
+## 渲染保護
+
+`render-guard` feature（預設開啟）加上 `Options::render_guard = true`（預設）時，`fix_document` 會用 `pulldown-cmark` 渲染修正前後的文件比對，把會意外改變渲染結果的修正擋下（PRD〈6.9〉）。運作方式見 [architecture.md](architecture.md#渲染保護)。
+
+- 修正沒有改變渲染時（最常見的情況），結果與 `render_guard = false` 完全相同，只多兩次渲染的成本。
+- 修復類規則（MDX008、010、030、040、042、062）本來就是要讓壞掉的語法正確渲染，照常套用；但它們只能改變被修正的區塊與相鄰的一個區塊，也不能改到渲染成程式碼、raw HTML 或 frontmatter 的行。
+- 版面類規則（例如 MDX004、MDX005、MDX052）不得改變渲染。會改變時，整條規則在這份文件都不套用。
+- 被擋下的修正列在 `FixResult::skipped`，對應的問題仍會出現在 `diagnose` 的結果裡。
+- 拒絕修正（`refused`）的行為不變。
+
+```rust
+use markdown_fixer::{Options, fix_document};
+
+fn fix_and_report(text: &str) -> String {
+    let result = fix_document(text, &Options::default());
+    for skip in &result.skipped {
+        eprintln!("line {}: {} not applied: {}", skip.line, skip.rule, skip.reason);
+    }
+    result.text
+}
+```
+
+需要與 JS 參考實作逐位元組相同（例如 parity 測試），把 `render_guard` 設成 `false`。
 
 ## 規則目錄
 
@@ -214,7 +257,8 @@ fn fix_snippet(text: &str) -> String {
 | 型別 | 衍生 |
 | --- | --- |
 | `Severity` | `Serialize`、`Deserialize`，序列化成小寫字串 |
-| `Rule`、`Problem`、`FixResult`、`detect::Detection` | `Serialize` |
+| `LimitPolicy` | `Serialize`、`Deserialize`，序列化成 `"error"`、`"ignore"` |
+| `Rule`、`Problem`、`FixResult`、`SkippedFix`、`detect::Detection` | `Serialize` |
 | `Options` | 無 |
 
 `Problem` 序列化後的鍵名與 oracle `--json` 的 problem 物件相同：
@@ -227,9 +271,9 @@ fn to_json(text: &str) -> serde_json::Result<String> {
 }
 ```
 
-`FixResult` 序列化時 `reason` 是空字串而不是省略。CLI 的 `--json` 會在 `reason` 為空時省略這個欄位，那是 CLI 的輸出格式，不是函式庫的。
+`FixResult` 序列化時 `reason` 是空字串而不是省略；`skipped` 是空陣列時省略，讓 JSON 形狀與 oracle 的 `fixDocument` 相同。CLI 的 `--json` 會在 `reason` 為空時省略這個欄位，那是 CLI 的輸出格式，不是函式庫的。
 
-`Options` 沒有 serde 支援，因為它的 JSON 表示法（`{"rules":[...],"ignoreRules":[...],"maxLineLength":0}`，鍵名與 JS 相同）屬於 FFI 的契約，由 `markdown-fixer-ffi` 自己解析，見 [ffi.md](ffi.md)。
+`Options` 沒有 serde 支援，因為它的 JSON 表示法（`{"rules":[...],"ignoreRules":[...],"maxLineLength":0,"maxQuoteDepth":32,"onLimit":"error","renderGuard":true}`，鍵名與 JS 相同）屬於 FFI 的契約，由 `markdown-fixer-ffi` 自己解析，見 [ffi.md](ffi.md)。
 
 ## 執行緒安全
 
@@ -243,6 +287,7 @@ fn to_json(text: &str) -> serde_json::Result<String> {
 
 - 處理時間與輸入長度大致成線性。實測約 1.16 MB 的文件，release build 在 Apple M5 Max 上 `fix_document` 約 136 ms、`diagnose` 約 65 ms（PRD 目標是 1 MB 低於 200 ms）。量測方式見 [architecture.md](architecture.md#效能)。
 - `fix_document` 最多跑 6 輪修正，每輪都會重新掃描文件，所以比 `diagnose` 慢幾倍。只需要知道「有沒有問題」時用 `diagnose`。
+- 渲染保護在修正改變渲染時要多跑幾次修正與一次 `diagnose`。以語料拼成的 1 MB 文件，開啟後約 270 ms（關閉時約 100 ms）；刻意製造的最壞情況見 [architecture.md](architecture.md#渲染保護的成本)。對延遲很敏感又確定只處理可信的輸入時，可以關閉。
 - CLI 對每個檔案會呼叫 `diagnose` 兩次、`fix_document` 一次。嵌入時可以依需求只呼叫需要的部分。
 - 呼叫端只需要一份規則目錄時，`rules()` 回傳的是 `&'static` 切片，不會配置記憶體。
 

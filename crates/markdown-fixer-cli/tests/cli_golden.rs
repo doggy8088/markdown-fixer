@@ -9,6 +9,16 @@
 //! 比對前的正規化：暫存目錄路徑換成 `<TMP>`、版本字串換成 `<VERSION>`、
 //! 移除 `--help` 裡 Rust 版專有旗標的區塊。
 //!
+//! 每個案例跑兩次：
+//!
+//! 1. 在參數最前面加上 `--no-render-guard`：渲染保護關閉，行為必須與 oracle 逐位元組相同。
+//!    `--no-render-guard` 放在最前面，不會被 `--rule` 之類需要值的旗標吃掉，也不影響
+//!    後面參數的錯誤順序。
+//! 2. 原樣執行（渲染保護開啟，也就是預設模式）：除非輸出裡出現被擋下的修正
+//!    （文字的 `Fix not applied`、`--quiet` 時的摘要行 `Render guard skipped`、JSON 的
+//!    `skippedFixes`），否則也必須與 golden 相同。
+//!    出現時只計數，不比對內容（那是刻意差異，見 `docs/parity.md`）。
+//!
 //! 只跑部分案例：`MDFIX_CLI_GOLDEN=<名稱片段> cargo test -p markdown-fixer-cli --test cli_golden`。
 //!
 //! 案例用到 symlink 與 Unix 權限，golden 也是在 Unix 上產生，所以整個檔案只在 Unix 編譯。
@@ -282,18 +292,41 @@ fn running_as_root(tmp: &TempDir) -> bool {
     readable
 }
 
+/// 一次重播的結果。
+#[derive(Debug, PartialEq, Eq)]
+enum Replay {
+    Matched,
+    /// 需要非 root 權限，但目前以 root 執行。
+    Skipped,
+    /// 渲染保護擋下了修正，輸出刻意與 oracle 不同。
+    Guarded,
+}
+
+/// 輸出裡是否有渲染保護擋下的修正。
+fn mentions_skipped_fixes(output: &std::process::Output) -> bool {
+    [&output.stdout, &output.stderr].iter().any(|bytes| {
+        let text = String::from_utf8_lossy(bytes);
+        text.contains("Fix not applied")
+            || text.contains("Render guard skipped")
+            || text.contains("\"skippedFixes\"")
+    })
+}
+
 #[cfg(unix)]
-fn replay(case: &Value) -> Result<bool, String> {
+fn replay(case: &Value, guard_off: bool) -> Result<Replay, String> {
     let name = case["name"].as_str().expect("name");
-    let args: Vec<&str> = case["args"]
+    let mut args: Vec<&str> = case["args"]
         .as_array()
         .expect("args")
         .iter()
         .map(|a| a.as_str().expect("arg"))
         .collect();
+    if guard_off {
+        args.insert(0, "--no-render-guard");
+    }
     let tmp = TempDir::new(name);
     if case["nonRoot"].as_bool() == Some(true) && running_as_root(&tmp) {
-        return Ok(false);
+        return Ok(Replay::Skipped);
     }
     let setup = parse_setup(&case["setup"]);
     for entry in &setup {
@@ -316,6 +349,9 @@ fn replay(case: &Value) -> Result<bool, String> {
     fs::create_dir_all(&cwd).expect("mkdir cwd");
 
     let output = run(&cwd, &args, None);
+    if !guard_off && mentions_skipped_fixes(&output) {
+        return Ok(Replay::Guarded);
+    }
     let expected = &case["expected"];
     let mut problems = Vec::new();
 
@@ -380,7 +416,7 @@ fn replay(case: &Value) -> Result<bool, String> {
     }
 
     if problems.is_empty() {
-        Ok(true)
+        Ok(Replay::Matched)
     } else {
         Err(format!(
             "[{name}] args={args:?}\n  {}",
@@ -404,22 +440,27 @@ fn cli_matches_oracle_golden() {
     assert!(names.len() >= 40, "expected at least 40 golden cases");
 
     let mut failures = Vec::new();
-    let mut passed = 0;
-    let mut skipped = 0;
+    let (mut passed, mut skipped, mut guarded) = (0, 0, 0);
     for path in &names {
         let case: Value =
             serde_json::from_str(&fs::read_to_string(path).expect("read golden")).expect("json");
         if !case["name"].as_str().unwrap_or("").contains(&filter) {
             continue;
         }
-        match replay(&case) {
-            Ok(true) => passed += 1,
-            Ok(false) => skipped += 1,
-            Err(message) => failures.push(message),
+        for guard_off in [true, false] {
+            match replay(&case, guard_off) {
+                Ok(Replay::Matched) => passed += 1,
+                Ok(Replay::Skipped) => skipped += 1,
+                Ok(Replay::Guarded) => guarded += 1,
+                Err(message) => failures.push(format!(
+                    "{}{message}",
+                    if guard_off { "" } else { "(render guard on) " }
+                )),
+            }
         }
     }
     eprintln!(
-        "CLI golden: {passed} passed, {} failed, {skipped} skipped",
+        "CLI golden: {passed} passed, {} failed, {skipped} skipped, {guarded} differ only by render-guard skips",
         failures.len()
     );
     assert!(

@@ -1,6 +1,6 @@
 {
   "source": "rules/MDX031/trigger.md",
-  "referenceVersion": "1.0.0",
+  "referenceVersion": "1.1.0",
   "cases": [
     {
       "name": "default",
@@ -10,24 +10,24 @@
           "rule": "MDX031",
           "name": "list-marker-style",
           "severity": "warning",
-          "fixable": true,
+          "fixable": false,
           "line": 4,
           "column": 1,
-          "message": "List uses \"*\" but the first item in this list uses \"-\". Use one bullet marker per list."
+          "message": "List uses \"*\" but the first item in this list uses \"-\". A different bullet marker starts a new list in CommonMark, so this is not fixed automatically; use one marker if this is one list."
         },
         {
           "rule": "MDX031",
           "name": "list-marker-style",
           "severity": "warning",
-          "fixable": true,
+          "fixable": false,
           "line": 5,
           "column": 1,
-          "message": "List uses \"+\" but the first item in this list uses \"-\". Use one bullet marker per list."
+          "message": "List uses \"+\" but the first item in this list uses \"-\". A different bullet marker starts a new list in CommonMark, so this is not fixed automatically; use one marker if this is one list."
         }
       ],
       "fix": {
-        "text": "# 購物清單\n\n- 牛奶\n- 雞蛋\n- 麵包\n",
-        "changed": true,
+        "text": "# 購物清單\n\n- 牛奶\n* 雞蛋\n+ 麵包\n",
+        "changed": false,
         "refused": false,
         "reason": ""
       }
@@ -44,24 +44,24 @@
           "rule": "MDX031",
           "name": "list-marker-style",
           "severity": "warning",
-          "fixable": true,
+          "fixable": false,
           "line": 4,
           "column": 1,
-          "message": "List uses \"*\" but the first item in this list uses \"-\". Use one bullet marker per list."
+          "message": "List uses \"*\" but the first item in this list uses \"-\". A different bullet marker starts a new list in CommonMark, so this is not fixed automatically; use one marker if this is one list."
         },
         {
           "rule": "MDX031",
           "name": "list-marker-style",
           "severity": "warning",
-          "fixable": true,
+          "fixable": false,
           "line": 5,
           "column": 1,
-          "message": "List uses \"+\" but the first item in this list uses \"-\". Use one bullet marker per list."
+          "message": "List uses \"+\" but the first item in this list uses \"-\". A different bullet marker starts a new list in CommonMark, so this is not fixed automatically; use one marker if this is one list."
         }
       ],
       "fix": {
-        "text": "# 購物清單\n\n- 牛奶\n- 雞蛋\n- 麵包\n",
-        "changed": true,
+        "text": "# 購物清單\n\n- 牛奶\n* 雞蛋\n+ 麵包\n",
+        "changed": false,
         "refused": false,
         "reason": ""
       }
@@ -76,24 +76,24 @@
           "rule": "MDX031",
           "name": "list-marker-style",
           "severity": "warning",
-          "fixable": true,
+          "fixable": false,
           "line": 4,
           "column": 1,
-          "message": "List uses \"*\" but the first item in this list uses \"-\". Use one bullet marker per list."
+          "message": "List uses \"*\" but the first item in this list uses \"-\". A different bullet marker starts a new list in CommonMark, so this is not fixed automatically; use one marker if this is one list."
         },
         {
           "rule": "MDX031",
           "name": "list-marker-style",
           "severity": "warning",
-          "fixable": true,
+          "fixable": false,
           "line": 5,
           "column": 1,
-          "message": "List uses \"+\" but the first item in this list uses \"-\". Use one bullet marker per list."
+          "message": "List uses \"+\" but the first item in this list uses \"-\". A different bullet marker starts a new list in CommonMark, so this is not fixed automatically; use one marker if this is one list."
         }
       ],
       "fix": {
-        "text": "# 購物清單\n\n- 牛奶\n- 雞蛋\n- 麵包\n",
-        "changed": true,
+        "text": "# 購物清單\n\n- 牛奶\n* 雞蛋\n+ 麵包\n",
+        "changed": false,
         "refused": false,
         "reason": ""
       }
@@ -111,24 +111,24 @@
           "rule": "MDX031",
           "name": "list-marker-style",
           "severity": "warning",
-          "fixable": true,
+          "fixable": false,
           "line": 4,
           "column": 1,
-          "message": "List uses \"*\" but the first item in this list uses \"-\". Use one bullet marker per list."
+          "message": "List uses \"*\" but the first item in this list uses \"-\". A different bullet marker starts a new list in CommonMark, so this is not fixed automatically; use one marker if this is one list."
         },
         {
           "rule": "MDX031",
           "name": "list-marker-style",
           "severity": "warning",
-          "fixable": true,
+          "fixable": false,
           "line": 5,
           "column": 1,
-          "message": "List uses \"+\" but the first item in this list uses \"-\". Use one bullet marker per list."
+          "message": "List uses \"+\" but the first item in this list uses \"-\". A different bullet marker starts a new list in CommonMark, so this is not fixed automatically; use one marker if this is one list."
         }
       ],
       "fix": {
-        "text": "# 購物清單\n\n- 牛奶\n- 雞蛋\n- 麵包\n",
-        "changed": true,
+        "text": "# 購物清單\n\n- 牛奶\n* 雞蛋\n+ 麵包\n",
+        "changed": false,
         "refused": false,
         "reason": ""
       }
@@ -144,6 +144,39 @@
         ]
       },
       "diagnose": [],
+      "fix": {
+        "text": "# 購物清單\n\n- 牛奶\n* 雞蛋\n+ 麵包\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "quote-depth-3-ignore",
+      "options": {
+        "maxQuoteDepth": 3,
+        "onLimit": "ignore"
+      },
+      "diagnose": [
+        {
+          "rule": "MDX031",
+          "name": "list-marker-style",
+          "severity": "warning",
+          "fixable": false,
+          "line": 4,
+          "column": 1,
+          "message": "List uses \"*\" but the first item in this list uses \"-\". A different bullet marker starts a new list in CommonMark, so this is not fixed automatically; use one marker if this is one list."
+        },
+        {
+          "rule": "MDX031",
+          "name": "list-marker-style",
+          "severity": "warning",
+          "fixable": false,
+          "line": 5,
+          "column": 1,
+          "message": "List uses \"+\" but the first item in this list uses \"-\". A different bullet marker starts a new list in CommonMark, so this is not fixed automatically; use one marker if this is one list."
+        }
+      ],
       "fix": {
         "text": "# 購物清單\n\n- 牛奶\n* 雞蛋\n+ 麵包\n",
         "changed": false,

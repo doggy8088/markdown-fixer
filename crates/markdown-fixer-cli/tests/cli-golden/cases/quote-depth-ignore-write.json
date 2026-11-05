@@ -1,0 +1,29 @@
+{
+  "name": "quote-depth-ignore-write",
+  "args": [
+    "--write",
+    "--max-quote-depth=3",
+    "--on-limit",
+    "ignore",
+    "deep.md"
+  ],
+  "cwd": "",
+  "nonRoot": false,
+  "setup": [
+    {
+      "path": "deep.md",
+      "text": "# 深層引言\n\n> 一層\n> > 兩層\n> > > 三層\n> > > > 四層 #沒空白\n\n-item\n"
+    }
+  ],
+  "expected": {
+    "status": 0,
+    "stdout": "deep.md\n  No problems.\n  Fixed 1 issue(s).\n\nFixed 1 issue(s) in 1 file(s).\nNo remaining Markdown issues.\n",
+    "stderr": "",
+    "files": [
+      {
+        "path": "deep.md",
+        "text": "# 深層引言\n\n> 一層\n> > 兩層\n> > > 三層\n> > > > 四層 #沒空白\n\n- item\n"
+      }
+    ]
+  }
+}

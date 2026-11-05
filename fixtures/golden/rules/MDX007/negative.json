@@ -1,6 +1,6 @@
 {
   "source": "rules/MDX007/negative.md",
-  "referenceVersion": "1.0.0",
+  "referenceVersion": "1.1.0",
   "cases": [
     {
       "name": "default",
@@ -66,6 +66,20 @@
           "MDX012",
           "MDX013"
         ]
+      },
+      "diagnose": [],
+      "fix": {
+        "text": "# Makefile 範例\n\n```make\nbuild:\n\tcargo build\n```\n\n在 inline code 裡的 `a\tb` 不算。\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "quote-depth-3-ignore",
+      "options": {
+        "maxQuoteDepth": 3,
+        "onLimit": "ignore"
       },
       "diagnose": [],
       "fix": {

@@ -1,0 +1,15 @@
+{
+  "name": "max-quote-depth-exponent",
+  "args": [
+    "--max-quote-depth=1e2"
+  ],
+  "cwd": "",
+  "nonRoot": false,
+  "setup": [],
+  "expected": {
+    "status": 2,
+    "stdout": "",
+    "stderr": "Error: --max-quote-depth requires a non-negative integer.\nRun with --help for usage.\n",
+    "files": []
+  }
+}

@@ -1,6 +1,6 @@
 {
   "source": "rules/MDX074/trigger.md",
-  "referenceVersion": "1.0.0",
+  "referenceVersion": "1.1.0",
   "cases": [
     {
       "name": "default",
@@ -108,6 +108,30 @@
         ]
       },
       "diagnose": [],
+      "fix": {
+        "text": "# 參考連結\n\n[首頁][home]\n\n[home]: https://example.com\n[Home]: https://example.org\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "quote-depth-3-ignore",
+      "options": {
+        "maxQuoteDepth": 3,
+        "onLimit": "ignore"
+      },
+      "diagnose": [
+        {
+          "rule": "MDX074",
+          "name": "reference-duplicate-definition",
+          "severity": "warning",
+          "fixable": false,
+          "line": 6,
+          "column": 1,
+          "message": "Reference definition \"Home\" is declared more than once."
+        }
+      ],
       "fix": {
         "text": "# 參考連結\n\n[首頁][home]\n\n[home]: https://example.com\n[Home]: https://example.org\n",
         "changed": false,

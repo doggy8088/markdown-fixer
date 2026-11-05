@@ -14,13 +14,13 @@
     }
   ],
   "expected": {
-    "status": 0,
-    "stdout": "Fixed 18 issue(s) in 1 file(s).\nNo remaining Markdown issues.\n",
+    "status": 1,
+    "stdout": "Fixed 16 issue(s) in 1 file(s).\n2 problem(s) remain: 0 fixable, 0 error(s), 2 warning(s), 0 info.\n",
     "stderr": "",
     "files": [
       {
         "path": "messy.md",
-        "text": "# Project Notes  \n\nIntro paragraph with trailing spaces.  \n\n## Setup\n* first item\n* second item\n* third item\n\nSome **bold** text and a [link](https://example.com).\n\n| Name | Value |\n| --- | --- |\n| a | 1 |\n\n> quote without space\n> no space here\n\n**標籤**：內容說明\nFinal line without newline.\n"
+        "text": "# Project Notes  \n\nIntro paragraph with trailing spaces.  \n\n## Setup\n* first item\n- second item\n- third item\n\nSome **bold** text and a [link](https://example.com).\n\n| Name | Value |\n| --- | --- |\n| a | 1 |\n\n> quote without space\n> no space here\n\n**標籤**：內容說明\nFinal line without newline.\n"
       }
     ]
   }

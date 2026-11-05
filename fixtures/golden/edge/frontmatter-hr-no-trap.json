@@ -1,6 +1,6 @@
 {
   "source": "edge/frontmatter-hr-no-trap.md",
-  "referenceVersion": "1.0.0",
+  "referenceVersion": "1.1.0",
   "cases": [
     {
       "name": "default",
@@ -106,6 +106,30 @@
           "MDX012",
           "MDX013"
         ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX010",
+          "name": "atx-missing-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 5,
+          "column": 2,
+          "message": "Add a space after the heading marker: \"# \" rather than \"#\"."
+        }
+      ],
+      "fix": {
+        "text": "---\n\n這行上面是分隔線，不是 frontmatter。\n\n# Title\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "quote-depth-3-ignore",
+      "options": {
+        "maxQuoteDepth": 3,
+        "onLimit": "ignore"
       },
       "diagnose": [
         {

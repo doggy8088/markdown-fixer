@@ -198,7 +198,14 @@ fn evaluate(
     } else {
         0
     };
-    let would_fix = if fix.refused { 0 } else { original_fixable };
+    // 渲染保護擋下修正時，`wouldFix` 只算真的會修好的問題；其他情況照 oracle。
+    let would_fix = if fix.refused {
+        0
+    } else if fix.skipped.is_empty() {
+        original_fixable
+    } else {
+        original_fixable.saturating_sub(remaining_fixable)
+    };
     FileResult {
         display,
         changed: write_mode && fix.changed && !fix.refused,
@@ -208,6 +215,7 @@ fn evaluate(
         shown: if write_mode { after } else { before },
         fixed,
         would_fix,
+        skipped: fix.skipped.clone(),
     }
 }
 
@@ -285,6 +293,15 @@ fn run_stdin(options: &CliOptions, out: &mut dyn Write, err: &mut dyn Write) -> 
         if options.quiet {
             if fix.refused {
                 say!(err, "{STDIN_DISPLAY}: Not modified: {}", fix.reason);
+            }
+            for skip in &fix.skipped {
+                say!(
+                    err,
+                    "{STDIN_DISPLAY}:{}: Fix not applied ({}): {}",
+                    skip.line,
+                    skip.rule,
+                    skip.reason
+                );
             }
         } else if options.json {
             say!(err, "{}", report::json_report(&results, options.mode));

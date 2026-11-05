@@ -34,6 +34,8 @@ markdown-fixer --check --json .             # 給程式解析的 JSON
 | `--rule <ids>`、`--rule=<ids>` | 只啟用這些規則。以逗號分隔，可重複 |
 | `--ignore-rule <ids>`、`--ignore-rule=<ids>` | 停用這些規則。以逗號分隔，可重複 |
 | `--max-line-length N`、`--max-line-length=N` | 啟用 MDX090，行長上限為 N |
+| `--max-quote-depth N`、`--max-quote-depth=N` | 引言巢狀深度上限，預設 32，0 表示不限制 |
+| `--on-limit <mode>`、`--on-limit=<mode>` | 超過上限時的處理方式：`error`（預設）或 `ignore`，見〈資源上限〉 |
 | `--list-rules` | 列出規則目錄後結束 |
 | `--version`、`-v` | 印出 `markdown-fixer <版本>` 後結束 |
 | `--help`、`-h` | 印出說明後結束 |
@@ -48,8 +50,9 @@ markdown-fixer --check --json .             # 給程式解析的 JSON
 | `--stdin` | 從標準輸入讀取 Markdown，顯示名稱為 `<stdin>`。不能和路徑一起使用 |
 | `--exit-zero` | 除了結束碼 2（用法或 I/O 錯誤），一律以 0 結束 |
 | `--detect` | 只判斷標準輸入是不是 Markdown，印出 `markdown` 或 `not-markdown` |
+| `--no-render-guard` | 關閉渲染保護，套用所有安全修正，即使會改變渲染結果。輸出與 oracle 逐位元組相同 |
 
-`--help` 把這三個旗標列在獨立的 `Rust-only options` 區塊，oracle 原有的說明行維持不變。
+`--help` 把這四個旗標列在獨立的 `Rust-only options` 區塊，oracle 原有的說明行維持不變。
 
 ### 參數解析的細節
 
@@ -60,6 +63,9 @@ markdown-fixer --check --json .             # 給程式解析的 JSON
 - `--rule` 與 `--ignore-rule` 一定會吃掉下一個參數，即使它看起來像旗標：`--rule --json` 的錯誤是 `Unknown rule: --json`。
 - 規則 ID 以 JS `trim()` 去掉前後空白（包含 NBSP 與 U+FEFF），空項目略過。全部是空項目時回報 `A rule list is required after --rule/--ignore-rule.`。
 - `--max-line-length` 的值以 JS `Number()` 解析：` 80 `、`0x50`、`1e2`、`80.0` 都合法；`8.5`、`0`、空字串與缺少的值都會回報 `--max-line-length requires a positive integer.`。
+- `--max-quote-depth` 的值必須是 1 到 9 個 ASCII 數字（`0` 可以，`007` 是 7）。`-1`、`1e2`、`0x10`、` 5`、空字串與缺少的值都會回報 `--max-quote-depth requires a non-negative integer.`。
+- `--on-limit` 只接受 `error` 與 `ignore`，大小寫有別；其他值或缺少的值回報 `--on-limit requires error or ignore.`。
+- 重複的 `--max-quote-depth`、`--on-limit` 以最後一個為準。
 - 單獨的 `-` 與 `--check=yes` 這類寫法是未知旗標。
 
 用法錯誤的輸出固定是兩行，寫到 stderr，結束碼 2：
@@ -111,6 +117,7 @@ README.md
 - 檔案沒有問題時印出 `  No problems.`。
 - 被拒絕修正的檔案多印一行 `  ERROR  Structural error: <原因>`（`--write` 時是 `Not modified`）。
 - `--write` 時，有修改的檔案多印一行 `  Fixed N issue(s).`。
+- 渲染保護擋下的修正，在問題清單之後每個一行（Rust 版專有，見〈渲染保護〉）。
 
 摘要行：
 
@@ -124,6 +131,7 @@ README.md
 | 有檔案讀寫失敗 | `Some files could not be read or written; see the errors above.` |
 | `--check` 有被拒絕的檔案 | `N file(s) need manual review before safe fixes.` |
 | `--write` 有被拒絕的檔案 | `N file(s) were not modified because of structural or frontmatter ambiguity.` |
+| 渲染保護擋下了修正 | `Render guard skipped N fix(es) in M file(s) that would change how the document renders; fix them manually or rerun with --no-render-guard.` |
 
 `--check` 顯示的是修正前的問題；`--write` 顯示的是修正後仍然存在的問題。
 
@@ -187,7 +195,7 @@ README.md
 
 | 欄位 | 說明 |
 | --- | --- |
-| `version` | Rust 版輸出自己的 crate 版本，oracle 輸出 `1.0.0`。比對時忽略 |
+| `version` | Rust 版輸出自己的 crate 版本，oracle 輸出自己的版本（目前 `1.1.0`）。比對時忽略 |
 | `mode` | `check` 或 `write` |
 | `files[].path` | 顯示路徑，與文字輸出相同 |
 | `files[].changed` | 這次執行實際改寫了檔案（只有 `--write` 會是 `true`） |
@@ -195,8 +203,9 @@ README.md
 | `files[].refused` | 因結構錯誤或 frontmatter 陷阱拒絕修正 |
 | `files[].reason` | 拒絕原因；沒有拒絕時省略這個欄位 |
 | `files[].fixed` | `--write` 修掉的可修正問題數；`--check` 一律是 0 |
-| `files[].wouldFix` | 修正前的可修正問題數；被拒絕時是 0 |
+| `files[].wouldFix` | 修正前的可修正問題數；被拒絕時是 0。渲染保護擋下修正時，只算真的會修好的問題 |
 | `files[].problems` | `--check` 是修正前的問題，`--write` 是修正後剩下的問題 |
+| `files[].skippedFixes` | Rust 版專有：渲染保護擋下的修正，每個元素有 `rule`、`line`、`reason`。陣列是空的時省略這個欄位，JSON 形狀與 oracle 相同 |
 | `summary.problems` | 所有 `files[].problems` 的統計 |
 
 讀寫失敗的檔案不會出現在 `files` 裡。即使所有檔案都讀取失敗，`--json` 仍然輸出完整結構（`files` 為空陣列），結束碼 2。
@@ -216,7 +225,7 @@ git show HEAD:README.md | markdown-fixer --stdin --json
 
 - stdout 一定是一份完整文件：修正後的文字；沒有變更或被拒絕修正時，就是原本的輸入，逐位元組相同。
 - 報告與摘要寫到 stderr，格式與檔案模式相同；加上 `--json` 時 JSON 也寫到 stderr。
-- `--quiet` 時 stderr 不輸出報告；只有被拒絕修正時印一行 `<stdin>: Not modified: <原因>`。
+- `--quiet` 時 stderr 不輸出報告；只有被拒絕修正時印一行 `<stdin>: Not modified: <原因>`，渲染保護擋下修正時每個印一行 `<stdin>:<行>: Fix not applied (<規則>): <原因>`。
 - 結束碼與檔案模式相同，可以搭配 `--exit-zero`。
 - 剪貼簿裡的片段通常沒有檔尾換行，建議搭配 `--ignore-rule MDX003`，讓片段維持原樣。
 
@@ -251,13 +260,47 @@ if pbpaste | markdown-fixer --detect >/dev/null; then
 fi
 ```
 
+## 渲染保護
+
+Rust 版預設開啟渲染保護（PRD〈6.9〉）：修正後以 CommonMark／GFM 渲染比對，會意外改變渲染結果的修正不套用。運作方式見 [architecture.md](architecture.md#渲染保護)。
+
+被擋下的修正在文字輸出裡列在該檔案的問題清單之後，格式對齊問題行：行號補到 10 字元、嚴重度欄固定是 `skipped`、規則 ID、兩個空格、`Fix not applied: ` 加原因。
+
+以 `a`、空格、tab、空格、換行、`b` 這兩行為例（pulldown-cmark 把行尾的「空格、tab、空格」當成硬換行）：
+
+```text
+notes.md
+  1:2        warning MDX004  Trailing whitespace. Exactly two trailing spaces create a hard line break; other trailing whitespace is noise. (fixable)
+  1:3        warning MDX007  Tab character found. Use spaces for indentation and alignment; tabs render at different widths.
+  1          skipped MDX004  Fix not applied: fixes for this layout rule would change how the document renders, so none were applied in this file
+
+2 problem(s) in 1 file(s): 1 fixable, 0 error(s), 2 warning(s), 0 info.
+Render guard skipped 1 fix(es) in 1 file(s) that would change how the document renders; fix them manually or rerun with --no-render-guard.
+```
+
+- 被擋下的修正對應的問題仍然列在問題清單裡（`--write` 時也是，因為它沒有被修掉），結束碼照一般規則計算，意義不變。
+- `skipped` 行不計入摘要行的問題數。
+- `--json` 時每個檔案多一個 `skippedFixes` 陣列，只在非空時出現。
+- `--quiet` 時不列出 `skipped` 行，但摘要行照印。
+- `--no-render-guard` 關閉渲染保護，輸出與 oracle 逐位元組相同。parity 測試用這個模式；CLI 的 golden 測試每個案例跑兩次，見 [parity.md](parity.md)。
+
+## 資源上限
+
+引言（`>`）巢狀超過 `--max-quote-depth`（預設 32）時：
+
+- `--on-limit error`（預設）：在該行回報 MDX086（error、不可修正），並拒絕修正整份文件。`--check` 印出 `  ERROR  Structural error: <原因>`，`--write` 印出 `  ERROR  Not modified: <原因>`，結束碼 1。
+- `--on-limit ignore`：超過上限的行不修改、不診斷，也不當成參考定義。
+
+`--max-quote-depth 0` 表示不限制。
+
 ## 與 oracle 的差異
 
 除了下列項目，輸出與 oracle 逐位元組相同。完整清單記錄在 [parity.md](parity.md)。
 
 1. `--version` 印出 Rust crate 的版本；JSON 的 `version` 欄位亦同。
 2. `--help` 的 `Usage:` 與 `Examples:` 行使用執行檔名稱 `markdown-fixer`，不是 `node markdown-fixer.mjs`。
-3. `--help` 多一個 `Rust-only options` 區塊，`--stdin`、`--exit-zero`、`--detect` 三個旗標只有 Rust 版有。
+3. `--help` 多一個 `Rust-only options` 區塊，`--stdin`、`--exit-zero`、`--detect`、`--no-render-guard` 四個旗標只有 Rust 版有。
+4. 渲染保護預設開啟。會改變渲染的修正不套用，並在輸出中列出（見〈渲染保護〉）；加上 `--no-render-guard` 時沒有這項差異。
 
 ## 範例
 

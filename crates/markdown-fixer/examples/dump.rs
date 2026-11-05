@@ -32,7 +32,7 @@ mod real {
     use std::io::{self, BufRead, Read, Write};
     use std::panic::{self, AssertUnwindSafe};
 
-    use markdown_fixer::{Options, diagnose, fix_document};
+    use markdown_fixer::{DEFAULT_MAX_QUOTE_DEPTH, LimitPolicy, Options, diagnose, fix_document};
     use serde_json::{Value, json};
 
     fn string_list(value: Option<&Value>, key: &str) -> Result<Option<Vec<String>>, String> {
@@ -65,13 +65,26 @@ mod real {
                 if n > 0.0 { n as usize } else { 0 }
             }
         };
+        // JS `createLimits`：非負數取整數部分，其他值用預設 32；`onLimit` 只認 "ignore"。
+        let max_quote_depth = match object.get("maxQuoteDepth") {
+            None | Some(Value::Null) => DEFAULT_MAX_QUOTE_DEPTH,
+            Some(number) => match number.as_f64() {
+                Some(n) if n >= 0.0 => n as usize,
+                _ => DEFAULT_MAX_QUOTE_DEPTH,
+            },
+        };
+        let on_limit = match object.get("onLimit").and_then(Value::as_str) {
+            Some("ignore") => LimitPolicy::Ignore,
+            _ => LimitPolicy::Error,
+        };
         Ok(Options {
             rules: string_list(object.get("rules"), "rules")?,
             ignore_rules: string_list(object.get("ignoreRules"), "ignoreRules")?,
             max_line_length,
+            max_quote_depth,
+            on_limit,
             // parity 工具：關閉 Rust 專有的渲染保護，行為與 JS 參考實作相同。
             render_guard: false,
-            ..Options::default()
         })
     }
 

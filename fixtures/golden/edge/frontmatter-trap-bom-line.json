@@ -1,6 +1,6 @@
 {
   "source": "edge/frontmatter-trap-bom-line.md",
-  "referenceVersion": "1.0.0",
+  "referenceVersion": "1.1.0",
   "cases": [
     {
       "name": "default",
@@ -10,10 +10,10 @@
           "rule": "MDX006",
           "name": "leading-blank-lines",
           "severity": "warning",
-          "fixable": true,
+          "fixable": false,
           "line": 1,
           "column": 1,
-          "message": "File starts with blank lines. Remove them so the first block starts at line 1."
+          "message": "File starts with blank lines before a line that begins with U+FEFF. Remove the U+FEFF first; removing only the blank lines would turn it into a BOM."
         },
         {
           "rule": "MDX009",
@@ -53,10 +53,10 @@
           "rule": "MDX006",
           "name": "leading-blank-lines",
           "severity": "warning",
-          "fixable": true,
+          "fixable": false,
           "line": 1,
           "column": 1,
-          "message": "File starts with blank lines. Remove them so the first block starts at line 1."
+          "message": "File starts with blank lines before a line that begins with U+FEFF. Remove the U+FEFF first; removing only the blank lines would turn it into a BOM."
         },
         {
           "rule": "MDX009",
@@ -94,10 +94,10 @@
           "rule": "MDX006",
           "name": "leading-blank-lines",
           "severity": "warning",
-          "fixable": true,
+          "fixable": false,
           "line": 1,
           "column": 1,
-          "message": "File starts with blank lines. Remove them so the first block starts at line 1."
+          "message": "File starts with blank lines before a line that begins with U+FEFF. Remove the U+FEFF first; removing only the blank lines would turn it into a BOM."
         },
         {
           "rule": "MDX009",
@@ -138,10 +138,10 @@
           "rule": "MDX006",
           "name": "leading-blank-lines",
           "severity": "warning",
-          "fixable": true,
+          "fixable": false,
           "line": 1,
           "column": 1,
-          "message": "File starts with blank lines. Remove them so the first block starts at line 1."
+          "message": "File starts with blank lines before a line that begins with U+FEFF. Remove the U+FEFF first; removing only the blank lines would turn it into a BOM."
         },
         {
           "rule": "MDX009",
@@ -185,6 +185,48 @@
         "changed": false,
         "refused": false,
         "reason": ""
+      }
+    },
+    {
+      "name": "quote-depth-3-ignore",
+      "options": {
+        "maxQuoteDepth": 3,
+        "onLimit": "ignore"
+      },
+      "diagnose": [
+        {
+          "rule": "MDX006",
+          "name": "leading-blank-lines",
+          "severity": "warning",
+          "fixable": false,
+          "line": 1,
+          "column": 1,
+          "message": "File starts with blank lines before a line that begins with U+FEFF. Remove the U+FEFF first; removing only the blank lines would turn it into a BOM."
+        },
+        {
+          "rule": "MDX009",
+          "name": "zero-width-character",
+          "severity": "warning",
+          "fixable": false,
+          "line": 2,
+          "column": 1,
+          "message": "Zero-width character found. Remove it unless it is intentional (for example, a line-break opportunity in some scripts)."
+        },
+        {
+          "rule": "MDX080",
+          "name": "setext-ambiguity",
+          "severity": "warning",
+          "fixable": false,
+          "line": 4,
+          "column": 1,
+          "message": "This line is a Setext heading underline for the previous paragraph, so it renders as a heading instead of a horizontal rule. Insert a blank line above it, or use *** for a rule."
+        }
+      ],
+      "fix": {
+        "text": "\n\uFEFF---\ntitle: x\n---\n",
+        "changed": false,
+        "refused": true,
+        "reason": "A fix would turn a leading --- into YAML frontmatter. Fix the first lines manually; use *** if the line was meant as a horizontal rule."
       }
     }
   ]

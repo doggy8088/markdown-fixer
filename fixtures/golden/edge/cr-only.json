@@ -1,6 +1,6 @@
 {
   "source": "edge/cr-only.md",
-  "referenceVersion": "1.0.0",
+  "referenceVersion": "1.1.0",
   "cases": [
     {
       "name": "default",
@@ -192,6 +192,48 @@
       ],
       "fix": {
         "text": "# Classic Mac\r\rText with CR only.\r\r## Sub\r",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "quote-depth-3-ignore",
+      "options": {
+        "maxQuoteDepth": 3,
+        "onLimit": "ignore"
+      },
+      "diagnose": [
+        {
+          "rule": "MDX002",
+          "name": "line-endings",
+          "severity": "warning",
+          "fixable": true,
+          "line": 1,
+          "column": 1,
+          "message": "File uses CRLF or CR line endings. Normalize them to LF."
+        },
+        {
+          "rule": "MDX013",
+          "name": "heading-blank-lines",
+          "severity": "warning",
+          "fixable": true,
+          "line": 4,
+          "column": 1,
+          "message": "Heading is directly attached to the preceding paragraph. Add a blank line before it."
+        },
+        {
+          "rule": "MDX010",
+          "name": "atx-missing-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 4,
+          "column": 3,
+          "message": "Add a space after the heading marker: \"## \" rather than \"##\"."
+        }
+      ],
+      "fix": {
+        "text": "# Classic Mac\n\nText with CR only.\n\n## Sub\n",
         "changed": true,
         "refused": false,
         "reason": ""

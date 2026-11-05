@@ -13,7 +13,10 @@ use std::fs;
 use std::panic::{self, AssertUnwindSafe};
 use std::path::{Path, PathBuf};
 
-use markdown_fixer::{FixResult, Options, Problem, diagnose, fix_document, rules};
+use markdown_fixer::{
+    DEFAULT_MAX_QUOTE_DEPTH, FixResult, LimitPolicy, Options, Problem, diagnose, fix_document,
+    rules,
+};
 use serde_json::Value;
 
 /// 最多詳細列出幾個失敗案例；其餘只計數。
@@ -81,9 +84,16 @@ fn options_from(value: &Value) -> Options {
             .get("maxLineLength")
             .and_then(Value::as_u64)
             .map_or(0, |n| n as usize),
+        max_quote_depth: value
+            .get("maxQuoteDepth")
+            .and_then(Value::as_u64)
+            .map_or(DEFAULT_MAX_QUOTE_DEPTH, |n| n as usize),
+        on_limit: match value.get("onLimit").and_then(Value::as_str) {
+            Some("ignore") => LimitPolicy::Ignore,
+            _ => LimitPolicy::Error,
+        },
         // golden 由 JS 參考實作產生：關閉 Rust 專有的渲染保護。
         render_guard: false,
-        ..Options::default()
     }
 }
 

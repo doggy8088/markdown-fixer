@@ -19,12 +19,12 @@
   ],
   "expected": {
     "status": 1,
-    "stdout": "ok.md\n  No problems.\n  Fixed 18 issue(s).\n\ntrap.md\n  ERROR  Not modified: A fix would turn a leading --- into YAML frontmatter. Fix the first lines manually; use *** if the line was meant as a horizontal rule.\n  1:1        warning MDX006  File starts with blank lines. Remove them so the first block starts at line 1. (fixable)\n  4:1        warning MDX080  This line is a Setext heading underline for the previous paragraph, so it renders as a heading instead of a horizontal rule. Insert a blank line above it, or use *** for a rule.\n  5:2        warning MDX010  Add a space after the heading marker: \"# \" rather than \"#\". (fixable)\n\nFixed 18 issue(s) in 1 file(s).\n3 problem(s) remain: 2 fixable, 0 error(s), 3 warning(s), 0 info.\n1 file(s) were not modified because of structural or frontmatter ambiguity.\n",
+    "stdout": "ok.md\n  7:1        warning MDX031  List uses \"-\" but the first item in this list uses \"*\". A different bullet marker starts a new list in CommonMark, so this is not fixed automatically; use one marker if this is one list.\n  8:1        warning MDX031  List uses \"-\" but the first item in this list uses \"*\". A different bullet marker starts a new list in CommonMark, so this is not fixed automatically; use one marker if this is one list.\n  Fixed 16 issue(s).\n\ntrap.md\n  ERROR  Not modified: A fix would turn a leading --- into YAML frontmatter. Fix the first lines manually; use *** if the line was meant as a horizontal rule.\n  1:1        warning MDX006  File starts with blank lines. Remove them so the first block starts at line 1. (fixable)\n  4:1        warning MDX080  This line is a Setext heading underline for the previous paragraph, so it renders as a heading instead of a horizontal rule. Insert a blank line above it, or use *** for a rule.\n  5:2        warning MDX010  Add a space after the heading marker: \"# \" rather than \"#\". (fixable)\n\nFixed 16 issue(s) in 1 file(s).\n5 problem(s) remain: 2 fixable, 0 error(s), 5 warning(s), 0 info.\n1 file(s) were not modified because of structural or frontmatter ambiguity.\n",
     "stderr": "",
     "files": [
       {
         "path": "ok.md",
-        "text": "# Project Notes  \n\nIntro paragraph with trailing spaces.  \n\n## Setup\n* first item\n* second item\n* third item\n\nSome **bold** text and a [link](https://example.com).\n\n| Name | Value |\n| --- | --- |\n| a | 1 |\n\n> quote without space\n> no space here\n\n**標籤**：內容說明\nFinal line without newline.\n"
+        "text": "# Project Notes  \n\nIntro paragraph with trailing spaces.  \n\n## Setup\n* first item\n- second item\n- third item\n\nSome **bold** text and a [link](https://example.com).\n\n| Name | Value |\n| --- | --- |\n| a | 1 |\n\n> quote without space\n> no space here\n\n**標籤**：內容說明\nFinal line without newline.\n"
       },
       {
         "path": "trap.md",

@@ -158,8 +158,13 @@ fn rules_json_matches_library_catalog() {
     let json = take(mdfix_rules_json());
     let value: serde_json::Value = serde_json::from_str(&json).unwrap();
     let rules = value["rules"].as_array().expect("rules 必須是陣列");
-    assert_eq!(rules.len(), 48);
-    assert_eq!(rules.iter().filter(|r| r["fixable"] == true).count(), 20);
+    let catalog = markdown_fixer::rules();
+    assert_eq!(rules.len(), catalog.len());
+    assert_eq!(
+        rules.iter().filter(|r| r["fixable"] == true).count(),
+        catalog.iter().filter(|r| r.fixable).count()
+    );
+    assert!(rules.iter().any(|r| r["id"] == "MDX086"));
     // 直接比對原始字串：重新序列化解析後的 Value 會把鍵排序，驗不出欄位順序。
     assert!(
         json.starts_with(
@@ -167,7 +172,7 @@ fn rules_json_matches_library_catalog() {
         ),
         "{json}"
     );
-    assert_eq!(rules[47]["id"], "MDX090");
+    assert_eq!(rules[rules.len() - 1]["id"], "MDX090");
 }
 
 #[test]
@@ -222,6 +227,53 @@ fn fix_matches_oracle_json() {
     assert_eq!(
         fix_bytes(b"---\na: 1\n", None),
         r#"{"text":"---\na: 1\n","changed":false,"refused":true,"reason":"Unclosed YAML frontmatter: no closing --- or ... line was found."}"#
+    );
+}
+
+#[test]
+fn quote_depth_limit_options() {
+    let doc = b"> > > deep\n";
+    let json = diagnose_bytes(doc, Some(r#"{"maxQuoteDepth":2}"#));
+    assert!(json.contains(r#""rule":"MDX086""#), "{json}");
+    let fixed: serde_json::Value =
+        serde_json::from_str(&fix_bytes(doc, Some(r#"{"maxQuoteDepth":2}"#))).unwrap();
+    assert_eq!(fixed["refused"], true);
+    let json = diagnose_bytes(doc, Some(r#"{"maxQuoteDepth":2,"onLimit":"ignore"}"#));
+    assert!(!json.contains("MDX086"), "{json}");
+    let json = diagnose_bytes(doc, Some(r#"{"maxQuoteDepth":0}"#));
+    assert!(!json.contains("MDX086"), "{json}");
+    assert_error_containing(
+        &diagnose_bytes(doc, Some(r#"{"onLimit":"warn"}"#)),
+        "invalid options JSON",
+    );
+    assert_error_containing(
+        &diagnose_bytes(doc, Some(r#"{"maxQuoteDepth":-1}"#)),
+        "invalid options JSON",
+    );
+}
+
+#[test]
+fn render_guard_reports_skipped_fixes() {
+    // 行尾的「空格、tab、空格」在 pulldown-cmark 是 hard break；MDX004 移除它會改變渲染。
+    let doc = "a \t \nb\n";
+    let guarded: serde_json::Value =
+        serde_json::from_str(&fix_bytes(doc.as_bytes(), None)).unwrap();
+    assert_eq!(guarded["text"], doc);
+    assert_eq!(guarded["changed"], false);
+    let skipped = guarded["skipped"].as_array().expect("skipped 必須是陣列");
+    assert_eq!(skipped[0]["rule"], "MDX004");
+    assert_eq!(skipped[0]["line"], 1);
+    assert!(skipped[0]["reason"].as_str().is_some_and(|r| !r.is_empty()));
+
+    // renderGuard: false 時與 oracle 相同，沒有 skipped 鍵。
+    let plain = fix_bytes(doc.as_bytes(), Some(r#"{"renderGuard":false}"#));
+    assert!(!plain.contains("skipped"), "{plain}");
+    assert!(plain.contains(r#""changed":true"#), "{plain}");
+    // 沒有被擋下的修正時也省略 skipped。
+    assert!(!fix_bytes(NBSP_DOC.as_bytes(), None).contains("skipped"));
+    assert_error_containing(
+        &fix_bytes(doc.as_bytes(), Some(r#"{"renderGuard":"no"}"#)),
+        "invalid options JSON",
     );
 }
 

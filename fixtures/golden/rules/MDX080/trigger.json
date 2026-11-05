@@ -1,6 +1,6 @@
 {
   "source": "rules/MDX080/trigger.md",
-  "referenceVersion": "1.0.0",
+  "referenceVersion": "1.1.0",
   "cases": [
     {
       "name": "default",
@@ -108,6 +108,30 @@
         ]
       },
       "diagnose": [],
+      "fix": {
+        "text": "# 文件\n\n這段文字下面想放分隔線\n---\n\n結果變成 H2。\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "quote-depth-3-ignore",
+      "options": {
+        "maxQuoteDepth": 3,
+        "onLimit": "ignore"
+      },
+      "diagnose": [
+        {
+          "rule": "MDX080",
+          "name": "setext-ambiguity",
+          "severity": "warning",
+          "fixable": false,
+          "line": 4,
+          "column": 1,
+          "message": "This line is a Setext heading underline for the previous paragraph, so it renders as a heading instead of a horizontal rule. Insert a blank line above it, or use *** for a rule."
+        }
+      ],
       "fix": {
         "text": "# 文件\n\n這段文字下面想放分隔線\n---\n\n結果變成 H2。\n",
         "changed": false,

@@ -2,7 +2,7 @@
 
 這份文件說明 `markdown-fixer` 的整體結構：crate 怎麼切、一份文件從輸入到輸出經過哪些步驟、哪些區域受到保護、欄號怎麼算，以及為什麼刻意不用 Markdown parser。
 
-Rust 版的每一個行為都以 JS oracle（`reference/js/markdown-fixer.mjs` v1.0.0）為準。下面提到的 JS 函式名稱與行號都指向 oracle；對應的 Rust 函式與模組請查 [porting-map.md](porting-map.md)。
+Rust 版的每一個行為都以 JS oracle（`reference/js/markdown-fixer.mjs` v1.1.0）為準；唯一的例外是 Rust 專有的渲染保護（見〈渲染保護〉），關閉後就與 oracle 逐位元組相同。下面提到的 JS 函式名稱都指向 oracle，行號是 v1.0.0 時的位置，升版後可能偏移幾行；對應的 Rust 函式與模組請查 [porting-map.md](porting-map.md)。
 
 ## Crate 結構
 
@@ -43,6 +43,7 @@ repo 裡其他與架構相關的目錄：
 | `table` | `splitTableCells`、`findTables` 等 | 表格偵測 |
 | `diagnose`、`fix` | `diagnose`、`fixDocument` | 兩條主要流程 |
 | `detect` | 無（Rust 版新增） | Markdown 偵測，見 [detect.md](detect.md) |
+| `guard` | 無（Rust 版新增） | 渲染保護：以 `pulldown-cmark` 渲染比對，擋下會意外改變渲染的修正。需要 `render-guard` feature，見〈渲染保護〉 |
 | `jsstr` | 無 | JS 字串語意：UTF-16 字串型別、`\s`、`\w`、`trim()` 等 |
 | `jsregex` | 無 | 只涵蓋 oracle 用到的語法子集的 JS 正規表示式引擎 |
 | `unicode_tables` | 無 | 由 Node 產生的 `\p{P}`、`\p{S}` 範圍表 |
@@ -233,15 +234,75 @@ Rust `regex` crate 不支援 lookaround、以 UTF-8 運作、`\w` 預設是 Unic
 
 代價是一些已知限制，例如跨行強調、巢狀 blockquote 裡的清單不完整解析。這些記錄在 [rules.md](rules.md#已知限制)。
 
+渲染保護（見下一節）確實用了 `pulldown-cmark`，但只用來**驗證**修正有沒有改變渲染，不用來產生修正。修正的內容永遠來自行導向的掃描；parser 只決定某個修正要不要套用。
+
+## 渲染保護
+
+PRD〈6.9〉要求自動修正不能意外改變渲染結果。行導向掃描與真正的 CommonMark 解析在邊界情況會不一致（例如 fence 屬於哪個容器），這些不一致會讓修正改到渲染。渲染保護在 `fix_document` 的最後一關，用 `pulldown-cmark` 實際渲染比對，把這類修正擋下。程式在 `crates/markdown-fixer/src/guard.rs`，`Options::render_guard` 控制開關，預設開啟。
+
+### 規則分類
+
+| 類別 | 規則 | 要求 |
+| --- | --- | --- |
+| 編碼 | MDX001、MDX002 | 比對前先去掉 BOM、統一行尾，所以永遠不會改變渲染，一律照常套用 |
+| 版面 | MDX003～006、011、012、013、020、052、060、082 | 不得改變渲染 |
+| 修復 | MDX008、010、030、040、042、062 | 目的就是改變渲染，但只能改被修正的區塊與相鄰的一個區塊 |
+
+MDX031 在 oracle v1.1.0 改成只回報，不在任何一類。
+
+### 流程
+
+```text
+fix::fix_document（與 oracle 相同）
+ │  拒絕修正或沒有改變 ─────────────────────> 原樣回傳
+ │  render(全部修正) == render(原文) ───────> 原樣回傳（便宜路徑）
+ ▼
+修復類檢查：只套用修復類 → rep
+ │  1. 行 diff（原文 ↔ rep）切成 hunk
+ │  2. 改到程式碼、raw HTML、frontmatter 的 hunk ─────> 還原
+ │  3. 只含行內修復（MDX008、040、042）的 hunk 改變區塊結構 ─> 還原
+ │  4. 其他頂層區塊的 HTML 或行範圍改變 ───> 還原最近的 hunk，最多 8 輪
+ ▼
+版面類檢查：render(全部修正) 必須等於 render(rep)
+ │  相等 ───────────────────────────────────> 回傳全部修正
+ │  先在差異區域的摘錄上，逐條試「rep ＋ 規則 L」
+ │  摘錄不可用時，在整份文件上逐條試
+ │  去掉肇事規則後在整份文件上再驗證一次
+ │  驗證失敗 ─────────────────> 只套用修復類（所有觸發的版面類規則都不套用）
+ ▼
+FixResult（skipped 列出沒套用的修正）
+```
+
+每一層都以「驗證，失敗就退一步」收尾：全部修正 → 去掉肇事規則 → 只套用（部分）修復 → 原文。原文永遠安全，所以結果不會有未預期的渲染改變。工作量有上限：版面類每條規則最多多跑一次完整修正，修復類最多 8 輪渲染。
+
+### 渲染與比對
+
+- **渲染選項**：表格、刪除線、任務清單、註腳、GFM blockquote 標籤（`> [!NOTE]`）、數學式。開數學式是因為 fixer 本來就把 `$…$` 與 `$$` 區塊當保護區域，不開的話數學式裡的 `*`、`_` 會被當成強調，產生與修正無關的誤報。
+- **frontmatter**：不開 pulldown-cmark 的 YAML metadata block，因為它在文件中間也會觸發，GitHub 只認檔首。檔首 frontmatter 改寫成同樣行數的 fenced code，內容逐字比對。
+- **看得見的差異**：比對前先去掉讀者看不到的差異。一般內文的連續空白摺成一個空格；程式碼區塊與 raw HTML 只去掉行尾空白與結尾空行。硬換行、NBSP、程式碼內容與所有標籤照原樣比對。
+- **頂層區塊**：深度 0 的事件範圍。每個區塊單獨渲染成 HTML，並記下來源的行範圍。
+
+### 行 diff
+
+先去掉共同的開頭與結尾，中段用編輯距離上限 256 的 Myers。超過上限時改用貪婪重新對齊（視窗 64 行）：優先找下一行也相同的共同行，找不到時把它當成單行替換。任何共同子序列都是合法的對齊，品質只影響 hunk 大小；對不齊時一律走安全的那一邊（還原修復）。
+
+### 已知限制
+
+- 版面類以「規則」為單位擋下：一個 MDX004 修正會改變渲染，整份文件的 MDX004 修正都不套用。`skipped` 會列出該規則的每一個問題行。PRD〈6.9〉就是這樣規定的；以區域為單位還原是可能的改進。
+- 渲染器是 pulldown-cmark，不是 GitHub 的 cmark-gfm。兩者有少數差異，例如行尾「空格、tab、空格」在 pulldown-cmark 是硬換行，ATX 結尾 `#` 後面有 tab 時不算結尾序列。guard 依 pulldown-cmark 的結果保守處理，最多少修一點，不會修錯。
+- 稽核結果與剩下的 oracle 疑似問題見 [parity.md](parity.md)。
+
 ## 相依政策
 
-函式庫預設**零執行期相依**。目前的相依：
+函式庫的核心引擎**零執行期相依**。`--no-default-features` 建置時完全沒有相依。目前的相依：
 
 | 套件 | 範圍 | 理由 |
 | --- | --- | --- |
+| `pulldown-cmark` | 選用 feature `render-guard`（預設開啟），`default-features = false`，只開 `html` | 渲染保護需要一個 CommonMark／GFM 渲染器來比對修正前後。它是純 Rust、沒有 I/O、沒有執行緒、沒有 C 相依，連帶只多了 `pulldown-cmark-escape`、`bitflags`、`memchr`、`unicase`。核心的修正與診斷完全不用它 |
 | `serde` | 選用 feature `serde` | 讓公開型別可以序列化，CLI 的 `--json` 與 FFI 會開啟 |
 | `proptest` | dev-dependency | property test：不 panic、冪等性 |
 | `serde_json` | dev-dependency | 讀取 golden 檔 |
+| `pulldown-cmark` | dev-dependency | `tests/guard.rs` 用自己的渲染比對檢查 guard，不呼叫函式庫內部 |
 
 新增相依前先問能不能不加。真的需要時：
 
@@ -273,13 +334,37 @@ PRD〈7〉的目標：1 MB 的 Markdown，`fix_document` 在 Apple M 系列上�
 | 約 1.16 MB 的文件，`fix_document` | 約 136 ms |
 | 同一份文件，`diagnose` | 約 65 ms（105 個問題） |
 | 15 KB 片段，`markdown-fixer --stdin --write`（含行程啟動） | 中位數約 6.5 ms |
-| release 版 CLI 執行檔（macOS aarch64） | 約 0.70 MB |
+| release 版 CLI 執行檔（macOS aarch64） | 約 1.1 MB（含渲染保護；不含時約 0.70 MB） |
 
 1 MB 的量測可以自己重跑：
 
 ```sh
 cargo test --release -p markdown-fixer --lib -- --ignored one_megabyte --nocapture
 ```
+
+### 渲染保護的成本
+
+渲染保護在便宜路徑上只多兩次渲染。修正改變渲染時（只要有修復類修正就會），多一次「只套用修復類」的修正與一次 `diagnose`；有肇事的版面類規則時，再加上摘錄上的逐條修正與整份文件的一次驗證。
+
+實測（release build，Apple M5 Max，機器同時有其他編譯工作）：
+
+| 1 MB 文件 | oracle 的 `fix_document` | 開啟渲染保護 |
+| --- | --- | --- |
+| 以 `fixtures/corpus` 拼成，含修復類修正 | 約 100 ms | 約 270 ms |
+| 同上，檔尾加一個會被擋下的 MDX004 | 約 100 ms | 約 370 ms |
+| 只有版面類修正、渲染不變的段落與清單 | 約 430 ms | 約 460 ms |
+| 每 4 行就有一個修復類修正（`#標題`、`-item` 等重複） | 約 570 ms | 約 1.5 s |
+| 每個區塊都有會被擋下的 MDX004（摘錄超過半份文件，改在整份文件上逐條找） | 約 480 ms | 約 3 s |
+
+最後兩列是刻意製造的最壞情況：成本是幾次完整修正加上診斷，仍然是線性的。量測可以自己重跑：
+
+```sh
+cargo test --release -p markdown-fixer --lib -- --ignored guard_one_megabyte --nocapture
+```
+
+加入 pulldown-cmark 後，release 版 CLI 執行檔約 1.1 MB（macOS aarch64），仍在 3 MB 以內。
+
+### 修正迴圈
 
 修正迴圈每一輪都會重新掃描好幾次，最壞情況是 6 輪乘上每輪的掃描次數。每次掃描在一般輸入上是線性的，實作時要避免在迴圈裡做「對每一行重新組整份文字」這類二次方運算。
 
@@ -288,7 +373,7 @@ oracle 本身有幾處在病態輸入上不是線性的。Rust 的輸出照 orac
 | 位置 | oracle | Rust |
 | --- | --- | --- |
 | MDX042 的 delimiter 配對（`matchEmphasisRuns`） | 平方時間：每個 closer 往回逐一找 opener，`a* ` 重複 4 萬次（117 KB）約 0.9 秒，輸入加倍時間約變 4 倍 | 攤銷 O(n)：`cjk_emphasis::leftover_runs` 以 6 個 stack 加差分陣列實作，1 MB 的 `a* ` 整個 CLI `--stdin --write` 約 0.3 秒 |
-| MDX042 的修正判斷與套用（`analyzeCjkEmphasis`、`applyCjkEmphasisFixes`） | 平方時間：每個候選 closer 重掃全部 leftovers 與 runs，每個 transform 重新組合整個段落；`**甲：**乙 ` 重複 8,000 次（112 KB）的 `fixDocument` 約 0.7 秒，16,000 次（224 KB）時 oracle 直接拋出 `RangeError`（見 [parity.md](parity.md#oracle-疑似問題)） | 每段 O(n log n)：事先算好每個位置的合格 opener、以 run 索引判斷中間有沒有 run、二分搜尋行號，套用時在整份文件上原地改寫。重複 32,000 次（448 KB）的 `fix_document` 約 52 ms（release），舊版約 5.4 秒 |
+| MDX042 的修正判斷與套用（`analyzeCjkEmphasis`、`applyCjkEmphasisFixes`） | 平方時間：每個候選 closer 重掃全部 leftovers 與 runs，每個 transform 重新組合整個段落；`**甲：**乙 ` 重複 8,000 次（112 KB）的 `fixDocument` 約 0.7 秒，v1.0.0 在 16,000 次（224 KB）時會拋出 `RangeError`，v1.1.0 已修正（見 [parity.md](parity.md#oracle-疑似問題)） | 每段 O(n log n)：事先算好每個位置的合格 opener、以 run 索引判斷中間有沒有 run、二分搜尋行號，套用時在整份文件上原地改寫。重複 32,000 次（448 KB）的 `fix_document` 約 52 ms（release），舊版約 5.4 秒 |
 | 深層引言的參考定義 regex | 指數級回溯，40 層 `>` 會卡住 | `jsregex` 的記憶化回溯，200 層以內毫秒級 |
 | 一行裡大量 `[](` 的連結目的地遮罩（`buildMask`） | 平方時間 | 照 oracle，仍是平方時間：10k 字元的病態行，`diagnose` 約 30 ms |
 

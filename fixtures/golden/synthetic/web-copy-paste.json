@@ -1,6 +1,6 @@
 {
   "source": "synthetic/web-copy-paste.md",
-  "referenceVersion": "1.0.0",
+  "referenceVersion": "1.1.0",
   "cases": [
     {
       "name": "default",
@@ -894,6 +894,228 @@
       ],
       "fix": {
         "text": "\uFEFF＃ 從網頁複製的教學\r\n\r\n這段文字是從某個部落格複製過來的，\u200B裡面夾雜了各種看不見的字元。 \r\n\u3000\u3000段落開頭用了兩個全形空白縮排。\r\n\r\n## 安裝步驟\r\n\r\n－ 先下載安裝檔\r\n－ 執行安裝程式\r\n－ 重新開機\r\n\r\n下載位置：［官方網站］（https://example.com/download）\r\n\r\n## \u00A0設定\r\n\r\n打開設定檔，找到\u00A0`timeout`\u00A0這一行，改成 30。\r\n\r\n> 注意：設定檔路徑是 https://example.com/docs/config\u00A0guide 裡寫的那個。\r\n\r\n“智慧引號” 和 ‘單引號’ 也是從 Word 來的…\r\n\r\n* 項目一   \r\n* 項目二\t\r\n*  項目三\r\n\r\n### 常見問題 \r\n\r\nQ：為什麼安裝失敗？\u200B\r\nA：請確認你有管理員權限。\r\n\r\n\r\n\r\n以上內容轉載自網路，版權屬原作者。\r\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "quote-depth-3-ignore",
+      "options": {
+        "maxQuoteDepth": 3,
+        "onLimit": "ignore"
+      },
+      "diagnose": [
+        {
+          "rule": "MDX001",
+          "name": "bom",
+          "severity": "warning",
+          "fixable": true,
+          "line": 1,
+          "column": 1,
+          "message": "File starts with a UTF-8 BOM. Remove it so the first Markdown block starts at byte 0."
+        },
+        {
+          "rule": "MDX002",
+          "name": "line-endings",
+          "severity": "warning",
+          "fixable": true,
+          "line": 1,
+          "column": 1,
+          "message": "File uses CRLF or CR line endings. Normalize them to LF."
+        },
+        {
+          "rule": "MDX084",
+          "name": "fullwidth-markdown-syntax",
+          "severity": "warning",
+          "fixable": false,
+          "line": 1,
+          "column": 1,
+          "message": "Full-width punctuation is being used for Markdown syntax. Use ASCII # for headings, -, *, or + for bullets, and [ ] ( ) for links and images."
+        },
+        {
+          "rule": "MDX009",
+          "name": "zero-width-character",
+          "severity": "warning",
+          "fixable": false,
+          "line": 3,
+          "column": 18,
+          "message": "Zero-width character found. Remove it unless it is intentional (for example, a line-break opportunity in some scripts)."
+        },
+        {
+          "rule": "MDX004",
+          "name": "trailing-whitespace",
+          "severity": "warning",
+          "fixable": true,
+          "line": 3,
+          "column": 33,
+          "message": "Trailing whitespace. Exactly two trailing spaces create a hard line break; other trailing whitespace is noise."
+        },
+        {
+          "rule": "MDX018",
+          "name": "first-heading-h1",
+          "severity": "info",
+          "fixable": false,
+          "line": 6,
+          "column": 1,
+          "message": "The first heading is not an H1. Start the outline with one H1 unless the document intentionally starts in a section."
+        },
+        {
+          "rule": "MDX084",
+          "name": "fullwidth-markdown-syntax",
+          "severity": "warning",
+          "fixable": false,
+          "line": 8,
+          "column": 1,
+          "message": "Full-width punctuation is being used for Markdown syntax. Use ASCII # for headings, -, *, or + for bullets, and [ ] ( ) for links and images."
+        },
+        {
+          "rule": "MDX084",
+          "name": "fullwidth-markdown-syntax",
+          "severity": "warning",
+          "fixable": false,
+          "line": 9,
+          "column": 1,
+          "message": "Full-width punctuation is being used for Markdown syntax. Use ASCII # for headings, -, *, or + for bullets, and [ ] ( ) for links and images."
+        },
+        {
+          "rule": "MDX084",
+          "name": "fullwidth-markdown-syntax",
+          "severity": "warning",
+          "fixable": false,
+          "line": 10,
+          "column": 1,
+          "message": "Full-width punctuation is being used for Markdown syntax. Use ASCII # for headings, -, *, or + for bullets, and [ ] ( ) for links and images."
+        },
+        {
+          "rule": "MDX084",
+          "name": "fullwidth-markdown-syntax",
+          "severity": "warning",
+          "fixable": false,
+          "line": 12,
+          "column": 1,
+          "message": "Full-width punctuation is being used for Markdown syntax. Use ASCII # for headings, -, *, or + for bullets, and [ ] ( ) for links and images."
+        },
+        {
+          "rule": "MDX070",
+          "name": "bare-url",
+          "severity": "info",
+          "fixable": false,
+          "line": 12,
+          "column": 13,
+          "message": "Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text."
+        },
+        {
+          "rule": "MDX010",
+          "name": "atx-missing-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 14,
+          "column": 3,
+          "message": "Add a space after the heading marker: \"## \" rather than \"##\"."
+        },
+        {
+          "rule": "MDX008",
+          "name": "non-breaking-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 14,
+          "column": 4,
+          "message": "Replace non-breaking spaces (U+00A0) with normal spaces; they usually come from Word or a web page paste."
+        },
+        {
+          "rule": "MDX008",
+          "name": "non-breaking-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 16,
+          "column": 9,
+          "message": "Replace non-breaking spaces (U+00A0) with normal spaces; they usually come from Word or a web page paste."
+        },
+        {
+          "rule": "MDX008",
+          "name": "non-breaking-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 16,
+          "column": 19,
+          "message": "Replace non-breaking spaces (U+00A0) with normal spaces; they usually come from Word or a web page paste."
+        },
+        {
+          "rule": "MDX070",
+          "name": "bare-url",
+          "severity": "info",
+          "fixable": false,
+          "line": 18,
+          "column": 13,
+          "message": "Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text."
+        },
+        {
+          "rule": "MDX008",
+          "name": "non-breaking-space",
+          "severity": "warning",
+          "fixable": false,
+          "line": 18,
+          "column": 44,
+          "message": "NBSP inside a URL. Replace it with %20 or remove it; the fixer leaves URLs untouched to avoid breaking them."
+        },
+        {
+          "rule": "MDX004",
+          "name": "trailing-whitespace",
+          "severity": "warning",
+          "fixable": true,
+          "line": 22,
+          "column": 6,
+          "message": "Trailing whitespace. Exactly two trailing spaces create a hard line break; other trailing whitespace is noise."
+        },
+        {
+          "rule": "MDX004",
+          "name": "trailing-whitespace",
+          "severity": "warning",
+          "fixable": true,
+          "line": 23,
+          "column": 6,
+          "message": "Trailing whitespace. Exactly two trailing spaces create a hard line break; other trailing whitespace is noise."
+        },
+        {
+          "rule": "MDX007",
+          "name": "hard-tab",
+          "severity": "warning",
+          "fixable": false,
+          "line": 23,
+          "column": 6,
+          "message": "Tab character found. Use spaces for indentation and alignment; tabs render at different widths."
+        },
+        {
+          "rule": "MDX004",
+          "name": "trailing-whitespace",
+          "severity": "warning",
+          "fixable": true,
+          "line": 26,
+          "column": 9,
+          "message": "Trailing whitespace. Exactly two trailing spaces create a hard line break; other trailing whitespace is noise."
+        },
+        {
+          "rule": "MDX009",
+          "name": "zero-width-character",
+          "severity": "warning",
+          "fixable": false,
+          "line": 28,
+          "column": 11,
+          "message": "Zero-width character found. Remove it unless it is intentional (for example, a line-break opportunity in some scripts)."
+        },
+        {
+          "rule": "MDX005",
+          "name": "multiple-blank-lines",
+          "severity": "warning",
+          "fixable": true,
+          "line": 31,
+          "column": 1,
+          "message": "Multiple consecutive blank lines. Use one blank line between blocks."
+        }
+      ],
+      "fix": {
+        "text": "＃ 從網頁複製的教學\n\n這段文字是從某個部落格複製過來的，\u200B裡面夾雜了各種看不見的字元。\n\u3000\u3000段落開頭用了兩個全形空白縮排。\n\n## 安裝步驟\n\n－ 先下載安裝檔\n－ 執行安裝程式\n－ 重新開機\n\n下載位置：［官方網站］（https://example.com/download）\n\n## 設定\n\n打開設定檔，找到 `timeout` 這一行，改成 30。\n\n> 注意：設定檔路徑是 https://example.com/docs/config\u00A0guide 裡寫的那個。\n\n“智慧引號” 和 ‘單引號’ 也是從 Word 來的…\n\n* 項目一  \n* 項目二\n*  項目三\n\n### 常見問題\n\nQ：為什麼安裝失敗？\u200B\nA：請確認你有管理員權限。\n\n以上內容轉載自網路，版權屬原作者。\n",
         "changed": true,
         "refused": false,
         "reason": ""

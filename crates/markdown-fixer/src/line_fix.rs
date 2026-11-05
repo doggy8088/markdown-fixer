@@ -6,10 +6,13 @@ use crate::jsregex::{Captures, Regex, re};
 use crate::jsstr::{self, JsString, at, concat, is_js_space, is_punct_or_symbol, trim};
 use crate::mask::{MaskOptions, Segment, build_mask, replace_with_offsets, split_masked};
 use crate::rules::{Enabled, Overrides, make_problem};
-use crate::scan::{LineInfo, is_protected_line, is_thematic_break, parse_quote_prefix};
+use crate::scan::{
+    LineInfo, is_protected_line, is_thematic_break, parse_quote_prefix, scan_quote_markers,
+};
 
 const SPACE: u16 = b' ' as u16;
 const TAB: u16 = b'\t' as u16;
+const GT: u16 = b'>' as u16;
 const HASH: u16 = b'#' as u16;
 const NBSP: u16 = 0xA0;
 
@@ -19,6 +22,8 @@ pub(crate) struct Change {
     pub(crate) rule: &'static str,
     pub(crate) column: usize,
     pub(crate) message: String,
+    /// JS `change.overrides`（例如只報告不修正的 `{ fixable: false }`）。
+    pub(crate) overrides: Overrides,
 }
 
 /// 修正步驟的結果（JS `{ line, changes }`）。
@@ -33,6 +38,7 @@ fn change(rule: &'static str, column: usize, message: impl Into<String>) -> Chan
         rule,
         column,
         message: message.into(),
+        overrides: Overrides::NONE,
     }
 }
 
@@ -126,12 +132,43 @@ pub(crate) fn fix_heading(line: &[u16], enabled: &Enabled) -> Option<StepResult>
 }
 
 /// JS `fixBlockquote(line, isEnabled)`。
+/// JS `startsIndentSensitiveBlock`：在引言裡意義取決於縮排的區塊（fence 與清單標記）。
+fn starts_indent_sensitive_block(content: &[u16]) -> bool {
+    re!(r"^(?:`{3,}|~{3,}|(?:[-*+]|\d{1,9}[.)])(?:[ \t]|$))").test(content)
+}
+
+/// JS `containerPrefix`：行首的引言與清單標記。回傳內容開始的位置，以及當作清單標記的 `*` 的索引。
+fn container_prefix(line: &[u16]) -> (usize, Vec<usize>) {
+    let mut stars = Vec::new();
+    let (_, mut pos) = scan_quote_markers(line);
+    while let Some(caps) = re!(r"^[ \t]*([-*+]|\d{1,9}[.)])(?:[ \t]+|$)").exec(&line[pos..]) {
+        let (Some((_, end)), Some((marker_start, marker_end))) = (caps.get(0), caps.get(1)) else {
+            break;
+        };
+        if line[pos + marker_start..pos + marker_end] == [u16::from(b'*')] {
+            stars.push(pos + marker_start);
+        }
+        pos += end;
+    }
+    (pos, stars)
+}
+
 pub(crate) fn fix_blockquote(line: &[u16], enabled: &Enabled) -> Option<StepResult> {
     if !enabled.is("MDX020") {
         return None;
     }
     let quote = parse_quote_prefix(line)?;
+    // parse_quote_prefix 停在 `>  >`；另一個標記前多一個空格仍是同一串巢狀，所以一次吃完整串。
+    // 否則 fix_document 每一輪只合併一層，結果不冪等。
+    let mut depth = quote.depth;
     let mut content = quote.rest;
+    while content.first() == Some(&SPACE) && content.get(1) == Some(&GT) {
+        let Some(inner) = parse_quote_prefix(&content[1..]) else {
+            break;
+        };
+        depth += inner.depth;
+        content = inner.rest;
+    }
     let gap_len = content
         .iter()
         .take_while(|&&c| c == SPACE || c == TAB)
@@ -139,16 +176,22 @@ pub(crate) fn fix_blockquote(line: &[u16], enabled: &Enabled) -> Option<StepResu
     if content[..gap_len].contains(&TAB) {
         return Some(unchanged(line));
     }
-    if gap_len <= 3 {
+    // 標記自己的空格之後再多的空白，兩個以上時可能是清單項目的延續；fence（決定程式碼
+    // 要扣掉多少縮排）與清單標記（決定項目內容的欄位）前面的空白也有意義。只移除其他內容
+    // 前的單一空格，或後面沒有內容的至多三個空格。
+    let blank_content = gap_len == content.len();
+    if (blank_content && gap_len <= 3)
+        || (gap_len == 1 && !starts_indent_sensitive_block(&content[1..]))
+    {
         content = &content[gap_len..];
     }
 
     let mut fixed: JsString = quote.leading.to_vec();
-    for k in 0..quote.depth {
+    for k in 0..depth {
         if k > 0 {
             fixed.push(SPACE);
         }
-        fixed.push(b'>' as u16);
+        fixed.push(GT);
     }
     if !content.is_empty() {
         fixed.push(SPACE);
@@ -336,6 +379,8 @@ pub(crate) fn fix_emphasis(line: &[u16], enabled: &Enabled) -> StepResult {
     {
         return unchanged(line);
     }
+    // 清單標記的 `*` 不是強調符號；移除它後面的空白會讓清單項目變成段落。
+    let (_, marker_stars) = container_prefix(line);
     let mask = build_mask(line, MaskOptions::NO_BARE_URLS);
     let segments = split_masked(line, &mask);
     let mut changes = Vec::new();
@@ -351,6 +396,7 @@ pub(crate) fn fix_emphasis(line: &[u16], enabled: &Enabled) -> StepResult {
             text = trim_pair(
                 line,
                 segment,
+                &marker_stars,
                 &text,
                 regex,
                 delimiter,
@@ -372,6 +418,7 @@ pub(crate) fn fix_emphasis(line: &[u16], enabled: &Enabled) -> StepResult {
 fn trim_pair(
     line: &[u16],
     segment: &Segment<'_>,
+    marker_stars: &[usize],
     text: &[u16],
     regex: &Regex,
     delimiter: &str,
@@ -416,7 +463,8 @@ fn trim_pair(
         let opener_repaired = delimiter_flanking(opener_before, content.first().copied());
         let closer_original = delimiter_flanking(ws.last().copied(), closer_after);
         let closer_repaired = delimiter_flanking(content.last().copied(), closer_after);
-        let allowed = opener_repaired.left
+        let allowed = !marker_stars.contains(&(segment.start + start))
+            && opener_repaired.left
             && closer_repaired.right
             && match ws_side {
                 WsSide::After => !opener_original.right,
@@ -438,25 +486,50 @@ pub(crate) fn fix_nbsp(line: &[u16], enabled: &Enabled) -> StepResult {
     let mask = build_mask(line, MaskOptions::default());
     let segments = split_masked(line, &mask);
     let mut changes = Vec::new();
+    // NBSP 對清單標記不算空白，所以 `*<NBSP>文字` 是段落；換成一般空格會變成清單項目，只報告不修。
+    let (prefix_end, _) = container_prefix(line);
+    let keep = re!(r"^[ \t]*(?:[-*+]|\d{1,9}[.)])(\u00A0+)")
+        .exec(&line[prefix_end.min(line.len())..])
+        .and_then(|caps| caps.get(1))
+        .map(|(start, end)| (prefix_end + start, prefix_end + end));
     let mut output: JsString = Vec::with_capacity(line.len());
     for segment in &segments {
         if segment.protected {
             output.extend_from_slice(segment.text);
             continue;
         }
-        if let Some(idx) = segment.text.iter().position(|&c| c == NBSP) {
+        let mut first = None;
+        for (i, &c) in segment.text.iter().enumerate() {
+            let index = segment.start + i;
+            if c != NBSP {
+                output.push(c);
+            } else if let Some((keep_start, _)) = keep.filter(|&(a, b)| index >= a && index < b) {
+                if index == keep_start {
+                    changes.push(Change {
+                        rule: "MDX008",
+                        column: index + 1,
+                        message: "NBSP right after a list marker. Replacing it with a space would turn this paragraph into a list item; use a normal space if a list was intended.".to_string(),
+                        overrides: Overrides::NOT_FIXABLE,
+                    });
+                }
+                output.push(c);
+            } else {
+                first.get_or_insert(i);
+                output.push(SPACE);
+            }
+        }
+        if let Some(i) = first {
             changes.push(change(
                 "MDX008",
-                segment.start + idx + 1,
+                segment.start + i + 1,
                 "Replace non-breaking spaces (U+00A0) with normal spaces; they usually come from Word or a web page paste.",
             ));
         }
-        output.extend(
-            segment
-                .text
-                .iter()
-                .map(|&c| if c == NBSP { SPACE } else { c }),
-        );
+    }
+    // NBSP 是該行或清單項目唯一的內容時，它讓這一行不是空行；換成一般空格會結束段落或清空項目。
+    let (content_start, _) = container_prefix(line);
+    if output != line && crate::scan::is_blank(&output[content_start.min(output.len())..]) {
+        return unchanged(line);
     }
     StepResult {
         line: output,
@@ -505,7 +578,7 @@ pub(crate) fn transform_line(
                     line_no,
                     c.column,
                     c.message,
-                    Overrides::NONE,
+                    c.overrides,
                 ));
             }
         }

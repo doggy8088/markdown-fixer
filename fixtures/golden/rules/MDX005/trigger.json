@@ -1,6 +1,6 @@
 {
   "source": "rules/MDX005/trigger.md",
-  "referenceVersion": "1.0.0",
+  "referenceVersion": "1.1.0",
   "cases": [
     {
       "name": "default",
@@ -111,6 +111,30 @@
       "fix": {
         "text": "# 多餘空行\n\n第一段。\n\n\n\n第二段前面有三個空行。\n",
         "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "quote-depth-3-ignore",
+      "options": {
+        "maxQuoteDepth": 3,
+        "onLimit": "ignore"
+      },
+      "diagnose": [
+        {
+          "rule": "MDX005",
+          "name": "multiple-blank-lines",
+          "severity": "warning",
+          "fixable": true,
+          "line": 5,
+          "column": 1,
+          "message": "Multiple consecutive blank lines. Use one blank line between blocks."
+        }
+      ],
+      "fix": {
+        "text": "# 多餘空行\n\n第一段。\n\n第二段前面有三個空行。\n",
+        "changed": true,
         "refused": false,
         "reason": ""
       }

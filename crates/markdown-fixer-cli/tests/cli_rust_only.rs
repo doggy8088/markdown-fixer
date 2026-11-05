@@ -334,3 +334,144 @@ fn detect_json_outputs_detection() {
     assert!(!signals.is_empty());
     assert!(text(&out.stdout).ends_with("}\n"));
 }
+
+// ---- 渲染保護（PRD〈6.9〉）與 --no-render-guard ----
+
+/// 行尾的「空格、tab、空格」在 pulldown-cmark 是 hard break，MDX004 移除它會改變渲染。
+const GUARDED: &str = "a \t \nb\n";
+
+#[test]
+fn check_lists_skipped_fixes_in_text_and_json() {
+    let tmp = TempDir::new("guard-check");
+    tmp.write("g.md", GUARDED);
+    let out = run(&tmp.path, &["g.md"], None);
+    assert_eq!(out.status.code(), Some(1));
+    let stdout = text(&out.stdout);
+    assert!(
+        stdout.contains(
+            "  1          skipped MDX004  Fix not applied: fixes for this layout rule would change how the document renders, so none were applied in this file\n"
+        ),
+        "{stdout}"
+    );
+    assert!(
+        stdout.contains("Render guard skipped 1 fix(es) in 1 file(s)"),
+        "{stdout}"
+    );
+
+    let out = run(&tmp.path, &["--json", "g.md"], None);
+    let json: Value = serde_json::from_slice(&out.stdout).unwrap();
+    let file = &json["files"][0];
+    assert_eq!(file["skippedFixes"][0]["rule"], "MDX004");
+    assert_eq!(file["skippedFixes"][0]["line"], 1);
+    assert_eq!(file["wouldChange"], false);
+    assert_eq!(file["wouldFix"], 0);
+
+    // 沒有被擋下的修正時，JSON 沒有 skippedFixes 鍵，文字輸出沒有額外的行。
+    tmp.write("ok.md", "#Title\n");
+    let out = run(&tmp.path, &["--json", "ok.md"], None);
+    assert!(!text(&out.stdout).contains("skippedFixes"));
+    let out = run(&tmp.path, &["ok.md"], None);
+    assert!(!text(&out.stdout).contains("Render guard"));
+}
+
+#[test]
+fn write_leaves_guarded_lines_and_no_render_guard_applies_them() {
+    let tmp = TempDir::new("guard-write");
+    let path = tmp.write("g.md", GUARDED);
+    let out = run(&tmp.path, &["--write", "g.md"], None);
+    assert_eq!(out.status.code(), Some(1), "{}", text(&out.stdout));
+    assert_eq!(std::fs::read_to_string(&path).unwrap(), GUARDED);
+    assert!(text(&out.stdout).contains("Fix not applied"));
+
+    let out = run(&tmp.path, &["--write", "--no-render-guard", "g.md"], None);
+    assert_eq!(out.status.code(), Some(0), "{}", text(&out.stdout));
+    assert_eq!(std::fs::read_to_string(&path).unwrap(), "a\nb\n");
+    assert!(!text(&out.stdout).contains("Fix not applied"));
+}
+
+#[test]
+fn stdin_write_reports_skipped_fixes_on_stderr() {
+    let tmp = TempDir::new("guard-stdin");
+    let out = run(&tmp.path, &["--stdin", "--write"], Some(GUARDED.as_bytes()));
+    assert_eq!(text(&out.stdout), GUARDED);
+    assert!(text(&out.stderr).contains("skipped MDX004  Fix not applied"));
+
+    let out = run(
+        &tmp.path,
+        &["--stdin", "--write", "--quiet", "--exit-zero"],
+        Some(GUARDED.as_bytes()),
+    );
+    assert_eq!(out.status.code(), Some(0));
+    assert_eq!(text(&out.stdout), GUARDED);
+    assert_eq!(
+        text(&out.stderr),
+        "<stdin>:1: Fix not applied (MDX004): fixes for this layout rule would change how the document renders, so none were applied in this file\n"
+    );
+
+    let out = run(
+        &tmp.path,
+        &["--stdin", "--write", "--quiet", "--no-render-guard"],
+        Some(GUARDED.as_bytes()),
+    );
+    assert_eq!(text(&out.stdout), "a\nb\n");
+    assert_eq!(text(&out.stderr), "");
+}
+
+#[test]
+fn help_mentions_no_render_guard_and_limits() {
+    let tmp = TempDir::new("help-guard");
+    let help = text(&run(&tmp.path, &["--help"], None).stdout);
+    assert!(help.contains("  --no-render-guard   "), "{help}");
+    assert!(help.contains(
+        "  --max-quote-depth N Limit blockquote nesting depth (default 32, 0 = no limit).\n"
+    ));
+    assert!(help.contains(
+        "  --on-limit <mode>   When a limit is exceeded: error (MDX086, default) or ignore.\n"
+    ));
+}
+
+// ---- 資源上限（PRD〈6.10〉） ----
+
+#[test]
+fn quote_depth_limit_flags() {
+    let tmp = TempDir::new("quote-depth");
+    tmp.write("deep.md", "> > > deep\n");
+    let out = run(&tmp.path, &["--max-quote-depth", "2", "deep.md"], None);
+    assert_eq!(out.status.code(), Some(1));
+    let stdout = text(&out.stdout);
+    assert!(stdout.contains("MDX086"), "{stdout}");
+    assert!(stdout.contains("  ERROR  Structural error: "), "{stdout}");
+
+    let out = run(
+        &tmp.path,
+        &["--max-quote-depth=2", "--on-limit=ignore", "deep.md"],
+        None,
+    );
+    assert!(!text(&out.stdout).contains("MDX086"));
+    let out = run(&tmp.path, &["--max-quote-depth", "0", "deep.md"], None);
+    assert!(!text(&out.stdout).contains("MDX086"));
+
+    for (args, message) in [
+        (
+            &["--max-quote-depth", "-1"][..],
+            "--max-quote-depth requires a non-negative integer.",
+        ),
+        (
+            &["--max-quote-depth"],
+            "--max-quote-depth requires a non-negative integer.",
+        ),
+        (
+            &["--on-limit", "warn"],
+            "--on-limit requires error or ignore.",
+        ),
+        (&["--on-limit="], "--on-limit requires error or ignore."),
+    ] {
+        let out = run(&tmp.path, args, None);
+        assert_eq!(out.status.code(), Some(2), "{args:?}");
+        assert_eq!(
+            text(&out.stderr),
+            format!("Error: {message}\nRun with --help for usage.\n"),
+            "{args:?}"
+        );
+    }
+}

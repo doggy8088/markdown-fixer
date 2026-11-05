@@ -2,14 +2,13 @@
 
 use crate::blank_lines::{
     apply_blank_line_fixes, apply_blank_line_normalization, apply_trailing_whitespace,
-    fix_list_style,
 };
 use crate::cjk_emphasis::apply_cjk_emphasis_fixes;
 use crate::jsstr::{self, JsString};
 use crate::line_fix::transform_line;
 use crate::rules::Enabled;
 use crate::scan::{
-    Scan, normalize_for_analysis, scan_document, starts_frontmatter_after_leading_blanks,
+    Scan, normalize_for_analysis, scan_document_with, starts_frontmatter_after_leading_blanks,
 };
 use crate::table::apply_table_delimiter_fixes;
 use crate::{FixResult, Options};
@@ -24,11 +23,11 @@ const BOM: u16 = 0xFEFF;
 const CR: u16 = b'\r' as u16;
 const LF: u16 = b'\n' as u16;
 
-/// 會阻擋修正的結構問題（MDX081、MDX083、MDX053、MDX085）的訊息。
+/// 會阻擋修正的結構問題（MDX081、MDX083、MDX053、MDX085、MDX086）的訊息，不受 `rules`／`ignore_rules` 影響。
 pub(crate) fn blocking_reason(scan: &Scan) -> Option<&str> {
     scan.issues
         .iter()
-        .find(|p| matches!(p.rule, "MDX081" | "MDX083" | "MDX053" | "MDX085"))
+        .find(|p| matches!(p.rule, "MDX081" | "MDX083" | "MDX053" | "MDX085" | "MDX086"))
         .map(|p| p.message.as_str())
 }
 
@@ -61,7 +60,7 @@ pub(crate) fn fix_document(text: &str, options: &Options) -> FixResult {
     let encoding_changed = (had_bom && enabled.is("MDX001")) || (has_cr && enabled.is("MDX002"));
 
     let mut working = normalized_original.clone();
-    let initial_scan = scan_document(&working);
+    let initial_scan = scan_document_with(&working, enabled.limits);
     let had_frontmatter = initial_scan.frontmatter_end.is_some();
     if let Some(reason) = blocking_reason(&initial_scan) {
         return refused(text, reason);
@@ -73,7 +72,7 @@ pub(crate) fn fix_document(text: &str, options: &Options) -> FixResult {
 
     for _ in 0..MAX_PASSES {
         let before = working.clone();
-        let scan = scan_document(&working);
+        let scan = scan_document_with(&working, enabled.limits);
         if let Some(reason) = blocking_reason(&scan) {
             return refused(text, reason);
         }
@@ -96,7 +95,6 @@ pub(crate) fn fix_document(text: &str, options: &Options) -> FixResult {
         working = jsstr::join_lines(&lines);
         working = apply_cjk_emphasis_fixes(&working, &enabled);
         working = apply_table_delimiter_fixes(&working, &enabled);
-        working = fix_list_style(&working, &enabled);
         working = apply_blank_line_fixes(&working, &enabled);
         working = apply_trailing_whitespace(&working, &enabled);
         working = apply_blank_line_normalization(&working, &enabled);
@@ -105,7 +103,11 @@ pub(crate) fn fix_document(text: &str, options: &Options) -> FixResult {
         }
     }
 
-    if !had_frontmatter && scan_document(&working).frontmatter_end.is_some() {
+    if !had_frontmatter
+        && scan_document_with(&working, enabled.limits)
+            .frontmatter_end
+            .is_some()
+    {
         return refused(text, FRONTMATTER_TRAP);
     }
     if !had_frontmatter && enabled.is("MDX006") && starts_frontmatter_after_leading_blanks(&working)

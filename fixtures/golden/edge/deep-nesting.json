@@ -1,6 +1,6 @@
 {
   "source": "edge/deep-nesting.md",
-  "referenceVersion": "1.0.0",
+  "referenceVersion": "1.1.0",
   "cases": [
     {
       "name": "default",
@@ -115,6 +115,20 @@
           "MDX012",
           "MDX013"
         ]
+      },
+      "diagnose": [],
+      "fix": {
+        "text": "# 深層巢狀\n\n- 第 1 層\n  - 第 2 層\n    - 第 3 層\n      - 第 4 層\n        - 第 5 層\n          - 第 6 層\n            - 第 7 層\n              - 第 8 層\n                - 第 9 層\n                  - 第 10 層\n                    - 第 11 層\n                      - 第 12 層\n                        - 第 13 層\n                          - 第 14 層\n                            - 第 15 層\n                              - 第 16 層\n                                - 第 17 層\n                                  - 第 18 層\n                                    - 第 19 層\n                                      - 第 20 層\n                                        - 第 21 層\n                                          - 第 22 層\n                                            - 第 23 層\n                                              - 第 24 層\n                                                - 第 25 層\n                                                  - 第 26 層\n                                                    - 第 27 層\n                                                      - 第 28 層\n                                                        - 第 29 層\n                                                          - 第 30 層\n\n>>>>>>>>>>>> 深層引言\n\n[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[x]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]((((((((((((((((((((y))))))))))))))))))))\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "quote-depth-3-ignore",
+      "options": {
+        "maxQuoteDepth": 3,
+        "onLimit": "ignore"
       },
       "diagnose": [],
       "fix": {

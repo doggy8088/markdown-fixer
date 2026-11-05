@@ -1,6 +1,6 @@
 {
   "source": "rules/MDX042/negative.md",
-  "referenceVersion": "1.0.0",
+  "referenceVersion": "1.1.0",
   "cases": [
     {
       "name": "default",
@@ -66,6 +66,20 @@
           "MDX012",
           "MDX013"
         ]
+      },
+      "diagnose": [],
+      "fix": {
+        "text": "# 正確的寫法\n\n**審查執行**：2026-11-04\n\n**Note:**text 在 ASCII 下可以配對。\n\n標籤：**內容**\n\n**狀態：待修正**（2026-…）\n\n`**審查執行：**2026` 在程式碼裡。\n\n打錯字（gpt-5.x、claude-*、gemini-2.5-flash）。\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "quote-depth-3-ignore",
+      "options": {
+        "maxQuoteDepth": 3,
+        "onLimit": "ignore"
       },
       "diagnose": [],
       "fix": {

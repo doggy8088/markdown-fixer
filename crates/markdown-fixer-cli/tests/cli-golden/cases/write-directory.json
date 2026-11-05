@@ -87,7 +87,7 @@
   ],
   "expected": {
     "status": 1,
-    "stdout": "README.md\n  No problems.\n  Fixed 18 issue(s).\n\ndocs/deep/long.md\n  No problems.\n\ndocs/guide.MD\n  10:1       info    MDX050  Fenced code block has no language. Add one when the language is known, for example ```js.\n  14:11      warning MDX071  Link or image has empty text or an empty destination.\n  14:11      warning MDX075  Image has no alt text. Add a short description, or confirm that an empty alt is correct for a decorative image.\n  Fixed 5 issue(s).\n\ndocs/intro.markdown\n  3:7        info    MDX070  Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text.\n\nFixed 23 issue(s) in 2 file(s).\n4 problem(s) remain: 0 fixable, 0 error(s), 2 warning(s), 2 info.\n",
+    "stdout": "README.md\n  7:1        warning MDX031  List uses \"-\" but the first item in this list uses \"*\". A different bullet marker starts a new list in CommonMark, so this is not fixed automatically; use one marker if this is one list.\n  8:1        warning MDX031  List uses \"-\" but the first item in this list uses \"*\". A different bullet marker starts a new list in CommonMark, so this is not fixed automatically; use one marker if this is one list.\n  Fixed 16 issue(s).\n\ndocs/deep/long.md\n  No problems.\n\ndocs/guide.MD\n  10:1       info    MDX050  Fenced code block has no language. Add one when the language is known, for example ```js.\n  14:11      warning MDX071  Link or image has empty text or an empty destination.\n  14:11      warning MDX075  Image has no alt text. Add a short description, or confirm that an empty alt is correct for a decorative image.\n  Fixed 5 issue(s).\n\ndocs/intro.markdown\n  3:7        info    MDX070  Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text.\n\nFixed 21 issue(s) in 2 file(s).\n6 problem(s) remain: 0 fixable, 0 error(s), 4 warning(s), 2 info.\n",
     "stderr": "",
     "files": [
       {
@@ -108,7 +108,7 @@
       },
       {
         "path": "README.md",
-        "text": "# Project Notes  \n\nIntro paragraph with trailing spaces.  \n\n## Setup\n* first item\n* second item\n* third item\n\nSome **bold** text and a [link](https://example.com).\n\n| Name | Value |\n| --- | --- |\n| a | 1 |\n\n> quote without space\n> no space here\n\n**標籤**：內容說明\nFinal line without newline.\n"
+        "text": "# Project Notes  \n\nIntro paragraph with trailing spaces.  \n\n## Setup\n* first item\n- second item\n- third item\n\nSome **bold** text and a [link](https://example.com).\n\n| Name | Value |\n| --- | --- |\n| a | 1 |\n\n> quote without space\n> no space here\n\n**標籤**：內容說明\nFinal line without newline.\n"
       },
       {
         "path": "blob-report/a.md",

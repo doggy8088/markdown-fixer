@@ -16,11 +16,11 @@
 
 | 限制 | Node 版 | Rust 版 |
 | --- | --- | --- |
-| 執行環境 | 需要 Node.js 20 以上 | 單一執行檔（macOS aarch64 release 版約 0.7 MB），沒有執行期相依 |
+| 執行環境 | 需要 Node.js 20 以上 | 單一執行檔（macOS aarch64 release 版約 1.1 MB），沒有執行期相依 |
 | 嵌入其他程式 | 只能當 CLI 呼叫 | Rust 函式庫與 C ABI |
 | 啟動時間 | 約數十毫秒 | 15 KB 片段從啟動到輸出約 6.5 ms，適合「按熱鍵就修正剪貼簿」的即時情境 |
 
-行為上的契約是與 Node 版一致：同樣的輸入與選項，Rust 版回報的問題（順序、行號、欄號、訊息）與修正後的文字都要和 Node 版逐位元組相同。JS 版本是行為的唯一標準（oracle），以 golden 語料與差異模糊測試驗證；目前的一致性狀態、刻意差異與已知問題見 [docs/parity.md](docs/parity.md)。
+行為上的契約是與 Node 版一致：同樣的輸入與選項，Rust 版回報的問題（順序、行號、欄號、訊息）與修正後的文字都要和 Node 版逐位元組相同。唯一的例外是 Rust 版預設開啟的**渲染保護**：修正後實際以 CommonMark／GFM 渲染比對，會意外改變渲染結果的修正不套用，並列在輸出裡；加上 `--no-render-guard`（函式庫是 `render_guard: false`）就與 Node 版完全相同。JS 版本是行為的唯一標準（oracle），以 golden 語料與差異模糊測試驗證；目前的一致性狀態、刻意差異與已知問題見 [docs/parity.md](docs/parity.md)。
 
 ## 安裝
 
@@ -101,6 +101,9 @@ pbpaste | markdown-fixer --stdin --write --quiet --ignore-rule MDX003
 
 # 判斷一段文字像不像 Markdown
 pbpaste | markdown-fixer --stdin --detect
+
+# 關閉渲染保護，套用所有安全修正（輸出與 Node 版完全相同）
+markdown-fixer --write --no-render-guard README.md
 ```
 
 `--write` 一定要明確指定檔案或目錄，不帶路徑會直接拒絕，避免意外改寫整個工作目錄。完整的旗標說明見 [docs/cli.md](docs/cli.md)。
@@ -139,16 +142,17 @@ macOS 上可以搭配 Karabiner-Elements，按 `左 Option+Shift+V` 把剪貼簿
 - 只改 Markdown 語法，不改意思、措辭或段落排版。
 - 不動 fenced code、inline code、frontmatter、數學式、URL、raw HTML、HTML comment 與連結目的地。剛好兩個行尾空格視為刻意的換行，會保留。
 - 不發明 alt text、連結目標、標題層級或表格內容。只報告的規則不會被自動套用。
-- 遇到未關閉的 frontmatter（MDX081）、未關閉的 HTML comment（MDX083）、不合法的 fence（MDX053）、未關閉的 `$$` 數學區塊（MDX085），或修正後會讓檔首的 `---` 變成 YAML frontmatter 時，整份文件保持原樣並回報原因。這些阻擋規則即使用 `--ignore-rule` 停用也照樣阻擋。
+- 遇到未關閉的 frontmatter（MDX081）、未關閉的 HTML comment（MDX083）、不合法的 fence（MDX053）、未關閉的 `$$` 數學區塊（MDX085）、超過深度上限的巢狀引言（MDX086），或修正後會讓檔首的 `---` 變成 YAML frontmatter 時，整份文件保持原樣並回報原因。這些阻擋規則即使用 `--ignore-rule` 停用也照樣阻擋。
+- 渲染保護（預設開啟）：修正不能意外改變渲染結果。排版類修正（空行、行尾空白、引言空白等）不得改變渲染；語法修復（`#標題`、`-item`、`** x **` 等）只能改變被修正的區塊，也不能改到程式碼。做不到的修正不套用，在輸出中列為 `skipped`。
 
-這是行導向的啟發式檢查器，不是完整的 CommonMark parser。`MDX010`（`#hashtag`）、`MDX030`（以連字號開頭的英文詞）、`MDX031`（空行隔開的兩個清單）有本質上的歧義，`--write` 之後一定要看 diff。原因與已知限制見 [docs/architecture.md](docs/architecture.md) 與 [docs/rules.md](docs/rules.md)。
+這是行導向的啟發式檢查器，不是完整的 CommonMark parser；渲染保護只用 parser 來驗證，不用來產生修正。`MDX010`（`#hashtag`）、`MDX030`（以連字號開頭的英文詞）有本質上的歧義，`--write` 之後一定要看 diff。原因與已知限制見 [docs/architecture.md](docs/architecture.md) 與 [docs/rules.md](docs/rules.md)。
 
 ## 文件
 
 | 文件 | 內容 |
 | --- | --- |
 | [docs/README.md](docs/README.md) | 文件索引 |
-| [docs/rules.md](docs/rules.md) | 48 條規則的完整說明與範例 |
+| [docs/rules.md](docs/rules.md) | 49 條規則的完整說明與範例 |
 | [docs/cli.md](docs/cli.md) | CLI 旗標、輸出格式、結束碼 |
 | [docs/library.md](docs/library.md) | Rust 函式庫 API |
 | [docs/ffi.md](docs/ffi.md) | C ABI |

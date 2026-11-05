@@ -1,6 +1,6 @@
 {
   "source": "rules/MDX084/trigger.md",
-  "referenceVersion": "1.0.0",
+  "referenceVersion": "1.1.0",
   "cases": [
     {
       "name": "default",
@@ -216,6 +216,57 @@
         ]
       },
       "diagnose": [],
+      "fix": {
+        "text": "# 全形語法\n\n＃ 全形井號標題\n\n－ 全形減號清單\n\n請見［連結］（https://example.com）。\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "quote-depth-3-ignore",
+      "options": {
+        "maxQuoteDepth": 3,
+        "onLimit": "ignore"
+      },
+      "diagnose": [
+        {
+          "rule": "MDX084",
+          "name": "fullwidth-markdown-syntax",
+          "severity": "warning",
+          "fixable": false,
+          "line": 3,
+          "column": 1,
+          "message": "Full-width punctuation is being used for Markdown syntax. Use ASCII # for headings, -, *, or + for bullets, and [ ] ( ) for links and images."
+        },
+        {
+          "rule": "MDX084",
+          "name": "fullwidth-markdown-syntax",
+          "severity": "warning",
+          "fixable": false,
+          "line": 5,
+          "column": 1,
+          "message": "Full-width punctuation is being used for Markdown syntax. Use ASCII # for headings, -, *, or + for bullets, and [ ] ( ) for links and images."
+        },
+        {
+          "rule": "MDX084",
+          "name": "fullwidth-markdown-syntax",
+          "severity": "warning",
+          "fixable": false,
+          "line": 7,
+          "column": 1,
+          "message": "Full-width punctuation is being used for Markdown syntax. Use ASCII # for headings, -, *, or + for bullets, and [ ] ( ) for links and images."
+        },
+        {
+          "rule": "MDX070",
+          "name": "bare-url",
+          "severity": "info",
+          "fixable": false,
+          "line": 7,
+          "column": 8,
+          "message": "Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text."
+        }
+      ],
       "fix": {
         "text": "# 全形語法\n\n＃ 全形井號標題\n\n－ 全形減號清單\n\n請見［連結］（https://example.com）。\n",
         "changed": false,

@@ -1,5 +1,5 @@
 {
-  "referenceVersion": "1.0.0",
+  "referenceVersion": "1.1.0",
   "rules": [
     {
       "id": "MDX001",
@@ -174,8 +174,8 @@
       "name": "list-marker-style",
       "category": "list",
       "severity": "warning",
-      "fixable": true,
-      "summary": "Use one bullet marker per list."
+      "fixable": false,
+      "summary": "Use one bullet marker per list; a different marker starts a new list, so this is reported, not fixed."
     },
     {
       "id": "MDX032",
@@ -376,6 +376,14 @@
       "severity": "error",
       "fixable": false,
       "summary": "Close every $$ math block."
+    },
+    {
+      "id": "MDX086",
+      "name": "resource-limit",
+      "category": "structure",
+      "severity": "error",
+      "fixable": false,
+      "summary": "Keep blockquote nesting within the configured depth limit (maxQuoteDepth)."
     },
     {
       "id": "MDX090",

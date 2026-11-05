@@ -34,10 +34,11 @@ export const OPTION_SETS = [
   { name: 'snippet', options: { ignoreRules: ['MDX003'] } },
   { name: 'line-length-80', options: { maxLineLength: 80 } },
   { name: 'keep-encoding', options: { ignoreRules: ['MDX001', 'MDX002'] } },
-  { name: 'headings-only', options: { rules: ['MDX010', 'MDX011', 'MDX012', 'MDX013'] } }
+  { name: 'headings-only', options: { rules: ['MDX010', 'MDX011', 'MDX012', 'MDX013'] } },
+  { name: 'quote-depth-3-ignore', options: { maxQuoteDepth: 3, onLimit: 'ignore' } }
 ];
 
-const BLOCKING_RULES = ['MDX081', 'MDX083', 'MDX053', 'MDX085'];
+const BLOCKING_RULES = ['MDX081', 'MDX083', 'MDX053', 'MDX085', 'MDX086'];
 
 // 與 oracle CLI 的 readMarkdownFile 相同：拒絕 NUL、嚴格 UTF-8、保留 BOM。
 export function readMarkdownFile(file) {
@@ -55,6 +56,8 @@ export function canonicalOptions(options = {}) {
   if (options.rules !== undefined) result.rules = [...options.rules];
   if (options.ignoreRules !== undefined) result.ignoreRules = [...options.ignoreRules];
   if (options.maxLineLength !== undefined) result.maxLineLength = options.maxLineLength;
+  if (options.maxQuoteDepth !== undefined) result.maxQuoteDepth = options.maxQuoteDepth;
+  if (options.onLimit !== undefined) result.onLimit = options.onLimit;
   return result;
 }
 

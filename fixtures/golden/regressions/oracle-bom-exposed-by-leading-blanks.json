@@ -1,6 +1,6 @@
 {
   "source": "regressions/oracle-bom-exposed-by-leading-blanks.md",
-  "referenceVersion": "1.0.0",
+  "referenceVersion": "1.1.0",
   "cases": [
     {
       "name": "default",
@@ -10,10 +10,10 @@
           "rule": "MDX006",
           "name": "leading-blank-lines",
           "severity": "warning",
-          "fixable": true,
+          "fixable": false,
           "line": 1,
           "column": 1,
-          "message": "File starts with blank lines. Remove them so the first block starts at line 1."
+          "message": "File starts with blank lines before a line that begins with U+FEFF. Remove the U+FEFF first; removing only the blank lines would turn it into a BOM."
         },
         {
           "rule": "MDX009",
@@ -26,7 +26,7 @@
         }
       ],
       "fix": {
-        "text": "\uFEFF# T\n",
+        "text": "\n\uFEFF# T\n",
         "changed": true,
         "refused": false,
         "reason": ""
@@ -44,10 +44,10 @@
           "rule": "MDX006",
           "name": "leading-blank-lines",
           "severity": "warning",
-          "fixable": true,
+          "fixable": false,
           "line": 1,
           "column": 1,
-          "message": "File starts with blank lines. Remove them so the first block starts at line 1."
+          "message": "File starts with blank lines before a line that begins with U+FEFF. Remove the U+FEFF first; removing only the blank lines would turn it into a BOM."
         },
         {
           "rule": "MDX009",
@@ -60,7 +60,7 @@
         }
       ],
       "fix": {
-        "text": "\uFEFF# T\n",
+        "text": "\n\uFEFF# T\n",
         "changed": true,
         "refused": false,
         "reason": ""
@@ -76,10 +76,10 @@
           "rule": "MDX006",
           "name": "leading-blank-lines",
           "severity": "warning",
-          "fixable": true,
+          "fixable": false,
           "line": 1,
           "column": 1,
-          "message": "File starts with blank lines. Remove them so the first block starts at line 1."
+          "message": "File starts with blank lines before a line that begins with U+FEFF. Remove the U+FEFF first; removing only the blank lines would turn it into a BOM."
         },
         {
           "rule": "MDX009",
@@ -92,7 +92,7 @@
         }
       ],
       "fix": {
-        "text": "\uFEFF# T\n",
+        "text": "\n\uFEFF# T\n",
         "changed": true,
         "refused": false,
         "reason": ""
@@ -111,10 +111,10 @@
           "rule": "MDX006",
           "name": "leading-blank-lines",
           "severity": "warning",
-          "fixable": true,
+          "fixable": false,
           "line": 1,
           "column": 1,
-          "message": "File starts with blank lines. Remove them so the first block starts at line 1."
+          "message": "File starts with blank lines before a line that begins with U+FEFF. Remove the U+FEFF first; removing only the blank lines would turn it into a BOM."
         },
         {
           "rule": "MDX009",
@@ -127,7 +127,7 @@
         }
       ],
       "fix": {
-        "text": "\uFEFF# T\n",
+        "text": "\n\uFEFF# T\n",
         "changed": true,
         "refused": false,
         "reason": ""
@@ -147,6 +147,39 @@
       "fix": {
         "text": "\n\n\uFEFF# T\n",
         "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "quote-depth-3-ignore",
+      "options": {
+        "maxQuoteDepth": 3,
+        "onLimit": "ignore"
+      },
+      "diagnose": [
+        {
+          "rule": "MDX006",
+          "name": "leading-blank-lines",
+          "severity": "warning",
+          "fixable": false,
+          "line": 1,
+          "column": 1,
+          "message": "File starts with blank lines before a line that begins with U+FEFF. Remove the U+FEFF first; removing only the blank lines would turn it into a BOM."
+        },
+        {
+          "rule": "MDX009",
+          "name": "zero-width-character",
+          "severity": "warning",
+          "fixable": false,
+          "line": 3,
+          "column": 1,
+          "message": "Zero-width character found. Remove it unless it is intentional (for example, a line-break opportunity in some scripts)."
+        }
+      ],
+      "fix": {
+        "text": "\n\uFEFF# T\n",
+        "changed": true,
         "refused": false,
         "reason": ""
       }

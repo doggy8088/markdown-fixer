@@ -209,7 +209,13 @@ fn deep_blockquote_definition_scan_is_fast() {
 fn deep_nesting_fix_document_is_fast() {
     let text = format!("{} 深層引言\n", ">".repeat(400));
     let started = Instant::now();
-    let _ = crate::fix_document(&text, &crate::Options::default());
+    // 預設上限會讓 400 層引言直接被 MDX086 拒絕；取消上限才量得到修正路徑本身。
+    let options = crate::Options {
+        render_guard: false,
+        max_quote_depth: 0,
+        ..crate::Options::default()
+    };
+    let _ = crate::fix_document(&text, &options);
     check_time(started.elapsed(), LIMIT * 4, &"deep nesting fix_document");
 }
 
@@ -305,9 +311,6 @@ fn phase_profile() {
     time("table apply", &mut || {
         let _ = crate::table::apply_table_delimiter_fixes(&t, &enabled);
     });
-    time("list style", &mut || {
-        let _ = crate::blank_lines::fix_list_style(&t, &enabled);
-    });
     time("blank fixes", &mut || {
         let _ = crate::blank_lines::apply_blank_line_fixes(&t, &enabled);
     });
@@ -347,12 +350,19 @@ fn pathological_documents_are_fast() {
         ("**甲：**乙 ".repeat(20) + "\n").repeat(1_600),
         ("**甲：**乙\n").repeat(5_000),
     ];
+    // 量的是與 oracle 相同的修正路徑：關閉渲染保護（它的成本由 guard 自己的測試負責），
+    // 並取消引言深度上限，讓深層引言真的走完掃描而不是直接被 MDX086 拒絕。
+    let options = crate::Options {
+        render_guard: false,
+        max_quote_depth: 0,
+        ..crate::Options::default()
+    };
     for text in &cases {
         let started = Instant::now();
-        let _ = crate::fix_document(text, &crate::Options::default());
+        let _ = crate::fix_document(text, &options);
         let fix = started.elapsed();
         let started = Instant::now();
-        let _ = crate::diagnose(text, &crate::Options::default());
+        let _ = crate::diagnose(text, &options);
         let diag = started.elapsed();
         let label: String = text.chars().take(12).collect();
         eprintln!("{:>8?} {:>8?} {:?}", fix, diag, label);

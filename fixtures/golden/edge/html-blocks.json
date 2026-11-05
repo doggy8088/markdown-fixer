@@ -1,6 +1,6 @@
 {
   "source": "edge/html-blocks.md",
-  "referenceVersion": "1.0.0",
+  "referenceVersion": "1.1.0",
   "cases": [
     {
       "name": "default",
@@ -269,6 +269,66 @@
           "line": 35,
           "column": 1,
           "message": "Heading is directly attached to the preceding paragraph. Add a blank line before it."
+        },
+        {
+          "rule": "MDX010",
+          "name": "atx-missing-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 35,
+          "column": 2,
+          "message": "Add a space after the heading marker: \"# \" rather than \"#\"."
+        }
+      ],
+      "fix": {
+        "text": "# HTML\n\n<div align=\"center\">\n#NoSpace\n** bold **\n</div>\n\n<script>\nconst a = \"#x\";\n\n\nconst b = 1;\n</script>\n\n<details>\n<summary>點我展開</summary>\n\n# 展開後的標題\n\n</details>\n\n<?php echo \"#x\"; ?>\n\n<!DOCTYPE html>\n\n<![CDATA[\n#data\n]]>\n\n<custom-element attr=\"x\">\n#NotHtml\n\npara\n<span>\n\n# AfterSpan\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "quote-depth-3-ignore",
+      "options": {
+        "maxQuoteDepth": 3,
+        "onLimit": "ignore"
+      },
+      "diagnose": [
+        {
+          "rule": "MDX019",
+          "name": "multiple-h1",
+          "severity": "info",
+          "fixable": false,
+          "line": 18,
+          "column": 1,
+          "message": "Document has more than one H1. Use H2 for subsections and keep one H1 for the page title."
+        },
+        {
+          "rule": "MDX010",
+          "name": "atx-missing-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 18,
+          "column": 2,
+          "message": "Add a space after the heading marker: \"# \" rather than \"#\"."
+        },
+        {
+          "rule": "MDX013",
+          "name": "heading-blank-lines",
+          "severity": "warning",
+          "fixable": true,
+          "line": 35,
+          "column": 1,
+          "message": "Heading is directly attached to the preceding paragraph. Add a blank line before it."
+        },
+        {
+          "rule": "MDX019",
+          "name": "multiple-h1",
+          "severity": "info",
+          "fixable": false,
+          "line": 35,
+          "column": 1,
+          "message": "Document has more than one H1. Use H2 for subsections and keep one H1 for the page title."
         },
         {
           "rule": "MDX010",

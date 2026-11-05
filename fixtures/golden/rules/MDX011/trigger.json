@@ -1,6 +1,6 @@
 {
   "source": "rules/MDX011/trigger.md",
-  "referenceVersion": "1.0.0",
+  "referenceVersion": "1.1.0",
   "cases": [
     {
       "name": "default",
@@ -152,6 +152,39 @@
           "line": 1,
           "column": 2,
           "message": "Use exactly one space after the ATX heading marker."
+        }
+      ],
+      "fix": {
+        "text": "# 兩個空白\n\n##\tTab 間隔\n\n內容。\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "quote-depth-3-ignore",
+      "options": {
+        "maxQuoteDepth": 3,
+        "onLimit": "ignore"
+      },
+      "diagnose": [
+        {
+          "rule": "MDX011",
+          "name": "atx-multiple-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 1,
+          "column": 2,
+          "message": "Use exactly one space after the ATX heading marker."
+        },
+        {
+          "rule": "MDX007",
+          "name": "hard-tab",
+          "severity": "warning",
+          "fixable": false,
+          "line": 3,
+          "column": 3,
+          "message": "Tab character found. Use spaces for indentation and alignment; tabs render at different widths."
         }
       ],
       "fix": {

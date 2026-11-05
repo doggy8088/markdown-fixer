@@ -1,0 +1,16 @@
+{
+  "name": "max-quote-depth-negative",
+  "args": [
+    "--max-quote-depth",
+    "-1"
+  ],
+  "cwd": "",
+  "nonRoot": false,
+  "setup": [],
+  "expected": {
+    "status": 2,
+    "stdout": "",
+    "stderr": "Error: --max-quote-depth requires a non-negative integer.\nRun with --help for usage.\n",
+    "files": []
+  }
+}

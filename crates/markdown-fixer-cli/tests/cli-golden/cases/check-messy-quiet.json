@@ -14,7 +14,7 @@
   ],
   "expected": {
     "status": 1,
-    "stdout": "18 problem(s) in 1 file(s): 18 fixable, 0 error(s), 18 warning(s), 0 info.\n",
+    "stdout": "18 problem(s) in 1 file(s): 16 fixable, 0 error(s), 18 warning(s), 0 info.\n",
     "stderr": "",
     "files": [
       {

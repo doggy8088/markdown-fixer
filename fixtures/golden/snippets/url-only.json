@@ -1,6 +1,6 @@
 {
   "source": "snippets/url-only.md",
-  "referenceVersion": "1.0.0",
+  "referenceVersion": "1.1.0",
   "cases": [
     {
       "name": "default",
@@ -138,6 +138,39 @@
       "fix": {
         "text": "https://github.com/example/repo/pull/42#issuecomment-1234567890",
         "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "quote-depth-3-ignore",
+      "options": {
+        "maxQuoteDepth": 3,
+        "onLimit": "ignore"
+      },
+      "diagnose": [
+        {
+          "rule": "MDX003",
+          "name": "final-newline",
+          "severity": "warning",
+          "fixable": true,
+          "line": 1,
+          "column": 1,
+          "message": "File does not end with a newline."
+        },
+        {
+          "rule": "MDX070",
+          "name": "bare-url",
+          "severity": "info",
+          "fixable": false,
+          "line": 1,
+          "column": 1,
+          "message": "Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text."
+        }
+      ],
+      "fix": {
+        "text": "https://github.com/example/repo/pull/42#issuecomment-1234567890\n",
+        "changed": true,
         "refused": false,
         "reason": ""
       }

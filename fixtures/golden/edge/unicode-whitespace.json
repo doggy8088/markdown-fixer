@@ -1,6 +1,6 @@
 {
   "source": "edge/unicode-whitespace.md",
-  "referenceVersion": "1.0.0",
+  "referenceVersion": "1.1.0",
   "cases": [
     {
       "name": "default",
@@ -144,6 +144,39 @@
         ]
       },
       "diagnose": [
+        {
+          "rule": "MDX010",
+          "name": "atx-missing-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 6,
+          "column": 2,
+          "message": "Add a space after the heading marker: \"# \" rather than \"#\"."
+        }
+      ],
+      "fix": {
+        "text": "# Unicode 空白\n\n全形空白開頭的行：\n\u3000\u3000段落縮排兩個全形空白。\n\n# \u3000全形空白當標題間隔\n\n-\u3000全形空白清單\n\n**\u3000粗體\u3000**\n\nthin\u2009space and en\u2002space\n\n[label\u00A0text]: https://example.com\n\n[a][label text]\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "quote-depth-3-ignore",
+      "options": {
+        "maxQuoteDepth": 3,
+        "onLimit": "ignore"
+      },
+      "diagnose": [
+        {
+          "rule": "MDX019",
+          "name": "multiple-h1",
+          "severity": "info",
+          "fixable": false,
+          "line": 6,
+          "column": 1,
+          "message": "Document has more than one H1. Use H2 for subsections and keep one H1 for the page title."
+        },
         {
           "rule": "MDX010",
           "name": "atx-missing-space",

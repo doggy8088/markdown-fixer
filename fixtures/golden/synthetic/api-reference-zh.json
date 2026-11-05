@@ -1,6 +1,6 @@
 {
   "source": "synthetic/api-reference-zh.md",
-  "referenceVersion": "1.0.0",
+  "referenceVersion": "1.1.0",
   "cases": [
     {
       "name": "default",
@@ -91,10 +91,10 @@
           "rule": "MDX031",
           "name": "list-marker-style",
           "severity": "warning",
-          "fixable": true,
+          "fixable": false,
           "line": 55,
           "column": 1,
-          "message": "List uses \"*\" but the first item in this list uses \"-\". Use one bullet marker per list."
+          "message": "List uses \"*\" but the first item in this list uses \"-\". A different bullet marker starts a new list in CommonMark, so this is not fixed automatically; use one marker if this is one list."
         },
         {
           "rule": "MDX050",
@@ -134,7 +134,7 @@
         }
       ],
       "fix": {
-        "text": "# 訂單服務 API 參考文件\n\n本文件說明訂單服務（Order Service）v2 的 REST API。所有端點都以 `https://api.example.com/v2` 為前綴，回應格式一律是 JSON。\n完整的 OpenAPI 規格請見 https://api.example.com/v2/openapi.json 。\n\n## 認證\n\n所有請求都必須帶上 Bearer token：\n\n```http\nGET /v2/orders HTTP/1.1\nHost: api.example.com\nAuthorization: Bearer <token>\n```\n\n**注意**：token 有效期限為 1 小時，過期後請用 refresh token 換新。\n\n## 端點一覽\n\n| 方法 | 路徑 | 說明 |\n| --- | --- | --- |\n| GET | `/orders` | 列出訂單 |\n| GET | `/orders/{id}` | 取得單筆訂單 |\n| POST | `/orders` | 建立訂單 |\n| PATCH | `/orders/{id}` | 更新訂單狀態 |\n| DELETE | `/orders/{id}` | 取消訂單 | 僅限草稿 |\n\n## 列出訂單\n\n`GET /orders`\n\n### 查詢參數\n\n| 參數 | 型別 | 必填 | 說明 |\n|---|:---:|---|---|\n| `status` | string | 否 | `draft`、`paid` 或 `shipped` |\n| `limit` | integer | 否 | 每頁筆數，預設 20，上限 100 |\n| `cursor` | string | 否 | 分頁游標 |\n| `q` | string | 否 | 支援 `name|email` 這種 OR 查詢 |\n\n### 回應範例\n\n```json\n{\n  \"data\": [\n    { \"id\": \"ord_123\", \"status\": \"paid\", \"total\": 1280 }\n  ],\n  \"next_cursor\": \"eyJpZCI6Im9yZF8xMjMifQ==\"\n}\n```\n\n#### 錯誤碼\n\n- `400`：參數格式錯誤\n- `401`：token 無效或過期\n- `429`：超過速率限制，請參考 `Retry-After` 標頭\n\n## 建立訂單\n\n`POST /orders`\n\n**請求主體：**\n\n```\n{\n  \"items\": [{ \"sku\": \"A-001\", \"qty\": 2 }],\n  \"note\": \"請於週五前出貨\"\n}\n```\n\n**回應：**`201 Created`，主體為新建立的訂單。\n\n> **提示**：建立訂單是冪等的。帶上 `Idempotency-Key` 標頭，重送同一個請求不會建立第二筆訂單。\n\n## 速率限制\n\n每個 API key 每分鐘最多 600 次請求。超過時回傳 `429`，並在 `Retry-After` 標頭告訴你要等幾秒。\n\n## 變更紀錄\n\n- 2026-10-01：新增 `cursor` 分頁，`page` 參數標記為 deprecated。\n- 2026-08-15：`DELETE /orders/{id}` 只能取消草稿狀態的訂單。\n\n相關文件：[錯誤處理指南][errors]、[Webhook 設定][webhooks]。\n\n[errors]: https://docs.example.com/errors\n[webhooks]: https://docs.example.com/webhooks\n[errors]: https://docs.example.com/errors-v1\n",
+        "text": "# 訂單服務 API 參考文件\n\n本文件說明訂單服務（Order Service）v2 的 REST API。所有端點都以 `https://api.example.com/v2` 為前綴，回應格式一律是 JSON。\n完整的 OpenAPI 規格請見 https://api.example.com/v2/openapi.json 。\n\n## 認證\n\n所有請求都必須帶上 Bearer token：\n\n```http\nGET /v2/orders HTTP/1.1\nHost: api.example.com\nAuthorization: Bearer <token>\n```\n\n**注意**：token 有效期限為 1 小時，過期後請用 refresh token 換新。\n\n## 端點一覽\n\n| 方法 | 路徑 | 說明 |\n| --- | --- | --- |\n| GET | `/orders` | 列出訂單 |\n| GET | `/orders/{id}` | 取得單筆訂單 |\n| POST | `/orders` | 建立訂單 |\n| PATCH | `/orders/{id}` | 更新訂單狀態 |\n| DELETE | `/orders/{id}` | 取消訂單 | 僅限草稿 |\n\n## 列出訂單\n\n`GET /orders`\n\n### 查詢參數\n\n| 參數 | 型別 | 必填 | 說明 |\n|---|:---:|---|---|\n| `status` | string | 否 | `draft`、`paid` 或 `shipped` |\n| `limit` | integer | 否 | 每頁筆數，預設 20，上限 100 |\n| `cursor` | string | 否 | 分頁游標 |\n| `q` | string | 否 | 支援 `name|email` 這種 OR 查詢 |\n\n### 回應範例\n\n```json\n{\n  \"data\": [\n    { \"id\": \"ord_123\", \"status\": \"paid\", \"total\": 1280 }\n  ],\n  \"next_cursor\": \"eyJpZCI6Im9yZF8xMjMifQ==\"\n}\n```\n\n#### 錯誤碼\n\n- `400`：參數格式錯誤\n- `401`：token 無效或過期\n* `429`：超過速率限制，請參考 `Retry-After` 標頭\n\n## 建立訂單\n\n`POST /orders`\n\n**請求主體：**\n\n```\n{\n  \"items\": [{ \"sku\": \"A-001\", \"qty\": 2 }],\n  \"note\": \"請於週五前出貨\"\n}\n```\n\n**回應：**`201 Created`，主體為新建立的訂單。\n\n> **提示**：建立訂單是冪等的。帶上 `Idempotency-Key` 標頭，重送同一個請求不會建立第二筆訂單。\n\n## 速率限制\n\n每個 API key 每分鐘最多 600 次請求。超過時回傳 `429`，並在 `Retry-After` 標頭告訴你要等幾秒。\n\n## 變更紀錄\n\n- 2026-10-01：新增 `cursor` 分頁，`page` 參數標記為 deprecated。\n- 2026-08-15：`DELETE /orders/{id}` 只能取消草稿狀態的訂單。\n\n相關文件：[錯誤處理指南][errors]、[Webhook 設定][webhooks]。\n\n[errors]: https://docs.example.com/errors\n[webhooks]: https://docs.example.com/webhooks\n[errors]: https://docs.example.com/errors-v1\n",
         "changed": true,
         "refused": false,
         "reason": ""
@@ -233,10 +233,10 @@
           "rule": "MDX031",
           "name": "list-marker-style",
           "severity": "warning",
-          "fixable": true,
+          "fixable": false,
           "line": 55,
           "column": 1,
-          "message": "List uses \"*\" but the first item in this list uses \"-\". Use one bullet marker per list."
+          "message": "List uses \"*\" but the first item in this list uses \"-\". A different bullet marker starts a new list in CommonMark, so this is not fixed automatically; use one marker if this is one list."
         },
         {
           "rule": "MDX050",
@@ -276,7 +276,7 @@
         }
       ],
       "fix": {
-        "text": "# 訂單服務 API 參考文件\n\n本文件說明訂單服務（Order Service）v2 的 REST API。所有端點都以 `https://api.example.com/v2` 為前綴，回應格式一律是 JSON。\n完整的 OpenAPI 規格請見 https://api.example.com/v2/openapi.json 。\n\n## 認證\n\n所有請求都必須帶上 Bearer token：\n\n```http\nGET /v2/orders HTTP/1.1\nHost: api.example.com\nAuthorization: Bearer <token>\n```\n\n**注意**：token 有效期限為 1 小時，過期後請用 refresh token 換新。\n\n## 端點一覽\n\n| 方法 | 路徑 | 說明 |\n| --- | --- | --- |\n| GET | `/orders` | 列出訂單 |\n| GET | `/orders/{id}` | 取得單筆訂單 |\n| POST | `/orders` | 建立訂單 |\n| PATCH | `/orders/{id}` | 更新訂單狀態 |\n| DELETE | `/orders/{id}` | 取消訂單 | 僅限草稿 |\n\n## 列出訂單\n\n`GET /orders`\n\n### 查詢參數\n\n| 參數 | 型別 | 必填 | 說明 |\n|---|:---:|---|---|\n| `status` | string | 否 | `draft`、`paid` 或 `shipped` |\n| `limit` | integer | 否 | 每頁筆數，預設 20，上限 100 |\n| `cursor` | string | 否 | 分頁游標 |\n| `q` | string | 否 | 支援 `name|email` 這種 OR 查詢 |\n\n### 回應範例\n\n```json\n{\n  \"data\": [\n    { \"id\": \"ord_123\", \"status\": \"paid\", \"total\": 1280 }\n  ],\n  \"next_cursor\": \"eyJpZCI6Im9yZF8xMjMifQ==\"\n}\n```\n\n#### 錯誤碼\n\n- `400`：參數格式錯誤\n- `401`：token 無效或過期\n- `429`：超過速率限制，請參考 `Retry-After` 標頭\n\n## 建立訂單\n\n`POST /orders`\n\n**請求主體：**\n\n```\n{\n  \"items\": [{ \"sku\": \"A-001\", \"qty\": 2 }],\n  \"note\": \"請於週五前出貨\"\n}\n```\n\n**回應：**`201 Created`，主體為新建立的訂單。\n\n> **提示**：建立訂單是冪等的。帶上 `Idempotency-Key` 標頭，重送同一個請求不會建立第二筆訂單。\n\n## 速率限制\n\n每個 API key 每分鐘最多 600 次請求。超過時回傳 `429`，並在 `Retry-After` 標頭告訴你要等幾秒。\n\n## 變更紀錄\n\n- 2026-10-01：新增 `cursor` 分頁，`page` 參數標記為 deprecated。\n- 2026-08-15：`DELETE /orders/{id}` 只能取消草稿狀態的訂單。\n\n相關文件：[錯誤處理指南][errors]、[Webhook 設定][webhooks]。\n\n[errors]: https://docs.example.com/errors\n[webhooks]: https://docs.example.com/webhooks\n[errors]: https://docs.example.com/errors-v1\n",
+        "text": "# 訂單服務 API 參考文件\n\n本文件說明訂單服務（Order Service）v2 的 REST API。所有端點都以 `https://api.example.com/v2` 為前綴，回應格式一律是 JSON。\n完整的 OpenAPI 規格請見 https://api.example.com/v2/openapi.json 。\n\n## 認證\n\n所有請求都必須帶上 Bearer token：\n\n```http\nGET /v2/orders HTTP/1.1\nHost: api.example.com\nAuthorization: Bearer <token>\n```\n\n**注意**：token 有效期限為 1 小時，過期後請用 refresh token 換新。\n\n## 端點一覽\n\n| 方法 | 路徑 | 說明 |\n| --- | --- | --- |\n| GET | `/orders` | 列出訂單 |\n| GET | `/orders/{id}` | 取得單筆訂單 |\n| POST | `/orders` | 建立訂單 |\n| PATCH | `/orders/{id}` | 更新訂單狀態 |\n| DELETE | `/orders/{id}` | 取消訂單 | 僅限草稿 |\n\n## 列出訂單\n\n`GET /orders`\n\n### 查詢參數\n\n| 參數 | 型別 | 必填 | 說明 |\n|---|:---:|---|---|\n| `status` | string | 否 | `draft`、`paid` 或 `shipped` |\n| `limit` | integer | 否 | 每頁筆數，預設 20，上限 100 |\n| `cursor` | string | 否 | 分頁游標 |\n| `q` | string | 否 | 支援 `name|email` 這種 OR 查詢 |\n\n### 回應範例\n\n```json\n{\n  \"data\": [\n    { \"id\": \"ord_123\", \"status\": \"paid\", \"total\": 1280 }\n  ],\n  \"next_cursor\": \"eyJpZCI6Im9yZF8xMjMifQ==\"\n}\n```\n\n#### 錯誤碼\n\n- `400`：參數格式錯誤\n- `401`：token 無效或過期\n* `429`：超過速率限制，請參考 `Retry-After` 標頭\n\n## 建立訂單\n\n`POST /orders`\n\n**請求主體：**\n\n```\n{\n  \"items\": [{ \"sku\": \"A-001\", \"qty\": 2 }],\n  \"note\": \"請於週五前出貨\"\n}\n```\n\n**回應：**`201 Created`，主體為新建立的訂單。\n\n> **提示**：建立訂單是冪等的。帶上 `Idempotency-Key` 標頭，重送同一個請求不會建立第二筆訂單。\n\n## 速率限制\n\n每個 API key 每分鐘最多 600 次請求。超過時回傳 `429`，並在 `Retry-After` 標頭告訴你要等幾秒。\n\n## 變更紀錄\n\n- 2026-10-01：新增 `cursor` 分頁，`page` 參數標記為 deprecated。\n- 2026-08-15：`DELETE /orders/{id}` 只能取消草稿狀態的訂單。\n\n相關文件：[錯誤處理指南][errors]、[Webhook 設定][webhooks]。\n\n[errors]: https://docs.example.com/errors\n[webhooks]: https://docs.example.com/webhooks\n[errors]: https://docs.example.com/errors-v1\n",
         "changed": true,
         "refused": false,
         "reason": ""
@@ -382,10 +382,10 @@
           "rule": "MDX031",
           "name": "list-marker-style",
           "severity": "warning",
-          "fixable": true,
+          "fixable": false,
           "line": 55,
           "column": 1,
-          "message": "List uses \"*\" but the first item in this list uses \"-\". Use one bullet marker per list."
+          "message": "List uses \"*\" but the first item in this list uses \"-\". A different bullet marker starts a new list in CommonMark, so this is not fixed automatically; use one marker if this is one list."
         },
         {
           "rule": "MDX050",
@@ -425,7 +425,7 @@
         }
       ],
       "fix": {
-        "text": "# 訂單服務 API 參考文件\n\n本文件說明訂單服務（Order Service）v2 的 REST API。所有端點都以 `https://api.example.com/v2` 為前綴，回應格式一律是 JSON。\n完整的 OpenAPI 規格請見 https://api.example.com/v2/openapi.json 。\n\n## 認證\n\n所有請求都必須帶上 Bearer token：\n\n```http\nGET /v2/orders HTTP/1.1\nHost: api.example.com\nAuthorization: Bearer <token>\n```\n\n**注意**：token 有效期限為 1 小時，過期後請用 refresh token 換新。\n\n## 端點一覽\n\n| 方法 | 路徑 | 說明 |\n| --- | --- | --- |\n| GET | `/orders` | 列出訂單 |\n| GET | `/orders/{id}` | 取得單筆訂單 |\n| POST | `/orders` | 建立訂單 |\n| PATCH | `/orders/{id}` | 更新訂單狀態 |\n| DELETE | `/orders/{id}` | 取消訂單 | 僅限草稿 |\n\n## 列出訂單\n\n`GET /orders`\n\n### 查詢參數\n\n| 參數 | 型別 | 必填 | 說明 |\n|---|:---:|---|---|\n| `status` | string | 否 | `draft`、`paid` 或 `shipped` |\n| `limit` | integer | 否 | 每頁筆數，預設 20，上限 100 |\n| `cursor` | string | 否 | 分頁游標 |\n| `q` | string | 否 | 支援 `name|email` 這種 OR 查詢 |\n\n### 回應範例\n\n```json\n{\n  \"data\": [\n    { \"id\": \"ord_123\", \"status\": \"paid\", \"total\": 1280 }\n  ],\n  \"next_cursor\": \"eyJpZCI6Im9yZF8xMjMifQ==\"\n}\n```\n\n#### 錯誤碼\n\n- `400`：參數格式錯誤\n- `401`：token 無效或過期\n- `429`：超過速率限制，請參考 `Retry-After` 標頭\n\n## 建立訂單\n\n`POST /orders`\n\n**請求主體：**\n\n```\n{\n  \"items\": [{ \"sku\": \"A-001\", \"qty\": 2 }],\n  \"note\": \"請於週五前出貨\"\n}\n```\n\n**回應：**`201 Created`，主體為新建立的訂單。\n\n> **提示**：建立訂單是冪等的。帶上 `Idempotency-Key` 標頭，重送同一個請求不會建立第二筆訂單。\n\n## 速率限制\n\n每個 API key 每分鐘最多 600 次請求。超過時回傳 `429`，並在 `Retry-After` 標頭告訴你要等幾秒。\n\n## 變更紀錄\n\n- 2026-10-01：新增 `cursor` 分頁，`page` 參數標記為 deprecated。\n- 2026-08-15：`DELETE /orders/{id}` 只能取消草稿狀態的訂單。\n\n相關文件：[錯誤處理指南][errors]、[Webhook 設定][webhooks]。\n\n[errors]: https://docs.example.com/errors\n[webhooks]: https://docs.example.com/webhooks\n[errors]: https://docs.example.com/errors-v1\n",
+        "text": "# 訂單服務 API 參考文件\n\n本文件說明訂單服務（Order Service）v2 的 REST API。所有端點都以 `https://api.example.com/v2` 為前綴，回應格式一律是 JSON。\n完整的 OpenAPI 規格請見 https://api.example.com/v2/openapi.json 。\n\n## 認證\n\n所有請求都必須帶上 Bearer token：\n\n```http\nGET /v2/orders HTTP/1.1\nHost: api.example.com\nAuthorization: Bearer <token>\n```\n\n**注意**：token 有效期限為 1 小時，過期後請用 refresh token 換新。\n\n## 端點一覽\n\n| 方法 | 路徑 | 說明 |\n| --- | --- | --- |\n| GET | `/orders` | 列出訂單 |\n| GET | `/orders/{id}` | 取得單筆訂單 |\n| POST | `/orders` | 建立訂單 |\n| PATCH | `/orders/{id}` | 更新訂單狀態 |\n| DELETE | `/orders/{id}` | 取消訂單 | 僅限草稿 |\n\n## 列出訂單\n\n`GET /orders`\n\n### 查詢參數\n\n| 參數 | 型別 | 必填 | 說明 |\n|---|:---:|---|---|\n| `status` | string | 否 | `draft`、`paid` 或 `shipped` |\n| `limit` | integer | 否 | 每頁筆數，預設 20，上限 100 |\n| `cursor` | string | 否 | 分頁游標 |\n| `q` | string | 否 | 支援 `name|email` 這種 OR 查詢 |\n\n### 回應範例\n\n```json\n{\n  \"data\": [\n    { \"id\": \"ord_123\", \"status\": \"paid\", \"total\": 1280 }\n  ],\n  \"next_cursor\": \"eyJpZCI6Im9yZF8xMjMifQ==\"\n}\n```\n\n#### 錯誤碼\n\n- `400`：參數格式錯誤\n- `401`：token 無效或過期\n* `429`：超過速率限制，請參考 `Retry-After` 標頭\n\n## 建立訂單\n\n`POST /orders`\n\n**請求主體：**\n\n```\n{\n  \"items\": [{ \"sku\": \"A-001\", \"qty\": 2 }],\n  \"note\": \"請於週五前出貨\"\n}\n```\n\n**回應：**`201 Created`，主體為新建立的訂單。\n\n> **提示**：建立訂單是冪等的。帶上 `Idempotency-Key` 標頭，重送同一個請求不會建立第二筆訂單。\n\n## 速率限制\n\n每個 API key 每分鐘最多 600 次請求。超過時回傳 `429`，並在 `Retry-After` 標頭告訴你要等幾秒。\n\n## 變更紀錄\n\n- 2026-10-01：新增 `cursor` 分頁，`page` 參數標記為 deprecated。\n- 2026-08-15：`DELETE /orders/{id}` 只能取消草稿狀態的訂單。\n\n相關文件：[錯誤處理指南][errors]、[Webhook 設定][webhooks]。\n\n[errors]: https://docs.example.com/errors\n[webhooks]: https://docs.example.com/webhooks\n[errors]: https://docs.example.com/errors-v1\n",
         "changed": true,
         "refused": false,
         "reason": ""
@@ -525,10 +525,10 @@
           "rule": "MDX031",
           "name": "list-marker-style",
           "severity": "warning",
-          "fixable": true,
+          "fixable": false,
           "line": 55,
           "column": 1,
-          "message": "List uses \"*\" but the first item in this list uses \"-\". Use one bullet marker per list."
+          "message": "List uses \"*\" but the first item in this list uses \"-\". A different bullet marker starts a new list in CommonMark, so this is not fixed automatically; use one marker if this is one list."
         },
         {
           "rule": "MDX050",
@@ -568,7 +568,7 @@
         }
       ],
       "fix": {
-        "text": "# 訂單服務 API 參考文件\n\n本文件說明訂單服務（Order Service）v2 的 REST API。所有端點都以 `https://api.example.com/v2` 為前綴，回應格式一律是 JSON。\n完整的 OpenAPI 規格請見 https://api.example.com/v2/openapi.json 。\n\n## 認證\n\n所有請求都必須帶上 Bearer token：\n\n```http\nGET /v2/orders HTTP/1.1\nHost: api.example.com\nAuthorization: Bearer <token>\n```\n\n**注意**：token 有效期限為 1 小時，過期後請用 refresh token 換新。\n\n## 端點一覽\n\n| 方法 | 路徑 | 說明 |\n| --- | --- | --- |\n| GET | `/orders` | 列出訂單 |\n| GET | `/orders/{id}` | 取得單筆訂單 |\n| POST | `/orders` | 建立訂單 |\n| PATCH | `/orders/{id}` | 更新訂單狀態 |\n| DELETE | `/orders/{id}` | 取消訂單 | 僅限草稿 |\n\n## 列出訂單\n\n`GET /orders`\n\n### 查詢參數\n\n| 參數 | 型別 | 必填 | 說明 |\n|---|:---:|---|---|\n| `status` | string | 否 | `draft`、`paid` 或 `shipped` |\n| `limit` | integer | 否 | 每頁筆數，預設 20，上限 100 |\n| `cursor` | string | 否 | 分頁游標 |\n| `q` | string | 否 | 支援 `name|email` 這種 OR 查詢 |\n\n### 回應範例\n\n```json\n{\n  \"data\": [\n    { \"id\": \"ord_123\", \"status\": \"paid\", \"total\": 1280 }\n  ],\n  \"next_cursor\": \"eyJpZCI6Im9yZF8xMjMifQ==\"\n}\n```\n\n#### 錯誤碼\n\n- `400`：參數格式錯誤\n- `401`：token 無效或過期\n- `429`：超過速率限制，請參考 `Retry-After` 標頭\n\n## 建立訂單\n\n`POST /orders`\n\n**請求主體：**\n\n```\n{\n  \"items\": [{ \"sku\": \"A-001\", \"qty\": 2 }],\n  \"note\": \"請於週五前出貨\"\n}\n```\n\n**回應：**`201 Created`，主體為新建立的訂單。\n\n> **提示**：建立訂單是冪等的。帶上 `Idempotency-Key` 標頭，重送同一個請求不會建立第二筆訂單。\n\n## 速率限制\n\n每個 API key 每分鐘最多 600 次請求。超過時回傳 `429`，並在 `Retry-After` 標頭告訴你要等幾秒。\n\n## 變更紀錄\n\n- 2026-10-01：新增 `cursor` 分頁，`page` 參數標記為 deprecated。\n- 2026-08-15：`DELETE /orders/{id}` 只能取消草稿狀態的訂單。\n\n相關文件：[錯誤處理指南][errors]、[Webhook 設定][webhooks]。\n\n[errors]: https://docs.example.com/errors\n[webhooks]: https://docs.example.com/webhooks\n[errors]: https://docs.example.com/errors-v1\n",
+        "text": "# 訂單服務 API 參考文件\n\n本文件說明訂單服務（Order Service）v2 的 REST API。所有端點都以 `https://api.example.com/v2` 為前綴，回應格式一律是 JSON。\n完整的 OpenAPI 規格請見 https://api.example.com/v2/openapi.json 。\n\n## 認證\n\n所有請求都必須帶上 Bearer token：\n\n```http\nGET /v2/orders HTTP/1.1\nHost: api.example.com\nAuthorization: Bearer <token>\n```\n\n**注意**：token 有效期限為 1 小時，過期後請用 refresh token 換新。\n\n## 端點一覽\n\n| 方法 | 路徑 | 說明 |\n| --- | --- | --- |\n| GET | `/orders` | 列出訂單 |\n| GET | `/orders/{id}` | 取得單筆訂單 |\n| POST | `/orders` | 建立訂單 |\n| PATCH | `/orders/{id}` | 更新訂單狀態 |\n| DELETE | `/orders/{id}` | 取消訂單 | 僅限草稿 |\n\n## 列出訂單\n\n`GET /orders`\n\n### 查詢參數\n\n| 參數 | 型別 | 必填 | 說明 |\n|---|:---:|---|---|\n| `status` | string | 否 | `draft`、`paid` 或 `shipped` |\n| `limit` | integer | 否 | 每頁筆數，預設 20，上限 100 |\n| `cursor` | string | 否 | 分頁游標 |\n| `q` | string | 否 | 支援 `name|email` 這種 OR 查詢 |\n\n### 回應範例\n\n```json\n{\n  \"data\": [\n    { \"id\": \"ord_123\", \"status\": \"paid\", \"total\": 1280 }\n  ],\n  \"next_cursor\": \"eyJpZCI6Im9yZF8xMjMifQ==\"\n}\n```\n\n#### 錯誤碼\n\n- `400`：參數格式錯誤\n- `401`：token 無效或過期\n* `429`：超過速率限制，請參考 `Retry-After` 標頭\n\n## 建立訂單\n\n`POST /orders`\n\n**請求主體：**\n\n```\n{\n  \"items\": [{ \"sku\": \"A-001\", \"qty\": 2 }],\n  \"note\": \"請於週五前出貨\"\n}\n```\n\n**回應：**`201 Created`，主體為新建立的訂單。\n\n> **提示**：建立訂單是冪等的。帶上 `Idempotency-Key` 標頭，重送同一個請求不會建立第二筆訂單。\n\n## 速率限制\n\n每個 API key 每分鐘最多 600 次請求。超過時回傳 `429`，並在 `Retry-After` 標頭告訴你要等幾秒。\n\n## 變更紀錄\n\n- 2026-10-01：新增 `cursor` 分頁，`page` 參數標記為 deprecated。\n- 2026-08-15：`DELETE /orders/{id}` 只能取消草稿狀態的訂單。\n\n相關文件：[錯誤處理指南][errors]、[Webhook 設定][webhooks]。\n\n[errors]: https://docs.example.com/errors\n[webhooks]: https://docs.example.com/webhooks\n[errors]: https://docs.example.com/errors-v1\n",
         "changed": true,
         "refused": false,
         "reason": ""
@@ -615,6 +615,147 @@
       ],
       "fix": {
         "text": "# 訂單服務 API 參考文件\n\n本文件說明訂單服務（Order Service）v2 的 REST API。所有端點都以 `https://api.example.com/v2` 為前綴，回應格式一律是 JSON。\n完整的 OpenAPI 規格請見 https://api.example.com/v2/openapi.json 。\n\n## 認證\n\n所有請求都必須帶上 Bearer token：\n\n```http\nGET /v2/orders HTTP/1.1\nHost: api.example.com\nAuthorization: Bearer <token>\n```\n\n**注意：**token 有效期限為 1 小時，過期後請用 refresh token 換新。\n\n## 端點一覽\n\n| 方法 | 路徑 | 說明 |\n| --- | --- | --- |\n| GET | `/orders` | 列出訂單 |\n| GET | `/orders/{id}` | 取得單筆訂單 |\n| POST | `/orders` | 建立訂單 |\n| PATCH | `/orders/{id}` | 更新訂單狀態 |\n| DELETE | `/orders/{id}` | 取消訂單 | 僅限草稿 |\n\n## 列出訂單\n\n`GET /orders`\n\n### 查詢參數\n\n| 參數 | 型別 | 必填 | 說明 |\n|---|:-:|--|---|\n| `status` | string | 否 | `draft`、`paid` 或 `shipped` |\n| `limit` | integer | 否 | 每頁筆數，預設 20，上限 100 |\n| `cursor` | string | 否 | 分頁游標 |\n| `q` | string | 否 | 支援 `name|email` 這種 OR 查詢 |\n\n### 回應範例\n\n```json\n{\n  \"data\": [\n    { \"id\": \"ord_123\", \"status\": \"paid\", \"total\": 1280 }\n  ],\n  \"next_cursor\": \"eyJpZCI6Im9yZF8xMjMifQ==\"\n}\n```\n\n#### 錯誤碼\n\n- `400`：參數格式錯誤\n- `401`：token 無效或過期\n* `429`：超過速率限制，請參考 `Retry-After` 標頭\n\n## 建立訂單\n\n`POST /orders`\n\n**請求主體：**\n\n```\n{\n  \"items\": [{ \"sku\": \"A-001\", \"qty\": 2 }],\n  \"note\": \"請於週五前出貨\"\n}\n```\n\n**回應：**`201 Created`，主體為新建立的訂單。\n\n> **提示：**建立訂單是冪等的。帶上 `Idempotency-Key` 標頭，重送同一個請求不會建立第二筆訂單。\n\n## 速率限制\n\n每個 API key 每分鐘最多 600 次請求。超過時回傳 `429`，並在 `Retry-After` 標頭告訴你要等幾秒。\n\n## 變更紀錄\n\n- 2026-10-01：新增 `cursor` 分頁，`page` 參數標記為 deprecated。\n- 2026-08-15：`DELETE /orders/{id}` 只能取消草稿狀態的訂單。\n\n相關文件：[錯誤處理指南][errors]、[Webhook 設定][webhooks]。\n\n[errors]: https://docs.example.com/errors\n[webhooks]: https://docs.example.com/webhooks\n[errors]: https://docs.example.com/errors-v1\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "quote-depth-3-ignore",
+      "options": {
+        "maxQuoteDepth": 3,
+        "onLimit": "ignore"
+      },
+      "diagnose": [
+        {
+          "rule": "MDX012",
+          "name": "atx-closing-hashes",
+          "severity": "warning",
+          "fixable": true,
+          "line": 1,
+          "column": 16,
+          "message": "Remove optional closing hashes from the heading; they add noise and are easy to miscount."
+        },
+        {
+          "rule": "MDX070",
+          "name": "bare-url",
+          "severity": "info",
+          "fixable": false,
+          "line": 4,
+          "column": 18,
+          "message": "Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": true,
+          "line": 16,
+          "column": 1,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": true,
+          "line": 16,
+          "column": 6,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX011",
+          "name": "atx-multiple-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 18,
+          "column": 3,
+          "message": "Use exactly one space after the ATX heading marker."
+        },
+        {
+          "rule": "MDX061",
+          "name": "table-column-count",
+          "severity": "error",
+          "fixable": false,
+          "line": 26,
+          "column": 1,
+          "message": "Table row has 4 cell(s) but the table has 3 column(s)."
+        },
+        {
+          "rule": "MDX013",
+          "name": "heading-blank-lines",
+          "severity": "warning",
+          "fixable": true,
+          "line": 28,
+          "column": 1,
+          "message": "Heading is directly attached to the following paragraph. Add a blank line after it."
+        },
+        {
+          "rule": "MDX060",
+          "name": "table-delimiter-width",
+          "severity": "warning",
+          "fixable": true,
+          "line": 34,
+          "column": 6,
+          "message": "Table delimiter cell has fewer than three hyphens."
+        },
+        {
+          "rule": "MDX063",
+          "name": "table-pipe-in-code",
+          "severity": "warning",
+          "fixable": false,
+          "line": 38,
+          "column": 25,
+          "message": "A pipe inside code or a URL in a table cell still splits the cell. Escape it as \\| in code, or use %7C in a URL."
+        },
+        {
+          "rule": "MDX031",
+          "name": "list-marker-style",
+          "severity": "warning",
+          "fixable": false,
+          "line": 55,
+          "column": 1,
+          "message": "List uses \"*\" but the first item in this list uses \"-\". A different bullet marker starts a new list in CommonMark, so this is not fixed automatically; use one marker if this is one list."
+        },
+        {
+          "rule": "MDX050",
+          "name": "fence-language",
+          "severity": "info",
+          "fixable": false,
+          "line": 63,
+          "column": 1,
+          "message": "Fenced code block has no language. Add one when the language is known, for example ```js."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": true,
+          "line": 72,
+          "column": 3,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": true,
+          "line": 72,
+          "column": 8,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX074",
+          "name": "reference-duplicate-definition",
+          "severity": "warning",
+          "fixable": false,
+          "line": 87,
+          "column": 1,
+          "message": "Reference definition \"errors\" is declared more than once."
+        }
+      ],
+      "fix": {
+        "text": "# 訂單服務 API 參考文件\n\n本文件說明訂單服務（Order Service）v2 的 REST API。所有端點都以 `https://api.example.com/v2` 為前綴，回應格式一律是 JSON。\n完整的 OpenAPI 規格請見 https://api.example.com/v2/openapi.json 。\n\n## 認證\n\n所有請求都必須帶上 Bearer token：\n\n```http\nGET /v2/orders HTTP/1.1\nHost: api.example.com\nAuthorization: Bearer <token>\n```\n\n**注意**：token 有效期限為 1 小時，過期後請用 refresh token 換新。\n\n## 端點一覽\n\n| 方法 | 路徑 | 說明 |\n| --- | --- | --- |\n| GET | `/orders` | 列出訂單 |\n| GET | `/orders/{id}` | 取得單筆訂單 |\n| POST | `/orders` | 建立訂單 |\n| PATCH | `/orders/{id}` | 更新訂單狀態 |\n| DELETE | `/orders/{id}` | 取消訂單 | 僅限草稿 |\n\n## 列出訂單\n\n`GET /orders`\n\n### 查詢參數\n\n| 參數 | 型別 | 必填 | 說明 |\n|---|:---:|---|---|\n| `status` | string | 否 | `draft`、`paid` 或 `shipped` |\n| `limit` | integer | 否 | 每頁筆數，預設 20，上限 100 |\n| `cursor` | string | 否 | 分頁游標 |\n| `q` | string | 否 | 支援 `name|email` 這種 OR 查詢 |\n\n### 回應範例\n\n```json\n{\n  \"data\": [\n    { \"id\": \"ord_123\", \"status\": \"paid\", \"total\": 1280 }\n  ],\n  \"next_cursor\": \"eyJpZCI6Im9yZF8xMjMifQ==\"\n}\n```\n\n#### 錯誤碼\n\n- `400`：參數格式錯誤\n- `401`：token 無效或過期\n* `429`：超過速率限制，請參考 `Retry-After` 標頭\n\n## 建立訂單\n\n`POST /orders`\n\n**請求主體：**\n\n```\n{\n  \"items\": [{ \"sku\": \"A-001\", \"qty\": 2 }],\n  \"note\": \"請於週五前出貨\"\n}\n```\n\n**回應：**`201 Created`，主體為新建立的訂單。\n\n> **提示**：建立訂單是冪等的。帶上 `Idempotency-Key` 標頭，重送同一個請求不會建立第二筆訂單。\n\n## 速率限制\n\n每個 API key 每分鐘最多 600 次請求。超過時回傳 `429`，並在 `Retry-After` 標頭告訴你要等幾秒。\n\n## 變更紀錄\n\n- 2026-10-01：新增 `cursor` 分頁，`page` 參數標記為 deprecated。\n- 2026-08-15：`DELETE /orders/{id}` 只能取消草稿狀態的訂單。\n\n相關文件：[錯誤處理指南][errors]、[Webhook 設定][webhooks]。\n\n[errors]: https://docs.example.com/errors\n[webhooks]: https://docs.example.com/webhooks\n[errors]: https://docs.example.com/errors-v1\n",
         "changed": true,
         "refused": false,
         "reason": ""

@@ -2,6 +2,7 @@
 
 use std::collections::HashSet;
 
+use crate::scan::Limits;
 use crate::{Options, OptionsError, Problem, Rule, Severity};
 
 /// 規則目錄，順序與 JS `RULES` 相同（由 oracle 產生，不要手改內容）。
@@ -179,8 +180,8 @@ pub(crate) static RULES: &[Rule] = &[
         name: "list-marker-style",
         category: "list",
         severity: Severity::Warning,
-        fixable: true,
-        summary: "Use one bullet marker per list.",
+        fixable: false,
+        summary: "Use one bullet marker per list; a different marker starts a new list, so this is reported, not fixed.",
     },
     Rule {
         id: "MDX032",
@@ -383,6 +384,14 @@ pub(crate) static RULES: &[Rule] = &[
         summary: "Close every $$ math block.",
     },
     Rule {
+        id: "MDX086",
+        name: "resource-limit",
+        category: "structure",
+        severity: Severity::Error,
+        fixable: false,
+        summary: "Keep blockquote nesting within the configured depth limit (maxQuoteDepth).",
+    },
+    Rule {
         id: "MDX090",
         name: "line-length",
         category: "style",
@@ -460,6 +469,8 @@ pub(crate) struct Enabled {
     include: Option<HashSet<String>>,
     ignore: Option<HashSet<String>>,
     max_line_length: usize,
+    /// 資源上限（JS 掛在 `isEnabled.limits`），每次掃描都要用同一組。
+    pub(crate) limits: Limits,
 }
 
 impl Enabled {
@@ -472,6 +483,7 @@ impl Enabled {
                 .as_ref()
                 .map(|v| v.iter().cloned().collect()),
             max_line_length: options.max_line_length,
+            limits: Limits::new(options),
         }
     }
 
@@ -515,8 +527,8 @@ mod tests {
 
     #[test]
     fn catalog_shape() {
-        assert_eq!(RULES.len(), 48);
-        assert_eq!(RULES.iter().filter(|r| r.fixable).count(), 20);
+        assert_eq!(RULES.len(), 49);
+        assert_eq!(RULES.iter().filter(|r| r.fixable).count(), 19);
         assert_eq!(RULES[0].id, "MDX001");
         assert_eq!(RULES[RULES.len() - 1].id, "MDX090");
     }
