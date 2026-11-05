@@ -546,6 +546,7 @@ mod tests {
             rules: Some(vec!["MDX001".into(), "NOPE".into()]),
             ignore_rules: Some(vec!["ALSO".into()]),
             max_line_length: 0,
+            ..Default::default()
         };
         assert_eq!(
             validate(&options),

@@ -38,6 +38,7 @@ fn refused(text: &str, reason: &str) -> FixResult {
         changed: false,
         refused: true,
         reason: reason.to_string(),
+        skipped: Vec::new(),
     }
 }
 
@@ -117,6 +118,7 @@ pub(crate) fn fix_document(text: &str, options: &Options) -> FixResult {
             changed: false,
             refused: false,
             reason: String::new(),
+            skipped: Vec::new(),
         };
     }
     if had_bom && !enabled.is("MDX001") {
@@ -142,5 +144,6 @@ pub(crate) fn fix_document(text: &str, options: &Options) -> FixResult {
         changed,
         refused: false,
         reason: String::new(),
+        skipped: Vec::new(),
     }
 }

@@ -60,8 +60,25 @@ pub struct Problem {
     pub message: String,
 }
 
+/// 引言巢狀深度上限的預設值（[`Options::max_quote_depth`]）。
+pub const DEFAULT_MAX_QUOTE_DEPTH: usize = 32;
+
+/// 超過資源上限（目前是引言巢狀深度）時的處理方式。
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Hash)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+#[cfg_attr(feature = "serde", serde(rename_all = "lowercase"))]
+pub enum LimitPolicy {
+    /// 回報 `MDX086`（error、blocking），`fix_document` 拒絕修正整份文件。預設值。
+    #[default]
+    Error,
+    /// 把超過上限的行當成不透明的保護行：不當成 reference definition、不修改、不診斷。
+    Ignore,
+}
+
 /// 檢查與修正選項（對應 JS 的 `options`）。
-#[derive(Debug, Clone, Default, PartialEq, Eq)]
+///
+/// 請用 `Options { ..Default::default() }` 建構，日後新增欄位才不會破壞相容性。
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Options {
     /// 只啟用這些規則；`None` 表示全部啟用。
     pub rules: Option<Vec<String>>,
@@ -69,6 +86,29 @@ pub struct Options {
     pub ignore_rules: Option<Vec<String>>,
     /// `MDX090` 行長上限；0 表示停用 MDX090。
     pub max_line_length: usize,
+    /// 引言（`>`）巢狀深度上限，超過時依 [`Options::on_limit`] 處理；0 表示不限制。
+    /// 對應 JS 的 `maxQuoteDepth`，預設 [`DEFAULT_MAX_QUOTE_DEPTH`]。
+    pub max_quote_depth: usize,
+    /// 超過資源上限時的處理方式。對應 JS 的 `onLimit`。
+    pub on_limit: LimitPolicy,
+    /// 渲染保護（Rust 專有）：修正後以 CommonMark/GFM 渲染比對，會意外改變渲染結果的
+    /// 修正不套用，改記錄在 [`FixResult::skipped`]。預設開啟；需要 `render-guard`
+    /// feature（預設啟用），未啟用該 feature 時這個欄位沒有作用。
+    /// 關閉後行為與 JS 參考實作逐位元組相同（parity 測試用這個模式）。
+    pub render_guard: bool,
+}
+
+impl Default for Options {
+    fn default() -> Self {
+        Options {
+            rules: None,
+            ignore_rules: None,
+            max_line_length: 0,
+            max_quote_depth: DEFAULT_MAX_QUOTE_DEPTH,
+            on_limit: LimitPolicy::Error,
+            render_guard: true,
+        }
+    }
 }
 
 /// 未知的規則 ID 等選項錯誤。
@@ -94,6 +134,18 @@ impl Options {
     }
 }
 
+/// 因渲染保護而沒有套用的修正（[`FixResult::skipped`] 的元素）。
+#[derive(Debug, Clone, PartialEq, Eq)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize))]
+pub struct SkippedFix {
+    /// 被擋下的規則 ID。
+    pub rule: &'static str,
+    /// 原文中受影響的第一行（從 1 起算）。
+    pub line: usize,
+    /// 擋下的原因（英文，給人與 agent 閱讀）。
+    pub reason: String,
+}
+
 /// `fix_document` 的結果（對應 JS 的 `fixDocument` 回傳值）。
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize))]
@@ -101,10 +153,14 @@ pub struct FixResult {
     /// 修正後的文字；`refused` 或未變更時等於輸入原文。
     pub text: String,
     pub changed: bool,
-    /// 因結構錯誤（MDX081/083/053/085）或 frontmatter 陷阱而拒絕修正。
+    /// 因結構錯誤（MDX081/083/053/085/086）或 frontmatter 陷阱而拒絕修正。
     pub refused: bool,
     /// 拒絕原因；未拒絕時為空字串。
     pub reason: String,
+    /// 渲染保護擋下、沒有套用的修正（Rust 專有；`render_guard` 關閉時一律為空）。
+    /// 序列化時空陣列會省略，讓 JSON 形狀與 JS 參考實作相同。
+    #[cfg_attr(feature = "serde", serde(skip_serializing_if = "Vec::is_empty"))]
+    pub skipped: Vec<SkippedFix>,
 }
 
 /// 完整規則目錄，順序與 JS 的 `RULES` 相同。

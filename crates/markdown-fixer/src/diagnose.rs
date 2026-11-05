@@ -242,6 +242,7 @@ mod tests {
             rules: Some(rules.iter().map(|r| r.to_string()).collect()),
             ignore_rules: None,
             max_line_length: 10,
+            ..Default::default()
         }
     }
 

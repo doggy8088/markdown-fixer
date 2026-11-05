@@ -69,6 +69,9 @@ mod real {
             rules: string_list(object.get("rules"), "rules")?,
             ignore_rules: string_list(object.get("ignoreRules"), "ignoreRules")?,
             max_line_length,
+            // parity 工具：關閉 Rust 專有的渲染保護，行為與 JS 參考實作相同。
+            render_guard: false,
+            ..Options::default()
         })
     }
 

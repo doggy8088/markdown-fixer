@@ -81,6 +81,9 @@ fn options_from(value: &Value) -> Options {
             .get("maxLineLength")
             .and_then(Value::as_u64)
             .map_or(0, |n| n as usize),
+        // golden 由 JS 參考實作產生：關閉 Rust 專有的渲染保護。
+        render_guard: false,
+        ..Options::default()
     }
 }
 

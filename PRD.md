@@ -3,7 +3,7 @@
 - **狀態**：v0.1 草案，實作中
 - **擁有者**：Will 保哥
 - **最後更新**：2026-11-05
-- **參考實作**：`reference/js/markdown-fixer.mjs`（JS v1.0.0，來源為 `~/.agents/skills/markdown-autocorrect/`）
+- **參考實作**：`reference/js/markdown-fixer.mjs`（JS v1.1.0，來源為 [doggy8088/skills](https://github.com/doggy8088/skills) 的 `skills/markdown-autocorrect/`）
 
 ## 1. 背景
 
@@ -97,7 +97,7 @@
 
 ### 6.1 規則目錄
 
-規則目錄共 48 條（20 條 fixable），必須與 JS `RULES` 陣列完全相同（ID、name、category、severity、fixable、summary、順序）。下表是摘要；英文 summary 原文以 `reference/js/markdown-fixer.mjs` 為準，中文說明見 `docs/rules.md`。
+規則目錄共 49 條（20 條 fixable；v0.1 新增 MDX086），必須與 JS `RULES` 陣列完全相同（ID、name、category、severity、fixable、summary、順序）。下表是摘要；英文 summary 原文以 `reference/js/markdown-fixer.mjs` 為準，中文說明見 `docs/rules.md`。
 
 | Rule | Name | Category | Severity | Fixable |
 | --- | --- | --- | --- | --- |
@@ -148,6 +148,7 @@
 | MDX083 | `html-comment-unclosed` | structure | error | no |
 | MDX084 | `fullwidth-markdown-syntax` | structure | warning | no |
 | MDX085 | `math-unclosed` | structure | error | no |
+| MDX086 | `resource-limit` | structure | error | no |
 | MDX090 | `line-length` | style | info | no |
 
 個別問題可以覆寫 severity 或 fixable（例如 MDX008 在 URL 內是 report-only，MDX042 開頭端只報告），覆寫邏輯與 JS `makeProblem(..., overrides)` 相同。
@@ -311,6 +312,31 @@ void mdfix_string_free(char *s);
 - Log 只記錄是否偵測為 Markdown、命中的訊號名稱、修正前後的大小，不記錄內容。
 - 既有測試必須全部維持通過；非 Markdown 輸入的輸出必須逐位元組不變。新增的測試涵蓋：Markdown 被正規化、程式碼與 log 不被誤判、提示符展開後的 Markdown、拒絕修正時的回退、關閉開關。
 - 更新 `README.md`、`DEVELOPMENT.md`、`AGENTS.md`、`CHANGELOG.md`（未發佈區段）。不自動 bump 版號、不 commit、不 push，交由擁有者決定。
+
+### 6.9 渲染保護（v0.1 新增，Rust 專有）
+
+**目標**：自動修正不能意外改變渲染結果。這一節優先於「與 oracle 逐位元組相同」；兩者衝突時，以不改變渲染為準，差異記錄在 `docs/parity.md`〈刻意差異〉。
+
+做法分兩層：
+
+1. **根因修正**（JS 與 Rust 一起改，oracle 升到 v1.1.0）：已知會改變渲染的修正直接修掉，例如 MDX052 在引言（`>`）或清單裡插入完全空白的行，把一個引言拆成兩個。這類修正改為「插入帶有相同容器前綴的空行」或「不在容器內插入」，以不改變渲染為原則。
+2. **執行期保護**（`render_guard`，預設開啟，需要 `render-guard` feature，以 `pulldown-cmark` 渲染）：
+   - 每條 fixable 規則屬於兩類之一。**版面類**（layout）：MDX001～006、011、012、013、020、031、052、060、082，本身不應改變渲染。**修復類**（repair）：MDX008、010、030、040、042、062，目的就是讓原本壞掉的語法正確渲染。
+   - 版面類檢查：`render(全部修正)` 必須等於 `render(只套用修復類)`。不相等時，逐條找出造成差異的版面類規則，不套用它們。
+   - 修復類檢查：修復類只能改變「被修正的行所在的頂層區塊」以及與它相鄰的一個區塊；其他頂層區塊的 HTML 與行範圍必須完全相同。違反時把該區域的修復還原。
+   - 被擋下的修正記錄在 `FixResult::skipped`（規則、行號、原因），CLI 在文字輸出與 `--json`（`skippedFixes`，只在非空時出現）中顯示；對應的問題仍會出現在診斷中，結束碼照常計算。
+   - 修正沒有改變渲染時（最常見的情況），只多兩次 parse 的成本。
+   - `render_guard = false`（CLI `--no-render-guard`）時行為與 oracle 逐位元組相同，parity 測試使用這個模式。
+3. **稽核**：以 render guard 的比對邏輯掃描語料、fuzz 與真實文件，列出 oracle 所有會改變渲染的修正，每一項都要有根因修正或被 guard 擋下的測試。
+
+### 6.10 資源上限（v0.1 新增，JS 與 Rust 一起實作）
+
+- `max_quote_depth`（JS `maxQuoteDepth`，CLI `--max-quote-depth N`）：引言巢狀深度上限，預設 32，0 表示不限制。
+- `on_limit`（JS `onLimit`，CLI `--on-limit error|ignore`）：超過上限時的處理方式。
+  - `error`（預設）：在該行回報新規則 **MDX086** `resource-limit`（structure、error、不可修正、blocking），`fix_document` 拒絕修正整份文件。CLI 結束碼依一般規則為 1。
+  - `ignore`：超過上限的行視為不透明的保護行，不當成 reference definition、不修改、不診斷。
+- reference definition 的偵測改為先手動掃描引言前綴、再比對其餘部分，消除 oracle v1.0.0 的指數級回溯；結果必須與舊 regex 相同（有等價測試）。
+- 同時修正 oracle v1.0.0 單行超過約 12 萬 code unit 時 `mask.push(...)` 拋出 `RangeError` 的問題。
 
 ## 7. 非功能需求
 

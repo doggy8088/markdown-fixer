@@ -127,6 +127,7 @@ fn probe_options() -> crate::Options {
         rules: list("rules"),
         ignore_rules: list("ignoreRules"),
         max_line_length: v.get("maxLineLength").and_then(|x| x.as_u64()).unwrap_or(0) as usize,
+        ..Default::default()
     }
 }
 

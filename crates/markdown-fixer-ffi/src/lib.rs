@@ -49,6 +49,7 @@ impl From<FfiOptions> for Options {
             rules: value.rules,
             ignore_rules: value.ignore_rules,
             max_line_length: value.max_line_length.unwrap_or(0),
+            ..Options::default()
         }
     }
 }

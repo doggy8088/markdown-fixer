@@ -77,6 +77,7 @@ impl CliOptions {
             rules: self.rules.clone(),
             ignore_rules: self.ignore_rules.clone(),
             max_line_length: self.max_line_length,
+            ..markdown_fixer::Options::default()
         }
     }
 }
