@@ -338,6 +338,14 @@ fn pathological_documents_are_fast() {
         "a* ".repeat(32_000) + "a\n",
         "甲* ".repeat(32_000) + "甲\n",
         "a** ".repeat(24_000) + "a\n",
+        // review-3：大量可修正的 `**X：**Y` 曾讓 MDX042 的分析與套用退化成平方時間。
+        "**甲：**乙 ".repeat(32_000) + "\n",
+        "*甲：*乙 ".repeat(32_000) + "\n",
+        "**甲：**乙 plain *text* ".repeat(16_000) + "\n",
+        "**甲，。**乙：**丙".repeat(16_000) + "\n",
+        // 同一段落跨很多行，各行都有 transform（考驗行號查詢與逐一套用）。
+        ("**甲：**乙 ".repeat(20) + "\n").repeat(1_600),
+        ("**甲：**乙\n").repeat(5_000),
     ];
     for text in &cases {
         let started = Instant::now();

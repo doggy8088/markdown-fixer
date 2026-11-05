@@ -288,6 +288,7 @@ oracle 本身有幾處在病態輸入上不是線性的。Rust 的輸出照 orac
 | 位置 | oracle | Rust |
 | --- | --- | --- |
 | MDX042 的 delimiter 配對（`matchEmphasisRuns`） | 平方時間：每個 closer 往回逐一找 opener，`a* ` 重複 4 萬次（117 KB）約 0.9 秒，輸入加倍時間約變 4 倍 | 攤銷 O(n)：`cjk_emphasis::leftover_runs` 以 6 個 stack 加差分陣列實作，1 MB 的 `a* ` 整個 CLI `--stdin --write` 約 0.3 秒 |
+| MDX042 的修正判斷與套用（`analyzeCjkEmphasis`、`applyCjkEmphasisFixes`） | 平方時間：每個候選 closer 重掃全部 leftovers 與 runs，每個 transform 重新組合整個段落；`**甲：**乙 ` 重複 8,000 次（112 KB）的 `fixDocument` 約 0.7 秒，16,000 次（224 KB）時 oracle 直接拋出 `RangeError`（見 [parity.md](parity.md#oracle-疑似問題)） | 每段 O(n log n)：事先算好每個位置的合格 opener、以 run 索引判斷中間有沒有 run、二分搜尋行號，套用時在整份文件上原地改寫。重複 32,000 次（448 KB）的 `fix_document` 約 52 ms（release），舊版約 5.4 秒 |
 | 深層引言的參考定義 regex | 指數級回溯，40 層 `>` 會卡住 | `jsregex` 的記憶化回溯，200 層以內毫秒級 |
 | 一行裡大量 `[](` 的連結目的地遮罩（`buildMask`） | 平方時間 | 照 oracle，仍是平方時間：10k 字元的病態行，`diagnose` 約 30 ms |
 

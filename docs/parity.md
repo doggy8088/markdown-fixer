@@ -170,6 +170,7 @@ node scripts/gen-golden.mjs --check    # 只檢查：golden 過期、缺少或�
 - **實際影響**：目前無法觸發。每個 transform 只是把一段標點從 `**` 內側搬到外側，長度不變，而且後一個 transform 的位置都在前一個的 closer 之後。以結構化產生的 39,985 個「同一段落有多個 transform」的段落比對「逐一套用」與「依原始偏移量一次套用」，結果全部相同。
 - **風險**：日後若加入會改變長度的修正，就會套用到錯誤的位置。
 - **重現**：`regressions/oracle-mdx042-multiple-transforms.md` 固定目前的多 transform 行為。
+- **Rust**：結果照 oracle，但不逐一重組段落，而是在整份文件上原地改寫每個 transform 的範圍（理由見 [porting-map.md](porting-map.md)）。原地改寫的前提不成立時，退回與 oracle 相同的逐一套用，所以日後即使加入會改變長度的修正，Rust 仍與 oracle 一致。
 
 ### 9. `analyzeCjkEmphasis` 的 `run !== opener` 永遠成立（不影響結果）
 
@@ -184,3 +185,19 @@ node scripts/gen-golden.mjs --check    # 只檢查：golden 過期、缺少或�
 - **重現**：`'a* '.repeat(n)` 單一段落，只啟用 MDX042。實測 n = 10,000（29 KB）約 60 ms、20,000（59 KB）約 230 ms、40,000（117 KB）約 900 ms，輸入加倍時間約變 4 倍；1 MB 會花上數十秒。
 - **影響**：只影響執行時間，不影響結果。剪貼簿或 CI 遇到這種輸入時，Node 版會明顯停頓。
 - **Rust**：輸出照 oracle，演算法改成攤銷 O(n)（`cjk_emphasis::leftover_runs`，細節見 [porting-map.md](porting-map.md)）。舊的逐一反向掃描保留為測試專用的 `leftover_runs_naive`，以 20,000 組隨機 run 序列驗證兩者結果相同。1 MB 的 `a* ` 整個 CLI `--stdin --write` 約 0.3 秒。
+
+### 11. `analyzeCjkEmphasis` 與 `applyCjkEmphasisFixes` 在大量可修正組合上是平方時間
+
+- **位置**：`analyzeCjkEmphasis`（第 1534 到 1648 行）與 `applyCjkEmphasisFixes`（第 1660 到 1677 行），MDX042。review 回報。
+- **oracle 行為**：每個候選 closer 都重掃全部 leftovers 找 opener，再用 `runs.some(...)` 掃全部 run 找中間的 delimiter；`locate` 與 `lineOffsetOf` 反向線性找行號。套用時每個 transform 都重新 join、改寫、split 整個段落。
+- **重現**：`'**甲：**乙 '.repeat(n) + '\n'`，預設選項。oracle 的 `fixDocument` 在 n = 4,000（56 KB）約 0.2 秒、8,000（112 KB）約 0.7 秒；n = 16,000 時改為拋出 `RangeError`（見第 12 項）。
+- **影響**：只影響執行時間，不影響結果。
+- **Rust**：輸出照 oracle，分析每段 O(n log n)、套用 O(n)（細節見 [porting-map.md](porting-map.md)）。舊版直接移植保留在測試專用的 `cjk_emphasis::naive`，`linear_equivalence_tests` 以 30,000 份隨機文件比對分析結果與修正輸出。n = 32,000（448 KB）的 `fix_document` 從約 5.4 秒降到約 52 ms（release）。
+
+### 12. 很長的一行在 MDX042 啟用時讓 oracle 拋出 `RangeError`
+
+- **位置**：`analyzeCjkEmphasis` 第 1549 行的 `mask.push(...buildMask(lines[i]))`。perf 回報。
+- **oracle 行為**：把整行的遮罩陣列展開成函式參數；V8 的參數數量受堆疊大小限制，一行超過約 12 萬 code unit 時拋出 `RangeError: Maximum call stack size exceeded`。這段程式對每個段落都會執行，段落裡不必有 `*`。
+- **重現**：`'a'.repeat(130000) + '\n'`，`diagnose` 與 `fixDocument` 都會拋出例外；加上 `ignoreRules: ['MDX042']` 就正常。12 萬 code unit 時正常，門檻依 Node 版本與堆疊大小而異（Node 24 實測）。
+- **影響**：剪貼簿或 CI 遇到單行很長的文件（例如壓縮成一行的 HTML 或資料）時，Node 版直接失敗。
+- **Rust**：無法也不應該重現例外，照常回傳結果。這個大小遠超過 golden 與差異測試的輸入，所以不會造成 parity 差異；遇到這種輸入時，差異來自 oracle 失敗，不是 Rust 的問題。
