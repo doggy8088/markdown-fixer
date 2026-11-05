@@ -1,0 +1,791 @@
+{
+  "name": "corpus-write-text",
+  "args": [
+    "--write",
+    "corpus"
+  ],
+  "cwd": "",
+  "nonRoot": false,
+  "setup": [
+    {
+      "path": "corpus",
+      "copyDir": "fixtures/corpus",
+      "fingerprint": "25a55b2941f413b9"
+    }
+  ],
+  "expected": {
+    "status": 1,
+    "stdout": "corpus/edge/blocking-fence-invalid.md\n  ERROR  Not modified: Invalid fenced-code opener: a backtick fence info string cannot contain backticks.\n  3:1        error   MDX053  Invalid fenced-code opener: a backtick fence info string cannot contain backticks.\n  5:1        info    MDX050  Fenced code block has no language. Add one when the language is known, for example ```js.\n  5:1        error   MDX051  Unclosed backtick code fence.\n  5:1        warning MDX052  Fenced code block starts directly after another block. Add a blank line before it. (fixable)\n\ncorpus/edge/blocking-frontmatter-unclosed.md\n  ERROR  Not modified: Unclosed YAML frontmatter: no closing --- or ... line was found.\n  1:1        error   MDX081  Unclosed YAML frontmatter: no closing --- or ... line was found.\n\ncorpus/edge/blocking-html-comment.md\n  ERROR  Not modified: Unclosed HTML comment: no closing --> was found.\n  3:1        error   MDX083  Unclosed HTML comment: no closing --> was found.\n\ncorpus/edge/blocking-math-quote-ended.md\n  ERROR  Not modified: Unclosed $$ math block: the blockquote ended before a closing $$ was found.\n  3:1        error   MDX085  Unclosed $$ math block: the blockquote ended before a closing $$ was found.\n  6:1        info    MDX019  Document has more than one H1. Use H2 for subsections and keep one H1 for the page title.\n  6:2        warning MDX010  Add a space after the heading marker: \"# \" rather than \"#\". (fixable)\n\ncorpus/edge/blocking-math-unclosed.md\n  ERROR  Not modified: Unclosed $$ math block: no closing $$ was found.\n  3:1        error   MDX085  Unclosed $$ math block: no closing $$ was found.\n\ncorpus/edge/blocking-quoted-fence-invalid.md\n  ERROR  Not modified: Invalid fenced-code opener: a backtick fence info string cannot contain backticks.\n  3:1        error   MDX053  Invalid fenced-code opener: a backtick fence info string cannot contain backticks.\n  5:1        info    MDX050  Fenced code block has no language. Add one when the language is known, for example ```js.\n  5:1        error   MDX051  Unclosed backtick code fence.\n  5:1        warning MDX052  Fenced code block starts directly after another block. Add a blank line before it. (fixable)\n\ncorpus/edge/bom-crlf-no-newline.md\n  No problems.\n  Fixed 5 issue(s).\n\ncorpus/edge/control-chars.md\n  No problems.\n\ncorpus/edge/cr-only.md\n  No problems.\n  Fixed 3 issue(s).\n\ncorpus/edge/deep-nesting.md\n  No problems.\n  Fixed 1 issue(s).\n\ncorpus/edge/double-bom.md\n  No problems.\n  Fixed 2 issue(s).\n\ncorpus/edge/emoji-columns.md\n  7:14       info    MDX070  Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text.\n  11:3       warning MDX063  A pipe inside code or a URL in a table cell still splits the cell. Escape it as \\| in code, or use %7C in a URL.\n  13:7       warning MDX071  Link or image has empty text or an empty destination.\n  15:3       warning MDX009  Zero-width character found. Remove it unless it is intentional (for example, a line-break opportunity in some scripts).\n  17:3       warning MDX007  Tab character found. Use spaces for indentation and alignment; tabs render at different widths.\n  Fixed 4 issue(s).\n\ncorpus/edge/emphasis-flanking.md\n  7:3        warning MDX042  Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword.\n  7:9        warning MDX042  Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword.\n  9:1        warning MDX042  Unpaired `*` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword.\n  9:5        warning MDX042  Unpaired `*` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword.\n  11:1       warning MDX042  Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword.\n  11:5       warning MDX042  Unpaired `****` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword.\n  11:11      warning MDX042  Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword.\n  13:1       warning MDX042  Unpaired `***` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword.\n  13:8       warning MDX042  Unpaired `***` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword.\n  15:1       warning MDX041  Possible unmatched strong or strikethrough delimiter on this line. Verify that emphasis opens and closes outside code and links.\n  16:1       warning MDX041  Possible unmatched strong or strikethrough delimiter on this line. Verify that emphasis opens and closes outside code and links.\n  26:1       warning MDX041  Possible unmatched strong or strikethrough delimiter on this line. Verify that emphasis opens and closes outside code and links.\n  Fixed 8 issue(s).\n\ncorpus/edge/empty.md\n  No problems.\n\ncorpus/edge/fence-variants.md\n  3:1        info    MDX050  Fenced code block has no language. Add one when the language is known, for example ```js.\n  8:1        info    MDX050  Fenced code block has no language. Add one when the language is known, for example ```js.\n  17:1       info    MDX050  Fenced code block has no language. Add one when the language is known, for example ```js.\n  Fixed 1 issue(s).\n\ncorpus/edge/frontmatter-hr-no-trap.md\n  No problems.\n  Fixed 1 issue(s).\n\ncorpus/edge/frontmatter-trap-bom-line.md\n  ERROR  Not modified: A fix would turn a leading --- into YAML frontmatter. Fix the first lines manually; use *** if the line was meant as a horizontal rule.\n  1:1        warning MDX006  File starts with blank lines. Remove them so the first block starts at line 1. (fixable)\n  2:1        warning MDX009  Zero-width character found. Remove it unless it is intentional (for example, a line-break opportunity in some scripts).\n  4:1        warning MDX080  This line is a Setext heading underline for the previous paragraph, so it renders as a heading instead of a horizontal rule. Insert a blank line above it, or use *** for a rule.\n\ncorpus/edge/frontmatter-trap-leading-blank.md\n  ERROR  Not modified: A fix would turn a leading --- into YAML frontmatter. Fix the first lines manually; use *** if the line was meant as a horizontal rule.\n  1:1        warning MDX006  File starts with blank lines. Remove them so the first block starts at line 1. (fixable)\n  4:1        warning MDX080  This line is a Setext heading underline for the previous paragraph, so it renders as a heading instead of a horizontal rule. Insert a blank line above it, or use *** for a rule.\n\ncorpus/edge/frontmatter-trap-unclosed.md\n  ERROR  Not modified: A fix would turn a leading --- into YAML frontmatter. Fix the first lines manually; use *** if the line was meant as a horizontal rule.\n  1:1        warning MDX006  File starts with blank lines. Remove them so the first block starts at line 1. (fixable)\n  5:1        warning MDX013  Heading is directly attached to the preceding paragraph. Add a blank line before it. (fixable)\n  5:2        warning MDX010  Add a space after the heading marker: \"# \" rather than \"#\". (fixable)\n\ncorpus/edge/html-blocks.md\n  18:1       info    MDX019  Document has more than one H1. Use H2 for subsections and keep one H1 for the page title.\n  36:1       info    MDX019  Document has more than one H1. Use H2 for subsections and keep one H1 for the page title.\n  Fixed 3 issue(s).\n\ncorpus/edge/indented-code-and-continuation.md\n  13:1       info    MDX050  Fenced code block has no language. Add one when the language is known, for example ```js.\n  Fixed 3 issue(s).\n\ncorpus/edge/long-line.md\n  No problems.\n  Fixed 1 issue(s).\n\ncorpus/edge/mixed-eol.md\n  6:1        warning MDX032  List starts directly after a paragraph. Add a blank line before it so the list boundary is unambiguous.\n  Fixed 2 issue(s).\n\ncorpus/edge/nested-containers.md\n  No problems.\n  Fixed 3 issue(s).\n\ncorpus/edge/only-newlines.md\n  No problems.\n  Fixed 2 issue(s).\n\ncorpus/edge/only-spaces.md\n  No problems.\n  Fixed 3 issue(s).\n\ncorpus/edge/quote-math-and-fence.md\n  8:1        info    MDX050  Fenced code block has no language. Add one when the language is known, for example ```js.\n\ncorpus/edge/reference-labels.md\n  3:15       warning MDX073  Reference link label \"STRASSE\" has no matching definition.\n  3:30       warning MDX073  Reference link label \"ǅ\" has no matching definition.\n\ncorpus/edge/setext-and-tables.md\n  14:1       warning MDX080  This line is a Setext heading underline for the previous paragraph, so it renders as a heading instead of a horizontal rule. Insert a blank line above it, or use *** for a rule.\n  Fixed 2 issue(s).\n\ncorpus/edge/single-hash.md\n  1:1        warning MDX016  Heading has no text. Remove it or give it a title.\n  Fixed 1 issue(s).\n\ncorpus/edge/thematic-breaks.md\n  15:1       warning MDX080  This line is a Setext heading underline for the previous paragraph, so it renders as a heading instead of a horizontal rule. Insert a blank line above it, or use *** for a rule.\n\ncorpus/edge/trailing-blank-lines.md\n  No problems.\n  Fixed 1 issue(s).\n\ncorpus/edge/unicode-whitespace.md\n  6:1        info    MDX019  Document has more than one H1. Use H2 for subsections and keep one H1 for the page title.\n  Fixed 1 issue(s).\n\ncorpus/real/dedent-paste/AGENTS.md\n  No problems.\n\ncorpus/real/dedent-paste/CHANGELOG.md\n  No problems.\n\ncorpus/real/dedent-paste/DEVELOPMENT.md\n  No problems.\n\ncorpus/real/dedent-paste/README.md\n  No problems.\n\ncorpus/real/mhtml/README.en.md\n  No problems.\n\ncorpus/real/mhtml/README.md\n  No problems.\n\ncorpus/real/mhtml/example.md\n  No problems.\n  Fixed 1 issue(s).\n\ncorpus/real/mhtml/screenshot.md\n  No problems.\n\ncorpus/real/skills/eli5-SKILL.md\n  18:1       warning MDX032  List starts directly after a paragraph. Add a blank line before it so the list boundary is unambiguous.\n  26:1       warning MDX032  List starts directly after a paragraph. Add a blank line before it so the list boundary is unambiguous.\n  Fixed 1 issue(s).\n\ncorpus/real/skills/humanizer-SKILL.md\n  No problems.\n\ncorpus/real/skills/markdown-autocorrect-SKILL.md\n  No problems.\n\ncorpus/real/skills/marpit-markdown-slide-deck-framework-SKILL.md\n  No problems.\n\ncorpus/real/skills/query-taiwan-holiday-SKILL.md\n  No problems.\n\ncorpus/real/skills/tdd-SKILL.md\n  No problems.\n\ncorpus/real/skills/teach-SKILL.md\n  10:1       info    MDX018  The first heading is not an H1. Start the outline with one H1 unless the document intentionally starts in a section.\n\ncorpus/real/skills/writing-beats-SKILL.md\n  25:1       info    MDX018  The first heading is not an H1. Start the outline with one H1 unless the document intentionally starts in a section.\n\ncorpus/real/skills/writing-for-agents-SKILL.md\n  10:1       info    MDX018  The first heading is not an H1. Start the outline with one H1 unless the document intentionally starts in a section.\n\ncorpus/regressions/js-mixed-idempotent.md\n  No problems.\n  Fixed 11 issue(s).\n\ncorpus/regressions/mdx040-cjk-bold-already-paired.md\n  No problems.\n\ncorpus/regressions/mdx042-money-amounts.md\n  1:1        warning MDX041  Possible unmatched strong or strikethrough delimiter on this line. Verify that emphasis opens and closes outside code and links.\n  3:1        warning MDX041  Possible unmatched strong or strikethrough delimiter on this line. Verify that emphasis opens and closes outside code and links.\n\ncorpus/regressions/oracle-bom-exposed-by-leading-blanks.md\n  1:1        warning MDX001  File starts with a UTF-8 BOM. Remove it so the first Markdown block starts at byte 0. (fixable)\n  Fixed 0 issue(s).\n\ncorpus/regressions/oracle-mdx016-hashes-only.md\n  No problems.\n\ncorpus/regressions/oracle-mdx018-setext-h1.md\n  2:1        warning MDX080  This line is a Setext heading underline for the previous paragraph, so it renders as a heading instead of a horizontal rule. Insert a blank line above it, or use *** for a rule.\n  4:1        info    MDX018  The first heading is not an H1. Start the outline with one H1 unless the document intentionally starts in a section.\n\ncorpus/regressions/oracle-mdx030-section-number.md\n  No problems.\n  Fixed 1 issue(s).\n\ncorpus/regressions/oracle-mdx052-quoted-fence.md\n  No problems.\n  Fixed 2 issue(s).\n\ncorpus/regressions/oracle-mdx084-inline-code.md\n  3:1        warning MDX084  Full-width punctuation is being used for Markdown syntax. Use ASCII # for headings, -, *, or + for bullets, and [ ] ( ) for links and images.\n\ncorpus/rules/MDX001/negative.md\n  No problems.\n\ncorpus/rules/MDX001/trigger.md\n  No problems.\n  Fixed 1 issue(s).\n\ncorpus/rules/MDX002/negative.md\n  No problems.\n\ncorpus/rules/MDX002/trigger.md\n  No problems.\n  Fixed 1 issue(s).\n\ncorpus/rules/MDX003/negative.md\n  No problems.\n\ncorpus/rules/MDX003/trigger.md\n  No problems.\n  Fixed 1 issue(s).\n\ncorpus/rules/MDX004/negative.md\n  No problems.\n\ncorpus/rules/MDX004/trigger.md\n  No problems.\n  Fixed 4 issue(s).\n\ncorpus/rules/MDX005/negative.md\n  No problems.\n\ncorpus/rules/MDX005/trigger.md\n  No problems.\n  Fixed 1 issue(s).\n\ncorpus/rules/MDX006/negative.md\n  No problems.\n\ncorpus/rules/MDX006/trigger.md\n  No problems.\n  Fixed 1 issue(s).\n\ncorpus/rules/MDX007/negative.md\n  No problems.\n\ncorpus/rules/MDX007/trigger.md\n  3:3        warning MDX007  Tab character found. Use spaces for indentation and alignment; tabs render at different widths.\n  5:5        warning MDX007  Tab character found. Use spaces for indentation and alignment; tabs render at different widths.\n\ncorpus/rules/MDX008/negative.md\n  No problems.\n\ncorpus/rules/MDX008/trigger.md\n  No problems.\n  Fixed 2 issue(s).\n\ncorpus/rules/MDX009/negative.md\n  No problems.\n\ncorpus/rules/MDX009/trigger.md\n  3:5        warning MDX009  Zero-width character found. Remove it unless it is intentional (for example, a line-break opportunity in some scripts).\n  5:11       warning MDX009  Zero-width character found. Remove it unless it is intentional (for example, a line-break opportunity in some scripts).\n\ncorpus/rules/MDX010/negative.md\n  No problems.\n\ncorpus/rules/MDX010/trigger.md\n  No problems.\n  Fixed 2 issue(s).\n\ncorpus/rules/MDX011/negative.md\n  No problems.\n\ncorpus/rules/MDX011/trigger.md\n  3:3        warning MDX007  Tab character found. Use spaces for indentation and alignment; tabs render at different widths.\n  Fixed 1 issue(s).\n\ncorpus/rules/MDX012/negative.md\n  No problems.\n\ncorpus/rules/MDX012/trigger.md\n  No problems.\n  Fixed 2 issue(s).\n\ncorpus/rules/MDX013/negative.md\n  8:1        info    MDX014  Heading is indented. Confirm it is not a top-level heading with accidental indentation; inside a list item the indent may be intentional.\n\ncorpus/rules/MDX013/trigger.md\n  No problems.\n  Fixed 4 issue(s).\n\ncorpus/rules/MDX014/negative.md\n  No problems.\n\ncorpus/rules/MDX014/trigger.md\n  3:1        info    MDX014  Heading is indented. Confirm it is not a top-level heading with accidental indentation; inside a list item the indent may be intentional.\n\ncorpus/rules/MDX015/negative.md\n  No problems.\n\ncorpus/rules/MDX015/trigger.md\n  3:1        warning MDX015  Heading jumps from H1 to H3. Use the next level instead of skipping one.\n\ncorpus/rules/MDX016/negative.md\n  No problems.\n\ncorpus/rules/MDX016/trigger.md\n  3:1        warning MDX016  Heading has no text. Remove it or give it a title.\n  5:1        warning MDX016  Heading has no text. Remove it or give it a title.\n  Fixed 1 issue(s).\n\ncorpus/rules/MDX017/negative.md\n  No problems.\n\ncorpus/rules/MDX017/trigger.md\n  3:1        info    MDX017  Heading ends with sentence punctuation. Headings usually read better without a trailing period, colon, or similar mark.\n  5:1        info    MDX017  Heading ends with sentence punctuation. Headings usually read better without a trailing period, colon, or similar mark.\n  7:1        info    MDX017  Heading ends with sentence punctuation. Headings usually read better without a trailing period, colon, or similar mark.\n\ncorpus/rules/MDX018/negative.md\n  5:1        info    MDX014  Heading is indented. Confirm it is not a top-level heading with accidental indentation; inside a list item the indent may be intentional.\n\ncorpus/rules/MDX018/trigger.md\n  1:1        info    MDX018  The first heading is not an H1. Start the outline with one H1 unless the document intentionally starts in a section.\n\ncorpus/rules/MDX019/negative.md\n  8:1        warning MDX080  This line is a Setext heading underline for the previous paragraph, so it renders as a heading instead of a horizontal rule. Insert a blank line above it, or use *** for a rule.\n\ncorpus/rules/MDX019/trigger.md\n  5:1        info    MDX019  Document has more than one H1. Use H2 for subsections and keep one H1 for the page title.\n\ncorpus/rules/MDX020/negative.md\n  No problems.\n\ncorpus/rules/MDX020/trigger.md\n  No problems.\n  Fixed 3 issue(s).\n\ncorpus/rules/MDX030/negative.md\n  No problems.\n\ncorpus/rules/MDX030/trigger.md\n  No problems.\n  Fixed 7 issue(s).\n\ncorpus/rules/MDX031/negative.md\n  No problems.\n\ncorpus/rules/MDX031/trigger.md\n  No problems.\n  Fixed 2 issue(s).\n\ncorpus/rules/MDX032/negative.md\n  No problems.\n\ncorpus/rules/MDX032/trigger.md\n  4:1        warning MDX032  List starts directly after a paragraph. Add a blank line before it so the list boundary is unambiguous.\n  6:1        warning MDX032  List ends directly before a paragraph, which may be read as a lazy continuation of the last item. Add a blank line after the list.\n\ncorpus/rules/MDX035/negative.md\n  No problems.\n\ncorpus/rules/MDX035/trigger.md\n  4:1        warning MDX032  List ends directly before a paragraph, which may be read as a lazy continuation of the last item. Add a blank line after the list.\n  4:1        warning MDX035  Empty list item. Remove it or add content.\n  5:1        warning MDX035  Empty list item. Remove it or add content.\n  6:1        warning MDX032  List starts directly after a paragraph. Add a blank line before it so the list boundary is unambiguous.\n  Fixed 1 issue(s).\n\ncorpus/rules/MDX040/negative.md\n  No problems.\n\ncorpus/rules/MDX040/trigger.md\n  No problems.\n  Fixed 6 issue(s).\n\ncorpus/rules/MDX041/negative.md\n  No problems.\n\ncorpus/rules/MDX041/trigger.md\n  3:1        warning MDX041  Possible unmatched strong or strikethrough delimiter on this line. Verify that emphasis opens and closes outside code and links.\n  5:1        warning MDX041  Possible unmatched strong or strikethrough delimiter on this line. Verify that emphasis opens and closes outside code and links.\n\ncorpus/rules/MDX042/negative.md\n  No problems.\n\ncorpus/rules/MDX042/trigger.md\n  7:3        warning MDX042  Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword.\n  7:9        warning MDX042  Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword.\n  Fixed 4 issue(s).\n\ncorpus/rules/MDX050/negative.md\n  No problems.\n\ncorpus/rules/MDX050/trigger.md\n  3:1        info    MDX050  Fenced code block has no language. Add one when the language is known, for example ```js.\n  7:1        info    MDX050  Fenced code block has no language. Add one when the language is known, for example ```js.\n\ncorpus/rules/MDX051/negative.md\n  9:1        info    MDX050  Fenced code block has no language. Add one when the language is known, for example ```js.\n\ncorpus/rules/MDX051/trigger.md\n  3:1        error   MDX051  Unclosed backtick code fence.\n\ncorpus/rules/MDX052/negative.md\n  No problems.\n\ncorpus/rules/MDX052/trigger.md\n  No problems.\n  Fixed 2 issue(s).\n\ncorpus/rules/MDX053/negative.md\n  No problems.\n\ncorpus/rules/MDX053/trigger.md\n  ERROR  Not modified: Invalid fenced-code opener: a backtick fence info string cannot contain backticks.\n  3:1        error   MDX053  Invalid fenced-code opener: a backtick fence info string cannot contain backticks.\n  5:1        info    MDX050  Fenced code block has no language. Add one when the language is known, for example ```js.\n  5:1        error   MDX051  Unclosed backtick code fence.\n  5:1        warning MDX052  Fenced code block starts directly after another block. Add a blank line before it. (fixable)\n\ncorpus/rules/MDX060/negative.md\n  No problems.\n\ncorpus/rules/MDX060/trigger.md\n  No problems.\n  Fixed 2 issue(s).\n\ncorpus/rules/MDX061/negative.md\n  6:3        warning MDX063  A pipe inside code or a URL in a table cell still splits the cell. Escape it as \\| in code, or use %7C in a URL.\n\ncorpus/rules/MDX061/trigger.md\n  5:1        error   MDX061  Table row has 3 cell(s) but the table has 2 column(s).\n  6:1        error   MDX061  Table row has 1 cell(s) but the table has 2 column(s).\n\ncorpus/rules/MDX062/negative.md\n  No problems.\n\ncorpus/rules/MDX062/trigger.md\n  No problems.\n  Fixed 2 issue(s).\n\ncorpus/rules/MDX063/negative.md\n  No problems.\n\ncorpus/rules/MDX063/trigger.md\n  5:3        warning MDX063  A pipe inside code or a URL in a table cell still splits the cell. Escape it as \\| in code, or use %7C in a URL.\n\ncorpus/rules/MDX070/negative.md\n  No problems.\n\ncorpus/rules/MDX070/trigger.md\n  3:4        info    MDX070  Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text.\n  5:3        info    MDX070  Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text.\n\ncorpus/rules/MDX071/negative.md\n  No problems.\n\ncorpus/rules/MDX071/trigger.md\n  3:1        warning MDX071  Link or image has empty text or an empty destination.\n  5:4        warning MDX071  Link or image has empty text or an empty destination.\n\ncorpus/rules/MDX072/negative.md\n  No problems.\n\ncorpus/rules/MDX072/trigger.md\n  3:9        info    MDX072  There is whitespace between ] and (. CommonMark does not parse this as a link; remove the space if a link was intended.\n  3:12       info    MDX070  Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text.\n\ncorpus/rules/MDX073/negative.md\n  No problems.\n\ncorpus/rules/MDX073/trigger.md\n  3:4        warning MDX073  Reference link label \"docs\" has no matching definition.\n\ncorpus/rules/MDX074/negative.md\n  No problems.\n\ncorpus/rules/MDX074/trigger.md\n  6:1        warning MDX074  Reference definition \"Home\" is declared more than once.\n\ncorpus/rules/MDX075/negative.md\n  No problems.\n\ncorpus/rules/MDX075/trigger.md\n  3:1        warning MDX071  Link or image has empty text or an empty destination.\n  3:1        warning MDX075  Image has no alt text. Add a short description, or confirm that an empty alt is correct for a decorative image.\n  5:1        warning MDX071  Link or image has empty text or an empty destination.\n  5:1        warning MDX075  Image has no alt text. Add a short description, or confirm that an empty alt is correct for a decorative image.\n\ncorpus/rules/MDX080/negative.md\n  No problems.\n\ncorpus/rules/MDX080/trigger.md\n  4:1        warning MDX080  This line is a Setext heading underline for the previous paragraph, so it renders as a heading instead of a horizontal rule. Insert a blank line above it, or use *** for a rule.\n\ncorpus/rules/MDX081/negative.md\n  No problems.\n\ncorpus/rules/MDX081/trigger.md\n  ERROR  Not modified: Unclosed YAML frontmatter: no closing --- or ... line was found.\n  1:1        error   MDX081  Unclosed YAML frontmatter: no closing --- or ... line was found.\n\ncorpus/rules/MDX082/negative.md\n  No problems.\n\ncorpus/rules/MDX082/trigger.md\n  No problems.\n  Fixed 1 issue(s).\n\ncorpus/rules/MDX083/negative.md\n  No problems.\n\ncorpus/rules/MDX083/trigger.md\n  ERROR  Not modified: Unclosed HTML comment: no closing --> was found.\n  3:1        error   MDX083  Unclosed HTML comment: no closing --> was found.\n\ncorpus/rules/MDX084/negative.md\n  No problems.\n\ncorpus/rules/MDX084/trigger.md\n  3:1        warning MDX084  Full-width punctuation is being used for Markdown syntax. Use ASCII # for headings, -, *, or + for bullets, and [ ] ( ) for links and images.\n  5:1        warning MDX084  Full-width punctuation is being used for Markdown syntax. Use ASCII # for headings, -, *, or + for bullets, and [ ] ( ) for links and images.\n  7:1        warning MDX084  Full-width punctuation is being used for Markdown syntax. Use ASCII # for headings, -, *, or + for bullets, and [ ] ( ) for links and images.\n  7:8        info    MDX070  Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text.\n\ncorpus/rules/MDX085/negative.md\n  No problems.\n\ncorpus/rules/MDX085/trigger.md\n  ERROR  Not modified: Unclosed $$ math block: no closing $$ was found.\n  3:1        error   MDX085  Unclosed $$ math block: no closing $$ was found.\n\ncorpus/rules/MDX090/negative.md\n  No problems.\n\ncorpus/rules/MDX090/trigger.md\n  No problems.\n\ncorpus/snippets/bom-notepad.md\n  No problems.\n  Fixed 3 issue(s).\n\ncorpus/snippets/chat-reply-no-newline.md\n  No problems.\n  Fixed 5 issue(s).\n\ncorpus/snippets/code-only.md\n  No problems.\n  Fixed 1 issue(s).\n\ncorpus/snippets/cr-only-old-mac.md\n  No problems.\n  Fixed 3 issue(s).\n\ncorpus/snippets/crlf-from-windows.md\n  No problems.\n  Fixed 3 issue(s).\n\ncorpus/snippets/frontmatter-lookalike.md\n  ERROR  Not modified: A fix would turn a leading --- into YAML frontmatter. Fix the first lines manually; use *** if the line was meant as a horizontal rule.\n  1:1        warning MDX006  File starts with blank lines. Remove them so the first block starts at line 1. (fixable)\n  4:1        warning MDX080  This line is a Setext heading underline for the previous paragraph, so it renders as a heading instead of a horizontal rule. Insert a blank line above it, or use *** for a rule.\n\ncorpus/snippets/gpt-bullets.md\n  No problems.\n  Fixed 8 issue(s).\n\ncorpus/snippets/leading-blank-lines.md\n  No problems.\n  Fixed 1 issue(s).\n\ncorpus/snippets/mixed-emphasis.md\n  No problems.\n  Fixed 5 issue(s).\n\ncorpus/snippets/quote-reply.md\n  No problems.\n  Fixed 4 issue(s).\n\ncorpus/snippets/single-line-heading.md\n  No problems.\n  Fixed 2 issue(s).\n\ncorpus/snippets/slack-copy-nbsp.md\n  1:26       info    MDX070  Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text.\n  1:57       warning MDX008  NBSP inside a URL. Replace it with %20 or remove it; the fixer leaves URLs untouched to avoid breaking them.\n  Fixed 2 issue(s).\n\ncorpus/snippets/table-from-excel.md\n  1:5        warning MDX007  Tab character found. Use spaces for indentation and alignment; tabs render at different widths.\n  2:6        warning MDX007  Tab character found. Use spaces for indentation and alignment; tabs render at different widths.\n  3:7        warning MDX007  Tab character found. Use spaces for indentation and alignment; tabs render at different widths.\n  4:7        warning MDX007  Tab character found. Use spaces for indentation and alignment; tabs render at different widths.\n\ncorpus/snippets/terminal-output.md\n  No problems.\n  Fixed 3 issue(s).\n\ncorpus/snippets/url-only.md\n  1:1        info    MDX070  Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text.\n  Fixed 1 issue(s).\n\ncorpus/synthetic/ai-chat-answer.md\n  1:1        info    MDX018  The first heading is not an H1. Start the outline with one H1 unless the document intentionally starts in a section.\n  16:1       info    MDX050  Fenced code block has no language. Add one when the language is known, for example ```js.\n  Fixed 7 issue(s).\n\ncorpus/synthetic/api-reference-zh.md\n  4:18       info    MDX070  Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text.\n  26:1       error   MDX061  Table row has 4 cell(s) but the table has 3 column(s).\n  39:25      warning MDX063  A pipe inside code or a URL in a table cell still splits the cell. Escape it as \\| in code, or use %7C in a URL.\n  64:1       info    MDX050  Fenced code block has no language. Add one when the language is known, for example ```js.\n  88:1       warning MDX074  Reference definition \"errors\" is declared more than once.\n  Fixed 9 issue(s).\n\ncorpus/synthetic/blog-hugo-frontmatter.md\n  14:1       info    MDX017  Heading ends with sentence punctuation. Headings usually read better without a trailing period, colon, or similar mark.\n  14:1       info    MDX018  The first heading is not an H1. Start the outline with one H1 unless the document intentionally starts in a section.\n  17:1       warning MDX032  List starts directly after a paragraph. Add a blank line before it so the list boundary is unambiguous.\n  Fixed 1 issue(s).\n\ncorpus/synthetic/blog-jekyll-liquid.md\n  11:1       info    MDX018  The first heading is not an H1. Start the outline with one H1 unless the document intentionally starts in a section.\n  18:1       warning MDX032  List starts directly after a paragraph. Add a blank line before it so the list boundary is unambiguous.\n  19:1       warning MDX032  List ends directly before a paragraph, which may be read as a lazy continuation of the last item. Add a blank line after the list.\n  Fixed 1 issue(s).\n\ncorpus/synthetic/changelog-keepachangelog.md\n  42:1       info    MDX019  Document has more than one H1. Use H2 for subsections and keep one H1 for the page title.\n  50:1       warning MDX032  List ends directly before a paragraph, which may be read as a lazy continuation of the last item. Add a blank line after the list.\n  50:1       warning MDX035  Empty list item. Remove it or add content.\n  Fixed 3 issue(s).\n\ncorpus/synthetic/code-review-report-ai.md\n  56:1       info    MDX017  Heading ends with sentence punctuation. Headings usually read better without a trailing period, colon, or similar mark.\n  Fixed 20 issue(s).\n\ncorpus/synthetic/config-guide.md\n  58:1       info    MDX017  Heading ends with sentence punctuation. Headings usually read better without a trailing period, colon, or similar mark.\n  68:3       warning MDX007  Tab character found. Use spaces for indentation and alignment; tabs render at different widths.\n  70:1       info    MDX050  Fenced code block has no language. Add one when the language is known, for example ```js.\n\ncorpus/synthetic/docusaurus-mdx.md\n  47:4       info    MDX070  Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text.\n\ncorpus/synthetic/html-heavy-readme.md\n  No problems.\n  Fixed 1 issue(s).\n\ncorpus/synthetic/marp-slides.md\n  13:1       warning MDX080  This line is a Setext heading underline for the previous paragraph, so it renders as a heading instead of a horizontal rule. Insert a blank line above it, or use *** for a rule.\n  15:1       info    MDX017  Heading ends with sentence punctuation. Headings usually read better without a trailing period, colon, or similar mark.\n  37:1       info    MDX017  Heading ends with sentence punctuation. Headings usually read better without a trailing period, colon, or similar mark.\n  55:1       info    MDX017  Heading ends with sentence punctuation. Headings usually read better without a trailing period, colon, or similar mark.\n  55:1       info    MDX019  Document has more than one H1. Use H2 for subsections and keep one H1 for the page title.\n  Fixed 1 issue(s).\n\ncorpus/synthetic/math-notes.md\n  59:3       info    MDX070  Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text.\n  Fixed 1 issue(s).\n\ncorpus/synthetic/meeting-notes-outlook.md\n  No problems.\n  Fixed 22 issue(s).\n\ncorpus/synthetic/obsidian-note.md\n  9:1        info    MDX019  Document has more than one H1. Use H2 for subsections and keep one H1 for the page title.\n  43:1       info    MDX019  Document has more than one H1. Use H2 for subsections and keep one H1 for the page title.\n  48:18      info    MDX070  Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text.\n  Fixed 6 issue(s).\n\ncorpus/synthetic/onboarding-mixed-lang.md\n  27:6       info    MDX070  Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text.\n  59:11      info    MDX070  Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text.\n  Fixed 3 issue(s).\n\ncorpus/synthetic/readme-en-library.md\n  10:1       warning MDX071  Link or image has empty text or an empty destination.\n  10:1       warning MDX075  Image has no alt text. Add a short description, or confirm that an empty alt is correct for a decorative image.\n  14:1       info    MDX018  The first heading is not an H1. Start the outline with one H1 unless the document intentionally starts in a section.\n  46:97      info    MDX072  There is whitespace between ] and (. CommonMark does not parse this as a link; remove the space if a link was intended.\n  50:1       info    MDX017  Heading ends with sentence punctuation. Headings usually read better without a trailing period, colon, or similar mark.\n  54:1       info    MDX017  Heading ends with sentence punctuation. Headings usually read better without a trailing period, colon, or similar mark.\n  72:69      info    MDX070  Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text.\n  73:47      info    MDX070  Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text.\n  Fixed 3 issue(s).\n\ncorpus/synthetic/release-notes-zh.md\n  21:1       warning MDX032  List ends directly before a paragraph, which may be read as a lazy continuation of the last item. Add a blank line after the list.\n  21:1       warning MDX035  Empty list item. Remove it or add content.\n  39:6       info    MDX070  Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text.\n  Fixed 6 issue(s).\n\ncorpus/synthetic/spec-prd-ai-generated.md\n  9:1        info    MDX017  Heading ends with sentence punctuation. Headings usually read better without a trailing period, colon, or similar mark.\n  75:1       info    MDX017  Heading ends with sentence punctuation. Headings usually read better without a trailing period, colon, or similar mark.\n  Fixed 33 issue(s).\n\ncorpus/synthetic/storybook-mdx.markdown\n  No problems.\n  Fixed 1 issue(s).\n\ncorpus/synthetic/troubleshooting-faq.md\n  5:1        info    MDX017  Heading ends with sentence punctuation. Headings usually read better without a trailing period, colon, or similar mark.\n  13:1       info    MDX017  Heading ends with sentence punctuation. Headings usually read better without a trailing period, colon, or similar mark.\n  17:1       info    MDX050  Fenced code block has no language. Add one when the language is known, for example ```js.\n  23:1       info    MDX017  Heading ends with sentence punctuation. Headings usually read better without a trailing period, colon, or similar mark.\n  30:1       info    MDX017  Heading ends with sentence punctuation. Headings usually read better without a trailing period, colon, or similar mark.\n  37:1       error   MDX061  Table row has 4 cell(s) but the table has 3 column(s).\n  44:1       warning MDX032  List ends directly before a paragraph, which may be read as a lazy continuation of the last item. Add a blank line after the list.\n  44:1       warning MDX035  Empty list item. Remove it or add content.\n  53:1       warning MDX032  List ends directly before a paragraph, which may be read as a lazy continuation of the last item. Add a blank line after the list.\n  53:6       info    MDX070  Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text.\n  Fixed 2 issue(s).\n\ncorpus/synthetic/tutorial-rust-cli.md\n  8:1        warning MDX032  List starts directly after a paragraph. Add a blank line before it so the list boundary is unambiguous.\n  20:1       info    MDX050  Fenced code block has no language. Add one when the language is known, for example ```js.\n  55:1       warning MDX032  List starts directly after a paragraph. Add a blank line before it so the list boundary is unambiguous.\n  105:20     info    MDX070  Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text.\n  Fixed 5 issue(s).\n\ncorpus/synthetic/web-copy-paste.md\n  1:1        warning MDX084  Full-width punctuation is being used for Markdown syntax. Use ASCII # for headings, -, *, or + for bullets, and [ ] ( ) for links and images.\n  3:18       warning MDX009  Zero-width character found. Remove it unless it is intentional (for example, a line-break opportunity in some scripts).\n  6:1        info    MDX018  The first heading is not an H1. Start the outline with one H1 unless the document intentionally starts in a section.\n  8:1        warning MDX084  Full-width punctuation is being used for Markdown syntax. Use ASCII # for headings, -, *, or + for bullets, and [ ] ( ) for links and images.\n  9:1        warning MDX084  Full-width punctuation is being used for Markdown syntax. Use ASCII # for headings, -, *, or + for bullets, and [ ] ( ) for links and images.\n  10:1       warning MDX084  Full-width punctuation is being used for Markdown syntax. Use ASCII # for headings, -, *, or + for bullets, and [ ] ( ) for links and images.\n  12:1       warning MDX084  Full-width punctuation is being used for Markdown syntax. Use ASCII # for headings, -, *, or + for bullets, and [ ] ( ) for links and images.\n  12:13      info    MDX070  Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text.\n  18:13      info    MDX070  Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text.\n  18:44      warning MDX008  NBSP inside a URL. Replace it with %20 or remove it; the fixer leaves URLs untouched to avoid breaking them.\n  28:11      warning MDX009  Zero-width character found. Remove it unless it is intentional (for example, a line-break opportunity in some scripts).\n  Fixed 11 issue(s).\n\ncorpus/synthetic/weekly-report.md\n  No problems.\n  Fixed 14 issue(s).\n\nFixed 305 issue(s) in 80 file(s).\n202 problem(s) remain: 11 fixable, 18 error(s), 107 warning(s), 77 info.\n14 file(s) were not modified because of structural or frontmatter ambiguity.\n",
+    "stderr": "",
+    "files": [
+      {
+        "path": "corpus/edge/blocking-fence-invalid.md",
+        "fnv": "f9091f36ac1bb4a5"
+      },
+      {
+        "path": "corpus/edge/blocking-frontmatter-unclosed.md",
+        "fnv": "6239005de7c7f0cf"
+      },
+      {
+        "path": "corpus/edge/blocking-html-comment.md",
+        "fnv": "68b55b943de7a562"
+      },
+      {
+        "path": "corpus/edge/blocking-math-quote-ended.md",
+        "fnv": "14ce53541ceb677f"
+      },
+      {
+        "path": "corpus/edge/blocking-math-unclosed.md",
+        "fnv": "3fe0ec32d9cdbf52"
+      },
+      {
+        "path": "corpus/edge/blocking-quoted-fence-invalid.md",
+        "fnv": "9737fb6694abf38a"
+      },
+      {
+        "path": "corpus/edge/bom-crlf-no-newline.md",
+        "fnv": "317e85374e042783"
+      },
+      {
+        "path": "corpus/edge/control-chars.md",
+        "fnv": "271417175f2c8273"
+      },
+      {
+        "path": "corpus/edge/cr-only.md",
+        "fnv": "1010cb9ed0284ce7"
+      },
+      {
+        "path": "corpus/edge/deep-nesting.md",
+        "fnv": "431d7d23331ce073"
+      },
+      {
+        "path": "corpus/edge/double-bom.md",
+        "fnv": "cf74dbc68dd576b4"
+      },
+      {
+        "path": "corpus/edge/emoji-columns.md",
+        "fnv": "530fbe920c374e17"
+      },
+      {
+        "path": "corpus/edge/emphasis-flanking.md",
+        "fnv": "6459e7fc9a432ed1"
+      },
+      {
+        "path": "corpus/edge/empty.md",
+        "fnv": "cbf29ce484222325"
+      },
+      {
+        "path": "corpus/edge/fence-variants.md",
+        "fnv": "2f75ac1e0c146df6"
+      },
+      {
+        "path": "corpus/edge/frontmatter-hr-no-trap.md",
+        "fnv": "a27f3b242602df35"
+      },
+      {
+        "path": "corpus/edge/frontmatter-trap-bom-line.md",
+        "fnv": "5983ad848e7b64ec"
+      },
+      {
+        "path": "corpus/edge/frontmatter-trap-leading-blank.md",
+        "fnv": "3a1c02918801e576"
+      },
+      {
+        "path": "corpus/edge/frontmatter-trap-unclosed.md",
+        "fnv": "a756274a234dd63f"
+      },
+      {
+        "path": "corpus/edge/html-blocks.md",
+        "fnv": "8f20b5a4f1b43405"
+      },
+      {
+        "path": "corpus/edge/indented-code-and-continuation.md",
+        "fnv": "7b60c2a79f590bda"
+      },
+      {
+        "path": "corpus/edge/long-line.md",
+        "fnv": "49a38fefc81e4d98"
+      },
+      {
+        "path": "corpus/edge/mixed-eol.md",
+        "fnv": "4d63765bbd7801d3"
+      },
+      {
+        "path": "corpus/edge/nested-containers.md",
+        "fnv": "8bc7f4269438b1a5"
+      },
+      {
+        "path": "corpus/edge/only-newlines.md",
+        "fnv": "cbf29ce484222325"
+      },
+      {
+        "path": "corpus/edge/only-spaces.md",
+        "fnv": "cbf29ce484222325"
+      },
+      {
+        "path": "corpus/edge/quote-math-and-fence.md",
+        "fnv": "7ad7fde67a03b014"
+      },
+      {
+        "path": "corpus/edge/reference-labels.md",
+        "fnv": "0417f9ea69ce7aab"
+      },
+      {
+        "path": "corpus/edge/setext-and-tables.md",
+        "fnv": "a3e0196ecca772bd"
+      },
+      {
+        "path": "corpus/edge/single-hash.md",
+        "fnv": "07c93407b491f828"
+      },
+      {
+        "path": "corpus/edge/thematic-breaks.md",
+        "fnv": "13c92e713cd64f8e"
+      },
+      {
+        "path": "corpus/edge/trailing-blank-lines.md",
+        "fnv": "317e85374e042783"
+      },
+      {
+        "path": "corpus/edge/unicode-whitespace.md",
+        "fnv": "78c1b331e4140efb"
+      },
+      {
+        "path": "corpus/real/dedent-paste/AGENTS.md",
+        "fnv": "dd6e60023a340092"
+      },
+      {
+        "path": "corpus/real/dedent-paste/CHANGELOG.md",
+        "fnv": "28234d5f1a8ca425"
+      },
+      {
+        "path": "corpus/real/dedent-paste/DEVELOPMENT.md",
+        "fnv": "9483e469c52da209"
+      },
+      {
+        "path": "corpus/real/dedent-paste/README.md",
+        "fnv": "e60d9a30fd5df87e"
+      },
+      {
+        "path": "corpus/real/mhtml/README.en.md",
+        "fnv": "295533739659acc5"
+      },
+      {
+        "path": "corpus/real/mhtml/README.md",
+        "fnv": "4493af4ecb39012f"
+      },
+      {
+        "path": "corpus/real/mhtml/example.md",
+        "fnv": "f2877a2f802c839c"
+      },
+      {
+        "path": "corpus/real/mhtml/screenshot.md",
+        "fnv": "cc69c1cff5ec43f7"
+      },
+      {
+        "path": "corpus/real/skills/eli5-SKILL.md",
+        "fnv": "812a9a13324a766c"
+      },
+      {
+        "path": "corpus/real/skills/humanizer-SKILL.md",
+        "fnv": "57171a1e23ab99f3"
+      },
+      {
+        "path": "corpus/real/skills/markdown-autocorrect-SKILL.md",
+        "fnv": "c2af8989ae240e24"
+      },
+      {
+        "path": "corpus/real/skills/marpit-markdown-slide-deck-framework-SKILL.md",
+        "fnv": "0989965172827305"
+      },
+      {
+        "path": "corpus/real/skills/query-taiwan-holiday-SKILL.md",
+        "fnv": "4b271af03446da79"
+      },
+      {
+        "path": "corpus/real/skills/tdd-SKILL.md",
+        "fnv": "d6c58e335264dc47"
+      },
+      {
+        "path": "corpus/real/skills/teach-SKILL.md",
+        "fnv": "4f0a6e880c7d76e7"
+      },
+      {
+        "path": "corpus/real/skills/writing-beats-SKILL.md",
+        "fnv": "93eb4e0704141d22"
+      },
+      {
+        "path": "corpus/real/skills/writing-for-agents-SKILL.md",
+        "fnv": "1e906fc1aa1f26dc"
+      },
+      {
+        "path": "corpus/regressions/js-mixed-idempotent.md",
+        "fnv": "0ecb57269f4317e3"
+      },
+      {
+        "path": "corpus/regressions/mdx040-cjk-bold-already-paired.md",
+        "fnv": "9d93b38d9db4009d"
+      },
+      {
+        "path": "corpus/regressions/mdx042-money-amounts.md",
+        "fnv": "ece0f6ed1a6b9eb1"
+      },
+      {
+        "path": "corpus/regressions/oracle-bom-exposed-by-leading-blanks.md",
+        "fnv": "2602decb1f5963d5"
+      },
+      {
+        "path": "corpus/regressions/oracle-mdx016-hashes-only.md",
+        "fnv": "27850afb6a5433e1"
+      },
+      {
+        "path": "corpus/regressions/oracle-mdx018-setext-h1.md",
+        "fnv": "f353c0b0667e51da"
+      },
+      {
+        "path": "corpus/regressions/oracle-mdx030-section-number.md",
+        "fnv": "9e63cc5f70eb35a0"
+      },
+      {
+        "path": "corpus/regressions/oracle-mdx052-quoted-fence.md",
+        "fnv": "8f8228a7075a9a0f"
+      },
+      {
+        "path": "corpus/regressions/oracle-mdx084-inline-code.md",
+        "fnv": "cedcfae0ec628aa0"
+      },
+      {
+        "path": "corpus/rules/MDX001/negative.md",
+        "fnv": "aaa0c5e440263cb3"
+      },
+      {
+        "path": "corpus/rules/MDX001/trigger.md",
+        "fnv": "3484283f48bf93c0"
+      },
+      {
+        "path": "corpus/rules/MDX002/negative.md",
+        "fnv": "d18b3b5f23369b97"
+      },
+      {
+        "path": "corpus/rules/MDX002/trigger.md",
+        "fnv": "65615cc6d90a3a42"
+      },
+      {
+        "path": "corpus/rules/MDX003/negative.md",
+        "fnv": "7beec594510765f1"
+      },
+      {
+        "path": "corpus/rules/MDX003/trigger.md",
+        "fnv": "387474c40e0f598c"
+      },
+      {
+        "path": "corpus/rules/MDX004/negative.md",
+        "fnv": "ca7d5943ef7452ee"
+      },
+      {
+        "path": "corpus/rules/MDX004/trigger.md",
+        "fnv": "cbafd33fbac140a1"
+      },
+      {
+        "path": "corpus/rules/MDX005/negative.md",
+        "fnv": "093012c9fd48544b"
+      },
+      {
+        "path": "corpus/rules/MDX005/trigger.md",
+        "fnv": "c39444ec8d74ba57"
+      },
+      {
+        "path": "corpus/rules/MDX006/negative.md",
+        "fnv": "a6b30e4b47711c75"
+      },
+      {
+        "path": "corpus/rules/MDX006/trigger.md",
+        "fnv": "1c1873f4c9765134"
+      },
+      {
+        "path": "corpus/rules/MDX007/negative.md",
+        "fnv": "1b71350b0742d77e"
+      },
+      {
+        "path": "corpus/rules/MDX007/trigger.md",
+        "fnv": "72f879c410d5ff96"
+      },
+      {
+        "path": "corpus/rules/MDX008/negative.md",
+        "fnv": "19573a17329c48b2"
+      },
+      {
+        "path": "corpus/rules/MDX008/trigger.md",
+        "fnv": "71b33f6cbcee6d82"
+      },
+      {
+        "path": "corpus/rules/MDX009/negative.md",
+        "fnv": "1a53fa4dd672c130"
+      },
+      {
+        "path": "corpus/rules/MDX009/trigger.md",
+        "fnv": "11d8da67aa6955bd"
+      },
+      {
+        "path": "corpus/rules/MDX010/negative.md",
+        "fnv": "b353b81cd94e5585"
+      },
+      {
+        "path": "corpus/rules/MDX010/trigger.md",
+        "fnv": "90a2b4dcaa6bf407"
+      },
+      {
+        "path": "corpus/rules/MDX011/negative.md",
+        "fnv": "5b8d1e09cd494daa"
+      },
+      {
+        "path": "corpus/rules/MDX011/trigger.md",
+        "fnv": "b6692bc1129b2203"
+      },
+      {
+        "path": "corpus/rules/MDX012/negative.md",
+        "fnv": "4f743b530d9c4ac9"
+      },
+      {
+        "path": "corpus/rules/MDX012/trigger.md",
+        "fnv": "288d950d793ea86b"
+      },
+      {
+        "path": "corpus/rules/MDX013/negative.md",
+        "fnv": "5e45a16d42fbffaf"
+      },
+      {
+        "path": "corpus/rules/MDX013/trigger.md",
+        "fnv": "471d257b35d911cd"
+      },
+      {
+        "path": "corpus/rules/MDX014/negative.md",
+        "fnv": "65c7606270dd7c80"
+      },
+      {
+        "path": "corpus/rules/MDX014/trigger.md",
+        "fnv": "1cd3ff0e97854315"
+      },
+      {
+        "path": "corpus/rules/MDX015/negative.md",
+        "fnv": "56c42c5e40b7efbb"
+      },
+      {
+        "path": "corpus/rules/MDX015/trigger.md",
+        "fnv": "9795aa002cdd09fd"
+      },
+      {
+        "path": "corpus/rules/MDX016/negative.md",
+        "fnv": "bc683de65c14847a"
+      },
+      {
+        "path": "corpus/rules/MDX016/trigger.md",
+        "fnv": "c959dc4d38bb97a5"
+      },
+      {
+        "path": "corpus/rules/MDX017/negative.md",
+        "fnv": "463be00fabba5cd9"
+      },
+      {
+        "path": "corpus/rules/MDX017/trigger.md",
+        "fnv": "116d6c13ac36c4f4"
+      },
+      {
+        "path": "corpus/rules/MDX018/negative.md",
+        "fnv": "e145204c72eb5ba5"
+      },
+      {
+        "path": "corpus/rules/MDX018/trigger.md",
+        "fnv": "bd3de606434142a2"
+      },
+      {
+        "path": "corpus/rules/MDX019/negative.md",
+        "fnv": "1f38585f0e8d533b"
+      },
+      {
+        "path": "corpus/rules/MDX019/trigger.md",
+        "fnv": "5f5cf7b23b76cd63"
+      },
+      {
+        "path": "corpus/rules/MDX020/negative.md",
+        "fnv": "d040405c789bafef"
+      },
+      {
+        "path": "corpus/rules/MDX020/trigger.md",
+        "fnv": "b666853152b9df73"
+      },
+      {
+        "path": "corpus/rules/MDX030/negative.md",
+        "fnv": "2d583d98c33ec2af"
+      },
+      {
+        "path": "corpus/rules/MDX030/trigger.md",
+        "fnv": "306e829e7d49738a"
+      },
+      {
+        "path": "corpus/rules/MDX031/negative.md",
+        "fnv": "3b19e5cb0a67abc5"
+      },
+      {
+        "path": "corpus/rules/MDX031/trigger.md",
+        "fnv": "1e7ecce20eb9f214"
+      },
+      {
+        "path": "corpus/rules/MDX032/negative.md",
+        "fnv": "739c436c58c9be98"
+      },
+      {
+        "path": "corpus/rules/MDX032/trigger.md",
+        "fnv": "5a65b38e4ffb7f21"
+      },
+      {
+        "path": "corpus/rules/MDX035/negative.md",
+        "fnv": "d1327ce897000d10"
+      },
+      {
+        "path": "corpus/rules/MDX035/trigger.md",
+        "fnv": "9c3216260adf9553"
+      },
+      {
+        "path": "corpus/rules/MDX040/negative.md",
+        "fnv": "c6bbcb5ea7462cc8"
+      },
+      {
+        "path": "corpus/rules/MDX040/trigger.md",
+        "fnv": "14106a68a622a480"
+      },
+      {
+        "path": "corpus/rules/MDX041/negative.md",
+        "fnv": "13c10ca1416c6e3d"
+      },
+      {
+        "path": "corpus/rules/MDX041/trigger.md",
+        "fnv": "c2d7fe87d3f89340"
+      },
+      {
+        "path": "corpus/rules/MDX042/negative.md",
+        "fnv": "1c670e621da3d335"
+      },
+      {
+        "path": "corpus/rules/MDX042/trigger.md",
+        "fnv": "e5c843f193a0f498"
+      },
+      {
+        "path": "corpus/rules/MDX050/negative.md",
+        "fnv": "2a94e4a53c146768"
+      },
+      {
+        "path": "corpus/rules/MDX050/trigger.md",
+        "fnv": "5292ef435fbd42d1"
+      },
+      {
+        "path": "corpus/rules/MDX051/negative.md",
+        "fnv": "97933a8353152e62"
+      },
+      {
+        "path": "corpus/rules/MDX051/trigger.md",
+        "fnv": "7778e7080e757f66"
+      },
+      {
+        "path": "corpus/rules/MDX052/negative.md",
+        "fnv": "857038b97b1208e4"
+      },
+      {
+        "path": "corpus/rules/MDX052/trigger.md",
+        "fnv": "59780402a8b9442e"
+      },
+      {
+        "path": "corpus/rules/MDX053/negative.md",
+        "fnv": "04e700eeb15c8198"
+      },
+      {
+        "path": "corpus/rules/MDX053/trigger.md",
+        "fnv": "5dc9162143734025"
+      },
+      {
+        "path": "corpus/rules/MDX060/negative.md",
+        "fnv": "96bf984999a3a2fc"
+      },
+      {
+        "path": "corpus/rules/MDX060/trigger.md",
+        "fnv": "bae7b997b061b93a"
+      },
+      {
+        "path": "corpus/rules/MDX061/negative.md",
+        "fnv": "9fb67fd36eb3d0b6"
+      },
+      {
+        "path": "corpus/rules/MDX061/trigger.md",
+        "fnv": "a4eb73e8b0611949"
+      },
+      {
+        "path": "corpus/rules/MDX062/negative.md",
+        "fnv": "0a4cf550e69f04b9"
+      },
+      {
+        "path": "corpus/rules/MDX062/trigger.md",
+        "fnv": "a8439e89e6fb9444"
+      },
+      {
+        "path": "corpus/rules/MDX063/negative.md",
+        "fnv": "f48e6c5cf9ff03cb"
+      },
+      {
+        "path": "corpus/rules/MDX063/trigger.md",
+        "fnv": "60c07e53586809f7"
+      },
+      {
+        "path": "corpus/rules/MDX070/negative.md",
+        "fnv": "c64651180f0ab12d"
+      },
+      {
+        "path": "corpus/rules/MDX070/trigger.md",
+        "fnv": "0eacde6c7d712c73"
+      },
+      {
+        "path": "corpus/rules/MDX071/negative.md",
+        "fnv": "ec6a7bef31e98652"
+      },
+      {
+        "path": "corpus/rules/MDX071/trigger.md",
+        "fnv": "1ba7101b668d324e"
+      },
+      {
+        "path": "corpus/rules/MDX072/negative.md",
+        "fnv": "8d521af1f04cb96d"
+      },
+      {
+        "path": "corpus/rules/MDX072/trigger.md",
+        "fnv": "adb7c77bd87b5add"
+      },
+      {
+        "path": "corpus/rules/MDX073/negative.md",
+        "fnv": "2faee3ff0059511f"
+      },
+      {
+        "path": "corpus/rules/MDX073/trigger.md",
+        "fnv": "39fb85aa0692e429"
+      },
+      {
+        "path": "corpus/rules/MDX074/negative.md",
+        "fnv": "8541de9789d9b22c"
+      },
+      {
+        "path": "corpus/rules/MDX074/trigger.md",
+        "fnv": "2b95a0db397b228d"
+      },
+      {
+        "path": "corpus/rules/MDX075/negative.md",
+        "fnv": "490800cfdf3d48e8"
+      },
+      {
+        "path": "corpus/rules/MDX075/trigger.md",
+        "fnv": "36104435aa2e3ddd"
+      },
+      {
+        "path": "corpus/rules/MDX080/negative.md",
+        "fnv": "d1f0ed9f455efadc"
+      },
+      {
+        "path": "corpus/rules/MDX080/trigger.md",
+        "fnv": "ce57c11775e049ec"
+      },
+      {
+        "path": "corpus/rules/MDX081/negative.md",
+        "fnv": "55568bce5ce9bd22"
+      },
+      {
+        "path": "corpus/rules/MDX081/trigger.md",
+        "fnv": "4402727a9ef450d6"
+      },
+      {
+        "path": "corpus/rules/MDX082/negative.md",
+        "fnv": "675e6418db6caae2"
+      },
+      {
+        "path": "corpus/rules/MDX082/trigger.md",
+        "fnv": "c9f30e4e34306866"
+      },
+      {
+        "path": "corpus/rules/MDX083/negative.md",
+        "fnv": "ffbab1b66c5a5fc5"
+      },
+      {
+        "path": "corpus/rules/MDX083/trigger.md",
+        "fnv": "69f4f8835e4cdcc6"
+      },
+      {
+        "path": "corpus/rules/MDX084/negative.md",
+        "fnv": "47ccbddf349d6f98"
+      },
+      {
+        "path": "corpus/rules/MDX084/trigger.md",
+        "fnv": "c9b3dfe14c8f3a0e"
+      },
+      {
+        "path": "corpus/rules/MDX085/negative.md",
+        "fnv": "f22b359f36d40e2f"
+      },
+      {
+        "path": "corpus/rules/MDX085/trigger.md",
+        "fnv": "f8c77021e971c9c4"
+      },
+      {
+        "path": "corpus/rules/MDX090/negative.md",
+        "fnv": "e58f853461bfec59"
+      },
+      {
+        "path": "corpus/rules/MDX090/trigger.md",
+        "fnv": "2ea6b42b51cde724"
+      },
+      {
+        "path": "corpus/snippets/bom-notepad.md",
+        "fnv": "1fbc3ef6903acb16"
+      },
+      {
+        "path": "corpus/snippets/chat-reply-no-newline.md",
+        "fnv": "68cc147239758ed2"
+      },
+      {
+        "path": "corpus/snippets/code-only.md",
+        "fnv": "7c6a7bae5544f091"
+      },
+      {
+        "path": "corpus/snippets/cr-only-old-mac.md",
+        "fnv": "a4100678d7f173bf"
+      },
+      {
+        "path": "corpus/snippets/crlf-from-windows.md",
+        "fnv": "f49844c448b526f8"
+      },
+      {
+        "path": "corpus/snippets/frontmatter-lookalike.md",
+        "fnv": "f1488170fb0d952d"
+      },
+      {
+        "path": "corpus/snippets/gpt-bullets.md",
+        "fnv": "ca0093c09d6a84fc"
+      },
+      {
+        "path": "corpus/snippets/leading-blank-lines.md",
+        "fnv": "d5e3df2966ea9e37"
+      },
+      {
+        "path": "corpus/snippets/mixed-emphasis.md",
+        "fnv": "d92046b0a8d6a03f"
+      },
+      {
+        "path": "corpus/snippets/quote-reply.md",
+        "fnv": "6d516aeb350a43e1"
+      },
+      {
+        "path": "corpus/snippets/single-line-heading.md",
+        "fnv": "fb092adc34fd2b19"
+      },
+      {
+        "path": "corpus/snippets/slack-copy-nbsp.md",
+        "fnv": "5852436ef324b1cc"
+      },
+      {
+        "path": "corpus/snippets/table-from-excel.md",
+        "fnv": "f46bd7973519036c"
+      },
+      {
+        "path": "corpus/snippets/terminal-output.md",
+        "fnv": "9d00770388e7f12a"
+      },
+      {
+        "path": "corpus/snippets/url-only.md",
+        "fnv": "9fa1647147ffba3e"
+      },
+      {
+        "path": "corpus/synthetic/ai-chat-answer.md",
+        "fnv": "218191090356eeac"
+      },
+      {
+        "path": "corpus/synthetic/api-reference-zh.md",
+        "fnv": "f9d0e04ec1f0af6d"
+      },
+      {
+        "path": "corpus/synthetic/blog-hugo-frontmatter.md",
+        "fnv": "f0e5198a2318b310"
+      },
+      {
+        "path": "corpus/synthetic/blog-jekyll-liquid.md",
+        "fnv": "943eb1a3ca461cae"
+      },
+      {
+        "path": "corpus/synthetic/changelog-keepachangelog.md",
+        "fnv": "8423ffba5062b627"
+      },
+      {
+        "path": "corpus/synthetic/code-review-report-ai.md",
+        "fnv": "c5dba6f976e45f3d"
+      },
+      {
+        "path": "corpus/synthetic/config-guide.md",
+        "fnv": "68f4e2d71ec5fa8f"
+      },
+      {
+        "path": "corpus/synthetic/docusaurus-mdx.md",
+        "fnv": "97b2052014a26486"
+      },
+      {
+        "path": "corpus/synthetic/html-heavy-readme.md",
+        "fnv": "9544f30c8a34ec03"
+      },
+      {
+        "path": "corpus/synthetic/marp-slides.md",
+        "fnv": "77f29c2548e98b44"
+      },
+      {
+        "path": "corpus/synthetic/math-notes.md",
+        "fnv": "b93a9b4e81cca6b2"
+      },
+      {
+        "path": "corpus/synthetic/meeting-notes-outlook.md",
+        "fnv": "9d703f9a5d310cd3"
+      },
+      {
+        "path": "corpus/synthetic/obsidian-note.md",
+        "fnv": "e641011fad3a2f63"
+      },
+      {
+        "path": "corpus/synthetic/onboarding-mixed-lang.md",
+        "fnv": "4b006eb7c68f04cd"
+      },
+      {
+        "path": "corpus/synthetic/readme-en-library.md",
+        "fnv": "430c1780fb85c630"
+      },
+      {
+        "path": "corpus/synthetic/release-notes-zh.md",
+        "fnv": "18b673e07831b6fd"
+      },
+      {
+        "path": "corpus/synthetic/spec-prd-ai-generated.md",
+        "fnv": "fb834c76423ac57e"
+      },
+      {
+        "path": "corpus/synthetic/storybook-mdx.markdown",
+        "fnv": "81b489cfb66dc5cf"
+      },
+      {
+        "path": "corpus/synthetic/troubleshooting-faq.md",
+        "fnv": "7ecb59f66e8b0de3"
+      },
+      {
+        "path": "corpus/synthetic/tutorial-rust-cli.md",
+        "fnv": "d092d14d61b77669"
+      },
+      {
+        "path": "corpus/synthetic/web-copy-paste.md",
+        "fnv": "a3d84cead4bac15e"
+      },
+      {
+        "path": "corpus/synthetic/weekly-report.md",
+        "fnv": "f86e4d2fa5a2ede8"
+      }
+    ]
+  }
+}

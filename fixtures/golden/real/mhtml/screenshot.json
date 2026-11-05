@@ -1,0 +1,79 @@
+{
+  "source": "real/mhtml/screenshot.md",
+  "referenceVersion": "1.0.0",
+  "cases": [
+    {
+      "name": "default",
+      "options": {},
+      "diagnose": [],
+      "fix": {
+        "text": "# mhtml\n\n把 Markdown 變成**漂亮、單一檔案**的 HTML，支援 *深色模式*、`自訂 CSS` 與 [設定檔](#)。\n\n> [!TIP]\n> 只要 `mhtml README.md`，就會在瀏覽器即時預覽。\n\n| 功能     | 旗標                 |\n| :------- | :------------------- |\n| 深淺主題 | `--theme dark`       |\n| 自訂樣式 | `--css my.css`       |\n| 目錄     | `--toc`              |\n\n```rust\nfn main() {\n    println!(\"Hello, mhtml!\");\n}\n```\n\n質能方程式 $E = mc^2$，以及：\n\n$$\\int_0^\\infty e^{-x^2}\\,dx = \\frac{\\sqrt{\\pi}}{2}$$\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "snippet",
+      "options": {
+        "ignoreRules": [
+          "MDX003"
+        ]
+      },
+      "diagnose": [],
+      "fix": {
+        "text": "# mhtml\n\n把 Markdown 變成**漂亮、單一檔案**的 HTML，支援 *深色模式*、`自訂 CSS` 與 [設定檔](#)。\n\n> [!TIP]\n> 只要 `mhtml README.md`，就會在瀏覽器即時預覽。\n\n| 功能     | 旗標                 |\n| :------- | :------------------- |\n| 深淺主題 | `--theme dark`       |\n| 自訂樣式 | `--css my.css`       |\n| 目錄     | `--toc`              |\n\n```rust\nfn main() {\n    println!(\"Hello, mhtml!\");\n}\n```\n\n質能方程式 $E = mc^2$，以及：\n\n$$\\int_0^\\infty e^{-x^2}\\,dx = \\frac{\\sqrt{\\pi}}{2}$$\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "line-length-80",
+      "options": {
+        "maxLineLength": 80
+      },
+      "diagnose": [],
+      "fix": {
+        "text": "# mhtml\n\n把 Markdown 變成**漂亮、單一檔案**的 HTML，支援 *深色模式*、`自訂 CSS` 與 [設定檔](#)。\n\n> [!TIP]\n> 只要 `mhtml README.md`，就會在瀏覽器即時預覽。\n\n| 功能     | 旗標                 |\n| :------- | :------------------- |\n| 深淺主題 | `--theme dark`       |\n| 自訂樣式 | `--css my.css`       |\n| 目錄     | `--toc`              |\n\n```rust\nfn main() {\n    println!(\"Hello, mhtml!\");\n}\n```\n\n質能方程式 $E = mc^2$，以及：\n\n$$\\int_0^\\infty e^{-x^2}\\,dx = \\frac{\\sqrt{\\pi}}{2}$$\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "keep-encoding",
+      "options": {
+        "ignoreRules": [
+          "MDX001",
+          "MDX002"
+        ]
+      },
+      "diagnose": [],
+      "fix": {
+        "text": "# mhtml\n\n把 Markdown 變成**漂亮、單一檔案**的 HTML，支援 *深色模式*、`自訂 CSS` 與 [設定檔](#)。\n\n> [!TIP]\n> 只要 `mhtml README.md`，就會在瀏覽器即時預覽。\n\n| 功能     | 旗標                 |\n| :------- | :------------------- |\n| 深淺主題 | `--theme dark`       |\n| 自訂樣式 | `--css my.css`       |\n| 目錄     | `--toc`              |\n\n```rust\nfn main() {\n    println!(\"Hello, mhtml!\");\n}\n```\n\n質能方程式 $E = mc^2$，以及：\n\n$$\\int_0^\\infty e^{-x^2}\\,dx = \\frac{\\sqrt{\\pi}}{2}$$\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "headings-only",
+      "options": {
+        "rules": [
+          "MDX010",
+          "MDX011",
+          "MDX012",
+          "MDX013"
+        ]
+      },
+      "diagnose": [],
+      "fix": {
+        "text": "# mhtml\n\n把 Markdown 變成**漂亮、單一檔案**的 HTML，支援 *深色模式*、`自訂 CSS` 與 [設定檔](#)。\n\n> [!TIP]\n> 只要 `mhtml README.md`，就會在瀏覽器即時預覽。\n\n| 功能     | 旗標                 |\n| :------- | :------------------- |\n| 深淺主題 | `--theme dark`       |\n| 自訂樣式 | `--css my.css`       |\n| 目錄     | `--toc`              |\n\n```rust\nfn main() {\n    println!(\"Hello, mhtml!\");\n}\n```\n\n質能方程式 $E = mc^2$，以及：\n\n$$\\int_0^\\infty e^{-x^2}\\,dx = \\frac{\\sqrt{\\pi}}{2}$$\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    }
+  ]
+}

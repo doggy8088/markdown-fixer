@@ -1,0 +1,515 @@
+{
+  "source": "synthetic/troubleshooting-faq.md",
+  "referenceVersion": "1.0.0",
+  "cases": [
+    {
+      "name": "default",
+      "options": {},
+      "diagnose": [
+        {
+          "rule": "MDX017",
+          "name": "heading-trailing-punctuation",
+          "severity": "info",
+          "fixable": false,
+          "line": 5,
+          "column": 1,
+          "message": "Heading ends with sentence punctuation. Headings usually read better without a trailing period, colon, or similar mark."
+        },
+        {
+          "rule": "MDX017",
+          "name": "heading-trailing-punctuation",
+          "severity": "info",
+          "fixable": false,
+          "line": 13,
+          "column": 1,
+          "message": "Heading ends with sentence punctuation. Headings usually read better without a trailing period, colon, or similar mark."
+        },
+        {
+          "rule": "MDX050",
+          "name": "fence-language",
+          "severity": "info",
+          "fixable": false,
+          "line": 17,
+          "column": 1,
+          "message": "Fenced code block has no language. Add one when the language is known, for example ```js."
+        },
+        {
+          "rule": "MDX017",
+          "name": "heading-trailing-punctuation",
+          "severity": "info",
+          "fixable": false,
+          "line": 23,
+          "column": 1,
+          "message": "Heading ends with sentence punctuation. Headings usually read better without a trailing period, colon, or similar mark."
+        },
+        {
+          "rule": "MDX020",
+          "name": "blockquote-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 24,
+          "column": 1,
+          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
+        },
+        {
+          "rule": "MDX020",
+          "name": "blockquote-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 28,
+          "column": 1,
+          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
+        },
+        {
+          "rule": "MDX017",
+          "name": "heading-trailing-punctuation",
+          "severity": "info",
+          "fixable": false,
+          "line": 30,
+          "column": 1,
+          "message": "Heading ends with sentence punctuation. Headings usually read better without a trailing period, colon, or similar mark."
+        },
+        {
+          "rule": "MDX061",
+          "name": "table-column-count",
+          "severity": "error",
+          "fixable": false,
+          "line": 37,
+          "column": 1,
+          "message": "Table row has 4 cell(s) but the table has 3 column(s)."
+        },
+        {
+          "rule": "MDX032",
+          "name": "list-blank-lines",
+          "severity": "warning",
+          "fixable": false,
+          "line": 44,
+          "column": 1,
+          "message": "List ends directly before a paragraph, which may be read as a lazy continuation of the last item. Add a blank line after the list."
+        },
+        {
+          "rule": "MDX035",
+          "name": "empty-list-item",
+          "severity": "warning",
+          "fixable": false,
+          "line": 44,
+          "column": 1,
+          "message": "Empty list item. Remove it or add content."
+        },
+        {
+          "rule": "MDX032",
+          "name": "list-blank-lines",
+          "severity": "warning",
+          "fixable": false,
+          "line": 53,
+          "column": 1,
+          "message": "List ends directly before a paragraph, which may be read as a lazy continuation of the last item. Add a blank line after the list."
+        },
+        {
+          "rule": "MDX070",
+          "name": "bare-url",
+          "severity": "info",
+          "fixable": false,
+          "line": 53,
+          "column": 6,
+          "message": "Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text."
+        }
+      ],
+      "fix": {
+        "text": "# 疑難排解 FAQ\n\n## 安裝問題\n\n### 執行時出現「找不到指令」？\n\n請確認安裝目錄有加進 `PATH`：\n\n```sh\necho $PATH | tr ':' '\\n' | grep -n local\n```\n\n### macOS 說「無法打開，因為無法驗證開發者」。\n\n到「系統設定 → 隱私權與安全性」，按下「強制打開」。或在終端機執行：\n\n```\nxattr -d com.apple.quarantine /usr/local/bin/mytool\n```\n\n## 執行問題\n\n### 為什麼輸出是亂碼?\n> 多半是語系沒設好。在 `~/.zshrc` 加上：\n>\n>     export LANG=en_US.UTF-8\n>\n> 然後重開終端機。\n\n### 剪貼簿沒有變化！\n\n| 原因 | 檢查方式 | 解法 |\n| --- | --- | --- |\n| 沒有輔助使用權限 | 系統設定 → 輔助使用 | 把終端機加進清單 |\n| 剪貼簿是圖片 | `pbpaste` 沒有輸出 | 先複製文字 |\n| 執行檔路徑錯誤 | `which mytool` | 用絕對路徑 |\n| Karabiner 沒啟用 | Karabiner-Elements → Complex Modifications | 重新啟用規則 | 重開 |\n\n### 結束碼代表什麼\n\n- `0`：沒有問題\n- `1`：還有 warning 或 error\n- `2`：用法錯誤或 I/O 錯誤\n-\n\n## 回報問題\n\n請附上：\n\n1. 作業系統與版本\n2. `mytool --version` 的輸出\n3. 可以重現問題的最小輸入\n回報網址：https://github.com/example/mytool/issues/new\n\n---\n\n還是解決不了？寄信到 support@example.com\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "snippet",
+      "options": {
+        "ignoreRules": [
+          "MDX003"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX017",
+          "name": "heading-trailing-punctuation",
+          "severity": "info",
+          "fixable": false,
+          "line": 5,
+          "column": 1,
+          "message": "Heading ends with sentence punctuation. Headings usually read better without a trailing period, colon, or similar mark."
+        },
+        {
+          "rule": "MDX017",
+          "name": "heading-trailing-punctuation",
+          "severity": "info",
+          "fixable": false,
+          "line": 13,
+          "column": 1,
+          "message": "Heading ends with sentence punctuation. Headings usually read better without a trailing period, colon, or similar mark."
+        },
+        {
+          "rule": "MDX050",
+          "name": "fence-language",
+          "severity": "info",
+          "fixable": false,
+          "line": 17,
+          "column": 1,
+          "message": "Fenced code block has no language. Add one when the language is known, for example ```js."
+        },
+        {
+          "rule": "MDX017",
+          "name": "heading-trailing-punctuation",
+          "severity": "info",
+          "fixable": false,
+          "line": 23,
+          "column": 1,
+          "message": "Heading ends with sentence punctuation. Headings usually read better without a trailing period, colon, or similar mark."
+        },
+        {
+          "rule": "MDX020",
+          "name": "blockquote-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 24,
+          "column": 1,
+          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
+        },
+        {
+          "rule": "MDX020",
+          "name": "blockquote-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 28,
+          "column": 1,
+          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
+        },
+        {
+          "rule": "MDX017",
+          "name": "heading-trailing-punctuation",
+          "severity": "info",
+          "fixable": false,
+          "line": 30,
+          "column": 1,
+          "message": "Heading ends with sentence punctuation. Headings usually read better without a trailing period, colon, or similar mark."
+        },
+        {
+          "rule": "MDX061",
+          "name": "table-column-count",
+          "severity": "error",
+          "fixable": false,
+          "line": 37,
+          "column": 1,
+          "message": "Table row has 4 cell(s) but the table has 3 column(s)."
+        },
+        {
+          "rule": "MDX032",
+          "name": "list-blank-lines",
+          "severity": "warning",
+          "fixable": false,
+          "line": 44,
+          "column": 1,
+          "message": "List ends directly before a paragraph, which may be read as a lazy continuation of the last item. Add a blank line after the list."
+        },
+        {
+          "rule": "MDX035",
+          "name": "empty-list-item",
+          "severity": "warning",
+          "fixable": false,
+          "line": 44,
+          "column": 1,
+          "message": "Empty list item. Remove it or add content."
+        },
+        {
+          "rule": "MDX032",
+          "name": "list-blank-lines",
+          "severity": "warning",
+          "fixable": false,
+          "line": 53,
+          "column": 1,
+          "message": "List ends directly before a paragraph, which may be read as a lazy continuation of the last item. Add a blank line after the list."
+        },
+        {
+          "rule": "MDX070",
+          "name": "bare-url",
+          "severity": "info",
+          "fixable": false,
+          "line": 53,
+          "column": 6,
+          "message": "Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text."
+        }
+      ],
+      "fix": {
+        "text": "# 疑難排解 FAQ\n\n## 安裝問題\n\n### 執行時出現「找不到指令」？\n\n請確認安裝目錄有加進 `PATH`：\n\n```sh\necho $PATH | tr ':' '\\n' | grep -n local\n```\n\n### macOS 說「無法打開，因為無法驗證開發者」。\n\n到「系統設定 → 隱私權與安全性」，按下「強制打開」。或在終端機執行：\n\n```\nxattr -d com.apple.quarantine /usr/local/bin/mytool\n```\n\n## 執行問題\n\n### 為什麼輸出是亂碼?\n> 多半是語系沒設好。在 `~/.zshrc` 加上：\n>\n>     export LANG=en_US.UTF-8\n>\n> 然後重開終端機。\n\n### 剪貼簿沒有變化！\n\n| 原因 | 檢查方式 | 解法 |\n| --- | --- | --- |\n| 沒有輔助使用權限 | 系統設定 → 輔助使用 | 把終端機加進清單 |\n| 剪貼簿是圖片 | `pbpaste` 沒有輸出 | 先複製文字 |\n| 執行檔路徑錯誤 | `which mytool` | 用絕對路徑 |\n| Karabiner 沒啟用 | Karabiner-Elements → Complex Modifications | 重新啟用規則 | 重開 |\n\n### 結束碼代表什麼\n\n- `0`：沒有問題\n- `1`：還有 warning 或 error\n- `2`：用法錯誤或 I/O 錯誤\n-\n\n## 回報問題\n\n請附上：\n\n1. 作業系統與版本\n2. `mytool --version` 的輸出\n3. 可以重現問題的最小輸入\n回報網址：https://github.com/example/mytool/issues/new\n\n---\n\n還是解決不了？寄信到 support@example.com\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "line-length-80",
+      "options": {
+        "maxLineLength": 80
+      },
+      "diagnose": [
+        {
+          "rule": "MDX017",
+          "name": "heading-trailing-punctuation",
+          "severity": "info",
+          "fixable": false,
+          "line": 5,
+          "column": 1,
+          "message": "Heading ends with sentence punctuation. Headings usually read better without a trailing period, colon, or similar mark."
+        },
+        {
+          "rule": "MDX017",
+          "name": "heading-trailing-punctuation",
+          "severity": "info",
+          "fixable": false,
+          "line": 13,
+          "column": 1,
+          "message": "Heading ends with sentence punctuation. Headings usually read better without a trailing period, colon, or similar mark."
+        },
+        {
+          "rule": "MDX050",
+          "name": "fence-language",
+          "severity": "info",
+          "fixable": false,
+          "line": 17,
+          "column": 1,
+          "message": "Fenced code block has no language. Add one when the language is known, for example ```js."
+        },
+        {
+          "rule": "MDX017",
+          "name": "heading-trailing-punctuation",
+          "severity": "info",
+          "fixable": false,
+          "line": 23,
+          "column": 1,
+          "message": "Heading ends with sentence punctuation. Headings usually read better without a trailing period, colon, or similar mark."
+        },
+        {
+          "rule": "MDX020",
+          "name": "blockquote-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 24,
+          "column": 1,
+          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
+        },
+        {
+          "rule": "MDX020",
+          "name": "blockquote-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 28,
+          "column": 1,
+          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
+        },
+        {
+          "rule": "MDX017",
+          "name": "heading-trailing-punctuation",
+          "severity": "info",
+          "fixable": false,
+          "line": 30,
+          "column": 1,
+          "message": "Heading ends with sentence punctuation. Headings usually read better without a trailing period, colon, or similar mark."
+        },
+        {
+          "rule": "MDX061",
+          "name": "table-column-count",
+          "severity": "error",
+          "fixable": false,
+          "line": 37,
+          "column": 1,
+          "message": "Table row has 4 cell(s) but the table has 3 column(s)."
+        },
+        {
+          "rule": "MDX032",
+          "name": "list-blank-lines",
+          "severity": "warning",
+          "fixable": false,
+          "line": 44,
+          "column": 1,
+          "message": "List ends directly before a paragraph, which may be read as a lazy continuation of the last item. Add a blank line after the list."
+        },
+        {
+          "rule": "MDX035",
+          "name": "empty-list-item",
+          "severity": "warning",
+          "fixable": false,
+          "line": 44,
+          "column": 1,
+          "message": "Empty list item. Remove it or add content."
+        },
+        {
+          "rule": "MDX032",
+          "name": "list-blank-lines",
+          "severity": "warning",
+          "fixable": false,
+          "line": 53,
+          "column": 1,
+          "message": "List ends directly before a paragraph, which may be read as a lazy continuation of the last item. Add a blank line after the list."
+        },
+        {
+          "rule": "MDX070",
+          "name": "bare-url",
+          "severity": "info",
+          "fixable": false,
+          "line": 53,
+          "column": 6,
+          "message": "Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text."
+        }
+      ],
+      "fix": {
+        "text": "# 疑難排解 FAQ\n\n## 安裝問題\n\n### 執行時出現「找不到指令」？\n\n請確認安裝目錄有加進 `PATH`：\n\n```sh\necho $PATH | tr ':' '\\n' | grep -n local\n```\n\n### macOS 說「無法打開，因為無法驗證開發者」。\n\n到「系統設定 → 隱私權與安全性」，按下「強制打開」。或在終端機執行：\n\n```\nxattr -d com.apple.quarantine /usr/local/bin/mytool\n```\n\n## 執行問題\n\n### 為什麼輸出是亂碼?\n> 多半是語系沒設好。在 `~/.zshrc` 加上：\n>\n>     export LANG=en_US.UTF-8\n>\n> 然後重開終端機。\n\n### 剪貼簿沒有變化！\n\n| 原因 | 檢查方式 | 解法 |\n| --- | --- | --- |\n| 沒有輔助使用權限 | 系統設定 → 輔助使用 | 把終端機加進清單 |\n| 剪貼簿是圖片 | `pbpaste` 沒有輸出 | 先複製文字 |\n| 執行檔路徑錯誤 | `which mytool` | 用絕對路徑 |\n| Karabiner 沒啟用 | Karabiner-Elements → Complex Modifications | 重新啟用規則 | 重開 |\n\n### 結束碼代表什麼\n\n- `0`：沒有問題\n- `1`：還有 warning 或 error\n- `2`：用法錯誤或 I/O 錯誤\n-\n\n## 回報問題\n\n請附上：\n\n1. 作業系統與版本\n2. `mytool --version` 的輸出\n3. 可以重現問題的最小輸入\n回報網址：https://github.com/example/mytool/issues/new\n\n---\n\n還是解決不了？寄信到 support@example.com\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "keep-encoding",
+      "options": {
+        "ignoreRules": [
+          "MDX001",
+          "MDX002"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX017",
+          "name": "heading-trailing-punctuation",
+          "severity": "info",
+          "fixable": false,
+          "line": 5,
+          "column": 1,
+          "message": "Heading ends with sentence punctuation. Headings usually read better without a trailing period, colon, or similar mark."
+        },
+        {
+          "rule": "MDX017",
+          "name": "heading-trailing-punctuation",
+          "severity": "info",
+          "fixable": false,
+          "line": 13,
+          "column": 1,
+          "message": "Heading ends with sentence punctuation. Headings usually read better without a trailing period, colon, or similar mark."
+        },
+        {
+          "rule": "MDX050",
+          "name": "fence-language",
+          "severity": "info",
+          "fixable": false,
+          "line": 17,
+          "column": 1,
+          "message": "Fenced code block has no language. Add one when the language is known, for example ```js."
+        },
+        {
+          "rule": "MDX017",
+          "name": "heading-trailing-punctuation",
+          "severity": "info",
+          "fixable": false,
+          "line": 23,
+          "column": 1,
+          "message": "Heading ends with sentence punctuation. Headings usually read better without a trailing period, colon, or similar mark."
+        },
+        {
+          "rule": "MDX020",
+          "name": "blockquote-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 24,
+          "column": 1,
+          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
+        },
+        {
+          "rule": "MDX020",
+          "name": "blockquote-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 28,
+          "column": 1,
+          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
+        },
+        {
+          "rule": "MDX017",
+          "name": "heading-trailing-punctuation",
+          "severity": "info",
+          "fixable": false,
+          "line": 30,
+          "column": 1,
+          "message": "Heading ends with sentence punctuation. Headings usually read better without a trailing period, colon, or similar mark."
+        },
+        {
+          "rule": "MDX061",
+          "name": "table-column-count",
+          "severity": "error",
+          "fixable": false,
+          "line": 37,
+          "column": 1,
+          "message": "Table row has 4 cell(s) but the table has 3 column(s)."
+        },
+        {
+          "rule": "MDX032",
+          "name": "list-blank-lines",
+          "severity": "warning",
+          "fixable": false,
+          "line": 44,
+          "column": 1,
+          "message": "List ends directly before a paragraph, which may be read as a lazy continuation of the last item. Add a blank line after the list."
+        },
+        {
+          "rule": "MDX035",
+          "name": "empty-list-item",
+          "severity": "warning",
+          "fixable": false,
+          "line": 44,
+          "column": 1,
+          "message": "Empty list item. Remove it or add content."
+        },
+        {
+          "rule": "MDX032",
+          "name": "list-blank-lines",
+          "severity": "warning",
+          "fixable": false,
+          "line": 53,
+          "column": 1,
+          "message": "List ends directly before a paragraph, which may be read as a lazy continuation of the last item. Add a blank line after the list."
+        },
+        {
+          "rule": "MDX070",
+          "name": "bare-url",
+          "severity": "info",
+          "fixable": false,
+          "line": 53,
+          "column": 6,
+          "message": "Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text."
+        }
+      ],
+      "fix": {
+        "text": "# 疑難排解 FAQ\n\n## 安裝問題\n\n### 執行時出現「找不到指令」？\n\n請確認安裝目錄有加進 `PATH`：\n\n```sh\necho $PATH | tr ':' '\\n' | grep -n local\n```\n\n### macOS 說「無法打開，因為無法驗證開發者」。\n\n到「系統設定 → 隱私權與安全性」，按下「強制打開」。或在終端機執行：\n\n```\nxattr -d com.apple.quarantine /usr/local/bin/mytool\n```\n\n## 執行問題\n\n### 為什麼輸出是亂碼?\n> 多半是語系沒設好。在 `~/.zshrc` 加上：\n>\n>     export LANG=en_US.UTF-8\n>\n> 然後重開終端機。\n\n### 剪貼簿沒有變化！\n\n| 原因 | 檢查方式 | 解法 |\n| --- | --- | --- |\n| 沒有輔助使用權限 | 系統設定 → 輔助使用 | 把終端機加進清單 |\n| 剪貼簿是圖片 | `pbpaste` 沒有輸出 | 先複製文字 |\n| 執行檔路徑錯誤 | `which mytool` | 用絕對路徑 |\n| Karabiner 沒啟用 | Karabiner-Elements → Complex Modifications | 重新啟用規則 | 重開 |\n\n### 結束碼代表什麼\n\n- `0`：沒有問題\n- `1`：還有 warning 或 error\n- `2`：用法錯誤或 I/O 錯誤\n-\n\n## 回報問題\n\n請附上：\n\n1. 作業系統與版本\n2. `mytool --version` 的輸出\n3. 可以重現問題的最小輸入\n回報網址：https://github.com/example/mytool/issues/new\n\n---\n\n還是解決不了？寄信到 support@example.com\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "headings-only",
+      "options": {
+        "rules": [
+          "MDX010",
+          "MDX011",
+          "MDX012",
+          "MDX013"
+        ]
+      },
+      "diagnose": [],
+      "fix": {
+        "text": "# 疑難排解 FAQ\n\n## 安裝問題\n\n### 執行時出現「找不到指令」？\n\n請確認安裝目錄有加進 `PATH`：\n\n```sh\necho $PATH | tr ':' '\\n' | grep -n local\n```\n\n### macOS 說「無法打開，因為無法驗證開發者」。\n\n到「系統設定 → 隱私權與安全性」，按下「強制打開」。或在終端機執行：\n\n```\nxattr -d com.apple.quarantine /usr/local/bin/mytool\n```\n\n## 執行問題\n\n### 為什麼輸出是亂碼?\n>多半是語系沒設好。在 `~/.zshrc` 加上：\n>\n>     export LANG=en_US.UTF-8\n>\n>然後重開終端機。\n\n### 剪貼簿沒有變化！\n\n| 原因 | 檢查方式 | 解法 |\n| --- | --- | --- |\n| 沒有輔助使用權限 | 系統設定 → 輔助使用 | 把終端機加進清單 |\n| 剪貼簿是圖片 | `pbpaste` 沒有輸出 | 先複製文字 |\n| 執行檔路徑錯誤 | `which mytool` | 用絕對路徑 |\n| Karabiner 沒啟用 | Karabiner-Elements → Complex Modifications | 重新啟用規則 | 重開 |\n\n### 結束碼代表什麼\n\n- `0`：沒有問題\n- `1`：還有 warning 或 error\n- `2`：用法錯誤或 I/O 錯誤\n-\n\n## 回報問題\n\n請附上：\n\n1. 作業系統與版本\n2. `mytool --version` 的輸出\n3. 可以重現問題的最小輸入\n回報網址：https://github.com/example/mytool/issues/new\n\n---\n\n還是解決不了？寄信到 support@example.com\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    }
+  ]
+}

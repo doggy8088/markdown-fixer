@@ -1,0 +1,299 @@
+{
+  "source": "rules/MDX042/trigger.md",
+  "referenceVersion": "1.0.0",
+  "cases": [
+    {
+      "name": "default",
+      "options": {},
+      "diagnose": [
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": true,
+          "line": 3,
+          "column": 1,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": true,
+          "line": 3,
+          "column": 8,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": true,
+          "line": 5,
+          "column": 1,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": true,
+          "line": 5,
+          "column": 7,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": false,
+          "line": 7,
+          "column": 3,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": false,
+          "line": 7,
+          "column": 9,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        }
+      ],
+      "fix": {
+        "text": "# AI 產出的摘要\n\n**審查執行**：2026-11-04\n\n**負責人**：王小明\n\n這是**「引號」**文字。\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "snippet",
+      "options": {
+        "ignoreRules": [
+          "MDX003"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": true,
+          "line": 3,
+          "column": 1,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": true,
+          "line": 3,
+          "column": 8,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": true,
+          "line": 5,
+          "column": 1,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": true,
+          "line": 5,
+          "column": 7,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": false,
+          "line": 7,
+          "column": 3,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": false,
+          "line": 7,
+          "column": 9,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        }
+      ],
+      "fix": {
+        "text": "# AI 產出的摘要\n\n**審查執行**：2026-11-04\n\n**負責人**：王小明\n\n這是**「引號」**文字。\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "line-length-80",
+      "options": {
+        "maxLineLength": 80
+      },
+      "diagnose": [
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": true,
+          "line": 3,
+          "column": 1,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": true,
+          "line": 3,
+          "column": 8,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": true,
+          "line": 5,
+          "column": 1,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": true,
+          "line": 5,
+          "column": 7,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": false,
+          "line": 7,
+          "column": 3,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": false,
+          "line": 7,
+          "column": 9,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        }
+      ],
+      "fix": {
+        "text": "# AI 產出的摘要\n\n**審查執行**：2026-11-04\n\n**負責人**：王小明\n\n這是**「引號」**文字。\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "keep-encoding",
+      "options": {
+        "ignoreRules": [
+          "MDX001",
+          "MDX002"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": true,
+          "line": 3,
+          "column": 1,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": true,
+          "line": 3,
+          "column": 8,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": true,
+          "line": 5,
+          "column": 1,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": true,
+          "line": 5,
+          "column": 7,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": false,
+          "line": 7,
+          "column": 3,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": false,
+          "line": 7,
+          "column": 9,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        }
+      ],
+      "fix": {
+        "text": "# AI 產出的摘要\n\n**審查執行**：2026-11-04\n\n**負責人**：王小明\n\n這是**「引號」**文字。\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "headings-only",
+      "options": {
+        "rules": [
+          "MDX010",
+          "MDX011",
+          "MDX012",
+          "MDX013"
+        ]
+      },
+      "diagnose": [],
+      "fix": {
+        "text": "# AI 產出的摘要\n\n**審查執行：**2026-11-04\n\n**負責人：**王小明\n\n這是**「引號」**文字。\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    }
+  ]
+}

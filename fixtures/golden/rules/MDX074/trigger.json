@@ -1,0 +1,119 @@
+{
+  "source": "rules/MDX074/trigger.md",
+  "referenceVersion": "1.0.0",
+  "cases": [
+    {
+      "name": "default",
+      "options": {},
+      "diagnose": [
+        {
+          "rule": "MDX074",
+          "name": "reference-duplicate-definition",
+          "severity": "warning",
+          "fixable": false,
+          "line": 6,
+          "column": 1,
+          "message": "Reference definition \"Home\" is declared more than once."
+        }
+      ],
+      "fix": {
+        "text": "# 參考連結\n\n[首頁][home]\n\n[home]: https://example.com\n[Home]: https://example.org\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "snippet",
+      "options": {
+        "ignoreRules": [
+          "MDX003"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX074",
+          "name": "reference-duplicate-definition",
+          "severity": "warning",
+          "fixable": false,
+          "line": 6,
+          "column": 1,
+          "message": "Reference definition \"Home\" is declared more than once."
+        }
+      ],
+      "fix": {
+        "text": "# 參考連結\n\n[首頁][home]\n\n[home]: https://example.com\n[Home]: https://example.org\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "line-length-80",
+      "options": {
+        "maxLineLength": 80
+      },
+      "diagnose": [
+        {
+          "rule": "MDX074",
+          "name": "reference-duplicate-definition",
+          "severity": "warning",
+          "fixable": false,
+          "line": 6,
+          "column": 1,
+          "message": "Reference definition \"Home\" is declared more than once."
+        }
+      ],
+      "fix": {
+        "text": "# 參考連結\n\n[首頁][home]\n\n[home]: https://example.com\n[Home]: https://example.org\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "keep-encoding",
+      "options": {
+        "ignoreRules": [
+          "MDX001",
+          "MDX002"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX074",
+          "name": "reference-duplicate-definition",
+          "severity": "warning",
+          "fixable": false,
+          "line": 6,
+          "column": 1,
+          "message": "Reference definition \"Home\" is declared more than once."
+        }
+      ],
+      "fix": {
+        "text": "# 參考連結\n\n[首頁][home]\n\n[home]: https://example.com\n[Home]: https://example.org\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "headings-only",
+      "options": {
+        "rules": [
+          "MDX010",
+          "MDX011",
+          "MDX012",
+          "MDX013"
+        ]
+      },
+      "diagnose": [],
+      "fix": {
+        "text": "# 參考連結\n\n[首頁][home]\n\n[home]: https://example.com\n[Home]: https://example.org\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    }
+  ]
+}

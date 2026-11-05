@@ -1,0 +1,218 @@
+{
+  "source": "snippets/slack-copy-nbsp.md",
+  "referenceVersion": "1.0.0",
+  "cases": [
+    {
+      "name": "default",
+      "options": {},
+      "diagnose": [
+        {
+          "rule": "MDX003",
+          "name": "final-newline",
+          "severity": "warning",
+          "fixable": true,
+          "line": 1,
+          "column": 1,
+          "message": "File does not end with a newline."
+        },
+        {
+          "rule": "MDX008",
+          "name": "non-breaking-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 1,
+          "column": 3,
+          "message": "Replace non-breaking spaces (U+00A0) with normal spaces; they usually come from Word or a web page paste."
+        },
+        {
+          "rule": "MDX070",
+          "name": "bare-url",
+          "severity": "info",
+          "fixable": false,
+          "line": 1,
+          "column": 26,
+          "message": "Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text."
+        },
+        {
+          "rule": "MDX008",
+          "name": "non-breaking-space",
+          "severity": "warning",
+          "fixable": false,
+          "line": 1,
+          "column": 57,
+          "message": "NBSP inside a URL. Replace it with %20 or remove it; the fixer leaves URLs untouched to avoid breaking them."
+        }
+      ],
+      "fix": {
+        "text": "明天 10:00 開會，請大家準時。 議程在這裡：https://docs.example.com/agenda\u00A0(Google\u00A0Doc)\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "snippet",
+      "options": {
+        "ignoreRules": [
+          "MDX003"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX008",
+          "name": "non-breaking-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 1,
+          "column": 3,
+          "message": "Replace non-breaking spaces (U+00A0) with normal spaces; they usually come from Word or a web page paste."
+        },
+        {
+          "rule": "MDX070",
+          "name": "bare-url",
+          "severity": "info",
+          "fixable": false,
+          "line": 1,
+          "column": 26,
+          "message": "Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text."
+        },
+        {
+          "rule": "MDX008",
+          "name": "non-breaking-space",
+          "severity": "warning",
+          "fixable": false,
+          "line": 1,
+          "column": 57,
+          "message": "NBSP inside a URL. Replace it with %20 or remove it; the fixer leaves URLs untouched to avoid breaking them."
+        }
+      ],
+      "fix": {
+        "text": "明天 10:00 開會，請大家準時。 議程在這裡：https://docs.example.com/agenda\u00A0(Google\u00A0Doc)",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "line-length-80",
+      "options": {
+        "maxLineLength": 80
+      },
+      "diagnose": [
+        {
+          "rule": "MDX003",
+          "name": "final-newline",
+          "severity": "warning",
+          "fixable": true,
+          "line": 1,
+          "column": 1,
+          "message": "File does not end with a newline."
+        },
+        {
+          "rule": "MDX008",
+          "name": "non-breaking-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 1,
+          "column": 3,
+          "message": "Replace non-breaking spaces (U+00A0) with normal spaces; they usually come from Word or a web page paste."
+        },
+        {
+          "rule": "MDX070",
+          "name": "bare-url",
+          "severity": "info",
+          "fixable": false,
+          "line": 1,
+          "column": 26,
+          "message": "Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text."
+        },
+        {
+          "rule": "MDX008",
+          "name": "non-breaking-space",
+          "severity": "warning",
+          "fixable": false,
+          "line": 1,
+          "column": 57,
+          "message": "NBSP inside a URL. Replace it with %20 or remove it; the fixer leaves URLs untouched to avoid breaking them."
+        }
+      ],
+      "fix": {
+        "text": "明天 10:00 開會，請大家準時。 議程在這裡：https://docs.example.com/agenda\u00A0(Google\u00A0Doc)\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "keep-encoding",
+      "options": {
+        "ignoreRules": [
+          "MDX001",
+          "MDX002"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX003",
+          "name": "final-newline",
+          "severity": "warning",
+          "fixable": true,
+          "line": 1,
+          "column": 1,
+          "message": "File does not end with a newline."
+        },
+        {
+          "rule": "MDX008",
+          "name": "non-breaking-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 1,
+          "column": 3,
+          "message": "Replace non-breaking spaces (U+00A0) with normal spaces; they usually come from Word or a web page paste."
+        },
+        {
+          "rule": "MDX070",
+          "name": "bare-url",
+          "severity": "info",
+          "fixable": false,
+          "line": 1,
+          "column": 26,
+          "message": "Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text."
+        },
+        {
+          "rule": "MDX008",
+          "name": "non-breaking-space",
+          "severity": "warning",
+          "fixable": false,
+          "line": 1,
+          "column": 57,
+          "message": "NBSP inside a URL. Replace it with %20 or remove it; the fixer leaves URLs untouched to avoid breaking them."
+        }
+      ],
+      "fix": {
+        "text": "明天 10:00 開會，請大家準時。 議程在這裡：https://docs.example.com/agenda\u00A0(Google\u00A0Doc)\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "headings-only",
+      "options": {
+        "rules": [
+          "MDX010",
+          "MDX011",
+          "MDX012",
+          "MDX013"
+        ]
+      },
+      "diagnose": [],
+      "fix": {
+        "text": "明天\u00A010:00\u00A0開會，請大家準時。\u00A0議程在這裡：https://docs.example.com/agenda\u00A0(Google\u00A0Doc)",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    }
+  ]
+}

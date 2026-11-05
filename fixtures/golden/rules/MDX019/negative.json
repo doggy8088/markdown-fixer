@@ -1,0 +1,119 @@
+{
+  "source": "rules/MDX019/negative.md",
+  "referenceVersion": "1.0.0",
+  "cases": [
+    {
+      "name": "default",
+      "options": {},
+      "diagnose": [
+        {
+          "rule": "MDX080",
+          "name": "setext-ambiguity",
+          "severity": "warning",
+          "fixable": false,
+          "line": 8,
+          "column": 1,
+          "message": "This line is a Setext heading underline for the previous paragraph, so it renders as a heading instead of a horizontal rule. Insert a blank line above it, or use *** for a rule."
+        }
+      ],
+      "fix": {
+        "text": "# 唯一的 H1\n\n```md\n# 程式碼裡的 H1\n```\n\nSetext 標題\n==========\n\n內容。\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "snippet",
+      "options": {
+        "ignoreRules": [
+          "MDX003"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX080",
+          "name": "setext-ambiguity",
+          "severity": "warning",
+          "fixable": false,
+          "line": 8,
+          "column": 1,
+          "message": "This line is a Setext heading underline for the previous paragraph, so it renders as a heading instead of a horizontal rule. Insert a blank line above it, or use *** for a rule."
+        }
+      ],
+      "fix": {
+        "text": "# 唯一的 H1\n\n```md\n# 程式碼裡的 H1\n```\n\nSetext 標題\n==========\n\n內容。\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "line-length-80",
+      "options": {
+        "maxLineLength": 80
+      },
+      "diagnose": [
+        {
+          "rule": "MDX080",
+          "name": "setext-ambiguity",
+          "severity": "warning",
+          "fixable": false,
+          "line": 8,
+          "column": 1,
+          "message": "This line is a Setext heading underline for the previous paragraph, so it renders as a heading instead of a horizontal rule. Insert a blank line above it, or use *** for a rule."
+        }
+      ],
+      "fix": {
+        "text": "# 唯一的 H1\n\n```md\n# 程式碼裡的 H1\n```\n\nSetext 標題\n==========\n\n內容。\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "keep-encoding",
+      "options": {
+        "ignoreRules": [
+          "MDX001",
+          "MDX002"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX080",
+          "name": "setext-ambiguity",
+          "severity": "warning",
+          "fixable": false,
+          "line": 8,
+          "column": 1,
+          "message": "This line is a Setext heading underline for the previous paragraph, so it renders as a heading instead of a horizontal rule. Insert a blank line above it, or use *** for a rule."
+        }
+      ],
+      "fix": {
+        "text": "# 唯一的 H1\n\n```md\n# 程式碼裡的 H1\n```\n\nSetext 標題\n==========\n\n內容。\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "headings-only",
+      "options": {
+        "rules": [
+          "MDX010",
+          "MDX011",
+          "MDX012",
+          "MDX013"
+        ]
+      },
+      "diagnose": [],
+      "fix": {
+        "text": "# 唯一的 H1\n\n```md\n# 程式碼裡的 H1\n```\n\nSetext 標題\n==========\n\n內容。\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    }
+  ]
+}

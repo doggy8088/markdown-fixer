@@ -1,0 +1,119 @@
+{
+  "source": "edge/quote-math-and-fence.md",
+  "referenceVersion": "1.0.0",
+  "cases": [
+    {
+      "name": "default",
+      "options": {},
+      "diagnose": [
+        {
+          "rule": "MDX050",
+          "name": "fence-language",
+          "severity": "info",
+          "fixable": false,
+          "line": 8,
+          "column": 1,
+          "message": "Fenced code block has no language. Add one when the language is known, for example ```js."
+        }
+      ],
+      "fix": {
+        "text": "# 引言裡的區塊\n\n> $$\n> #Title\n> ** bold **\n> $$\n\n> ```\n> #NoSpace\n> ```\n\n- $$\n  x = 1\n  $$\n\n- [ ] $$\n  y = 2\n  $$\n\n> - $$\n>   z = 3\n>   $$\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "snippet",
+      "options": {
+        "ignoreRules": [
+          "MDX003"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX050",
+          "name": "fence-language",
+          "severity": "info",
+          "fixable": false,
+          "line": 8,
+          "column": 1,
+          "message": "Fenced code block has no language. Add one when the language is known, for example ```js."
+        }
+      ],
+      "fix": {
+        "text": "# 引言裡的區塊\n\n> $$\n> #Title\n> ** bold **\n> $$\n\n> ```\n> #NoSpace\n> ```\n\n- $$\n  x = 1\n  $$\n\n- [ ] $$\n  y = 2\n  $$\n\n> - $$\n>   z = 3\n>   $$\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "line-length-80",
+      "options": {
+        "maxLineLength": 80
+      },
+      "diagnose": [
+        {
+          "rule": "MDX050",
+          "name": "fence-language",
+          "severity": "info",
+          "fixable": false,
+          "line": 8,
+          "column": 1,
+          "message": "Fenced code block has no language. Add one when the language is known, for example ```js."
+        }
+      ],
+      "fix": {
+        "text": "# 引言裡的區塊\n\n> $$\n> #Title\n> ** bold **\n> $$\n\n> ```\n> #NoSpace\n> ```\n\n- $$\n  x = 1\n  $$\n\n- [ ] $$\n  y = 2\n  $$\n\n> - $$\n>   z = 3\n>   $$\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "keep-encoding",
+      "options": {
+        "ignoreRules": [
+          "MDX001",
+          "MDX002"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX050",
+          "name": "fence-language",
+          "severity": "info",
+          "fixable": false,
+          "line": 8,
+          "column": 1,
+          "message": "Fenced code block has no language. Add one when the language is known, for example ```js."
+        }
+      ],
+      "fix": {
+        "text": "# 引言裡的區塊\n\n> $$\n> #Title\n> ** bold **\n> $$\n\n> ```\n> #NoSpace\n> ```\n\n- $$\n  x = 1\n  $$\n\n- [ ] $$\n  y = 2\n  $$\n\n> - $$\n>   z = 3\n>   $$\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "headings-only",
+      "options": {
+        "rules": [
+          "MDX010",
+          "MDX011",
+          "MDX012",
+          "MDX013"
+        ]
+      },
+      "diagnose": [],
+      "fix": {
+        "text": "# 引言裡的區塊\n\n> $$\n> #Title\n> ** bold **\n> $$\n\n> ```\n> #NoSpace\n> ```\n\n- $$\n  x = 1\n  $$\n\n- [ ] $$\n  y = 2\n  $$\n\n> - $$\n>   z = 3\n>   $$\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    }
+  ]
+}

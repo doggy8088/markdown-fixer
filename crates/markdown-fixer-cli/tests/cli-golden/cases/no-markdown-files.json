@@ -1,0 +1,30 @@
+{
+  "name": "no-markdown-files",
+  "args": [
+    "empty",
+    "other"
+  ],
+  "cwd": "",
+  "nonRoot": false,
+  "setup": [
+    {
+      "path": "empty",
+      "dir": true
+    },
+    {
+      "path": "other/x.txt",
+      "text": "x\n"
+    }
+  ],
+  "expected": {
+    "status": 0,
+    "stdout": "No Markdown files found.\n",
+    "stderr": "",
+    "files": [
+      {
+        "path": "other/x.txt",
+        "text": "x\n"
+      }
+    ]
+  }
+}

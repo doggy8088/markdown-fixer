@@ -1,0 +1,28 @@
+{
+  "name": "crlf-bom-nothing-else",
+  "args": [
+    "--write",
+    "--json",
+    "--ignore-rule=MDX001,MDX002",
+    "w.md"
+  ],
+  "cwd": "",
+  "nonRoot": false,
+  "setup": [
+    {
+      "path": "w.md",
+      "text": "﻿# Title\r\n"
+    }
+  ],
+  "expected": {
+    "status": 0,
+    "stdout": "{\n  \"tool\": \"markdown-fixer\",\n  \"version\": \"<VERSION>\",\n  \"mode\": \"write\",\n  \"files\": [\n    {\n      \"path\": \"w.md\",\n      \"changed\": false,\n      \"wouldChange\": false,\n      \"refused\": false,\n      \"fixed\": 0,\n      \"wouldFix\": 0,\n      \"problems\": []\n    }\n  ],\n  \"summary\": {\n    \"files\": 1,\n    \"changed\": 0,\n    \"wouldChange\": 0,\n    \"fixed\": 0,\n    \"refused\": 0,\n    \"problems\": {\n      \"total\": 0,\n      \"errors\": 0,\n      \"warnings\": 0,\n      \"info\": 0,\n      \"fixable\": 0\n    }\n  }\n}\n",
+    "stderr": "",
+    "files": [
+      {
+        "path": "w.md",
+        "text": "﻿# Title\r\n"
+      }
+    ]
+  }
+}

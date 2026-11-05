@@ -1,0 +1,26 @@
+{
+  "name": "write-messy",
+  "args": [
+    "--write",
+    "messy.md"
+  ],
+  "cwd": "",
+  "nonRoot": false,
+  "setup": [
+    {
+      "path": "messy.md",
+      "text": "#Project Notes   \nIntro paragraph with trailing spaces.   \n##  Setup ##\n* first item\n- second item\n-third item\n\n\nSome **  bold  ** text and a [link](https://example.com).\n\n| Name | Value |\n| - | -- |\n| a | 1 |\n> quote without space\n>no space here\n\n**標籤：**內容說明\nFinal line without newline."
+    }
+  ],
+  "expected": {
+    "status": 0,
+    "stdout": "messy.md\n  No problems.\n  Fixed 18 issue(s).\n\nFixed 18 issue(s) in 1 file(s).\nNo remaining Markdown issues.\n",
+    "stderr": "",
+    "files": [
+      {
+        "path": "messy.md",
+        "text": "# Project Notes  \n\nIntro paragraph with trailing spaces.  \n\n## Setup\n* first item\n* second item\n* third item\n\nSome **bold** text and a [link](https://example.com).\n\n| Name | Value |\n| --- | --- |\n| a | 1 |\n\n> quote without space\n> no space here\n\n**標籤**：內容說明\nFinal line without newline.\n"
+      }
+    ]
+  }
+}

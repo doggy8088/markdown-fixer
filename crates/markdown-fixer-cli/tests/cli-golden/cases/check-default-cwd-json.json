@@ -1,0 +1,161 @@
+{
+  "name": "check-default-cwd-json",
+  "args": [
+    "--json"
+  ],
+  "cwd": "",
+  "nonRoot": false,
+  "setup": [
+    {
+      "path": "README.md",
+      "text": "#Project Notes   \nIntro paragraph with trailing spaces.   \n##  Setup ##\n* first item\n- second item\n-third item\n\n\nSome **  bold  ** text and a [link](https://example.com).\n\n| Name | Value |\n| - | -- |\n| a | 1 |\n> quote without space\n>no space here\n\n**標籤：**內容說明\nFinal line without newline."
+    },
+    {
+      "path": "clean.md",
+      "text": "# Clean Document\n\nThis document has no problems.\n\n## Section\n\n- One\n- Two\n\n```js\nconsole.log('hi');\n```\n"
+    },
+    {
+      "path": "notes.txt",
+      "text": "#Not a markdown extension\nbut given explicitly.\n"
+    },
+    {
+      "path": "docs/guide.MD",
+      "text": "# 會議記錄\n\n**日期：**2026-11-05\n**出席：** 王小明、李大華\n\n##討論事項\n1. 第一項\n2.第二項\n\n```\n沒有語言的程式碼\n```\n參考 [文件] 與 ![](image.png)。\n"
+    },
+    {
+      "path": "docs/intro.markdown",
+      "text": "# Info Only\n\nVisit https://example.com for details.\n"
+    },
+    {
+      "path": "docs/page.mdx",
+      "text": "#Skipped mdx\n"
+    },
+    {
+      "path": "docs/deep/long.md",
+      "text": "# Long Lines\n\nThis is a fairly long line of English prose that goes well past forty characters.\n這是一行很長的中文句子，用來測試行長計算是否以字元為單位而不是位元組，應該超過四十個字。\nShort line.\n\n| Column | Another column that is very very very long in a table row |\n| --- | --- |\n| a | b |\n"
+    },
+    {
+      "path": "docs/link.md",
+      "symlink": "../README.md"
+    },
+    {
+      "path": "docs/dirlink",
+      "symlink": "deep"
+    },
+    {
+      "path": "node_modules/pkg/README.md",
+      "text": "#Excluded\n"
+    },
+    {
+      "path": ".git/notes.md",
+      "text": "#Excluded\n"
+    },
+    {
+      "path": "vendor/x.md",
+      "text": "#Excluded\n"
+    },
+    {
+      "path": "docs/coverage/report.md",
+      "text": "#Excluded\n"
+    },
+    {
+      "path": "test-results/a.md",
+      "text": "#Excluded\n"
+    },
+    {
+      "path": "playwright-report/a.md",
+      "text": "#Excluded\n"
+    },
+    {
+      "path": "blob-report/a.md",
+      "text": "#Excluded\n"
+    },
+    {
+      "path": ".e2e-tmp/a.md",
+      "text": "#Excluded\n"
+    },
+    {
+      "path": ".hg/a.md",
+      "text": "#Excluded\n"
+    },
+    {
+      "path": ".svn/a.md",
+      "text": "#Excluded\n"
+    }
+  ],
+  "expected": {
+    "status": 1,
+    "stdout": "{\n  \"tool\": \"markdown-fixer\",\n  \"version\": \"<VERSION>\",\n  \"mode\": \"check\",\n  \"files\": [\n    {\n      \"path\": \"README.md\",\n      \"changed\": false,\n      \"wouldChange\": true,\n      \"refused\": false,\n      \"fixed\": 0,\n      \"wouldFix\": 18,\n      \"problems\": [\n        {\n          \"rule\": \"MDX013\",\n          \"name\": \"heading-blank-lines\",\n          \"severity\": \"warning\",\n          \"fixable\": true,\n          \"line\": 1,\n          \"column\": 1,\n          \"message\": \"Heading is directly attached to the following paragraph. Add a blank line after it.\"\n        },\n        {\n          \"rule\": \"MDX010\",\n          \"name\": \"atx-missing-space\",\n          \"severity\": \"warning\",\n          \"fixable\": true,\n          \"line\": 1,\n          \"column\": 2,\n          \"message\": \"Add a space after the heading marker: \\\"# \\\" rather than \\\"#\\\".\"\n        },\n        {\n          \"rule\": \"MDX004\",\n          \"name\": \"trailing-whitespace\",\n          \"severity\": \"warning\",\n          \"fixable\": true,\n          \"line\": 1,\n          \"column\": 15,\n          \"message\": \"Trailing whitespace. Exactly two trailing spaces create a hard line break; other trailing whitespace is noise.\"\n        },\n        {\n          \"rule\": \"MDX004\",\n          \"name\": \"trailing-whitespace\",\n          \"severity\": \"warning\",\n          \"fixable\": true,\n          \"line\": 2,\n          \"column\": 38,\n          \"message\": \"Trailing whitespace. Exactly two trailing spaces create a hard line break; other trailing whitespace is noise.\"\n        },\n        {\n          \"rule\": \"MDX013\",\n          \"name\": \"heading-blank-lines\",\n          \"severity\": \"warning\",\n          \"fixable\": true,\n          \"line\": 3,\n          \"column\": 1,\n          \"message\": \"Heading is directly attached to the preceding paragraph. Add a blank line before it.\"\n        },\n        {\n          \"rule\": \"MDX011\",\n          \"name\": \"atx-multiple-space\",\n          \"severity\": \"warning\",\n          \"fixable\": true,\n          \"line\": 3,\n          \"column\": 3,\n          \"message\": \"Use exactly one space after the ATX heading marker.\"\n        },\n        {\n          \"rule\": \"MDX012\",\n          \"name\": \"atx-closing-hashes\",\n          \"severity\": \"warning\",\n          \"fixable\": true,\n          \"line\": 3,\n          \"column\": 10,\n          \"message\": \"Remove optional closing hashes from the heading; they add noise and are easy to miscount.\"\n        },\n        {\n          \"rule\": \"MDX031\",\n          \"name\": \"list-marker-style\",\n          \"severity\": \"warning\",\n          \"fixable\": true,\n          \"line\": 5,\n          \"column\": 1,\n          \"message\": \"List uses \\\"-\\\" but the first item in this list uses \\\"*\\\". Use one bullet marker per list.\"\n        },\n        {\n          \"rule\": \"MDX031\",\n          \"name\": \"list-marker-style\",\n          \"severity\": \"warning\",\n          \"fixable\": true,\n          \"line\": 6,\n          \"column\": 1,\n          \"message\": \"List uses \\\"-\\\" but the first item in this list uses \\\"*\\\". Use one bullet marker per list.\"\n        },\n        {\n          \"rule\": \"MDX030\",\n          \"name\": \"list-marker-space\",\n          \"severity\": \"warning\",\n          \"fixable\": true,\n          \"line\": 6,\n          \"column\": 2,\n          \"message\": \"Add a space after the \\\"-\\\" list marker.\"\n        },\n        {\n          \"rule\": \"MDX005\",\n          \"name\": \"multiple-blank-lines\",\n          \"severity\": \"warning\",\n          \"fixable\": true,\n          \"line\": 8,\n          \"column\": 1,\n          \"message\": \"Multiple consecutive blank lines. Use one blank line between blocks.\"\n        },\n        {\n          \"rule\": \"MDX040\",\n          \"name\": \"emphasis-inner-space\",\n          \"severity\": \"warning\",\n          \"fixable\": true,\n          \"line\": 9,\n          \"column\": 6,\n          \"message\": \"Remove spaces just inside the bold (**) delimiters.\"\n        },\n        {\n          \"rule\": \"MDX060\",\n          \"name\": \"table-delimiter-width\",\n          \"severity\": \"warning\",\n          \"fixable\": true,\n          \"line\": 12,\n          \"column\": 3,\n          \"message\": \"Table delimiter cell has fewer than three hyphens.\"\n        },\n        {\n          \"rule\": \"MDX062\",\n          \"name\": \"table-blank-lines\",\n          \"severity\": \"warning\",\n          \"fixable\": true,\n          \"line\": 14,\n          \"column\": 1,\n          \"message\": \"Table ends directly before another block. Add a blank line after it.\"\n        },\n        {\n          \"rule\": \"MDX020\",\n          \"name\": \"blockquote-space\",\n          \"severity\": \"warning\",\n          \"fixable\": true,\n          \"line\": 15,\n          \"column\": 1,\n          \"message\": \"Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation.\"\n        },\n        {\n          \"rule\": \"MDX042\",\n          \"name\": \"cjk-emphasis-unpaired\",\n          \"severity\": \"warning\",\n          \"fixable\": true,\n          \"line\": 17,\n          \"column\": 1,\n          \"message\": \"Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword.\"\n        },\n        {\n          \"rule\": \"MDX042\",\n          \"name\": \"cjk-emphasis-unpaired\",\n          \"severity\": \"warning\",\n          \"fixable\": true,\n          \"line\": 17,\n          \"column\": 6,\n          \"message\": \"Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword.\"\n        },\n        {\n          \"rule\": \"MDX003\",\n          \"name\": \"final-newline\",\n          \"severity\": \"warning\",\n          \"fixable\": true,\n          \"line\": 18,\n          \"column\": 1,\n          \"message\": \"File does not end with a newline.\"\n        }\n      ]\n    },\n    {\n      \"path\": \"clean.md\",\n      \"changed\": false,\n      \"wouldChange\": false,\n      \"refused\": false,\n      \"fixed\": 0,\n      \"wouldFix\": 0,\n      \"problems\": []\n    },\n    {\n      \"path\": \"docs/deep/long.md\",\n      \"changed\": false,\n      \"wouldChange\": false,\n      \"refused\": false,\n      \"fixed\": 0,\n      \"wouldFix\": 0,\n      \"problems\": []\n    },\n    {\n      \"path\": \"docs/guide.MD\",\n      \"changed\": false,\n      \"wouldChange\": true,\n      \"refused\": false,\n      \"fixed\": 0,\n      \"wouldFix\": 5,\n      \"problems\": [\n        {\n          \"rule\": \"MDX042\",\n          \"name\": \"cjk-emphasis-unpaired\",\n          \"severity\": \"warning\",\n          \"fixable\": true,\n          \"line\": 3,\n          \"column\": 1,\n          \"message\": \"Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword.\"\n        },\n        {\n          \"rule\": \"MDX042\",\n          \"name\": \"cjk-emphasis-unpaired\",\n          \"severity\": \"warning\",\n          \"fixable\": true,\n          \"line\": 3,\n          \"column\": 6,\n          \"message\": \"Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword.\"\n        },\n        {\n          \"rule\": \"MDX010\",\n          \"name\": \"atx-missing-space\",\n          \"severity\": \"warning\",\n          \"fixable\": true,\n          \"line\": 6,\n          \"column\": 3,\n          \"message\": \"Add a space after the heading marker: \\\"## \\\" rather than \\\"##\\\".\"\n        },\n        {\n          \"rule\": \"MDX030\",\n          \"name\": \"list-marker-space\",\n          \"severity\": \"warning\",\n          \"fixable\": true,\n          \"line\": 8,\n          \"column\": 3,\n          \"message\": \"Add a space after the \\\"2.\\\" list marker.\"\n        },\n        {\n          \"rule\": \"MDX050\",\n          \"name\": \"fence-language\",\n          \"severity\": \"info\",\n          \"fixable\": false,\n          \"line\": 10,\n          \"column\": 1,\n          \"message\": \"Fenced code block has no language. Add one when the language is known, for example ```js.\"\n        },\n        {\n          \"rule\": \"MDX052\",\n          \"name\": \"fence-blank-lines\",\n          \"severity\": \"warning\",\n          \"fixable\": true,\n          \"line\": 12,\n          \"column\": 1,\n          \"message\": \"Fenced code block ends directly before another block. Add a blank line after it.\"\n        },\n        {\n          \"rule\": \"MDX071\",\n          \"name\": \"empty-link\",\n          \"severity\": \"warning\",\n          \"fixable\": false,\n          \"line\": 13,\n          \"column\": 11,\n          \"message\": \"Link or image has empty text or an empty destination.\"\n        },\n        {\n          \"rule\": \"MDX075\",\n          \"name\": \"image-alt\",\n          \"severity\": \"warning\",\n          \"fixable\": false,\n          \"line\": 13,\n          \"column\": 11,\n          \"message\": \"Image has no alt text. Add a short description, or confirm that an empty alt is correct for a decorative image.\"\n        }\n      ]\n    },\n    {\n      \"path\": \"docs/intro.markdown\",\n      \"changed\": false,\n      \"wouldChange\": false,\n      \"refused\": false,\n      \"fixed\": 0,\n      \"wouldFix\": 0,\n      \"problems\": [\n        {\n          \"rule\": \"MDX070\",\n          \"name\": \"bare-url\",\n          \"severity\": \"info\",\n          \"fixable\": false,\n          \"line\": 3,\n          \"column\": 7,\n          \"message\": \"Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text.\"\n        }\n      ]\n    }\n  ],\n  \"summary\": {\n    \"files\": 5,\n    \"changed\": 0,\n    \"wouldChange\": 2,\n    \"fixed\": 0,\n    \"refused\": 0,\n    \"problems\": {\n      \"total\": 27,\n      \"errors\": 0,\n      \"warnings\": 25,\n      \"info\": 2,\n      \"fixable\": 23\n    }\n  }\n}\n",
+    "stderr": "",
+    "files": [
+      {
+        "path": ".e2e-tmp/a.md",
+        "text": "#Excluded\n"
+      },
+      {
+        "path": ".git/notes.md",
+        "text": "#Excluded\n"
+      },
+      {
+        "path": ".hg/a.md",
+        "text": "#Excluded\n"
+      },
+      {
+        "path": ".svn/a.md",
+        "text": "#Excluded\n"
+      },
+      {
+        "path": "README.md",
+        "text": "#Project Notes   \nIntro paragraph with trailing spaces.   \n##  Setup ##\n* first item\n- second item\n-third item\n\n\nSome **  bold  ** text and a [link](https://example.com).\n\n| Name | Value |\n| - | -- |\n| a | 1 |\n> quote without space\n>no space here\n\n**標籤：**內容說明\nFinal line without newline."
+      },
+      {
+        "path": "blob-report/a.md",
+        "text": "#Excluded\n"
+      },
+      {
+        "path": "clean.md",
+        "text": "# Clean Document\n\nThis document has no problems.\n\n## Section\n\n- One\n- Two\n\n```js\nconsole.log('hi');\n```\n"
+      },
+      {
+        "path": "docs/coverage/report.md",
+        "text": "#Excluded\n"
+      },
+      {
+        "path": "docs/deep/long.md",
+        "text": "# Long Lines\n\nThis is a fairly long line of English prose that goes well past forty characters.\n這是一行很長的中文句子，用來測試行長計算是否以字元為單位而不是位元組，應該超過四十個字。\nShort line.\n\n| Column | Another column that is very very very long in a table row |\n| --- | --- |\n| a | b |\n"
+      },
+      {
+        "path": "docs/guide.MD",
+        "text": "# 會議記錄\n\n**日期：**2026-11-05\n**出席：** 王小明、李大華\n\n##討論事項\n1. 第一項\n2.第二項\n\n```\n沒有語言的程式碼\n```\n參考 [文件] 與 ![](image.png)。\n"
+      },
+      {
+        "path": "docs/intro.markdown",
+        "text": "# Info Only\n\nVisit https://example.com for details.\n"
+      },
+      {
+        "path": "docs/page.mdx",
+        "text": "#Skipped mdx\n"
+      },
+      {
+        "path": "node_modules/pkg/README.md",
+        "text": "#Excluded\n"
+      },
+      {
+        "path": "notes.txt",
+        "text": "#Not a markdown extension\nbut given explicitly.\n"
+      },
+      {
+        "path": "playwright-report/a.md",
+        "text": "#Excluded\n"
+      },
+      {
+        "path": "test-results/a.md",
+        "text": "#Excluded\n"
+      },
+      {
+        "path": "vendor/x.md",
+        "text": "#Excluded\n"
+      }
+    ]
+  }
+}

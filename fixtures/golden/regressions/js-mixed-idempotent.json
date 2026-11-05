@@ -1,0 +1,525 @@
+{
+  "source": "regressions/js-mixed-idempotent.md",
+  "referenceVersion": "1.0.0",
+  "cases": [
+    {
+      "name": "default",
+      "options": {},
+      "diagnose": [
+        {
+          "rule": "MDX010",
+          "name": "atx-missing-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 1,
+          "column": 2,
+          "message": "Add a space after the heading marker: \"# \" rather than \"#\"."
+        },
+        {
+          "rule": "MDX013",
+          "name": "heading-blank-lines",
+          "severity": "warning",
+          "fixable": true,
+          "line": 4,
+          "column": 1,
+          "message": "Heading is directly attached to the preceding paragraph. Add a blank line before it."
+        },
+        {
+          "rule": "MDX011",
+          "name": "atx-multiple-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 4,
+          "column": 3,
+          "message": "Use exactly one space after the ATX heading marker."
+        },
+        {
+          "rule": "MDX012",
+          "name": "atx-closing-hashes",
+          "severity": "warning",
+          "fixable": true,
+          "line": 4,
+          "column": 8,
+          "message": "Remove optional closing hashes from the heading; they add noise and are easy to miscount."
+        },
+        {
+          "rule": "MDX030",
+          "name": "list-marker-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 5,
+          "column": 2,
+          "message": "Add a space after the \"-\" list marker."
+        },
+        {
+          "rule": "MDX031",
+          "name": "list-marker-style",
+          "severity": "warning",
+          "fixable": true,
+          "line": 6,
+          "column": 1,
+          "message": "List uses \"*\" but the first item in this list uses \"-\". Use one bullet marker per list."
+        },
+        {
+          "rule": "MDX031",
+          "name": "list-marker-style",
+          "severity": "warning",
+          "fixable": true,
+          "line": 7,
+          "column": 1,
+          "message": "List uses \"+\" but the first item in this list uses \"-\". Use one bullet marker per list."
+        },
+        {
+          "rule": "MDX040",
+          "name": "emphasis-inner-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 9,
+          "column": 1,
+          "message": "Remove spaces just inside the bold (**) delimiters."
+        },
+        {
+          "rule": "MDX040",
+          "name": "emphasis-inner-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 9,
+          "column": 14,
+          "message": "Remove the space just inside the italic (*) delimiter. Single-star spacing is fixed only when the other side is attached."
+        },
+        {
+          "rule": "MDX020",
+          "name": "blockquote-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 11,
+          "column": 1,
+          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
+        },
+        {
+          "rule": "MDX060",
+          "name": "table-delimiter-width",
+          "severity": "warning",
+          "fixable": true,
+          "line": 15,
+          "column": 3,
+          "message": "Table delimiter cell has fewer than three hyphens."
+        }
+      ],
+      "fix": {
+        "text": "# Title\n\nParagraph\n\n## Sub\n- item\n- other\n- third\n\n**bold** and *italic* and _ italic _\n\n> quote\n>     code\n\n| a | b |\n| --- | --- |\n| 1 | 2 |\n\n```js\ncode\n```\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "snippet",
+      "options": {
+        "ignoreRules": [
+          "MDX003"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX010",
+          "name": "atx-missing-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 1,
+          "column": 2,
+          "message": "Add a space after the heading marker: \"# \" rather than \"#\"."
+        },
+        {
+          "rule": "MDX013",
+          "name": "heading-blank-lines",
+          "severity": "warning",
+          "fixable": true,
+          "line": 4,
+          "column": 1,
+          "message": "Heading is directly attached to the preceding paragraph. Add a blank line before it."
+        },
+        {
+          "rule": "MDX011",
+          "name": "atx-multiple-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 4,
+          "column": 3,
+          "message": "Use exactly one space after the ATX heading marker."
+        },
+        {
+          "rule": "MDX012",
+          "name": "atx-closing-hashes",
+          "severity": "warning",
+          "fixable": true,
+          "line": 4,
+          "column": 8,
+          "message": "Remove optional closing hashes from the heading; they add noise and are easy to miscount."
+        },
+        {
+          "rule": "MDX030",
+          "name": "list-marker-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 5,
+          "column": 2,
+          "message": "Add a space after the \"-\" list marker."
+        },
+        {
+          "rule": "MDX031",
+          "name": "list-marker-style",
+          "severity": "warning",
+          "fixable": true,
+          "line": 6,
+          "column": 1,
+          "message": "List uses \"*\" but the first item in this list uses \"-\". Use one bullet marker per list."
+        },
+        {
+          "rule": "MDX031",
+          "name": "list-marker-style",
+          "severity": "warning",
+          "fixable": true,
+          "line": 7,
+          "column": 1,
+          "message": "List uses \"+\" but the first item in this list uses \"-\". Use one bullet marker per list."
+        },
+        {
+          "rule": "MDX040",
+          "name": "emphasis-inner-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 9,
+          "column": 1,
+          "message": "Remove spaces just inside the bold (**) delimiters."
+        },
+        {
+          "rule": "MDX040",
+          "name": "emphasis-inner-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 9,
+          "column": 14,
+          "message": "Remove the space just inside the italic (*) delimiter. Single-star spacing is fixed only when the other side is attached."
+        },
+        {
+          "rule": "MDX020",
+          "name": "blockquote-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 11,
+          "column": 1,
+          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
+        },
+        {
+          "rule": "MDX060",
+          "name": "table-delimiter-width",
+          "severity": "warning",
+          "fixable": true,
+          "line": 15,
+          "column": 3,
+          "message": "Table delimiter cell has fewer than three hyphens."
+        }
+      ],
+      "fix": {
+        "text": "# Title\n\nParagraph\n\n## Sub\n- item\n- other\n- third\n\n**bold** and *italic* and _ italic _\n\n> quote\n>     code\n\n| a | b |\n| --- | --- |\n| 1 | 2 |\n\n```js\ncode\n```\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "line-length-80",
+      "options": {
+        "maxLineLength": 80
+      },
+      "diagnose": [
+        {
+          "rule": "MDX010",
+          "name": "atx-missing-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 1,
+          "column": 2,
+          "message": "Add a space after the heading marker: \"# \" rather than \"#\"."
+        },
+        {
+          "rule": "MDX013",
+          "name": "heading-blank-lines",
+          "severity": "warning",
+          "fixable": true,
+          "line": 4,
+          "column": 1,
+          "message": "Heading is directly attached to the preceding paragraph. Add a blank line before it."
+        },
+        {
+          "rule": "MDX011",
+          "name": "atx-multiple-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 4,
+          "column": 3,
+          "message": "Use exactly one space after the ATX heading marker."
+        },
+        {
+          "rule": "MDX012",
+          "name": "atx-closing-hashes",
+          "severity": "warning",
+          "fixable": true,
+          "line": 4,
+          "column": 8,
+          "message": "Remove optional closing hashes from the heading; they add noise and are easy to miscount."
+        },
+        {
+          "rule": "MDX030",
+          "name": "list-marker-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 5,
+          "column": 2,
+          "message": "Add a space after the \"-\" list marker."
+        },
+        {
+          "rule": "MDX031",
+          "name": "list-marker-style",
+          "severity": "warning",
+          "fixable": true,
+          "line": 6,
+          "column": 1,
+          "message": "List uses \"*\" but the first item in this list uses \"-\". Use one bullet marker per list."
+        },
+        {
+          "rule": "MDX031",
+          "name": "list-marker-style",
+          "severity": "warning",
+          "fixable": true,
+          "line": 7,
+          "column": 1,
+          "message": "List uses \"+\" but the first item in this list uses \"-\". Use one bullet marker per list."
+        },
+        {
+          "rule": "MDX040",
+          "name": "emphasis-inner-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 9,
+          "column": 1,
+          "message": "Remove spaces just inside the bold (**) delimiters."
+        },
+        {
+          "rule": "MDX040",
+          "name": "emphasis-inner-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 9,
+          "column": 14,
+          "message": "Remove the space just inside the italic (*) delimiter. Single-star spacing is fixed only when the other side is attached."
+        },
+        {
+          "rule": "MDX020",
+          "name": "blockquote-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 11,
+          "column": 1,
+          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
+        },
+        {
+          "rule": "MDX060",
+          "name": "table-delimiter-width",
+          "severity": "warning",
+          "fixable": true,
+          "line": 15,
+          "column": 3,
+          "message": "Table delimiter cell has fewer than three hyphens."
+        }
+      ],
+      "fix": {
+        "text": "# Title\n\nParagraph\n\n## Sub\n- item\n- other\n- third\n\n**bold** and *italic* and _ italic _\n\n> quote\n>     code\n\n| a | b |\n| --- | --- |\n| 1 | 2 |\n\n```js\ncode\n```\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "keep-encoding",
+      "options": {
+        "ignoreRules": [
+          "MDX001",
+          "MDX002"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX010",
+          "name": "atx-missing-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 1,
+          "column": 2,
+          "message": "Add a space after the heading marker: \"# \" rather than \"#\"."
+        },
+        {
+          "rule": "MDX013",
+          "name": "heading-blank-lines",
+          "severity": "warning",
+          "fixable": true,
+          "line": 4,
+          "column": 1,
+          "message": "Heading is directly attached to the preceding paragraph. Add a blank line before it."
+        },
+        {
+          "rule": "MDX011",
+          "name": "atx-multiple-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 4,
+          "column": 3,
+          "message": "Use exactly one space after the ATX heading marker."
+        },
+        {
+          "rule": "MDX012",
+          "name": "atx-closing-hashes",
+          "severity": "warning",
+          "fixable": true,
+          "line": 4,
+          "column": 8,
+          "message": "Remove optional closing hashes from the heading; they add noise and are easy to miscount."
+        },
+        {
+          "rule": "MDX030",
+          "name": "list-marker-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 5,
+          "column": 2,
+          "message": "Add a space after the \"-\" list marker."
+        },
+        {
+          "rule": "MDX031",
+          "name": "list-marker-style",
+          "severity": "warning",
+          "fixable": true,
+          "line": 6,
+          "column": 1,
+          "message": "List uses \"*\" but the first item in this list uses \"-\". Use one bullet marker per list."
+        },
+        {
+          "rule": "MDX031",
+          "name": "list-marker-style",
+          "severity": "warning",
+          "fixable": true,
+          "line": 7,
+          "column": 1,
+          "message": "List uses \"+\" but the first item in this list uses \"-\". Use one bullet marker per list."
+        },
+        {
+          "rule": "MDX040",
+          "name": "emphasis-inner-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 9,
+          "column": 1,
+          "message": "Remove spaces just inside the bold (**) delimiters."
+        },
+        {
+          "rule": "MDX040",
+          "name": "emphasis-inner-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 9,
+          "column": 14,
+          "message": "Remove the space just inside the italic (*) delimiter. Single-star spacing is fixed only when the other side is attached."
+        },
+        {
+          "rule": "MDX020",
+          "name": "blockquote-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 11,
+          "column": 1,
+          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
+        },
+        {
+          "rule": "MDX060",
+          "name": "table-delimiter-width",
+          "severity": "warning",
+          "fixable": true,
+          "line": 15,
+          "column": 3,
+          "message": "Table delimiter cell has fewer than three hyphens."
+        }
+      ],
+      "fix": {
+        "text": "# Title\n\nParagraph\n\n## Sub\n- item\n- other\n- third\n\n**bold** and *italic* and _ italic _\n\n> quote\n>     code\n\n| a | b |\n| --- | --- |\n| 1 | 2 |\n\n```js\ncode\n```\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "headings-only",
+      "options": {
+        "rules": [
+          "MDX010",
+          "MDX011",
+          "MDX012",
+          "MDX013"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX010",
+          "name": "atx-missing-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 1,
+          "column": 2,
+          "message": "Add a space after the heading marker: \"# \" rather than \"#\"."
+        },
+        {
+          "rule": "MDX013",
+          "name": "heading-blank-lines",
+          "severity": "warning",
+          "fixable": true,
+          "line": 4,
+          "column": 1,
+          "message": "Heading is directly attached to the preceding paragraph. Add a blank line before it."
+        },
+        {
+          "rule": "MDX013",
+          "name": "heading-blank-lines",
+          "severity": "warning",
+          "fixable": true,
+          "line": 4,
+          "column": 1,
+          "message": "Heading is directly attached to the following paragraph. Add a blank line after it."
+        },
+        {
+          "rule": "MDX011",
+          "name": "atx-multiple-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 4,
+          "column": 3,
+          "message": "Use exactly one space after the ATX heading marker."
+        },
+        {
+          "rule": "MDX012",
+          "name": "atx-closing-hashes",
+          "severity": "warning",
+          "fixable": true,
+          "line": 4,
+          "column": 8,
+          "message": "Remove optional closing hashes from the heading; they add noise and are easy to miscount."
+        }
+      ],
+      "fix": {
+        "text": "# Title\n\nParagraph\n\n## Sub\n\n-item\n* other\n+ third\n\n**  bold  ** and * italic* and _ italic _\n\n>quote\n>     code\n\n| a | b |\n| - | -- |\n| 1 | 2 |\n\n```js\ncode\n```\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    }
+  ]
+}

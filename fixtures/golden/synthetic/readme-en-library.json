@@ -1,0 +1,570 @@
+{
+  "source": "synthetic/readme-en-library.md",
+  "referenceVersion": "1.0.0",
+  "cases": [
+    {
+      "name": "default",
+      "options": {},
+      "diagnose": [
+        {
+          "rule": "MDX071",
+          "name": "empty-link",
+          "severity": "warning",
+          "fixable": false,
+          "line": 10,
+          "column": 1,
+          "message": "Link or image has empty text or an empty destination."
+        },
+        {
+          "rule": "MDX075",
+          "name": "image-alt",
+          "severity": "warning",
+          "fixable": false,
+          "line": 10,
+          "column": 1,
+          "message": "Image has no alt text. Add a short description, or confirm that an empty alt is correct for a decorative image."
+        },
+        {
+          "rule": "MDX013",
+          "name": "heading-blank-lines",
+          "severity": "warning",
+          "fixable": true,
+          "line": 13,
+          "column": 1,
+          "message": "Heading is directly attached to the preceding paragraph. Add a blank line before it."
+        },
+        {
+          "rule": "MDX018",
+          "name": "first-heading-h1",
+          "severity": "info",
+          "fixable": false,
+          "line": 13,
+          "column": 1,
+          "message": "The first heading is not an H1. Start the outline with one H1 unless the document intentionally starts in a section."
+        },
+        {
+          "rule": "MDX072",
+          "name": "link-space-before-destination",
+          "severity": "info",
+          "fixable": false,
+          "line": 45,
+          "column": 97,
+          "message": "There is whitespace between ] and (. CommonMark does not parse this as a link; remove the space if a link was intended."
+        },
+        {
+          "rule": "MDX013",
+          "name": "heading-blank-lines",
+          "severity": "warning",
+          "fixable": true,
+          "line": 49,
+          "column": 1,
+          "message": "Heading is directly attached to the following paragraph. Add a blank line after it."
+        },
+        {
+          "rule": "MDX017",
+          "name": "heading-trailing-punctuation",
+          "severity": "info",
+          "fixable": false,
+          "line": 49,
+          "column": 1,
+          "message": "Heading ends with sentence punctuation. Headings usually read better without a trailing period, colon, or similar mark."
+        },
+        {
+          "rule": "MDX013",
+          "name": "heading-blank-lines",
+          "severity": "warning",
+          "fixable": true,
+          "line": 52,
+          "column": 1,
+          "message": "Heading is directly attached to the following paragraph. Add a blank line after it."
+        },
+        {
+          "rule": "MDX017",
+          "name": "heading-trailing-punctuation",
+          "severity": "info",
+          "fixable": false,
+          "line": 52,
+          "column": 1,
+          "message": "Heading ends with sentence punctuation. Headings usually read better without a trailing period, colon, or similar mark."
+        },
+        {
+          "rule": "MDX070",
+          "name": "bare-url",
+          "severity": "info",
+          "fixable": false,
+          "line": 69,
+          "column": 69,
+          "message": "Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text."
+        },
+        {
+          "rule": "MDX070",
+          "name": "bare-url",
+          "severity": "info",
+          "fixable": false,
+          "line": 70,
+          "column": 47,
+          "message": "Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text."
+        }
+      ],
+      "fix": {
+        "text": "<p align=\"center\">\n  <img src=\"docs/logo.svg\" width=\"120\" alt=\"tinyqueue logo\">\n</p>\n\n<h1 align=\"center\">tinyqueue</h1>\n\n[![CI](https://github.com/example/tinyqueue/actions/workflows/ci.yml/badge.svg)](https://github.com/example/tinyqueue/actions)\n[![crates.io](https://img.shields.io/crates/v/tinyqueue.svg)](https://crates.io/crates/tinyqueue)\n[![docs.rs](https://docs.rs/tinyqueue/badge.svg)](https://docs.rs/tinyqueue)\n![](https://img.shields.io/badge/license-MIT-blue.svg)\n\nA tiny, lock-free, bounded MPMC queue for Rust.\n\n## Features\n\n- **Lock-free** push and pop using atomics\n- **Bounded** capacity, decided at construction time\n- `no_std` support behind the `std` feature flag\n- Zero dependencies\n\n## Installation\n\n```toml\n[dependencies]\ntinyqueue = \"0.4\"\n```\n\n## Usage\n\n```rust\nuse tinyqueue::Queue;\n\nlet q = Queue::with_capacity(8);\nq.push(1).unwrap();\nassert_eq!(q.pop(), Some(1));\n```\n\n### Benchmarks\n\n| Queue | push (ns) | pop (ns) |\n|-------|----------:|---------:|\n| tinyqueue | 12.1 | 11.8 |\n| crossbeam ArrayQueue | 13.4 | 12.9 |\n| std Mutex<VecDeque> | 41.0 | 39.7 |\n\nRun them yourself with `cargo bench`. Results above are from an M3 Pro, see [the benchmark notes] (docs/bench.md).\n\n## FAQ\n\n### Is it really lock-free?\n\nYes. Every operation is a bounded number of CAS loops. See the [design doc][design].\n\n### Why not just use crossbeam?\n\nYou probably should! tinyqueue exists for `no_std` targets where crossbeam is too heavy.\n\n## Contributing\n\n1. Fork it\n2. Create your feature branch (`git checkout -b feature/foo`)\n3. Commit your changes (`git commit -am 'Add some foo'`)\n4. Push to the branch (`git push origin feature/foo`)\n5. Create a new Pull Request\n\nPlease read CONTRIBUTING.md first.\n\n## License\n\nLicensed under either of\n\n * Apache License, Version 2.0 ([LICENSE-APACHE](LICENSE-APACHE) or http://www.apache.org/licenses/LICENSE-2.0)\n * MIT license ([LICENSE-MIT](LICENSE-MIT) or http://opensource.org/licenses/MIT)\n\nat your option.\n\n[design]: docs/design.md\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "snippet",
+      "options": {
+        "ignoreRules": [
+          "MDX003"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX071",
+          "name": "empty-link",
+          "severity": "warning",
+          "fixable": false,
+          "line": 10,
+          "column": 1,
+          "message": "Link or image has empty text or an empty destination."
+        },
+        {
+          "rule": "MDX075",
+          "name": "image-alt",
+          "severity": "warning",
+          "fixable": false,
+          "line": 10,
+          "column": 1,
+          "message": "Image has no alt text. Add a short description, or confirm that an empty alt is correct for a decorative image."
+        },
+        {
+          "rule": "MDX013",
+          "name": "heading-blank-lines",
+          "severity": "warning",
+          "fixable": true,
+          "line": 13,
+          "column": 1,
+          "message": "Heading is directly attached to the preceding paragraph. Add a blank line before it."
+        },
+        {
+          "rule": "MDX018",
+          "name": "first-heading-h1",
+          "severity": "info",
+          "fixable": false,
+          "line": 13,
+          "column": 1,
+          "message": "The first heading is not an H1. Start the outline with one H1 unless the document intentionally starts in a section."
+        },
+        {
+          "rule": "MDX072",
+          "name": "link-space-before-destination",
+          "severity": "info",
+          "fixable": false,
+          "line": 45,
+          "column": 97,
+          "message": "There is whitespace between ] and (. CommonMark does not parse this as a link; remove the space if a link was intended."
+        },
+        {
+          "rule": "MDX013",
+          "name": "heading-blank-lines",
+          "severity": "warning",
+          "fixable": true,
+          "line": 49,
+          "column": 1,
+          "message": "Heading is directly attached to the following paragraph. Add a blank line after it."
+        },
+        {
+          "rule": "MDX017",
+          "name": "heading-trailing-punctuation",
+          "severity": "info",
+          "fixable": false,
+          "line": 49,
+          "column": 1,
+          "message": "Heading ends with sentence punctuation. Headings usually read better without a trailing period, colon, or similar mark."
+        },
+        {
+          "rule": "MDX013",
+          "name": "heading-blank-lines",
+          "severity": "warning",
+          "fixable": true,
+          "line": 52,
+          "column": 1,
+          "message": "Heading is directly attached to the following paragraph. Add a blank line after it."
+        },
+        {
+          "rule": "MDX017",
+          "name": "heading-trailing-punctuation",
+          "severity": "info",
+          "fixable": false,
+          "line": 52,
+          "column": 1,
+          "message": "Heading ends with sentence punctuation. Headings usually read better without a trailing period, colon, or similar mark."
+        },
+        {
+          "rule": "MDX070",
+          "name": "bare-url",
+          "severity": "info",
+          "fixable": false,
+          "line": 69,
+          "column": 69,
+          "message": "Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text."
+        },
+        {
+          "rule": "MDX070",
+          "name": "bare-url",
+          "severity": "info",
+          "fixable": false,
+          "line": 70,
+          "column": 47,
+          "message": "Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text."
+        }
+      ],
+      "fix": {
+        "text": "<p align=\"center\">\n  <img src=\"docs/logo.svg\" width=\"120\" alt=\"tinyqueue logo\">\n</p>\n\n<h1 align=\"center\">tinyqueue</h1>\n\n[![CI](https://github.com/example/tinyqueue/actions/workflows/ci.yml/badge.svg)](https://github.com/example/tinyqueue/actions)\n[![crates.io](https://img.shields.io/crates/v/tinyqueue.svg)](https://crates.io/crates/tinyqueue)\n[![docs.rs](https://docs.rs/tinyqueue/badge.svg)](https://docs.rs/tinyqueue)\n![](https://img.shields.io/badge/license-MIT-blue.svg)\n\nA tiny, lock-free, bounded MPMC queue for Rust.\n\n## Features\n\n- **Lock-free** push and pop using atomics\n- **Bounded** capacity, decided at construction time\n- `no_std` support behind the `std` feature flag\n- Zero dependencies\n\n## Installation\n\n```toml\n[dependencies]\ntinyqueue = \"0.4\"\n```\n\n## Usage\n\n```rust\nuse tinyqueue::Queue;\n\nlet q = Queue::with_capacity(8);\nq.push(1).unwrap();\nassert_eq!(q.pop(), Some(1));\n```\n\n### Benchmarks\n\n| Queue | push (ns) | pop (ns) |\n|-------|----------:|---------:|\n| tinyqueue | 12.1 | 11.8 |\n| crossbeam ArrayQueue | 13.4 | 12.9 |\n| std Mutex<VecDeque> | 41.0 | 39.7 |\n\nRun them yourself with `cargo bench`. Results above are from an M3 Pro, see [the benchmark notes] (docs/bench.md).\n\n## FAQ\n\n### Is it really lock-free?\n\nYes. Every operation is a bounded number of CAS loops. See the [design doc][design].\n\n### Why not just use crossbeam?\n\nYou probably should! tinyqueue exists for `no_std` targets where crossbeam is too heavy.\n\n## Contributing\n\n1. Fork it\n2. Create your feature branch (`git checkout -b feature/foo`)\n3. Commit your changes (`git commit -am 'Add some foo'`)\n4. Push to the branch (`git push origin feature/foo`)\n5. Create a new Pull Request\n\nPlease read CONTRIBUTING.md first.\n\n## License\n\nLicensed under either of\n\n * Apache License, Version 2.0 ([LICENSE-APACHE](LICENSE-APACHE) or http://www.apache.org/licenses/LICENSE-2.0)\n * MIT license ([LICENSE-MIT](LICENSE-MIT) or http://opensource.org/licenses/MIT)\n\nat your option.\n\n[design]: docs/design.md\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "line-length-80",
+      "options": {
+        "maxLineLength": 80
+      },
+      "diagnose": [
+        {
+          "rule": "MDX090",
+          "name": "line-length",
+          "severity": "info",
+          "fixable": false,
+          "line": 7,
+          "column": 81,
+          "message": "Line is 126 characters; limit is 80."
+        },
+        {
+          "rule": "MDX090",
+          "name": "line-length",
+          "severity": "info",
+          "fixable": false,
+          "line": 8,
+          "column": 81,
+          "message": "Line is 97 characters; limit is 80."
+        },
+        {
+          "rule": "MDX071",
+          "name": "empty-link",
+          "severity": "warning",
+          "fixable": false,
+          "line": 10,
+          "column": 1,
+          "message": "Link or image has empty text or an empty destination."
+        },
+        {
+          "rule": "MDX075",
+          "name": "image-alt",
+          "severity": "warning",
+          "fixable": false,
+          "line": 10,
+          "column": 1,
+          "message": "Image has no alt text. Add a short description, or confirm that an empty alt is correct for a decorative image."
+        },
+        {
+          "rule": "MDX013",
+          "name": "heading-blank-lines",
+          "severity": "warning",
+          "fixable": true,
+          "line": 13,
+          "column": 1,
+          "message": "Heading is directly attached to the preceding paragraph. Add a blank line before it."
+        },
+        {
+          "rule": "MDX018",
+          "name": "first-heading-h1",
+          "severity": "info",
+          "fixable": false,
+          "line": 13,
+          "column": 1,
+          "message": "The first heading is not an H1. Start the outline with one H1 unless the document intentionally starts in a section."
+        },
+        {
+          "rule": "MDX090",
+          "name": "line-length",
+          "severity": "info",
+          "fixable": false,
+          "line": 45,
+          "column": 81,
+          "message": "Line is 114 characters; limit is 80."
+        },
+        {
+          "rule": "MDX072",
+          "name": "link-space-before-destination",
+          "severity": "info",
+          "fixable": false,
+          "line": 45,
+          "column": 97,
+          "message": "There is whitespace between ] and (. CommonMark does not parse this as a link; remove the space if a link was intended."
+        },
+        {
+          "rule": "MDX013",
+          "name": "heading-blank-lines",
+          "severity": "warning",
+          "fixable": true,
+          "line": 49,
+          "column": 1,
+          "message": "Heading is directly attached to the following paragraph. Add a blank line after it."
+        },
+        {
+          "rule": "MDX017",
+          "name": "heading-trailing-punctuation",
+          "severity": "info",
+          "fixable": false,
+          "line": 49,
+          "column": 1,
+          "message": "Heading ends with sentence punctuation. Headings usually read better without a trailing period, colon, or similar mark."
+        },
+        {
+          "rule": "MDX090",
+          "name": "line-length",
+          "severity": "info",
+          "fixable": false,
+          "line": 50,
+          "column": 81,
+          "message": "Line is 84 characters; limit is 80."
+        },
+        {
+          "rule": "MDX013",
+          "name": "heading-blank-lines",
+          "severity": "warning",
+          "fixable": true,
+          "line": 52,
+          "column": 1,
+          "message": "Heading is directly attached to the following paragraph. Add a blank line after it."
+        },
+        {
+          "rule": "MDX017",
+          "name": "heading-trailing-punctuation",
+          "severity": "info",
+          "fixable": false,
+          "line": 52,
+          "column": 1,
+          "message": "Heading ends with sentence punctuation. Headings usually read better without a trailing period, colon, or similar mark."
+        },
+        {
+          "rule": "MDX090",
+          "name": "line-length",
+          "severity": "info",
+          "fixable": false,
+          "line": 53,
+          "column": 81,
+          "message": "Line is 88 characters; limit is 80."
+        },
+        {
+          "rule": "MDX070",
+          "name": "bare-url",
+          "severity": "info",
+          "fixable": false,
+          "line": 69,
+          "column": 69,
+          "message": "Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text."
+        },
+        {
+          "rule": "MDX090",
+          "name": "line-length",
+          "severity": "info",
+          "fixable": false,
+          "line": 69,
+          "column": 81,
+          "message": "Line is 111 characters; limit is 80."
+        },
+        {
+          "rule": "MDX070",
+          "name": "bare-url",
+          "severity": "info",
+          "fixable": false,
+          "line": 70,
+          "column": 47,
+          "message": "Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text."
+        },
+        {
+          "rule": "MDX090",
+          "name": "line-length",
+          "severity": "info",
+          "fixable": false,
+          "line": 70,
+          "column": 81,
+          "message": "Line is 81 characters; limit is 80."
+        }
+      ],
+      "fix": {
+        "text": "<p align=\"center\">\n  <img src=\"docs/logo.svg\" width=\"120\" alt=\"tinyqueue logo\">\n</p>\n\n<h1 align=\"center\">tinyqueue</h1>\n\n[![CI](https://github.com/example/tinyqueue/actions/workflows/ci.yml/badge.svg)](https://github.com/example/tinyqueue/actions)\n[![crates.io](https://img.shields.io/crates/v/tinyqueue.svg)](https://crates.io/crates/tinyqueue)\n[![docs.rs](https://docs.rs/tinyqueue/badge.svg)](https://docs.rs/tinyqueue)\n![](https://img.shields.io/badge/license-MIT-blue.svg)\n\nA tiny, lock-free, bounded MPMC queue for Rust.\n\n## Features\n\n- **Lock-free** push and pop using atomics\n- **Bounded** capacity, decided at construction time\n- `no_std` support behind the `std` feature flag\n- Zero dependencies\n\n## Installation\n\n```toml\n[dependencies]\ntinyqueue = \"0.4\"\n```\n\n## Usage\n\n```rust\nuse tinyqueue::Queue;\n\nlet q = Queue::with_capacity(8);\nq.push(1).unwrap();\nassert_eq!(q.pop(), Some(1));\n```\n\n### Benchmarks\n\n| Queue | push (ns) | pop (ns) |\n|-------|----------:|---------:|\n| tinyqueue | 12.1 | 11.8 |\n| crossbeam ArrayQueue | 13.4 | 12.9 |\n| std Mutex<VecDeque> | 41.0 | 39.7 |\n\nRun them yourself with `cargo bench`. Results above are from an M3 Pro, see [the benchmark notes] (docs/bench.md).\n\n## FAQ\n\n### Is it really lock-free?\n\nYes. Every operation is a bounded number of CAS loops. See the [design doc][design].\n\n### Why not just use crossbeam?\n\nYou probably should! tinyqueue exists for `no_std` targets where crossbeam is too heavy.\n\n## Contributing\n\n1. Fork it\n2. Create your feature branch (`git checkout -b feature/foo`)\n3. Commit your changes (`git commit -am 'Add some foo'`)\n4. Push to the branch (`git push origin feature/foo`)\n5. Create a new Pull Request\n\nPlease read CONTRIBUTING.md first.\n\n## License\n\nLicensed under either of\n\n * Apache License, Version 2.0 ([LICENSE-APACHE](LICENSE-APACHE) or http://www.apache.org/licenses/LICENSE-2.0)\n * MIT license ([LICENSE-MIT](LICENSE-MIT) or http://opensource.org/licenses/MIT)\n\nat your option.\n\n[design]: docs/design.md\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "keep-encoding",
+      "options": {
+        "ignoreRules": [
+          "MDX001",
+          "MDX002"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX071",
+          "name": "empty-link",
+          "severity": "warning",
+          "fixable": false,
+          "line": 10,
+          "column": 1,
+          "message": "Link or image has empty text or an empty destination."
+        },
+        {
+          "rule": "MDX075",
+          "name": "image-alt",
+          "severity": "warning",
+          "fixable": false,
+          "line": 10,
+          "column": 1,
+          "message": "Image has no alt text. Add a short description, or confirm that an empty alt is correct for a decorative image."
+        },
+        {
+          "rule": "MDX013",
+          "name": "heading-blank-lines",
+          "severity": "warning",
+          "fixable": true,
+          "line": 13,
+          "column": 1,
+          "message": "Heading is directly attached to the preceding paragraph. Add a blank line before it."
+        },
+        {
+          "rule": "MDX018",
+          "name": "first-heading-h1",
+          "severity": "info",
+          "fixable": false,
+          "line": 13,
+          "column": 1,
+          "message": "The first heading is not an H1. Start the outline with one H1 unless the document intentionally starts in a section."
+        },
+        {
+          "rule": "MDX072",
+          "name": "link-space-before-destination",
+          "severity": "info",
+          "fixable": false,
+          "line": 45,
+          "column": 97,
+          "message": "There is whitespace between ] and (. CommonMark does not parse this as a link; remove the space if a link was intended."
+        },
+        {
+          "rule": "MDX013",
+          "name": "heading-blank-lines",
+          "severity": "warning",
+          "fixable": true,
+          "line": 49,
+          "column": 1,
+          "message": "Heading is directly attached to the following paragraph. Add a blank line after it."
+        },
+        {
+          "rule": "MDX017",
+          "name": "heading-trailing-punctuation",
+          "severity": "info",
+          "fixable": false,
+          "line": 49,
+          "column": 1,
+          "message": "Heading ends with sentence punctuation. Headings usually read better without a trailing period, colon, or similar mark."
+        },
+        {
+          "rule": "MDX013",
+          "name": "heading-blank-lines",
+          "severity": "warning",
+          "fixable": true,
+          "line": 52,
+          "column": 1,
+          "message": "Heading is directly attached to the following paragraph. Add a blank line after it."
+        },
+        {
+          "rule": "MDX017",
+          "name": "heading-trailing-punctuation",
+          "severity": "info",
+          "fixable": false,
+          "line": 52,
+          "column": 1,
+          "message": "Heading ends with sentence punctuation. Headings usually read better without a trailing period, colon, or similar mark."
+        },
+        {
+          "rule": "MDX070",
+          "name": "bare-url",
+          "severity": "info",
+          "fixable": false,
+          "line": 69,
+          "column": 69,
+          "message": "Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text."
+        },
+        {
+          "rule": "MDX070",
+          "name": "bare-url",
+          "severity": "info",
+          "fixable": false,
+          "line": 70,
+          "column": 47,
+          "message": "Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text."
+        }
+      ],
+      "fix": {
+        "text": "<p align=\"center\">\n  <img src=\"docs/logo.svg\" width=\"120\" alt=\"tinyqueue logo\">\n</p>\n\n<h1 align=\"center\">tinyqueue</h1>\n\n[![CI](https://github.com/example/tinyqueue/actions/workflows/ci.yml/badge.svg)](https://github.com/example/tinyqueue/actions)\n[![crates.io](https://img.shields.io/crates/v/tinyqueue.svg)](https://crates.io/crates/tinyqueue)\n[![docs.rs](https://docs.rs/tinyqueue/badge.svg)](https://docs.rs/tinyqueue)\n![](https://img.shields.io/badge/license-MIT-blue.svg)\n\nA tiny, lock-free, bounded MPMC queue for Rust.\n\n## Features\n\n- **Lock-free** push and pop using atomics\n- **Bounded** capacity, decided at construction time\n- `no_std` support behind the `std` feature flag\n- Zero dependencies\n\n## Installation\n\n```toml\n[dependencies]\ntinyqueue = \"0.4\"\n```\n\n## Usage\n\n```rust\nuse tinyqueue::Queue;\n\nlet q = Queue::with_capacity(8);\nq.push(1).unwrap();\nassert_eq!(q.pop(), Some(1));\n```\n\n### Benchmarks\n\n| Queue | push (ns) | pop (ns) |\n|-------|----------:|---------:|\n| tinyqueue | 12.1 | 11.8 |\n| crossbeam ArrayQueue | 13.4 | 12.9 |\n| std Mutex<VecDeque> | 41.0 | 39.7 |\n\nRun them yourself with `cargo bench`. Results above are from an M3 Pro, see [the benchmark notes] (docs/bench.md).\n\n## FAQ\n\n### Is it really lock-free?\n\nYes. Every operation is a bounded number of CAS loops. See the [design doc][design].\n\n### Why not just use crossbeam?\n\nYou probably should! tinyqueue exists for `no_std` targets where crossbeam is too heavy.\n\n## Contributing\n\n1. Fork it\n2. Create your feature branch (`git checkout -b feature/foo`)\n3. Commit your changes (`git commit -am 'Add some foo'`)\n4. Push to the branch (`git push origin feature/foo`)\n5. Create a new Pull Request\n\nPlease read CONTRIBUTING.md first.\n\n## License\n\nLicensed under either of\n\n * Apache License, Version 2.0 ([LICENSE-APACHE](LICENSE-APACHE) or http://www.apache.org/licenses/LICENSE-2.0)\n * MIT license ([LICENSE-MIT](LICENSE-MIT) or http://opensource.org/licenses/MIT)\n\nat your option.\n\n[design]: docs/design.md\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "headings-only",
+      "options": {
+        "rules": [
+          "MDX010",
+          "MDX011",
+          "MDX012",
+          "MDX013"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX013",
+          "name": "heading-blank-lines",
+          "severity": "warning",
+          "fixable": true,
+          "line": 13,
+          "column": 1,
+          "message": "Heading is directly attached to the preceding paragraph. Add a blank line before it."
+        },
+        {
+          "rule": "MDX013",
+          "name": "heading-blank-lines",
+          "severity": "warning",
+          "fixable": true,
+          "line": 49,
+          "column": 1,
+          "message": "Heading is directly attached to the following paragraph. Add a blank line after it."
+        },
+        {
+          "rule": "MDX013",
+          "name": "heading-blank-lines",
+          "severity": "warning",
+          "fixable": true,
+          "line": 52,
+          "column": 1,
+          "message": "Heading is directly attached to the following paragraph. Add a blank line after it."
+        }
+      ],
+      "fix": {
+        "text": "<p align=\"center\">\n  <img src=\"docs/logo.svg\" width=\"120\" alt=\"tinyqueue logo\">\n</p>\n\n<h1 align=\"center\">tinyqueue</h1>\n\n[![CI](https://github.com/example/tinyqueue/actions/workflows/ci.yml/badge.svg)](https://github.com/example/tinyqueue/actions)\n[![crates.io](https://img.shields.io/crates/v/tinyqueue.svg)](https://crates.io/crates/tinyqueue)\n[![docs.rs](https://docs.rs/tinyqueue/badge.svg)](https://docs.rs/tinyqueue)\n![](https://img.shields.io/badge/license-MIT-blue.svg)\n\nA tiny, lock-free, bounded MPMC queue for Rust.\n\n## Features\n\n- **Lock-free** push and pop using atomics\n- **Bounded** capacity, decided at construction time\n- `no_std` support behind the `std` feature flag\n- Zero dependencies\n\n## Installation\n\n```toml\n[dependencies]\ntinyqueue = \"0.4\"\n```\n\n## Usage\n\n```rust\nuse tinyqueue::Queue;\n\nlet q = Queue::with_capacity(8);\nq.push(1).unwrap();\nassert_eq!(q.pop(), Some(1));\n```\n\n### Benchmarks\n\n| Queue | push (ns) | pop (ns) |\n|-------|----------:|---------:|\n| tinyqueue | 12.1 | 11.8 |\n| crossbeam ArrayQueue | 13.4 | 12.9 |\n| std Mutex<VecDeque> | 41.0 | 39.7 |\n\nRun them yourself with `cargo bench`. Results above are from an M3 Pro, see [the benchmark notes] (docs/bench.md).\n\n## FAQ\n\n### Is it really lock-free?\n\nYes. Every operation is a bounded number of CAS loops. See the [design doc][design].\n\n### Why not just use crossbeam?\n\nYou probably should! tinyqueue exists for `no_std` targets where crossbeam is too heavy.\n\n## Contributing\n\n1. Fork it\n2. Create your feature branch (`git checkout -b feature/foo`)\n3. Commit your changes (`git commit -am 'Add some foo'`)\n4. Push to the branch (`git push origin feature/foo`)\n5. Create a new Pull Request\n\nPlease read CONTRIBUTING.md first.\n\n## License\n\nLicensed under either of\n\n * Apache License, Version 2.0 ([LICENSE-APACHE](LICENSE-APACHE) or http://www.apache.org/licenses/LICENSE-2.0)\n * MIT license ([LICENSE-MIT](LICENSE-MIT) or http://opensource.org/licenses/MIT)\n\nat your option.\n\n[design]: docs/design.md\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    }
+  ]
+}

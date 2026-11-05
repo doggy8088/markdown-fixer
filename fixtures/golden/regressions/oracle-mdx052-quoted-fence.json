@@ -1,0 +1,155 @@
+{
+  "source": "regressions/oracle-mdx052-quoted-fence.md",
+  "referenceVersion": "1.0.0",
+  "cases": [
+    {
+      "name": "default",
+      "options": {},
+      "diagnose": [
+        {
+          "rule": "MDX052",
+          "name": "fence-blank-lines",
+          "severity": "warning",
+          "fixable": true,
+          "line": 4,
+          "column": 1,
+          "message": "Fenced code block starts directly after another block. Add a blank line before it."
+        },
+        {
+          "rule": "MDX052",
+          "name": "fence-blank-lines",
+          "severity": "warning",
+          "fixable": true,
+          "line": 6,
+          "column": 1,
+          "message": "Fenced code block ends directly before another block. Add a blank line after it."
+        }
+      ],
+      "fix": {
+        "text": "# T\n\n> text\n\n> ```js\n> x\n> ```\n\n> more\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "snippet",
+      "options": {
+        "ignoreRules": [
+          "MDX003"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX052",
+          "name": "fence-blank-lines",
+          "severity": "warning",
+          "fixable": true,
+          "line": 4,
+          "column": 1,
+          "message": "Fenced code block starts directly after another block. Add a blank line before it."
+        },
+        {
+          "rule": "MDX052",
+          "name": "fence-blank-lines",
+          "severity": "warning",
+          "fixable": true,
+          "line": 6,
+          "column": 1,
+          "message": "Fenced code block ends directly before another block. Add a blank line after it."
+        }
+      ],
+      "fix": {
+        "text": "# T\n\n> text\n\n> ```js\n> x\n> ```\n\n> more\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "line-length-80",
+      "options": {
+        "maxLineLength": 80
+      },
+      "diagnose": [
+        {
+          "rule": "MDX052",
+          "name": "fence-blank-lines",
+          "severity": "warning",
+          "fixable": true,
+          "line": 4,
+          "column": 1,
+          "message": "Fenced code block starts directly after another block. Add a blank line before it."
+        },
+        {
+          "rule": "MDX052",
+          "name": "fence-blank-lines",
+          "severity": "warning",
+          "fixable": true,
+          "line": 6,
+          "column": 1,
+          "message": "Fenced code block ends directly before another block. Add a blank line after it."
+        }
+      ],
+      "fix": {
+        "text": "# T\n\n> text\n\n> ```js\n> x\n> ```\n\n> more\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "keep-encoding",
+      "options": {
+        "ignoreRules": [
+          "MDX001",
+          "MDX002"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX052",
+          "name": "fence-blank-lines",
+          "severity": "warning",
+          "fixable": true,
+          "line": 4,
+          "column": 1,
+          "message": "Fenced code block starts directly after another block. Add a blank line before it."
+        },
+        {
+          "rule": "MDX052",
+          "name": "fence-blank-lines",
+          "severity": "warning",
+          "fixable": true,
+          "line": 6,
+          "column": 1,
+          "message": "Fenced code block ends directly before another block. Add a blank line after it."
+        }
+      ],
+      "fix": {
+        "text": "# T\n\n> text\n\n> ```js\n> x\n> ```\n\n> more\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "headings-only",
+      "options": {
+        "rules": [
+          "MDX010",
+          "MDX011",
+          "MDX012",
+          "MDX013"
+        ]
+      },
+      "diagnose": [],
+      "fix": {
+        "text": "# T\n\n> text\n> ```js\n> x\n> ```\n> more\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    }
+  ]
+}

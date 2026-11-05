@@ -1,0 +1,155 @@
+{
+  "source": "rules/MDX031/trigger.md",
+  "referenceVersion": "1.0.0",
+  "cases": [
+    {
+      "name": "default",
+      "options": {},
+      "diagnose": [
+        {
+          "rule": "MDX031",
+          "name": "list-marker-style",
+          "severity": "warning",
+          "fixable": true,
+          "line": 4,
+          "column": 1,
+          "message": "List uses \"*\" but the first item in this list uses \"-\". Use one bullet marker per list."
+        },
+        {
+          "rule": "MDX031",
+          "name": "list-marker-style",
+          "severity": "warning",
+          "fixable": true,
+          "line": 5,
+          "column": 1,
+          "message": "List uses \"+\" but the first item in this list uses \"-\". Use one bullet marker per list."
+        }
+      ],
+      "fix": {
+        "text": "# 購物清單\n\n- 牛奶\n- 雞蛋\n- 麵包\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "snippet",
+      "options": {
+        "ignoreRules": [
+          "MDX003"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX031",
+          "name": "list-marker-style",
+          "severity": "warning",
+          "fixable": true,
+          "line": 4,
+          "column": 1,
+          "message": "List uses \"*\" but the first item in this list uses \"-\". Use one bullet marker per list."
+        },
+        {
+          "rule": "MDX031",
+          "name": "list-marker-style",
+          "severity": "warning",
+          "fixable": true,
+          "line": 5,
+          "column": 1,
+          "message": "List uses \"+\" but the first item in this list uses \"-\". Use one bullet marker per list."
+        }
+      ],
+      "fix": {
+        "text": "# 購物清單\n\n- 牛奶\n- 雞蛋\n- 麵包\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "line-length-80",
+      "options": {
+        "maxLineLength": 80
+      },
+      "diagnose": [
+        {
+          "rule": "MDX031",
+          "name": "list-marker-style",
+          "severity": "warning",
+          "fixable": true,
+          "line": 4,
+          "column": 1,
+          "message": "List uses \"*\" but the first item in this list uses \"-\". Use one bullet marker per list."
+        },
+        {
+          "rule": "MDX031",
+          "name": "list-marker-style",
+          "severity": "warning",
+          "fixable": true,
+          "line": 5,
+          "column": 1,
+          "message": "List uses \"+\" but the first item in this list uses \"-\". Use one bullet marker per list."
+        }
+      ],
+      "fix": {
+        "text": "# 購物清單\n\n- 牛奶\n- 雞蛋\n- 麵包\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "keep-encoding",
+      "options": {
+        "ignoreRules": [
+          "MDX001",
+          "MDX002"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX031",
+          "name": "list-marker-style",
+          "severity": "warning",
+          "fixable": true,
+          "line": 4,
+          "column": 1,
+          "message": "List uses \"*\" but the first item in this list uses \"-\". Use one bullet marker per list."
+        },
+        {
+          "rule": "MDX031",
+          "name": "list-marker-style",
+          "severity": "warning",
+          "fixable": true,
+          "line": 5,
+          "column": 1,
+          "message": "List uses \"+\" but the first item in this list uses \"-\". Use one bullet marker per list."
+        }
+      ],
+      "fix": {
+        "text": "# 購物清單\n\n- 牛奶\n- 雞蛋\n- 麵包\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "headings-only",
+      "options": {
+        "rules": [
+          "MDX010",
+          "MDX011",
+          "MDX012",
+          "MDX013"
+        ]
+      },
+      "diagnose": [],
+      "fix": {
+        "text": "# 購物清單\n\n- 牛奶\n* 雞蛋\n+ 麵包\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    }
+  ]
+}

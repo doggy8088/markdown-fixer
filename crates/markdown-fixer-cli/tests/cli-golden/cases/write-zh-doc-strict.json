@@ -1,0 +1,28 @@
+{
+  "name": "write-zh-doc-strict",
+  "args": [
+    "--write",
+    "--strict",
+    "--json",
+    "zh-doc.md"
+  ],
+  "cwd": "",
+  "nonRoot": false,
+  "setup": [
+    {
+      "path": "zh-doc.md",
+      "text": "# 會議記錄\n\n**日期：**2026-11-05\n**出席：** 王小明、李大華\n\n##討論事項\n1. 第一項\n2.第二項\n\n```\n沒有語言的程式碼\n```\n參考 [文件] 與 ![](image.png)。\n"
+    }
+  ],
+  "expected": {
+    "status": 1,
+    "stdout": "{\n  \"tool\": \"markdown-fixer\",\n  \"version\": \"<VERSION>\",\n  \"mode\": \"write\",\n  \"files\": [\n    {\n      \"path\": \"zh-doc.md\",\n      \"changed\": true,\n      \"wouldChange\": true,\n      \"refused\": false,\n      \"fixed\": 5,\n      \"wouldFix\": 5,\n      \"problems\": [\n        {\n          \"rule\": \"MDX050\",\n          \"name\": \"fence-language\",\n          \"severity\": \"info\",\n          \"fixable\": false,\n          \"line\": 10,\n          \"column\": 1,\n          \"message\": \"Fenced code block has no language. Add one when the language is known, for example ```js.\"\n        },\n        {\n          \"rule\": \"MDX071\",\n          \"name\": \"empty-link\",\n          \"severity\": \"warning\",\n          \"fixable\": false,\n          \"line\": 14,\n          \"column\": 11,\n          \"message\": \"Link or image has empty text or an empty destination.\"\n        },\n        {\n          \"rule\": \"MDX075\",\n          \"name\": \"image-alt\",\n          \"severity\": \"warning\",\n          \"fixable\": false,\n          \"line\": 14,\n          \"column\": 11,\n          \"message\": \"Image has no alt text. Add a short description, or confirm that an empty alt is correct for a decorative image.\"\n        }\n      ]\n    }\n  ],\n  \"summary\": {\n    \"files\": 1,\n    \"changed\": 1,\n    \"wouldChange\": 1,\n    \"fixed\": 5,\n    \"refused\": 0,\n    \"problems\": {\n      \"total\": 3,\n      \"errors\": 0,\n      \"warnings\": 2,\n      \"info\": 1,\n      \"fixable\": 0\n    }\n  }\n}\n",
+    "stderr": "",
+    "files": [
+      {
+        "path": "zh-doc.md",
+        "text": "# 會議記錄\n\n**日期**：2026-11-05\n**出席：** 王小明、李大華\n\n## 討論事項\n1. 第一項\n2. 第二項\n\n```\n沒有語言的程式碼\n```\n\n參考 [文件] 與 ![](image.png)。\n"
+      }
+    ]
+  }
+}

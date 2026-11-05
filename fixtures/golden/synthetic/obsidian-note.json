@@ -1,0 +1,453 @@
+{
+  "source": "synthetic/obsidian-note.md",
+  "referenceVersion": "1.0.0",
+  "cases": [
+    {
+      "name": "default",
+      "options": {},
+      "diagnose": [
+        {
+          "rule": "MDX019",
+          "name": "multiple-h1",
+          "severity": "info",
+          "fixable": false,
+          "line": 9,
+          "column": 1,
+          "message": "Document has more than one H1. Use H2 for subsections and keep one H1 for the page title."
+        },
+        {
+          "rule": "MDX010",
+          "name": "atx-missing-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 9,
+          "column": 2,
+          "message": "Add a space after the heading marker: \"# \" rather than \"#\"."
+        },
+        {
+          "rule": "MDX020",
+          "name": "blockquote-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 17,
+          "column": 1,
+          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
+        },
+        {
+          "rule": "MDX004",
+          "name": "trailing-whitespace",
+          "severity": "warning",
+          "fixable": true,
+          "line": 38,
+          "column": 6,
+          "message": "Trailing whitespace. Exactly two trailing spaces create a hard line break; other trailing whitespace is noise."
+        },
+        {
+          "rule": "MDX013",
+          "name": "heading-blank-lines",
+          "severity": "warning",
+          "fixable": true,
+          "line": 42,
+          "column": 1,
+          "message": "Heading is directly attached to the preceding paragraph. Add a blank line before it."
+        },
+        {
+          "rule": "MDX013",
+          "name": "heading-blank-lines",
+          "severity": "warning",
+          "fixable": true,
+          "line": 42,
+          "column": 1,
+          "message": "Heading is directly attached to the following paragraph. Add a blank line after it."
+        },
+        {
+          "rule": "MDX019",
+          "name": "multiple-h1",
+          "severity": "info",
+          "fixable": false,
+          "line": 42,
+          "column": 1,
+          "message": "Document has more than one H1. Use H2 for subsections and keep one H1 for the page title."
+        },
+        {
+          "rule": "MDX010",
+          "name": "atx-missing-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 42,
+          "column": 2,
+          "message": "Add a space after the heading marker: \"# \" rather than \"#\"."
+        },
+        {
+          "rule": "MDX070",
+          "name": "bare-url",
+          "severity": "info",
+          "fixable": false,
+          "line": 46,
+          "column": 18,
+          "message": "Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text."
+        }
+      ],
+      "fix": {
+        "text": "---\naliases: [Rust 所有權, ownership]\ntags: [rust, 學習筆記]\ncreated: 2026-08-20\n---\n\n# Rust 所有權筆記\n\n# rust #學習筆記\n\n相關筆記：[[Rust 借用規則]]、[[生命週期|Lifetime]]、[[Rust 智慧指標#Box]]\n\n> [!note] 核心觀念\n> 每個值都有一個擁有者（owner），擁有者離開作用域時，值就會被釋放。\n\n> [!warning]\n> 移動（move）之後，原本的變數就不能再用了。\n\n## 三條規則\n\n1. 每個值都有一個擁有者\n2. 同一時間只能有一個擁有者\n3. 擁有者離開作用域，值就被 drop\n\n## 範例\n\n```rust\nlet s1 = String::from(\"hello\");\nlet s2 = s1; // s1 被移動\n// println!(\"{}\", s1); // 編譯錯誤\n```\n\n![[ownership-diagram.png]]\n\n## 疑問\n- [ ] `Copy` 和 `Clone` 的差別？→ 見 [[Copy vs Clone]]\n- [x] 為什麼 `&str` 不用 move？\n- [ ]\n\n%%\n這段是 Obsidian 的註解，不會顯示在預覽裡。\n\n# TODO 補上 Rc 的例子\n\n%%\n\n## 參考\n- The Book 第 4 章 https://doc.rust-lang.org/book/ch04-00-understanding-ownership.html\n- ^block-ref-123\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "snippet",
+      "options": {
+        "ignoreRules": [
+          "MDX003"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX019",
+          "name": "multiple-h1",
+          "severity": "info",
+          "fixable": false,
+          "line": 9,
+          "column": 1,
+          "message": "Document has more than one H1. Use H2 for subsections and keep one H1 for the page title."
+        },
+        {
+          "rule": "MDX010",
+          "name": "atx-missing-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 9,
+          "column": 2,
+          "message": "Add a space after the heading marker: \"# \" rather than \"#\"."
+        },
+        {
+          "rule": "MDX020",
+          "name": "blockquote-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 17,
+          "column": 1,
+          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
+        },
+        {
+          "rule": "MDX004",
+          "name": "trailing-whitespace",
+          "severity": "warning",
+          "fixable": true,
+          "line": 38,
+          "column": 6,
+          "message": "Trailing whitespace. Exactly two trailing spaces create a hard line break; other trailing whitespace is noise."
+        },
+        {
+          "rule": "MDX013",
+          "name": "heading-blank-lines",
+          "severity": "warning",
+          "fixable": true,
+          "line": 42,
+          "column": 1,
+          "message": "Heading is directly attached to the preceding paragraph. Add a blank line before it."
+        },
+        {
+          "rule": "MDX013",
+          "name": "heading-blank-lines",
+          "severity": "warning",
+          "fixable": true,
+          "line": 42,
+          "column": 1,
+          "message": "Heading is directly attached to the following paragraph. Add a blank line after it."
+        },
+        {
+          "rule": "MDX019",
+          "name": "multiple-h1",
+          "severity": "info",
+          "fixable": false,
+          "line": 42,
+          "column": 1,
+          "message": "Document has more than one H1. Use H2 for subsections and keep one H1 for the page title."
+        },
+        {
+          "rule": "MDX010",
+          "name": "atx-missing-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 42,
+          "column": 2,
+          "message": "Add a space after the heading marker: \"# \" rather than \"#\"."
+        },
+        {
+          "rule": "MDX070",
+          "name": "bare-url",
+          "severity": "info",
+          "fixable": false,
+          "line": 46,
+          "column": 18,
+          "message": "Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text."
+        }
+      ],
+      "fix": {
+        "text": "---\naliases: [Rust 所有權, ownership]\ntags: [rust, 學習筆記]\ncreated: 2026-08-20\n---\n\n# Rust 所有權筆記\n\n# rust #學習筆記\n\n相關筆記：[[Rust 借用規則]]、[[生命週期|Lifetime]]、[[Rust 智慧指標#Box]]\n\n> [!note] 核心觀念\n> 每個值都有一個擁有者（owner），擁有者離開作用域時，值就會被釋放。\n\n> [!warning]\n> 移動（move）之後，原本的變數就不能再用了。\n\n## 三條規則\n\n1. 每個值都有一個擁有者\n2. 同一時間只能有一個擁有者\n3. 擁有者離開作用域，值就被 drop\n\n## 範例\n\n```rust\nlet s1 = String::from(\"hello\");\nlet s2 = s1; // s1 被移動\n// println!(\"{}\", s1); // 編譯錯誤\n```\n\n![[ownership-diagram.png]]\n\n## 疑問\n- [ ] `Copy` 和 `Clone` 的差別？→ 見 [[Copy vs Clone]]\n- [x] 為什麼 `&str` 不用 move？\n- [ ]\n\n%%\n這段是 Obsidian 的註解，不會顯示在預覽裡。\n\n# TODO 補上 Rc 的例子\n\n%%\n\n## 參考\n- The Book 第 4 章 https://doc.rust-lang.org/book/ch04-00-understanding-ownership.html\n- ^block-ref-123\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "line-length-80",
+      "options": {
+        "maxLineLength": 80
+      },
+      "diagnose": [
+        {
+          "rule": "MDX019",
+          "name": "multiple-h1",
+          "severity": "info",
+          "fixable": false,
+          "line": 9,
+          "column": 1,
+          "message": "Document has more than one H1. Use H2 for subsections and keep one H1 for the page title."
+        },
+        {
+          "rule": "MDX010",
+          "name": "atx-missing-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 9,
+          "column": 2,
+          "message": "Add a space after the heading marker: \"# \" rather than \"#\"."
+        },
+        {
+          "rule": "MDX020",
+          "name": "blockquote-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 17,
+          "column": 1,
+          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
+        },
+        {
+          "rule": "MDX004",
+          "name": "trailing-whitespace",
+          "severity": "warning",
+          "fixable": true,
+          "line": 38,
+          "column": 6,
+          "message": "Trailing whitespace. Exactly two trailing spaces create a hard line break; other trailing whitespace is noise."
+        },
+        {
+          "rule": "MDX013",
+          "name": "heading-blank-lines",
+          "severity": "warning",
+          "fixable": true,
+          "line": 42,
+          "column": 1,
+          "message": "Heading is directly attached to the preceding paragraph. Add a blank line before it."
+        },
+        {
+          "rule": "MDX013",
+          "name": "heading-blank-lines",
+          "severity": "warning",
+          "fixable": true,
+          "line": 42,
+          "column": 1,
+          "message": "Heading is directly attached to the following paragraph. Add a blank line after it."
+        },
+        {
+          "rule": "MDX019",
+          "name": "multiple-h1",
+          "severity": "info",
+          "fixable": false,
+          "line": 42,
+          "column": 1,
+          "message": "Document has more than one H1. Use H2 for subsections and keep one H1 for the page title."
+        },
+        {
+          "rule": "MDX010",
+          "name": "atx-missing-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 42,
+          "column": 2,
+          "message": "Add a space after the heading marker: \"# \" rather than \"#\"."
+        },
+        {
+          "rule": "MDX070",
+          "name": "bare-url",
+          "severity": "info",
+          "fixable": false,
+          "line": 46,
+          "column": 18,
+          "message": "Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text."
+        },
+        {
+          "rule": "MDX090",
+          "name": "line-length",
+          "severity": "info",
+          "fixable": false,
+          "line": 46,
+          "column": 81,
+          "message": "Line is 84 characters; limit is 80."
+        }
+      ],
+      "fix": {
+        "text": "---\naliases: [Rust 所有權, ownership]\ntags: [rust, 學習筆記]\ncreated: 2026-08-20\n---\n\n# Rust 所有權筆記\n\n# rust #學習筆記\n\n相關筆記：[[Rust 借用規則]]、[[生命週期|Lifetime]]、[[Rust 智慧指標#Box]]\n\n> [!note] 核心觀念\n> 每個值都有一個擁有者（owner），擁有者離開作用域時，值就會被釋放。\n\n> [!warning]\n> 移動（move）之後，原本的變數就不能再用了。\n\n## 三條規則\n\n1. 每個值都有一個擁有者\n2. 同一時間只能有一個擁有者\n3. 擁有者離開作用域，值就被 drop\n\n## 範例\n\n```rust\nlet s1 = String::from(\"hello\");\nlet s2 = s1; // s1 被移動\n// println!(\"{}\", s1); // 編譯錯誤\n```\n\n![[ownership-diagram.png]]\n\n## 疑問\n- [ ] `Copy` 和 `Clone` 的差別？→ 見 [[Copy vs Clone]]\n- [x] 為什麼 `&str` 不用 move？\n- [ ]\n\n%%\n這段是 Obsidian 的註解，不會顯示在預覽裡。\n\n# TODO 補上 Rc 的例子\n\n%%\n\n## 參考\n- The Book 第 4 章 https://doc.rust-lang.org/book/ch04-00-understanding-ownership.html\n- ^block-ref-123\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "keep-encoding",
+      "options": {
+        "ignoreRules": [
+          "MDX001",
+          "MDX002"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX019",
+          "name": "multiple-h1",
+          "severity": "info",
+          "fixable": false,
+          "line": 9,
+          "column": 1,
+          "message": "Document has more than one H1. Use H2 for subsections and keep one H1 for the page title."
+        },
+        {
+          "rule": "MDX010",
+          "name": "atx-missing-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 9,
+          "column": 2,
+          "message": "Add a space after the heading marker: \"# \" rather than \"#\"."
+        },
+        {
+          "rule": "MDX020",
+          "name": "blockquote-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 17,
+          "column": 1,
+          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
+        },
+        {
+          "rule": "MDX004",
+          "name": "trailing-whitespace",
+          "severity": "warning",
+          "fixable": true,
+          "line": 38,
+          "column": 6,
+          "message": "Trailing whitespace. Exactly two trailing spaces create a hard line break; other trailing whitespace is noise."
+        },
+        {
+          "rule": "MDX013",
+          "name": "heading-blank-lines",
+          "severity": "warning",
+          "fixable": true,
+          "line": 42,
+          "column": 1,
+          "message": "Heading is directly attached to the preceding paragraph. Add a blank line before it."
+        },
+        {
+          "rule": "MDX013",
+          "name": "heading-blank-lines",
+          "severity": "warning",
+          "fixable": true,
+          "line": 42,
+          "column": 1,
+          "message": "Heading is directly attached to the following paragraph. Add a blank line after it."
+        },
+        {
+          "rule": "MDX019",
+          "name": "multiple-h1",
+          "severity": "info",
+          "fixable": false,
+          "line": 42,
+          "column": 1,
+          "message": "Document has more than one H1. Use H2 for subsections and keep one H1 for the page title."
+        },
+        {
+          "rule": "MDX010",
+          "name": "atx-missing-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 42,
+          "column": 2,
+          "message": "Add a space after the heading marker: \"# \" rather than \"#\"."
+        },
+        {
+          "rule": "MDX070",
+          "name": "bare-url",
+          "severity": "info",
+          "fixable": false,
+          "line": 46,
+          "column": 18,
+          "message": "Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text."
+        }
+      ],
+      "fix": {
+        "text": "---\naliases: [Rust 所有權, ownership]\ntags: [rust, 學習筆記]\ncreated: 2026-08-20\n---\n\n# Rust 所有權筆記\n\n# rust #學習筆記\n\n相關筆記：[[Rust 借用規則]]、[[生命週期|Lifetime]]、[[Rust 智慧指標#Box]]\n\n> [!note] 核心觀念\n> 每個值都有一個擁有者（owner），擁有者離開作用域時，值就會被釋放。\n\n> [!warning]\n> 移動（move）之後，原本的變數就不能再用了。\n\n## 三條規則\n\n1. 每個值都有一個擁有者\n2. 同一時間只能有一個擁有者\n3. 擁有者離開作用域，值就被 drop\n\n## 範例\n\n```rust\nlet s1 = String::from(\"hello\");\nlet s2 = s1; // s1 被移動\n// println!(\"{}\", s1); // 編譯錯誤\n```\n\n![[ownership-diagram.png]]\n\n## 疑問\n- [ ] `Copy` 和 `Clone` 的差別？→ 見 [[Copy vs Clone]]\n- [x] 為什麼 `&str` 不用 move？\n- [ ]\n\n%%\n這段是 Obsidian 的註解，不會顯示在預覽裡。\n\n# TODO 補上 Rc 的例子\n\n%%\n\n## 參考\n- The Book 第 4 章 https://doc.rust-lang.org/book/ch04-00-understanding-ownership.html\n- ^block-ref-123\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "headings-only",
+      "options": {
+        "rules": [
+          "MDX010",
+          "MDX011",
+          "MDX012",
+          "MDX013"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX010",
+          "name": "atx-missing-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 9,
+          "column": 2,
+          "message": "Add a space after the heading marker: \"# \" rather than \"#\"."
+        },
+        {
+          "rule": "MDX013",
+          "name": "heading-blank-lines",
+          "severity": "warning",
+          "fixable": true,
+          "line": 42,
+          "column": 1,
+          "message": "Heading is directly attached to the preceding paragraph. Add a blank line before it."
+        },
+        {
+          "rule": "MDX013",
+          "name": "heading-blank-lines",
+          "severity": "warning",
+          "fixable": true,
+          "line": 42,
+          "column": 1,
+          "message": "Heading is directly attached to the following paragraph. Add a blank line after it."
+        },
+        {
+          "rule": "MDX010",
+          "name": "atx-missing-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 42,
+          "column": 2,
+          "message": "Add a space after the heading marker: \"# \" rather than \"#\"."
+        }
+      ],
+      "fix": {
+        "text": "---\naliases: [Rust 所有權, ownership]\ntags: [rust, 學習筆記]\ncreated: 2026-08-20\n---\n\n# Rust 所有權筆記\n\n# rust #學習筆記\n\n相關筆記：[[Rust 借用規則]]、[[生命週期|Lifetime]]、[[Rust 智慧指標#Box]]\n\n> [!note] 核心觀念\n> 每個值都有一個擁有者（owner），擁有者離開作用域時，值就會被釋放。\n\n> [!warning]\n>移動（move）之後，原本的變數就不能再用了。\n\n## 三條規則\n\n1. 每個值都有一個擁有者\n2. 同一時間只能有一個擁有者\n3. 擁有者離開作用域，值就被 drop\n\n## 範例\n\n```rust\nlet s1 = String::from(\"hello\");\nlet s2 = s1; // s1 被移動\n// println!(\"{}\", s1); // 編譯錯誤\n```\n\n![[ownership-diagram.png]]\n\n## 疑問\n- [ ] `Copy` 和 `Clone` 的差別？→ 見 [[Copy vs Clone]]\n- [x] 為什麼 `&str` 不用 move？\n- [ ] \n\n%%\n這段是 Obsidian 的註解，不會顯示在預覽裡。\n\n# TODO 補上 Rc 的例子\n\n%%\n\n## 參考\n- The Book 第 4 章 https://doc.rust-lang.org/book/ch04-00-understanding-ownership.html\n- ^block-ref-123\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    }
+  ]
+}

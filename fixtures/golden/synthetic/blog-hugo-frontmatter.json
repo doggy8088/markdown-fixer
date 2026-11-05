@@ -1,0 +1,236 @@
+{
+  "source": "synthetic/blog-hugo-frontmatter.md",
+  "referenceVersion": "1.0.0",
+  "cases": [
+    {
+      "name": "default",
+      "options": {},
+      "diagnose": [
+        {
+          "rule": "MDX082",
+          "name": "frontmatter-blank-line",
+          "severity": "warning",
+          "fixable": true,
+          "line": 9,
+          "column": 1,
+          "message": "Frontmatter must be followed by a blank line."
+        },
+        {
+          "rule": "MDX017",
+          "name": "heading-trailing-punctuation",
+          "severity": "info",
+          "fixable": false,
+          "line": 13,
+          "column": 1,
+          "message": "Heading ends with sentence punctuation. Headings usually read better without a trailing period, colon, or similar mark."
+        },
+        {
+          "rule": "MDX018",
+          "name": "first-heading-h1",
+          "severity": "info",
+          "fixable": false,
+          "line": 13,
+          "column": 1,
+          "message": "The first heading is not an H1. Start the outline with one H1 unless the document intentionally starts in a section."
+        },
+        {
+          "rule": "MDX032",
+          "name": "list-blank-lines",
+          "severity": "warning",
+          "fixable": false,
+          "line": 16,
+          "column": 1,
+          "message": "List starts directly after a paragraph. Add a blank line before it so the list boundary is unambiguous."
+        }
+      ],
+      "fix": {
+        "text": "---\ntitle: \"我如何把部落格從 WordPress 搬到 Hugo\"\ndate: 2026-09-12T21:30:00+08:00\ndraft: false\ntags: [\"hugo\", \"部落格\", \"靜態網站\"]\ncategories: [\"技術筆記\"]\nsummary: \"#搬家 心得與踩過的坑\"\n---\n\n搬家這件事拖了三年，這次終於下定決心。這篇文章記錄整個過程，以及幾個 Hugo 新手很容易踩到的坑。\n\n<!--more-->\n\n## 為什麼離開 WordPress？\n\n說穿了只有三個原因：\n- 主機費用每年漲\n- 外掛更新常常把網站弄壞\n- 我想用 Markdown 寫文章，不想再用區塊編輯器\n\n## 匯出舊文章\n\n我用 [wordpress-export-to-markdown](https://github.com/lonekorean/wordpress-export-to-markdown) 這個工具，一次把 300 多篇文章轉成 Markdown。轉完之後，問題才開始：\n\n1. 圖片路徑全部是絕對網址\n2. 程式碼區塊變成 `<pre>` 標籤\n3. 很多文章開頭多了空行\n\n### 圖片路徑\n\n用一行 `sed` 解決：\n\n```bash\nfind content/posts -name '*.md' -exec sed -i '' 's#https://old.example.com/wp-content/uploads#/images#g' {} +\n```\n\n### shortcode\n\nHugo 的 shortcode 長這樣，記得放在 code block 裡才不會被渲染：\n\n```go-html-template\n{{</* figure src=\"/images/cover.png\" title=\"封面\" */>}}\n```\n\n文章內直接使用：\n\n{{< figure src=\"/images/hugo-logo.png\" title=\"Hugo\" >}}\n\n## 設定 `config.toml`\n\n```toml\nbaseURL = \"https://blog.example.com/\"\nlanguageCode = \"zh-tw\"\ntitle = \"保哥的技術筆記\"\ntheme = \"PaperMod\"\n\n[params]\n  ShowReadingTime = true\n```\n\n## 結論\n\n整體來說搬家很值得，網站速度從 2.8 秒降到 0.4 秒 ！如果你也在考慮，可以先從**匯出一小部分文章**開始試。\n\n有問題歡迎在下方留言，或寄信到 blog@example.com。\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "snippet",
+      "options": {
+        "ignoreRules": [
+          "MDX003"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX082",
+          "name": "frontmatter-blank-line",
+          "severity": "warning",
+          "fixable": true,
+          "line": 9,
+          "column": 1,
+          "message": "Frontmatter must be followed by a blank line."
+        },
+        {
+          "rule": "MDX017",
+          "name": "heading-trailing-punctuation",
+          "severity": "info",
+          "fixable": false,
+          "line": 13,
+          "column": 1,
+          "message": "Heading ends with sentence punctuation. Headings usually read better without a trailing period, colon, or similar mark."
+        },
+        {
+          "rule": "MDX018",
+          "name": "first-heading-h1",
+          "severity": "info",
+          "fixable": false,
+          "line": 13,
+          "column": 1,
+          "message": "The first heading is not an H1. Start the outline with one H1 unless the document intentionally starts in a section."
+        },
+        {
+          "rule": "MDX032",
+          "name": "list-blank-lines",
+          "severity": "warning",
+          "fixable": false,
+          "line": 16,
+          "column": 1,
+          "message": "List starts directly after a paragraph. Add a blank line before it so the list boundary is unambiguous."
+        }
+      ],
+      "fix": {
+        "text": "---\ntitle: \"我如何把部落格從 WordPress 搬到 Hugo\"\ndate: 2026-09-12T21:30:00+08:00\ndraft: false\ntags: [\"hugo\", \"部落格\", \"靜態網站\"]\ncategories: [\"技術筆記\"]\nsummary: \"#搬家 心得與踩過的坑\"\n---\n\n搬家這件事拖了三年，這次終於下定決心。這篇文章記錄整個過程，以及幾個 Hugo 新手很容易踩到的坑。\n\n<!--more-->\n\n## 為什麼離開 WordPress？\n\n說穿了只有三個原因：\n- 主機費用每年漲\n- 外掛更新常常把網站弄壞\n- 我想用 Markdown 寫文章，不想再用區塊編輯器\n\n## 匯出舊文章\n\n我用 [wordpress-export-to-markdown](https://github.com/lonekorean/wordpress-export-to-markdown) 這個工具，一次把 300 多篇文章轉成 Markdown。轉完之後，問題才開始：\n\n1. 圖片路徑全部是絕對網址\n2. 程式碼區塊變成 `<pre>` 標籤\n3. 很多文章開頭多了空行\n\n### 圖片路徑\n\n用一行 `sed` 解決：\n\n```bash\nfind content/posts -name '*.md' -exec sed -i '' 's#https://old.example.com/wp-content/uploads#/images#g' {} +\n```\n\n### shortcode\n\nHugo 的 shortcode 長這樣，記得放在 code block 裡才不會被渲染：\n\n```go-html-template\n{{</* figure src=\"/images/cover.png\" title=\"封面\" */>}}\n```\n\n文章內直接使用：\n\n{{< figure src=\"/images/hugo-logo.png\" title=\"Hugo\" >}}\n\n## 設定 `config.toml`\n\n```toml\nbaseURL = \"https://blog.example.com/\"\nlanguageCode = \"zh-tw\"\ntitle = \"保哥的技術筆記\"\ntheme = \"PaperMod\"\n\n[params]\n  ShowReadingTime = true\n```\n\n## 結論\n\n整體來說搬家很值得，網站速度從 2.8 秒降到 0.4 秒 ！如果你也在考慮，可以先從**匯出一小部分文章**開始試。\n\n有問題歡迎在下方留言，或寄信到 blog@example.com。\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "line-length-80",
+      "options": {
+        "maxLineLength": 80
+      },
+      "diagnose": [
+        {
+          "rule": "MDX082",
+          "name": "frontmatter-blank-line",
+          "severity": "warning",
+          "fixable": true,
+          "line": 9,
+          "column": 1,
+          "message": "Frontmatter must be followed by a blank line."
+        },
+        {
+          "rule": "MDX017",
+          "name": "heading-trailing-punctuation",
+          "severity": "info",
+          "fixable": false,
+          "line": 13,
+          "column": 1,
+          "message": "Heading ends with sentence punctuation. Headings usually read better without a trailing period, colon, or similar mark."
+        },
+        {
+          "rule": "MDX018",
+          "name": "first-heading-h1",
+          "severity": "info",
+          "fixable": false,
+          "line": 13,
+          "column": 1,
+          "message": "The first heading is not an H1. Start the outline with one H1 unless the document intentionally starts in a section."
+        },
+        {
+          "rule": "MDX032",
+          "name": "list-blank-lines",
+          "severity": "warning",
+          "fixable": false,
+          "line": 16,
+          "column": 1,
+          "message": "List starts directly after a paragraph. Add a blank line before it so the list boundary is unambiguous."
+        },
+        {
+          "rule": "MDX090",
+          "name": "line-length",
+          "severity": "info",
+          "fixable": false,
+          "line": 22,
+          "column": 81,
+          "message": "Line is 134 characters; limit is 80."
+        }
+      ],
+      "fix": {
+        "text": "---\ntitle: \"我如何把部落格從 WordPress 搬到 Hugo\"\ndate: 2026-09-12T21:30:00+08:00\ndraft: false\ntags: [\"hugo\", \"部落格\", \"靜態網站\"]\ncategories: [\"技術筆記\"]\nsummary: \"#搬家 心得與踩過的坑\"\n---\n\n搬家這件事拖了三年，這次終於下定決心。這篇文章記錄整個過程，以及幾個 Hugo 新手很容易踩到的坑。\n\n<!--more-->\n\n## 為什麼離開 WordPress？\n\n說穿了只有三個原因：\n- 主機費用每年漲\n- 外掛更新常常把網站弄壞\n- 我想用 Markdown 寫文章，不想再用區塊編輯器\n\n## 匯出舊文章\n\n我用 [wordpress-export-to-markdown](https://github.com/lonekorean/wordpress-export-to-markdown) 這個工具，一次把 300 多篇文章轉成 Markdown。轉完之後，問題才開始：\n\n1. 圖片路徑全部是絕對網址\n2. 程式碼區塊變成 `<pre>` 標籤\n3. 很多文章開頭多了空行\n\n### 圖片路徑\n\n用一行 `sed` 解決：\n\n```bash\nfind content/posts -name '*.md' -exec sed -i '' 's#https://old.example.com/wp-content/uploads#/images#g' {} +\n```\n\n### shortcode\n\nHugo 的 shortcode 長這樣，記得放在 code block 裡才不會被渲染：\n\n```go-html-template\n{{</* figure src=\"/images/cover.png\" title=\"封面\" */>}}\n```\n\n文章內直接使用：\n\n{{< figure src=\"/images/hugo-logo.png\" title=\"Hugo\" >}}\n\n## 設定 `config.toml`\n\n```toml\nbaseURL = \"https://blog.example.com/\"\nlanguageCode = \"zh-tw\"\ntitle = \"保哥的技術筆記\"\ntheme = \"PaperMod\"\n\n[params]\n  ShowReadingTime = true\n```\n\n## 結論\n\n整體來說搬家很值得，網站速度從 2.8 秒降到 0.4 秒 ！如果你也在考慮，可以先從**匯出一小部分文章**開始試。\n\n有問題歡迎在下方留言，或寄信到 blog@example.com。\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "keep-encoding",
+      "options": {
+        "ignoreRules": [
+          "MDX001",
+          "MDX002"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX082",
+          "name": "frontmatter-blank-line",
+          "severity": "warning",
+          "fixable": true,
+          "line": 9,
+          "column": 1,
+          "message": "Frontmatter must be followed by a blank line."
+        },
+        {
+          "rule": "MDX017",
+          "name": "heading-trailing-punctuation",
+          "severity": "info",
+          "fixable": false,
+          "line": 13,
+          "column": 1,
+          "message": "Heading ends with sentence punctuation. Headings usually read better without a trailing period, colon, or similar mark."
+        },
+        {
+          "rule": "MDX018",
+          "name": "first-heading-h1",
+          "severity": "info",
+          "fixable": false,
+          "line": 13,
+          "column": 1,
+          "message": "The first heading is not an H1. Start the outline with one H1 unless the document intentionally starts in a section."
+        },
+        {
+          "rule": "MDX032",
+          "name": "list-blank-lines",
+          "severity": "warning",
+          "fixable": false,
+          "line": 16,
+          "column": 1,
+          "message": "List starts directly after a paragraph. Add a blank line before it so the list boundary is unambiguous."
+        }
+      ],
+      "fix": {
+        "text": "---\ntitle: \"我如何把部落格從 WordPress 搬到 Hugo\"\ndate: 2026-09-12T21:30:00+08:00\ndraft: false\ntags: [\"hugo\", \"部落格\", \"靜態網站\"]\ncategories: [\"技術筆記\"]\nsummary: \"#搬家 心得與踩過的坑\"\n---\n\n搬家這件事拖了三年，這次終於下定決心。這篇文章記錄整個過程，以及幾個 Hugo 新手很容易踩到的坑。\n\n<!--more-->\n\n## 為什麼離開 WordPress？\n\n說穿了只有三個原因：\n- 主機費用每年漲\n- 外掛更新常常把網站弄壞\n- 我想用 Markdown 寫文章，不想再用區塊編輯器\n\n## 匯出舊文章\n\n我用 [wordpress-export-to-markdown](https://github.com/lonekorean/wordpress-export-to-markdown) 這個工具，一次把 300 多篇文章轉成 Markdown。轉完之後，問題才開始：\n\n1. 圖片路徑全部是絕對網址\n2. 程式碼區塊變成 `<pre>` 標籤\n3. 很多文章開頭多了空行\n\n### 圖片路徑\n\n用一行 `sed` 解決：\n\n```bash\nfind content/posts -name '*.md' -exec sed -i '' 's#https://old.example.com/wp-content/uploads#/images#g' {} +\n```\n\n### shortcode\n\nHugo 的 shortcode 長這樣，記得放在 code block 裡才不會被渲染：\n\n```go-html-template\n{{</* figure src=\"/images/cover.png\" title=\"封面\" */>}}\n```\n\n文章內直接使用：\n\n{{< figure src=\"/images/hugo-logo.png\" title=\"Hugo\" >}}\n\n## 設定 `config.toml`\n\n```toml\nbaseURL = \"https://blog.example.com/\"\nlanguageCode = \"zh-tw\"\ntitle = \"保哥的技術筆記\"\ntheme = \"PaperMod\"\n\n[params]\n  ShowReadingTime = true\n```\n\n## 結論\n\n整體來說搬家很值得，網站速度從 2.8 秒降到 0.4 秒 ！如果你也在考慮，可以先從**匯出一小部分文章**開始試。\n\n有問題歡迎在下方留言，或寄信到 blog@example.com。\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "headings-only",
+      "options": {
+        "rules": [
+          "MDX010",
+          "MDX011",
+          "MDX012",
+          "MDX013"
+        ]
+      },
+      "diagnose": [],
+      "fix": {
+        "text": "---\ntitle: \"我如何把部落格從 WordPress 搬到 Hugo\"\ndate: 2026-09-12T21:30:00+08:00\ndraft: false\ntags: [\"hugo\", \"部落格\", \"靜態網站\"]\ncategories: [\"技術筆記\"]\nsummary: \"#搬家 心得與踩過的坑\"\n---\n搬家這件事拖了三年，這次終於下定決心。這篇文章記錄整個過程，以及幾個 Hugo 新手很容易踩到的坑。\n\n<!--more-->\n\n## 為什麼離開 WordPress？\n\n說穿了只有三個原因：\n- 主機費用每年漲\n- 外掛更新常常把網站弄壞\n- 我想用 Markdown 寫文章，不想再用區塊編輯器\n\n## 匯出舊文章\n\n我用 [wordpress-export-to-markdown](https://github.com/lonekorean/wordpress-export-to-markdown) 這個工具，一次把 300 多篇文章轉成 Markdown。轉完之後，問題才開始：\n\n1. 圖片路徑全部是絕對網址\n2. 程式碼區塊變成 `<pre>` 標籤\n3. 很多文章開頭多了空行\n\n### 圖片路徑\n\n用一行 `sed` 解決：\n\n```bash\nfind content/posts -name '*.md' -exec sed -i '' 's#https://old.example.com/wp-content/uploads#/images#g' {} +\n```\n\n### shortcode\n\nHugo 的 shortcode 長這樣，記得放在 code block 裡才不會被渲染：\n\n```go-html-template\n{{</* figure src=\"/images/cover.png\" title=\"封面\" */>}}\n```\n\n文章內直接使用：\n\n{{< figure src=\"/images/hugo-logo.png\" title=\"Hugo\" >}}\n\n## 設定 `config.toml`\n\n```toml\nbaseURL = \"https://blog.example.com/\"\nlanguageCode = \"zh-tw\"\ntitle = \"保哥的技術筆記\"\ntheme = \"PaperMod\"\n\n[params]\n  ShowReadingTime = true\n```\n\n## 結論\n\n整體來說搬家很值得，網站速度從 2.8 秒降到 0.4 秒 ！如果你也在考慮，可以先從**匯出一小部分文章**開始試。\n\n有問題歡迎在下方留言，或寄信到 blog@example.com。\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    }
+  ]
+}

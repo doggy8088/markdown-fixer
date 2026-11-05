@@ -1,0 +1,30 @@
+{
+  "name": "symlink-write",
+  "args": [
+    "--write",
+    "link.md"
+  ],
+  "cwd": "",
+  "nonRoot": false,
+  "setup": [
+    {
+      "path": "target.md",
+      "text": "#Title\n"
+    },
+    {
+      "path": "link.md",
+      "symlink": "target.md"
+    }
+  ],
+  "expected": {
+    "status": 0,
+    "stdout": "link.md\n  No problems.\n  Fixed 1 issue(s).\n\nFixed 1 issue(s) in 1 file(s).\nNo remaining Markdown issues.\n",
+    "stderr": "",
+    "files": [
+      {
+        "path": "target.md",
+        "text": "# Title\n"
+      }
+    ]
+  }
+}

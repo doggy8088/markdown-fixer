@@ -1,0 +1,227 @@
+{
+  "source": "edge/blocking-quoted-fence-invalid.md",
+  "referenceVersion": "1.0.0",
+  "cases": [
+    {
+      "name": "default",
+      "options": {},
+      "diagnose": [
+        {
+          "rule": "MDX053",
+          "name": "fence-invalid",
+          "severity": "error",
+          "fixable": false,
+          "line": 3,
+          "column": 1,
+          "message": "Invalid fenced-code opener: a backtick fence info string cannot contain backticks."
+        },
+        {
+          "rule": "MDX050",
+          "name": "fence-language",
+          "severity": "info",
+          "fixable": false,
+          "line": 5,
+          "column": 1,
+          "message": "Fenced code block has no language. Add one when the language is known, for example ```js."
+        },
+        {
+          "rule": "MDX051",
+          "name": "fence-unclosed",
+          "severity": "error",
+          "fixable": false,
+          "line": 5,
+          "column": 1,
+          "message": "Unclosed backtick code fence."
+        },
+        {
+          "rule": "MDX052",
+          "name": "fence-blank-lines",
+          "severity": "warning",
+          "fixable": true,
+          "line": 5,
+          "column": 1,
+          "message": "Fenced code block starts directly after another block. Add a blank line before it."
+        }
+      ],
+      "fix": {
+        "text": "# 範例\n\n> ```js`bad\n> code\n> ```\n",
+        "changed": false,
+        "refused": true,
+        "reason": "Invalid fenced-code opener: a backtick fence info string cannot contain backticks."
+      }
+    },
+    {
+      "name": "snippet",
+      "options": {
+        "ignoreRules": [
+          "MDX003"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX053",
+          "name": "fence-invalid",
+          "severity": "error",
+          "fixable": false,
+          "line": 3,
+          "column": 1,
+          "message": "Invalid fenced-code opener: a backtick fence info string cannot contain backticks."
+        },
+        {
+          "rule": "MDX050",
+          "name": "fence-language",
+          "severity": "info",
+          "fixable": false,
+          "line": 5,
+          "column": 1,
+          "message": "Fenced code block has no language. Add one when the language is known, for example ```js."
+        },
+        {
+          "rule": "MDX051",
+          "name": "fence-unclosed",
+          "severity": "error",
+          "fixable": false,
+          "line": 5,
+          "column": 1,
+          "message": "Unclosed backtick code fence."
+        },
+        {
+          "rule": "MDX052",
+          "name": "fence-blank-lines",
+          "severity": "warning",
+          "fixable": true,
+          "line": 5,
+          "column": 1,
+          "message": "Fenced code block starts directly after another block. Add a blank line before it."
+        }
+      ],
+      "fix": {
+        "text": "# 範例\n\n> ```js`bad\n> code\n> ```\n",
+        "changed": false,
+        "refused": true,
+        "reason": "Invalid fenced-code opener: a backtick fence info string cannot contain backticks."
+      }
+    },
+    {
+      "name": "line-length-80",
+      "options": {
+        "maxLineLength": 80
+      },
+      "diagnose": [
+        {
+          "rule": "MDX053",
+          "name": "fence-invalid",
+          "severity": "error",
+          "fixable": false,
+          "line": 3,
+          "column": 1,
+          "message": "Invalid fenced-code opener: a backtick fence info string cannot contain backticks."
+        },
+        {
+          "rule": "MDX050",
+          "name": "fence-language",
+          "severity": "info",
+          "fixable": false,
+          "line": 5,
+          "column": 1,
+          "message": "Fenced code block has no language. Add one when the language is known, for example ```js."
+        },
+        {
+          "rule": "MDX051",
+          "name": "fence-unclosed",
+          "severity": "error",
+          "fixable": false,
+          "line": 5,
+          "column": 1,
+          "message": "Unclosed backtick code fence."
+        },
+        {
+          "rule": "MDX052",
+          "name": "fence-blank-lines",
+          "severity": "warning",
+          "fixable": true,
+          "line": 5,
+          "column": 1,
+          "message": "Fenced code block starts directly after another block. Add a blank line before it."
+        }
+      ],
+      "fix": {
+        "text": "# 範例\n\n> ```js`bad\n> code\n> ```\n",
+        "changed": false,
+        "refused": true,
+        "reason": "Invalid fenced-code opener: a backtick fence info string cannot contain backticks."
+      }
+    },
+    {
+      "name": "keep-encoding",
+      "options": {
+        "ignoreRules": [
+          "MDX001",
+          "MDX002"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX053",
+          "name": "fence-invalid",
+          "severity": "error",
+          "fixable": false,
+          "line": 3,
+          "column": 1,
+          "message": "Invalid fenced-code opener: a backtick fence info string cannot contain backticks."
+        },
+        {
+          "rule": "MDX050",
+          "name": "fence-language",
+          "severity": "info",
+          "fixable": false,
+          "line": 5,
+          "column": 1,
+          "message": "Fenced code block has no language. Add one when the language is known, for example ```js."
+        },
+        {
+          "rule": "MDX051",
+          "name": "fence-unclosed",
+          "severity": "error",
+          "fixable": false,
+          "line": 5,
+          "column": 1,
+          "message": "Unclosed backtick code fence."
+        },
+        {
+          "rule": "MDX052",
+          "name": "fence-blank-lines",
+          "severity": "warning",
+          "fixable": true,
+          "line": 5,
+          "column": 1,
+          "message": "Fenced code block starts directly after another block. Add a blank line before it."
+        }
+      ],
+      "fix": {
+        "text": "# 範例\n\n> ```js`bad\n> code\n> ```\n",
+        "changed": false,
+        "refused": true,
+        "reason": "Invalid fenced-code opener: a backtick fence info string cannot contain backticks."
+      }
+    },
+    {
+      "name": "headings-only",
+      "options": {
+        "rules": [
+          "MDX010",
+          "MDX011",
+          "MDX012",
+          "MDX013"
+        ]
+      },
+      "diagnose": [],
+      "fix": {
+        "text": "# 範例\n\n> ```js`bad\n> code\n> ```\n",
+        "changed": false,
+        "refused": true,
+        "reason": "Invalid fenced-code opener: a backtick fence info string cannot contain backticks."
+      }
+    }
+  ]
+}

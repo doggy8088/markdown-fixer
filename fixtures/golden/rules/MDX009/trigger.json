@@ -1,0 +1,155 @@
+{
+  "source": "rules/MDX009/trigger.md",
+  "referenceVersion": "1.0.0",
+  "cases": [
+    {
+      "name": "default",
+      "options": {},
+      "diagnose": [
+        {
+          "rule": "MDX009",
+          "name": "zero-width-character",
+          "severity": "warning",
+          "fixable": false,
+          "line": 3,
+          "column": 5,
+          "message": "Zero-width character found. Remove it unless it is intentional (for example, a line-break opportunity in some scripts)."
+        },
+        {
+          "rule": "MDX009",
+          "name": "zero-width-character",
+          "severity": "warning",
+          "fixable": false,
+          "line": 5,
+          "column": 11,
+          "message": "Zero-width character found. Remove it unless it is intentional (for example, a line-break opportunity in some scripts)."
+        }
+      ],
+      "fix": {
+        "text": "# 零寬字元\n\n這段文字\u200B中間藏了零寬空白。\n\n檔案中段的 BOM：\uFEFF標記。\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "snippet",
+      "options": {
+        "ignoreRules": [
+          "MDX003"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX009",
+          "name": "zero-width-character",
+          "severity": "warning",
+          "fixable": false,
+          "line": 3,
+          "column": 5,
+          "message": "Zero-width character found. Remove it unless it is intentional (for example, a line-break opportunity in some scripts)."
+        },
+        {
+          "rule": "MDX009",
+          "name": "zero-width-character",
+          "severity": "warning",
+          "fixable": false,
+          "line": 5,
+          "column": 11,
+          "message": "Zero-width character found. Remove it unless it is intentional (for example, a line-break opportunity in some scripts)."
+        }
+      ],
+      "fix": {
+        "text": "# 零寬字元\n\n這段文字\u200B中間藏了零寬空白。\n\n檔案中段的 BOM：\uFEFF標記。\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "line-length-80",
+      "options": {
+        "maxLineLength": 80
+      },
+      "diagnose": [
+        {
+          "rule": "MDX009",
+          "name": "zero-width-character",
+          "severity": "warning",
+          "fixable": false,
+          "line": 3,
+          "column": 5,
+          "message": "Zero-width character found. Remove it unless it is intentional (for example, a line-break opportunity in some scripts)."
+        },
+        {
+          "rule": "MDX009",
+          "name": "zero-width-character",
+          "severity": "warning",
+          "fixable": false,
+          "line": 5,
+          "column": 11,
+          "message": "Zero-width character found. Remove it unless it is intentional (for example, a line-break opportunity in some scripts)."
+        }
+      ],
+      "fix": {
+        "text": "# 零寬字元\n\n這段文字\u200B中間藏了零寬空白。\n\n檔案中段的 BOM：\uFEFF標記。\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "keep-encoding",
+      "options": {
+        "ignoreRules": [
+          "MDX001",
+          "MDX002"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX009",
+          "name": "zero-width-character",
+          "severity": "warning",
+          "fixable": false,
+          "line": 3,
+          "column": 5,
+          "message": "Zero-width character found. Remove it unless it is intentional (for example, a line-break opportunity in some scripts)."
+        },
+        {
+          "rule": "MDX009",
+          "name": "zero-width-character",
+          "severity": "warning",
+          "fixable": false,
+          "line": 5,
+          "column": 11,
+          "message": "Zero-width character found. Remove it unless it is intentional (for example, a line-break opportunity in some scripts)."
+        }
+      ],
+      "fix": {
+        "text": "# 零寬字元\n\n這段文字\u200B中間藏了零寬空白。\n\n檔案中段的 BOM：\uFEFF標記。\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "headings-only",
+      "options": {
+        "rules": [
+          "MDX010",
+          "MDX011",
+          "MDX012",
+          "MDX013"
+        ]
+      },
+      "diagnose": [],
+      "fix": {
+        "text": "# 零寬字元\n\n這段文字\u200B中間藏了零寬空白。\n\n檔案中段的 BOM：\uFEFF標記。\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    }
+  ]
+}

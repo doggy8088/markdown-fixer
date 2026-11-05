@@ -1,0 +1,27 @@
+{
+  "name": "max-line-length",
+  "args": [
+    "--max-line-length=40",
+    "--json",
+    "long.md"
+  ],
+  "cwd": "",
+  "nonRoot": false,
+  "setup": [
+    {
+      "path": "long.md",
+      "text": "# Long Lines\n\nThis is a fairly long line of English prose that goes well past forty characters.\n這是一行很長的中文句子，用來測試行長計算是否以字元為單位而不是位元組，應該超過四十個字。\nShort line.\n\n| Column | Another column that is very very very long in a table row |\n| --- | --- |\n| a | b |\n"
+    }
+  ],
+  "expected": {
+    "status": 0,
+    "stdout": "{\n  \"tool\": \"markdown-fixer\",\n  \"version\": \"<VERSION>\",\n  \"mode\": \"check\",\n  \"files\": [\n    {\n      \"path\": \"long.md\",\n      \"changed\": false,\n      \"wouldChange\": false,\n      \"refused\": false,\n      \"fixed\": 0,\n      \"wouldFix\": 0,\n      \"problems\": [\n        {\n          \"rule\": \"MDX090\",\n          \"name\": \"line-length\",\n          \"severity\": \"info\",\n          \"fixable\": false,\n          \"line\": 3,\n          \"column\": 41,\n          \"message\": \"Line is 81 characters; limit is 40.\"\n        },\n        {\n          \"rule\": \"MDX090\",\n          \"name\": \"line-length\",\n          \"severity\": \"info\",\n          \"fixable\": false,\n          \"line\": 4,\n          \"column\": 41,\n          \"message\": \"Line is 44 characters; limit is 40.\"\n        }\n      ]\n    }\n  ],\n  \"summary\": {\n    \"files\": 1,\n    \"changed\": 0,\n    \"wouldChange\": 0,\n    \"fixed\": 0,\n    \"refused\": 0,\n    \"problems\": {\n      \"total\": 2,\n      \"errors\": 0,\n      \"warnings\": 0,\n      \"info\": 2,\n      \"fixable\": 0\n    }\n  }\n}\n",
+    "stderr": "",
+    "files": [
+      {
+        "path": "long.md",
+        "text": "# Long Lines\n\nThis is a fairly long line of English prose that goes well past forty characters.\n這是一行很長的中文句子，用來測試行長計算是否以字元為單位而不是位元組，應該超過四十個字。\nShort line.\n\n| Column | Another column that is very very very long in a table row |\n| --- | --- |\n| a | b |\n"
+      }
+    ]
+  }
+}

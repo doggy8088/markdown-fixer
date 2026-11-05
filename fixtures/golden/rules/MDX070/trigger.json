@@ -1,0 +1,155 @@
+{
+  "source": "rules/MDX070/trigger.md",
+  "referenceVersion": "1.0.0",
+  "cases": [
+    {
+      "name": "default",
+      "options": {},
+      "diagnose": [
+        {
+          "rule": "MDX070",
+          "name": "bare-url",
+          "severity": "info",
+          "fixable": false,
+          "line": 3,
+          "column": 4,
+          "message": "Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text."
+        },
+        {
+          "rule": "MDX070",
+          "name": "bare-url",
+          "severity": "info",
+          "fixable": false,
+          "line": 5,
+          "column": 3,
+          "message": "Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text."
+        }
+      ],
+      "fix": {
+        "text": "# 連結\n\n請見 https://example.com/docs 的說明。\n\n或 www.example.org。\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "snippet",
+      "options": {
+        "ignoreRules": [
+          "MDX003"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX070",
+          "name": "bare-url",
+          "severity": "info",
+          "fixable": false,
+          "line": 3,
+          "column": 4,
+          "message": "Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text."
+        },
+        {
+          "rule": "MDX070",
+          "name": "bare-url",
+          "severity": "info",
+          "fixable": false,
+          "line": 5,
+          "column": 3,
+          "message": "Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text."
+        }
+      ],
+      "fix": {
+        "text": "# 連結\n\n請見 https://example.com/docs 的說明。\n\n或 www.example.org。\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "line-length-80",
+      "options": {
+        "maxLineLength": 80
+      },
+      "diagnose": [
+        {
+          "rule": "MDX070",
+          "name": "bare-url",
+          "severity": "info",
+          "fixable": false,
+          "line": 3,
+          "column": 4,
+          "message": "Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text."
+        },
+        {
+          "rule": "MDX070",
+          "name": "bare-url",
+          "severity": "info",
+          "fixable": false,
+          "line": 5,
+          "column": 3,
+          "message": "Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text."
+        }
+      ],
+      "fix": {
+        "text": "# 連結\n\n請見 https://example.com/docs 的說明。\n\n或 www.example.org。\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "keep-encoding",
+      "options": {
+        "ignoreRules": [
+          "MDX001",
+          "MDX002"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX070",
+          "name": "bare-url",
+          "severity": "info",
+          "fixable": false,
+          "line": 3,
+          "column": 4,
+          "message": "Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text."
+        },
+        {
+          "rule": "MDX070",
+          "name": "bare-url",
+          "severity": "info",
+          "fixable": false,
+          "line": 5,
+          "column": 3,
+          "message": "Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text."
+        }
+      ],
+      "fix": {
+        "text": "# 連結\n\n請見 https://example.com/docs 的說明。\n\n或 www.example.org。\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "headings-only",
+      "options": {
+        "rules": [
+          "MDX010",
+          "MDX011",
+          "MDX012",
+          "MDX013"
+        ]
+      },
+      "diagnose": [],
+      "fix": {
+        "text": "# 連結\n\n請見 https://example.com/docs 的說明。\n\n或 www.example.org。\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "name": "rule-mdx090-default-limit",
+  "args": [
+    "--rule",
+    "MDX090",
+    "long.md"
+  ],
+  "cwd": "",
+  "nonRoot": false,
+  "setup": [
+    {
+      "path": "long.md",
+      "text": "# Long Lines\n\nThis is a fairly long line of English prose that goes well past forty characters.\n這是一行很長的中文句子，用來測試行長計算是否以字元為單位而不是位元組，應該超過四十個字。\nShort line.\n\n| Column | Another column that is very very very long in a table row |\n| --- | --- |\n| a | b |\n"
+    }
+  ],
+  "expected": {
+    "status": 0,
+    "stdout": "long.md\n  No problems.\n\nNo Markdown issues found in 1 file(s).\n",
+    "stderr": "",
+    "files": [
+      {
+        "path": "long.md",
+        "text": "# Long Lines\n\nThis is a fairly long line of English prose that goes well past forty characters.\n這是一行很長的中文句子，用來測試行長計算是否以字元為單位而不是位元組，應該超過四十個字。\nShort line.\n\n| Column | Another column that is very very very long in a table row |\n| --- | --- |\n| a | b |\n"
+      }
+    ]
+  }
+}

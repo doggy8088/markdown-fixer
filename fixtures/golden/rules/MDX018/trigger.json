@@ -1,0 +1,119 @@
+{
+  "source": "rules/MDX018/trigger.md",
+  "referenceVersion": "1.0.0",
+  "cases": [
+    {
+      "name": "default",
+      "options": {},
+      "diagnose": [
+        {
+          "rule": "MDX018",
+          "name": "first-heading-h1",
+          "severity": "info",
+          "fixable": false,
+          "line": 1,
+          "column": 1,
+          "message": "The first heading is not an H1. Start the outline with one H1 unless the document intentionally starts in a section."
+        }
+      ],
+      "fix": {
+        "text": "## 從二級標題開始\n\n內容。\n\n### 小節\n\n更多內容。\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "snippet",
+      "options": {
+        "ignoreRules": [
+          "MDX003"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX018",
+          "name": "first-heading-h1",
+          "severity": "info",
+          "fixable": false,
+          "line": 1,
+          "column": 1,
+          "message": "The first heading is not an H1. Start the outline with one H1 unless the document intentionally starts in a section."
+        }
+      ],
+      "fix": {
+        "text": "## 從二級標題開始\n\n內容。\n\n### 小節\n\n更多內容。\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "line-length-80",
+      "options": {
+        "maxLineLength": 80
+      },
+      "diagnose": [
+        {
+          "rule": "MDX018",
+          "name": "first-heading-h1",
+          "severity": "info",
+          "fixable": false,
+          "line": 1,
+          "column": 1,
+          "message": "The first heading is not an H1. Start the outline with one H1 unless the document intentionally starts in a section."
+        }
+      ],
+      "fix": {
+        "text": "## 從二級標題開始\n\n內容。\n\n### 小節\n\n更多內容。\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "keep-encoding",
+      "options": {
+        "ignoreRules": [
+          "MDX001",
+          "MDX002"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX018",
+          "name": "first-heading-h1",
+          "severity": "info",
+          "fixable": false,
+          "line": 1,
+          "column": 1,
+          "message": "The first heading is not an H1. Start the outline with one H1 unless the document intentionally starts in a section."
+        }
+      ],
+      "fix": {
+        "text": "## 從二級標題開始\n\n內容。\n\n### 小節\n\n更多內容。\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "headings-only",
+      "options": {
+        "rules": [
+          "MDX010",
+          "MDX011",
+          "MDX012",
+          "MDX013"
+        ]
+      },
+      "diagnose": [],
+      "fix": {
+        "text": "## 從二級標題開始\n\n內容。\n\n### 小節\n\n更多內容。\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    }
+  ]
+}

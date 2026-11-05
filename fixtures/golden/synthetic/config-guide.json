@@ -1,0 +1,191 @@
+{
+  "source": "synthetic/config-guide.md",
+  "referenceVersion": "1.0.0",
+  "cases": [
+    {
+      "name": "default",
+      "options": {},
+      "diagnose": [
+        {
+          "rule": "MDX017",
+          "name": "heading-trailing-punctuation",
+          "severity": "info",
+          "fixable": false,
+          "line": 58,
+          "column": 1,
+          "message": "Heading ends with sentence punctuation. Headings usually read better without a trailing period, colon, or similar mark."
+        },
+        {
+          "rule": "MDX007",
+          "name": "hard-tab",
+          "severity": "warning",
+          "fixable": false,
+          "line": 68,
+          "column": 3,
+          "message": "Tab character found. Use spaces for indentation and alignment; tabs render at different widths."
+        },
+        {
+          "rule": "MDX050",
+          "name": "fence-language",
+          "severity": "info",
+          "fixable": false,
+          "line": 70,
+          "column": 1,
+          "message": "Fenced code block has no language. Add one when the language is known, for example ```js."
+        }
+      ],
+      "fix": {
+        "text": "# 設定檔指南\n\n本工具會依序讀取以下設定檔，後面的覆寫前面的：\n\n1. `/etc/mytool/config.toml`\n2. `~/.config/mytool/config.toml`\n3. 專案目錄下的 `.mytool.toml`\n\n## TOML 格式\n\n```toml\n# 全域設定\n[general]\nlog_level = \"info\"   # debug | info | warn | error\ncolor = true\n\n[paths]\ncache = \"~/.cache/mytool\"\n```\n\n## YAML 格式（舊版）\n\n舊版用 YAML，仍然支援但不建議：\n\n```yaml\ngeneral:\n  log_level: info\n  color: true\n# 註解\npaths:\n  cache: ~/.cache/mytool\n```\n\n## 環境變數\n\n| 變數 | 對應設定 | 預設值 |\n| --- | --- | --- |\n| `MYTOOL_LOG` | `general.log_level` | `info` |\n| `MYTOOL_COLOR` | `general.color` | `true` |\n| `MYTOOL_CACHE` | `paths.cache` | `~/.cache/mytool` |\n| `NO_COLOR` | 停用顏色 | 未設定 |\n\n## Makefile 整合\n\n```make\nlint:\n\tmytool --check docs/\n\nfix:\n\tmytool --write docs/\n```\n\n舊專案的 Makefile 也可以直接縮排四格貼上：\n\n    lint:\n    \tmytool --check docs/\n\n## INI 格式？\n\n不支援。如果你看到 `config.ini`，那是 v0.x 的遺留檔案，可以刪除。\n\n## 驗證設定\n\n```sh\nmytool config --validate\n```\n\n輸出\t範例：\n\n```\n✔ /etc/mytool/config.toml\n✔ ~/.config/mytool/config.toml\n✘ .mytool.toml: unknown key \"colour\" (did you mean \"color\"?)\n```\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "snippet",
+      "options": {
+        "ignoreRules": [
+          "MDX003"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX017",
+          "name": "heading-trailing-punctuation",
+          "severity": "info",
+          "fixable": false,
+          "line": 58,
+          "column": 1,
+          "message": "Heading ends with sentence punctuation. Headings usually read better without a trailing period, colon, or similar mark."
+        },
+        {
+          "rule": "MDX007",
+          "name": "hard-tab",
+          "severity": "warning",
+          "fixable": false,
+          "line": 68,
+          "column": 3,
+          "message": "Tab character found. Use spaces for indentation and alignment; tabs render at different widths."
+        },
+        {
+          "rule": "MDX050",
+          "name": "fence-language",
+          "severity": "info",
+          "fixable": false,
+          "line": 70,
+          "column": 1,
+          "message": "Fenced code block has no language. Add one when the language is known, for example ```js."
+        }
+      ],
+      "fix": {
+        "text": "# 設定檔指南\n\n本工具會依序讀取以下設定檔，後面的覆寫前面的：\n\n1. `/etc/mytool/config.toml`\n2. `~/.config/mytool/config.toml`\n3. 專案目錄下的 `.mytool.toml`\n\n## TOML 格式\n\n```toml\n# 全域設定\n[general]\nlog_level = \"info\"   # debug | info | warn | error\ncolor = true\n\n[paths]\ncache = \"~/.cache/mytool\"\n```\n\n## YAML 格式（舊版）\n\n舊版用 YAML，仍然支援但不建議：\n\n```yaml\ngeneral:\n  log_level: info\n  color: true\n# 註解\npaths:\n  cache: ~/.cache/mytool\n```\n\n## 環境變數\n\n| 變數 | 對應設定 | 預設值 |\n| --- | --- | --- |\n| `MYTOOL_LOG` | `general.log_level` | `info` |\n| `MYTOOL_COLOR` | `general.color` | `true` |\n| `MYTOOL_CACHE` | `paths.cache` | `~/.cache/mytool` |\n| `NO_COLOR` | 停用顏色 | 未設定 |\n\n## Makefile 整合\n\n```make\nlint:\n\tmytool --check docs/\n\nfix:\n\tmytool --write docs/\n```\n\n舊專案的 Makefile 也可以直接縮排四格貼上：\n\n    lint:\n    \tmytool --check docs/\n\n## INI 格式？\n\n不支援。如果你看到 `config.ini`，那是 v0.x 的遺留檔案，可以刪除。\n\n## 驗證設定\n\n```sh\nmytool config --validate\n```\n\n輸出\t範例：\n\n```\n✔ /etc/mytool/config.toml\n✔ ~/.config/mytool/config.toml\n✘ .mytool.toml: unknown key \"colour\" (did you mean \"color\"?)\n```\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "line-length-80",
+      "options": {
+        "maxLineLength": 80
+      },
+      "diagnose": [
+        {
+          "rule": "MDX017",
+          "name": "heading-trailing-punctuation",
+          "severity": "info",
+          "fixable": false,
+          "line": 58,
+          "column": 1,
+          "message": "Heading ends with sentence punctuation. Headings usually read better without a trailing period, colon, or similar mark."
+        },
+        {
+          "rule": "MDX007",
+          "name": "hard-tab",
+          "severity": "warning",
+          "fixable": false,
+          "line": 68,
+          "column": 3,
+          "message": "Tab character found. Use spaces for indentation and alignment; tabs render at different widths."
+        },
+        {
+          "rule": "MDX050",
+          "name": "fence-language",
+          "severity": "info",
+          "fixable": false,
+          "line": 70,
+          "column": 1,
+          "message": "Fenced code block has no language. Add one when the language is known, for example ```js."
+        }
+      ],
+      "fix": {
+        "text": "# 設定檔指南\n\n本工具會依序讀取以下設定檔，後面的覆寫前面的：\n\n1. `/etc/mytool/config.toml`\n2. `~/.config/mytool/config.toml`\n3. 專案目錄下的 `.mytool.toml`\n\n## TOML 格式\n\n```toml\n# 全域設定\n[general]\nlog_level = \"info\"   # debug | info | warn | error\ncolor = true\n\n[paths]\ncache = \"~/.cache/mytool\"\n```\n\n## YAML 格式（舊版）\n\n舊版用 YAML，仍然支援但不建議：\n\n```yaml\ngeneral:\n  log_level: info\n  color: true\n# 註解\npaths:\n  cache: ~/.cache/mytool\n```\n\n## 環境變數\n\n| 變數 | 對應設定 | 預設值 |\n| --- | --- | --- |\n| `MYTOOL_LOG` | `general.log_level` | `info` |\n| `MYTOOL_COLOR` | `general.color` | `true` |\n| `MYTOOL_CACHE` | `paths.cache` | `~/.cache/mytool` |\n| `NO_COLOR` | 停用顏色 | 未設定 |\n\n## Makefile 整合\n\n```make\nlint:\n\tmytool --check docs/\n\nfix:\n\tmytool --write docs/\n```\n\n舊專案的 Makefile 也可以直接縮排四格貼上：\n\n    lint:\n    \tmytool --check docs/\n\n## INI 格式？\n\n不支援。如果你看到 `config.ini`，那是 v0.x 的遺留檔案，可以刪除。\n\n## 驗證設定\n\n```sh\nmytool config --validate\n```\n\n輸出\t範例：\n\n```\n✔ /etc/mytool/config.toml\n✔ ~/.config/mytool/config.toml\n✘ .mytool.toml: unknown key \"colour\" (did you mean \"color\"?)\n```\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "keep-encoding",
+      "options": {
+        "ignoreRules": [
+          "MDX001",
+          "MDX002"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX017",
+          "name": "heading-trailing-punctuation",
+          "severity": "info",
+          "fixable": false,
+          "line": 58,
+          "column": 1,
+          "message": "Heading ends with sentence punctuation. Headings usually read better without a trailing period, colon, or similar mark."
+        },
+        {
+          "rule": "MDX007",
+          "name": "hard-tab",
+          "severity": "warning",
+          "fixable": false,
+          "line": 68,
+          "column": 3,
+          "message": "Tab character found. Use spaces for indentation and alignment; tabs render at different widths."
+        },
+        {
+          "rule": "MDX050",
+          "name": "fence-language",
+          "severity": "info",
+          "fixable": false,
+          "line": 70,
+          "column": 1,
+          "message": "Fenced code block has no language. Add one when the language is known, for example ```js."
+        }
+      ],
+      "fix": {
+        "text": "# 設定檔指南\n\n本工具會依序讀取以下設定檔，後面的覆寫前面的：\n\n1. `/etc/mytool/config.toml`\n2. `~/.config/mytool/config.toml`\n3. 專案目錄下的 `.mytool.toml`\n\n## TOML 格式\n\n```toml\n# 全域設定\n[general]\nlog_level = \"info\"   # debug | info | warn | error\ncolor = true\n\n[paths]\ncache = \"~/.cache/mytool\"\n```\n\n## YAML 格式（舊版）\n\n舊版用 YAML，仍然支援但不建議：\n\n```yaml\ngeneral:\n  log_level: info\n  color: true\n# 註解\npaths:\n  cache: ~/.cache/mytool\n```\n\n## 環境變數\n\n| 變數 | 對應設定 | 預設值 |\n| --- | --- | --- |\n| `MYTOOL_LOG` | `general.log_level` | `info` |\n| `MYTOOL_COLOR` | `general.color` | `true` |\n| `MYTOOL_CACHE` | `paths.cache` | `~/.cache/mytool` |\n| `NO_COLOR` | 停用顏色 | 未設定 |\n\n## Makefile 整合\n\n```make\nlint:\n\tmytool --check docs/\n\nfix:\n\tmytool --write docs/\n```\n\n舊專案的 Makefile 也可以直接縮排四格貼上：\n\n    lint:\n    \tmytool --check docs/\n\n## INI 格式？\n\n不支援。如果你看到 `config.ini`，那是 v0.x 的遺留檔案，可以刪除。\n\n## 驗證設定\n\n```sh\nmytool config --validate\n```\n\n輸出\t範例：\n\n```\n✔ /etc/mytool/config.toml\n✔ ~/.config/mytool/config.toml\n✘ .mytool.toml: unknown key \"colour\" (did you mean \"color\"?)\n```\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "headings-only",
+      "options": {
+        "rules": [
+          "MDX010",
+          "MDX011",
+          "MDX012",
+          "MDX013"
+        ]
+      },
+      "diagnose": [],
+      "fix": {
+        "text": "# 設定檔指南\n\n本工具會依序讀取以下設定檔，後面的覆寫前面的：\n\n1. `/etc/mytool/config.toml`\n2. `~/.config/mytool/config.toml`\n3. 專案目錄下的 `.mytool.toml`\n\n## TOML 格式\n\n```toml\n# 全域設定\n[general]\nlog_level = \"info\"   # debug | info | warn | error\ncolor = true\n\n[paths]\ncache = \"~/.cache/mytool\"\n```\n\n## YAML 格式（舊版）\n\n舊版用 YAML，仍然支援但不建議：\n\n```yaml\ngeneral:\n  log_level: info\n  color: true\n# 註解\npaths:\n  cache: ~/.cache/mytool\n```\n\n## 環境變數\n\n| 變數 | 對應設定 | 預設值 |\n| --- | --- | --- |\n| `MYTOOL_LOG` | `general.log_level` | `info` |\n| `MYTOOL_COLOR` | `general.color` | `true` |\n| `MYTOOL_CACHE` | `paths.cache` | `~/.cache/mytool` |\n| `NO_COLOR` | 停用顏色 | 未設定 |\n\n## Makefile 整合\n\n```make\nlint:\n\tmytool --check docs/\n\nfix:\n\tmytool --write docs/\n```\n\n舊專案的 Makefile 也可以直接縮排四格貼上：\n\n    lint:\n    \tmytool --check docs/\n\n## INI 格式？\n\n不支援。如果你看到 `config.ini`，那是 v0.x 的遺留檔案，可以刪除。\n\n## 驗證設定\n\n```sh\nmytool config --validate\n```\n\n輸出\t範例：\n\n```\n✔ /etc/mytool/config.toml\n✔ ~/.config/mytool/config.toml\n✘ .mytool.toml: unknown key \"colour\" (did you mean \"color\"?)\n```\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    }
+  ]
+}

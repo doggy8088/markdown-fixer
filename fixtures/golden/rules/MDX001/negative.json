@@ -1,0 +1,79 @@
+{
+  "source": "rules/MDX001/negative.md",
+  "referenceVersion": "1.0.0",
+  "cases": [
+    {
+      "name": "default",
+      "options": {},
+      "diagnose": [],
+      "fix": {
+        "text": "# BOM 說明\n\n檔案開頭的 BOM 是 `U+FEFF`；本檔沒有 BOM，只是在 inline code 裡提到 `\\uFEFF`。\n\n```text\n\uFEFF這行在 fenced code 裡，開頭有 BOM，但不在檔首。\n```\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "snippet",
+      "options": {
+        "ignoreRules": [
+          "MDX003"
+        ]
+      },
+      "diagnose": [],
+      "fix": {
+        "text": "# BOM 說明\n\n檔案開頭的 BOM 是 `U+FEFF`；本檔沒有 BOM，只是在 inline code 裡提到 `\\uFEFF`。\n\n```text\n\uFEFF這行在 fenced code 裡，開頭有 BOM，但不在檔首。\n```\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "line-length-80",
+      "options": {
+        "maxLineLength": 80
+      },
+      "diagnose": [],
+      "fix": {
+        "text": "# BOM 說明\n\n檔案開頭的 BOM 是 `U+FEFF`；本檔沒有 BOM，只是在 inline code 裡提到 `\\uFEFF`。\n\n```text\n\uFEFF這行在 fenced code 裡，開頭有 BOM，但不在檔首。\n```\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "keep-encoding",
+      "options": {
+        "ignoreRules": [
+          "MDX001",
+          "MDX002"
+        ]
+      },
+      "diagnose": [],
+      "fix": {
+        "text": "# BOM 說明\n\n檔案開頭的 BOM 是 `U+FEFF`；本檔沒有 BOM，只是在 inline code 裡提到 `\\uFEFF`。\n\n```text\n\uFEFF這行在 fenced code 裡，開頭有 BOM，但不在檔首。\n```\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "headings-only",
+      "options": {
+        "rules": [
+          "MDX010",
+          "MDX011",
+          "MDX012",
+          "MDX013"
+        ]
+      },
+      "diagnose": [],
+      "fix": {
+        "text": "# BOM 說明\n\n檔案開頭的 BOM 是 `U+FEFF`；本檔沒有 BOM，只是在 inline code 裡提到 `\\uFEFF`。\n\n```text\n\uFEFF這行在 fenced code 裡，開頭有 BOM，但不在檔首。\n```\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    }
+  ]
+}

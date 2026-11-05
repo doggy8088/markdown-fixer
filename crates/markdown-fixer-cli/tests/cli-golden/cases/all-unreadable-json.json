@@ -1,0 +1,26 @@
+{
+  "name": "all-unreadable-json",
+  "args": [
+    "--json",
+    "bad.md"
+  ],
+  "cwd": "",
+  "nonRoot": false,
+  "setup": [
+    {
+      "path": "bad.md",
+      "hex": "c3"
+    }
+  ],
+  "expected": {
+    "status": 2,
+    "stdout": "{\n  \"tool\": \"markdown-fixer\",\n  \"version\": \"<VERSION>\",\n  \"mode\": \"check\",\n  \"files\": [],\n  \"summary\": {\n    \"files\": 0,\n    \"changed\": 0,\n    \"wouldChange\": 0,\n    \"fixed\": 0,\n    \"refused\": 0,\n    \"problems\": {\n      \"total\": 0,\n      \"errors\": 0,\n      \"warnings\": 0,\n      \"info\": 0,\n      \"fixable\": 0\n    }\n  }\n}\n",
+    "stderr": "Error: bad.md: The encoded data was not valid for encoding utf-8\n",
+    "files": [
+      {
+        "path": "bad.md",
+        "hex": "c3"
+      }
+    ]
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "name": "unreadable-file",
+  "args": [
+    "--write",
+    "."
+  ],
+  "cwd": "",
+  "nonRoot": true,
+  "setup": [
+    {
+      "path": "secret.md",
+      "text": "# Clean Document\n\nThis document has no problems.\n\n## Section\n\n- One\n- Two\n\n```js\nconsole.log('hi');\n```\n",
+      "mode": "000"
+    },
+    {
+      "path": "ok.md",
+      "text": "#Project Notes   \nIntro paragraph with trailing spaces.   \n##  Setup ##\n* first item\n- second item\n-third item\n\n\nSome **  bold  ** text and a [link](https://example.com).\n\n| Name | Value |\n| - | -- |\n| a | 1 |\n> quote without space\n>no space here\n\n**標籤：**內容說明\nFinal line without newline."
+    }
+  ],
+  "expected": {
+    "status": 2,
+    "stdout": "ok.md\n  No problems.\n  Fixed 18 issue(s).\n\nFixed 18 issue(s) in 1 file(s).\nSome files could not be read or written; see the errors above.\n",
+    "stderr": "Error: secret.md: EACCES: permission denied, open '<TMP>/secret.md'\n",
+    "files": [
+      {
+        "path": "ok.md",
+        "text": "# Project Notes  \n\nIntro paragraph with trailing spaces.  \n\n## Setup\n* first item\n* second item\n* third item\n\nSome **bold** text and a [link](https://example.com).\n\n| Name | Value |\n| --- | --- |\n| a | 1 |\n\n> quote without space\n> no space here\n\n**標籤**：內容說明\nFinal line without newline.\n"
+      },
+      {
+        "path": "secret.md",
+        "text": "# Clean Document\n\nThis document has no problems.\n\n## Section\n\n- One\n- Two\n\n```js\nconsole.log('hi');\n```\n",
+        "mode": "000"
+      }
+    ]
+  }
+}

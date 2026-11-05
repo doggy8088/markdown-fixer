@@ -1,0 +1,803 @@
+{
+  "source": "edge/emphasis-flanking.md",
+  "referenceVersion": "1.0.0",
+  "cases": [
+    {
+      "name": "default",
+      "options": {},
+      "diagnose": [
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": false,
+          "line": 7,
+          "column": 3,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": false,
+          "line": 7,
+          "column": 9,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": false,
+          "line": 9,
+          "column": 1,
+          "message": "Unpaired `*` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": false,
+          "line": 9,
+          "column": 5,
+          "message": "Unpaired `*` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": false,
+          "line": 11,
+          "column": 1,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": false,
+          "line": 11,
+          "column": 5,
+          "message": "Unpaired `****` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": false,
+          "line": 11,
+          "column": 11,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": false,
+          "line": 13,
+          "column": 1,
+          "message": "Unpaired `***` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": false,
+          "line": 13,
+          "column": 8,
+          "message": "Unpaired `***` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX041",
+          "name": "unmatched-emphasis",
+          "severity": "warning",
+          "fixable": false,
+          "line": 15,
+          "column": 1,
+          "message": "Possible unmatched strong or strikethrough delimiter on this line. Verify that emphasis opens and closes outside code and links."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": true,
+          "line": 15,
+          "column": 1,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX041",
+          "name": "unmatched-emphasis",
+          "severity": "warning",
+          "fixable": false,
+          "line": 16,
+          "column": 1,
+          "message": "Possible unmatched strong or strikethrough delimiter on this line. Verify that emphasis opens and closes outside code and links."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": true,
+          "line": 16,
+          "column": 6,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": true,
+          "line": 18,
+          "column": 5,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": true,
+          "line": 18,
+          "column": 13,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": true,
+          "line": 18,
+          "column": 21,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX040",
+          "name": "emphasis-inner-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 22,
+          "column": 1,
+          "message": "Remove spaces just inside the bold (**) delimiters."
+        },
+        {
+          "rule": "MDX040",
+          "name": "emphasis-inner-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 22,
+          "column": 11,
+          "message": "Remove spaces just inside the bold (**) delimiters."
+        },
+        {
+          "rule": "MDX040",
+          "name": "emphasis-inner-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 24,
+          "column": 1,
+          "message": "Remove spaces just inside the bold (__) delimiters."
+        },
+        {
+          "rule": "MDX041",
+          "name": "unmatched-emphasis",
+          "severity": "warning",
+          "fixable": false,
+          "line": 26,
+          "column": 1,
+          "message": "Possible unmatched strong or strikethrough delimiter on this line. Verify that emphasis opens and closes outside code and links."
+        }
+      ],
+      "fix": {
+        "text": "# 強調邊界\n\n**狀態：** 已完成\n\n**Note:**text\n\n這是**「引號」**文字\n\n*標籤：*內容\n\n**甲：****乙：**丙\n\n***粗斜體：***內容\n\n**跨行開頭\n中文結尾**：內容\n\n**A**：B **C**：D **E**：F\n\na**b**c 與 a__b__c\n\n**前空白** 與 **後空白**\n\n__底線__\n\n$10 **$20 ** $30\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "snippet",
+      "options": {
+        "ignoreRules": [
+          "MDX003"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": false,
+          "line": 7,
+          "column": 3,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": false,
+          "line": 7,
+          "column": 9,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": false,
+          "line": 9,
+          "column": 1,
+          "message": "Unpaired `*` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": false,
+          "line": 9,
+          "column": 5,
+          "message": "Unpaired `*` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": false,
+          "line": 11,
+          "column": 1,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": false,
+          "line": 11,
+          "column": 5,
+          "message": "Unpaired `****` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": false,
+          "line": 11,
+          "column": 11,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": false,
+          "line": 13,
+          "column": 1,
+          "message": "Unpaired `***` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": false,
+          "line": 13,
+          "column": 8,
+          "message": "Unpaired `***` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX041",
+          "name": "unmatched-emphasis",
+          "severity": "warning",
+          "fixable": false,
+          "line": 15,
+          "column": 1,
+          "message": "Possible unmatched strong or strikethrough delimiter on this line. Verify that emphasis opens and closes outside code and links."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": true,
+          "line": 15,
+          "column": 1,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX041",
+          "name": "unmatched-emphasis",
+          "severity": "warning",
+          "fixable": false,
+          "line": 16,
+          "column": 1,
+          "message": "Possible unmatched strong or strikethrough delimiter on this line. Verify that emphasis opens and closes outside code and links."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": true,
+          "line": 16,
+          "column": 6,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": true,
+          "line": 18,
+          "column": 5,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": true,
+          "line": 18,
+          "column": 13,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": true,
+          "line": 18,
+          "column": 21,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX040",
+          "name": "emphasis-inner-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 22,
+          "column": 1,
+          "message": "Remove spaces just inside the bold (**) delimiters."
+        },
+        {
+          "rule": "MDX040",
+          "name": "emphasis-inner-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 22,
+          "column": 11,
+          "message": "Remove spaces just inside the bold (**) delimiters."
+        },
+        {
+          "rule": "MDX040",
+          "name": "emphasis-inner-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 24,
+          "column": 1,
+          "message": "Remove spaces just inside the bold (__) delimiters."
+        },
+        {
+          "rule": "MDX041",
+          "name": "unmatched-emphasis",
+          "severity": "warning",
+          "fixable": false,
+          "line": 26,
+          "column": 1,
+          "message": "Possible unmatched strong or strikethrough delimiter on this line. Verify that emphasis opens and closes outside code and links."
+        }
+      ],
+      "fix": {
+        "text": "# 強調邊界\n\n**狀態：** 已完成\n\n**Note:**text\n\n這是**「引號」**文字\n\n*標籤：*內容\n\n**甲：****乙：**丙\n\n***粗斜體：***內容\n\n**跨行開頭\n中文結尾**：內容\n\n**A**：B **C**：D **E**：F\n\na**b**c 與 a__b__c\n\n**前空白** 與 **後空白**\n\n__底線__\n\n$10 **$20 ** $30\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "line-length-80",
+      "options": {
+        "maxLineLength": 80
+      },
+      "diagnose": [
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": false,
+          "line": 7,
+          "column": 3,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": false,
+          "line": 7,
+          "column": 9,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": false,
+          "line": 9,
+          "column": 1,
+          "message": "Unpaired `*` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": false,
+          "line": 9,
+          "column": 5,
+          "message": "Unpaired `*` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": false,
+          "line": 11,
+          "column": 1,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": false,
+          "line": 11,
+          "column": 5,
+          "message": "Unpaired `****` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": false,
+          "line": 11,
+          "column": 11,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": false,
+          "line": 13,
+          "column": 1,
+          "message": "Unpaired `***` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": false,
+          "line": 13,
+          "column": 8,
+          "message": "Unpaired `***` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX041",
+          "name": "unmatched-emphasis",
+          "severity": "warning",
+          "fixable": false,
+          "line": 15,
+          "column": 1,
+          "message": "Possible unmatched strong or strikethrough delimiter on this line. Verify that emphasis opens and closes outside code and links."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": true,
+          "line": 15,
+          "column": 1,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX041",
+          "name": "unmatched-emphasis",
+          "severity": "warning",
+          "fixable": false,
+          "line": 16,
+          "column": 1,
+          "message": "Possible unmatched strong or strikethrough delimiter on this line. Verify that emphasis opens and closes outside code and links."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": true,
+          "line": 16,
+          "column": 6,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": true,
+          "line": 18,
+          "column": 5,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": true,
+          "line": 18,
+          "column": 13,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": true,
+          "line": 18,
+          "column": 21,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX040",
+          "name": "emphasis-inner-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 22,
+          "column": 1,
+          "message": "Remove spaces just inside the bold (**) delimiters."
+        },
+        {
+          "rule": "MDX040",
+          "name": "emphasis-inner-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 22,
+          "column": 11,
+          "message": "Remove spaces just inside the bold (**) delimiters."
+        },
+        {
+          "rule": "MDX040",
+          "name": "emphasis-inner-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 24,
+          "column": 1,
+          "message": "Remove spaces just inside the bold (__) delimiters."
+        },
+        {
+          "rule": "MDX041",
+          "name": "unmatched-emphasis",
+          "severity": "warning",
+          "fixable": false,
+          "line": 26,
+          "column": 1,
+          "message": "Possible unmatched strong or strikethrough delimiter on this line. Verify that emphasis opens and closes outside code and links."
+        }
+      ],
+      "fix": {
+        "text": "# 強調邊界\n\n**狀態：** 已完成\n\n**Note:**text\n\n這是**「引號」**文字\n\n*標籤：*內容\n\n**甲：****乙：**丙\n\n***粗斜體：***內容\n\n**跨行開頭\n中文結尾**：內容\n\n**A**：B **C**：D **E**：F\n\na**b**c 與 a__b__c\n\n**前空白** 與 **後空白**\n\n__底線__\n\n$10 **$20 ** $30\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "keep-encoding",
+      "options": {
+        "ignoreRules": [
+          "MDX001",
+          "MDX002"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": false,
+          "line": 7,
+          "column": 3,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": false,
+          "line": 7,
+          "column": 9,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": false,
+          "line": 9,
+          "column": 1,
+          "message": "Unpaired `*` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": false,
+          "line": 9,
+          "column": 5,
+          "message": "Unpaired `*` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": false,
+          "line": 11,
+          "column": 1,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": false,
+          "line": 11,
+          "column": 5,
+          "message": "Unpaired `****` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": false,
+          "line": 11,
+          "column": 11,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": false,
+          "line": 13,
+          "column": 1,
+          "message": "Unpaired `***` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": false,
+          "line": 13,
+          "column": 8,
+          "message": "Unpaired `***` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX041",
+          "name": "unmatched-emphasis",
+          "severity": "warning",
+          "fixable": false,
+          "line": 15,
+          "column": 1,
+          "message": "Possible unmatched strong or strikethrough delimiter on this line. Verify that emphasis opens and closes outside code and links."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": true,
+          "line": 15,
+          "column": 1,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX041",
+          "name": "unmatched-emphasis",
+          "severity": "warning",
+          "fixable": false,
+          "line": 16,
+          "column": 1,
+          "message": "Possible unmatched strong or strikethrough delimiter on this line. Verify that emphasis opens and closes outside code and links."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": true,
+          "line": 16,
+          "column": 6,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": true,
+          "line": 18,
+          "column": 5,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": true,
+          "line": 18,
+          "column": 13,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": true,
+          "line": 18,
+          "column": 21,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX040",
+          "name": "emphasis-inner-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 22,
+          "column": 1,
+          "message": "Remove spaces just inside the bold (**) delimiters."
+        },
+        {
+          "rule": "MDX040",
+          "name": "emphasis-inner-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 22,
+          "column": 11,
+          "message": "Remove spaces just inside the bold (**) delimiters."
+        },
+        {
+          "rule": "MDX040",
+          "name": "emphasis-inner-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 24,
+          "column": 1,
+          "message": "Remove spaces just inside the bold (__) delimiters."
+        },
+        {
+          "rule": "MDX041",
+          "name": "unmatched-emphasis",
+          "severity": "warning",
+          "fixable": false,
+          "line": 26,
+          "column": 1,
+          "message": "Possible unmatched strong or strikethrough delimiter on this line. Verify that emphasis opens and closes outside code and links."
+        }
+      ],
+      "fix": {
+        "text": "# 強調邊界\n\n**狀態：** 已完成\n\n**Note:**text\n\n這是**「引號」**文字\n\n*標籤：*內容\n\n**甲：****乙：**丙\n\n***粗斜體：***內容\n\n**跨行開頭\n中文結尾**：內容\n\n**A**：B **C**：D **E**：F\n\na**b**c 與 a__b__c\n\n**前空白** 與 **後空白**\n\n__底線__\n\n$10 **$20 ** $30\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "headings-only",
+      "options": {
+        "rules": [
+          "MDX010",
+          "MDX011",
+          "MDX012",
+          "MDX013"
+        ]
+      },
+      "diagnose": [],
+      "fix": {
+        "text": "# 強調邊界\n\n**狀態：** 已完成\n\n**Note:**text\n\n這是**「引號」**文字\n\n*標籤：*內容\n\n**甲：****乙：**丙\n\n***粗斜體：***內容\n\n**跨行開頭\n中文結尾：**內容\n\n**A：**B **C：**D **E：**F\n\na**b**c 與 a__b__c\n\n** 前空白** 與 **後空白 **\n\n__ 底線 __\n\n$10 **$20 ** $30\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    }
+  ]
+}

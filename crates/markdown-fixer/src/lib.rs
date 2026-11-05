@@ -90,7 +90,7 @@ impl std::error::Error for OptionsError {}
 impl Options {
     /// 檢查 `rules` / `ignore_rules` 中的 ID 是否都存在於規則目錄。
     pub fn validate(&self) -> Result<(), OptionsError> {
-        todo!("skeleton: implement in core")
+        rules::validate(self)
     }
 }
 
@@ -109,7 +109,7 @@ pub struct FixResult {
 
 /// 完整規則目錄，順序與 JS 的 `RULES` 相同。
 pub fn rules() -> &'static [Rule] {
-    todo!("skeleton: implement in core")
+    rules::RULES
 }
 
 /// 依 ID 查規則。
@@ -119,15 +119,32 @@ pub fn rule(id: &str) -> Option<&'static Rule> {
 
 /// 檢查文字，回傳與 JS `diagnose(text, options)` 相同順序、相同內容的問題清單。
 pub fn diagnose(text: &str, options: &Options) -> Vec<Problem> {
-    let _ = (text, options);
-    todo!("skeleton: implement in core")
+    diagnose::diagnose(text, options)
 }
 
 /// 套用安全修正，行為與 JS `fixDocument(text, options)` 相同。
 pub fn fix_document(text: &str, options: &Options) -> FixResult {
-    let _ = (text, options);
-    todo!("skeleton: implement in core")
+    fix::fix_document(text, options)
 }
 
 /// Markdown 內容偵測（給剪貼簿、dedent-paste 等「輸入不一定是 Markdown」的情境）。
 pub mod detect;
+
+// 內部模組。行內處理一律以 UTF-16 code unit（`Vec<u16>`）運算，與 JS 字串索引一致。
+mod blank_lines;
+mod cjk_emphasis;
+mod diagnose;
+mod fix;
+mod jsregex;
+mod jsstr;
+mod line_fix;
+mod mask;
+#[cfg(test)]
+mod parity_probe;
+#[cfg(test)]
+mod regex_hazards;
+mod rules;
+mod scan;
+mod structure;
+mod table;
+mod unicode_tables;

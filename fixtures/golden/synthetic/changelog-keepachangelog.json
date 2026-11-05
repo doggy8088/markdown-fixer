@@ -1,0 +1,308 @@
+{
+  "source": "synthetic/changelog-keepachangelog.md",
+  "referenceVersion": "1.0.0",
+  "cases": [
+    {
+      "name": "default",
+      "options": {},
+      "diagnose": [
+        {
+          "rule": "MDX030",
+          "name": "list-marker-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 16,
+          "column": 2,
+          "message": "Add a space after the \"-\" list marker."
+        },
+        {
+          "rule": "MDX031",
+          "name": "list-marker-style",
+          "severity": "warning",
+          "fixable": true,
+          "line": 25,
+          "column": 1,
+          "message": "List uses \"-\" but the first item in this list uses \"*\". Use one bullet marker per list."
+        },
+        {
+          "rule": "MDX019",
+          "name": "multiple-h1",
+          "severity": "info",
+          "fixable": false,
+          "line": 42,
+          "column": 1,
+          "message": "Document has more than one H1. Use H2 for subsections and keep one H1 for the page title."
+        },
+        {
+          "rule": "MDX032",
+          "name": "list-blank-lines",
+          "severity": "warning",
+          "fixable": false,
+          "line": 50,
+          "column": 1,
+          "message": "List ends directly before a paragraph, which may be read as a lazy continuation of the last item. Add a blank line after the list."
+        },
+        {
+          "rule": "MDX035",
+          "name": "empty-list-item",
+          "severity": "warning",
+          "fixable": false,
+          "line": 50,
+          "column": 1,
+          "message": "Empty list item. Remove it or add content."
+        },
+        {
+          "rule": "MDX004",
+          "name": "trailing-whitespace",
+          "severity": "warning",
+          "fixable": true,
+          "line": 50,
+          "column": 2,
+          "message": "Trailing whitespace. Exactly two trailing spaces create a hard line break; other trailing whitespace is noise."
+        }
+      ],
+      "fix": {
+        "text": "# Changelog\n\nAll notable changes to this project will be documented in this file.\n\nThe format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),\nand this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).\n\n## [Unreleased]\n\n### Added\n- `--stdin` flag reads Markdown from standard input.\n- `--exit-zero` for clipboard scripts.\n\n### Fixed\n\n- Column numbers for emoji are now reported in UTF-16 code units.\n- Trailing whitespace inside fenced code is no longer touched.\n\n## [1.2.0] - 2026-10-20\n\n### Added\n\n* New rule MDX042 for unpaired emphasis next to CJK punctuation.\n* `--list-rules` prints the catalog.\n* JSON output includes `wouldFix`.\n\n### Changed\n\n- Bumped MSRV to 1.85 .\n- **Breaking:** `fix()` was renamed to `fix_document()`.\n\n### Removed\n\n- The `--legacy` flag. See #123 for details.\n\n## [1.1.0] - 2026-07-02\n\n### Security\n\n- Refuse to write files that contain NUL bytes ([#98]).\n\n# 1.0.0 - 2026-05-01\n\nInitial release.\n\n## [0.9.0-beta.1] - 2026-03-10\n\n### Added\n- Beta release for internal testing.\n-\n\n[Unreleased]: https://github.com/example/markdown-fixer/compare/v1.2.0...HEAD\n[1.2.0]: https://github.com/example/markdown-fixer/compare/v1.1.0...v1.2.0\n[1.1.0]: https://github.com/example/markdown-fixer/compare/v1.0.0...v1.1.0\n[0.9.0-beta.1]: https://github.com/example/markdown-fixer/releases/tag/v0.9.0-beta.1\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "snippet",
+      "options": {
+        "ignoreRules": [
+          "MDX003"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX030",
+          "name": "list-marker-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 16,
+          "column": 2,
+          "message": "Add a space after the \"-\" list marker."
+        },
+        {
+          "rule": "MDX031",
+          "name": "list-marker-style",
+          "severity": "warning",
+          "fixable": true,
+          "line": 25,
+          "column": 1,
+          "message": "List uses \"-\" but the first item in this list uses \"*\". Use one bullet marker per list."
+        },
+        {
+          "rule": "MDX019",
+          "name": "multiple-h1",
+          "severity": "info",
+          "fixable": false,
+          "line": 42,
+          "column": 1,
+          "message": "Document has more than one H1. Use H2 for subsections and keep one H1 for the page title."
+        },
+        {
+          "rule": "MDX032",
+          "name": "list-blank-lines",
+          "severity": "warning",
+          "fixable": false,
+          "line": 50,
+          "column": 1,
+          "message": "List ends directly before a paragraph, which may be read as a lazy continuation of the last item. Add a blank line after the list."
+        },
+        {
+          "rule": "MDX035",
+          "name": "empty-list-item",
+          "severity": "warning",
+          "fixable": false,
+          "line": 50,
+          "column": 1,
+          "message": "Empty list item. Remove it or add content."
+        },
+        {
+          "rule": "MDX004",
+          "name": "trailing-whitespace",
+          "severity": "warning",
+          "fixable": true,
+          "line": 50,
+          "column": 2,
+          "message": "Trailing whitespace. Exactly two trailing spaces create a hard line break; other trailing whitespace is noise."
+        }
+      ],
+      "fix": {
+        "text": "# Changelog\n\nAll notable changes to this project will be documented in this file.\n\nThe format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),\nand this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).\n\n## [Unreleased]\n\n### Added\n- `--stdin` flag reads Markdown from standard input.\n- `--exit-zero` for clipboard scripts.\n\n### Fixed\n\n- Column numbers for emoji are now reported in UTF-16 code units.\n- Trailing whitespace inside fenced code is no longer touched.\n\n## [1.2.0] - 2026-10-20\n\n### Added\n\n* New rule MDX042 for unpaired emphasis next to CJK punctuation.\n* `--list-rules` prints the catalog.\n* JSON output includes `wouldFix`.\n\n### Changed\n\n- Bumped MSRV to 1.85 .\n- **Breaking:** `fix()` was renamed to `fix_document()`.\n\n### Removed\n\n- The `--legacy` flag. See #123 for details.\n\n## [1.1.0] - 2026-07-02\n\n### Security\n\n- Refuse to write files that contain NUL bytes ([#98]).\n\n# 1.0.0 - 2026-05-01\n\nInitial release.\n\n## [0.9.0-beta.1] - 2026-03-10\n\n### Added\n- Beta release for internal testing.\n-\n\n[Unreleased]: https://github.com/example/markdown-fixer/compare/v1.2.0...HEAD\n[1.2.0]: https://github.com/example/markdown-fixer/compare/v1.1.0...v1.2.0\n[1.1.0]: https://github.com/example/markdown-fixer/compare/v1.0.0...v1.1.0\n[0.9.0-beta.1]: https://github.com/example/markdown-fixer/releases/tag/v0.9.0-beta.1\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "line-length-80",
+      "options": {
+        "maxLineLength": 80
+      },
+      "diagnose": [
+        {
+          "rule": "MDX090",
+          "name": "line-length",
+          "severity": "info",
+          "fixable": false,
+          "line": 6,
+          "column": 81,
+          "message": "Line is 87 characters; limit is 80."
+        },
+        {
+          "rule": "MDX030",
+          "name": "list-marker-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 16,
+          "column": 2,
+          "message": "Add a space after the \"-\" list marker."
+        },
+        {
+          "rule": "MDX031",
+          "name": "list-marker-style",
+          "severity": "warning",
+          "fixable": true,
+          "line": 25,
+          "column": 1,
+          "message": "List uses \"-\" but the first item in this list uses \"*\". Use one bullet marker per list."
+        },
+        {
+          "rule": "MDX019",
+          "name": "multiple-h1",
+          "severity": "info",
+          "fixable": false,
+          "line": 42,
+          "column": 1,
+          "message": "Document has more than one H1. Use H2 for subsections and keep one H1 for the page title."
+        },
+        {
+          "rule": "MDX032",
+          "name": "list-blank-lines",
+          "severity": "warning",
+          "fixable": false,
+          "line": 50,
+          "column": 1,
+          "message": "List ends directly before a paragraph, which may be read as a lazy continuation of the last item. Add a blank line after the list."
+        },
+        {
+          "rule": "MDX035",
+          "name": "empty-list-item",
+          "severity": "warning",
+          "fixable": false,
+          "line": 50,
+          "column": 1,
+          "message": "Empty list item. Remove it or add content."
+        },
+        {
+          "rule": "MDX004",
+          "name": "trailing-whitespace",
+          "severity": "warning",
+          "fixable": true,
+          "line": 50,
+          "column": 2,
+          "message": "Trailing whitespace. Exactly two trailing spaces create a hard line break; other trailing whitespace is noise."
+        }
+      ],
+      "fix": {
+        "text": "# Changelog\n\nAll notable changes to this project will be documented in this file.\n\nThe format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),\nand this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).\n\n## [Unreleased]\n\n### Added\n- `--stdin` flag reads Markdown from standard input.\n- `--exit-zero` for clipboard scripts.\n\n### Fixed\n\n- Column numbers for emoji are now reported in UTF-16 code units.\n- Trailing whitespace inside fenced code is no longer touched.\n\n## [1.2.0] - 2026-10-20\n\n### Added\n\n* New rule MDX042 for unpaired emphasis next to CJK punctuation.\n* `--list-rules` prints the catalog.\n* JSON output includes `wouldFix`.\n\n### Changed\n\n- Bumped MSRV to 1.85 .\n- **Breaking:** `fix()` was renamed to `fix_document()`.\n\n### Removed\n\n- The `--legacy` flag. See #123 for details.\n\n## [1.1.0] - 2026-07-02\n\n### Security\n\n- Refuse to write files that contain NUL bytes ([#98]).\n\n# 1.0.0 - 2026-05-01\n\nInitial release.\n\n## [0.9.0-beta.1] - 2026-03-10\n\n### Added\n- Beta release for internal testing.\n-\n\n[Unreleased]: https://github.com/example/markdown-fixer/compare/v1.2.0...HEAD\n[1.2.0]: https://github.com/example/markdown-fixer/compare/v1.1.0...v1.2.0\n[1.1.0]: https://github.com/example/markdown-fixer/compare/v1.0.0...v1.1.0\n[0.9.0-beta.1]: https://github.com/example/markdown-fixer/releases/tag/v0.9.0-beta.1\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "keep-encoding",
+      "options": {
+        "ignoreRules": [
+          "MDX001",
+          "MDX002"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX030",
+          "name": "list-marker-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 16,
+          "column": 2,
+          "message": "Add a space after the \"-\" list marker."
+        },
+        {
+          "rule": "MDX031",
+          "name": "list-marker-style",
+          "severity": "warning",
+          "fixable": true,
+          "line": 25,
+          "column": 1,
+          "message": "List uses \"-\" but the first item in this list uses \"*\". Use one bullet marker per list."
+        },
+        {
+          "rule": "MDX019",
+          "name": "multiple-h1",
+          "severity": "info",
+          "fixable": false,
+          "line": 42,
+          "column": 1,
+          "message": "Document has more than one H1. Use H2 for subsections and keep one H1 for the page title."
+        },
+        {
+          "rule": "MDX032",
+          "name": "list-blank-lines",
+          "severity": "warning",
+          "fixable": false,
+          "line": 50,
+          "column": 1,
+          "message": "List ends directly before a paragraph, which may be read as a lazy continuation of the last item. Add a blank line after the list."
+        },
+        {
+          "rule": "MDX035",
+          "name": "empty-list-item",
+          "severity": "warning",
+          "fixable": false,
+          "line": 50,
+          "column": 1,
+          "message": "Empty list item. Remove it or add content."
+        },
+        {
+          "rule": "MDX004",
+          "name": "trailing-whitespace",
+          "severity": "warning",
+          "fixable": true,
+          "line": 50,
+          "column": 2,
+          "message": "Trailing whitespace. Exactly two trailing spaces create a hard line break; other trailing whitespace is noise."
+        }
+      ],
+      "fix": {
+        "text": "# Changelog\n\nAll notable changes to this project will be documented in this file.\n\nThe format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),\nand this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).\n\n## [Unreleased]\n\n### Added\n- `--stdin` flag reads Markdown from standard input.\n- `--exit-zero` for clipboard scripts.\n\n### Fixed\n\n- Column numbers for emoji are now reported in UTF-16 code units.\n- Trailing whitespace inside fenced code is no longer touched.\n\n## [1.2.0] - 2026-10-20\n\n### Added\n\n* New rule MDX042 for unpaired emphasis next to CJK punctuation.\n* `--list-rules` prints the catalog.\n* JSON output includes `wouldFix`.\n\n### Changed\n\n- Bumped MSRV to 1.85 .\n- **Breaking:** `fix()` was renamed to `fix_document()`.\n\n### Removed\n\n- The `--legacy` flag. See #123 for details.\n\n## [1.1.0] - 2026-07-02\n\n### Security\n\n- Refuse to write files that contain NUL bytes ([#98]).\n\n# 1.0.0 - 2026-05-01\n\nInitial release.\n\n## [0.9.0-beta.1] - 2026-03-10\n\n### Added\n- Beta release for internal testing.\n-\n\n[Unreleased]: https://github.com/example/markdown-fixer/compare/v1.2.0...HEAD\n[1.2.0]: https://github.com/example/markdown-fixer/compare/v1.1.0...v1.2.0\n[1.1.0]: https://github.com/example/markdown-fixer/compare/v1.0.0...v1.1.0\n[0.9.0-beta.1]: https://github.com/example/markdown-fixer/releases/tag/v0.9.0-beta.1\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "headings-only",
+      "options": {
+        "rules": [
+          "MDX010",
+          "MDX011",
+          "MDX012",
+          "MDX013"
+        ]
+      },
+      "diagnose": [],
+      "fix": {
+        "text": "# Changelog\n\nAll notable changes to this project will be documented in this file.\n\nThe format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),\nand this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).\n\n## [Unreleased]\n\n### Added\n- `--stdin` flag reads Markdown from standard input.\n- `--exit-zero` for clipboard scripts.\n\n### Fixed\n\n-Column numbers for emoji are now reported in UTF-16 code units.\n- Trailing whitespace inside fenced code is no longer touched.\n\n## [1.2.0] - 2026-10-20\n\n### Added\n\n* New rule MDX042 for unpaired emphasis next to CJK punctuation.\n* `--list-rules` prints the catalog.\n- JSON output includes `wouldFix`.\n\n### Changed\n\n- Bumped MSRV to 1.85 .\n- **Breaking:** `fix()` was renamed to `fix_document()`.\n\n### Removed\n\n- The `--legacy` flag. See #123 for details.\n\n## [1.1.0] - 2026-07-02\n\n### Security\n\n- Refuse to write files that contain NUL bytes ([#98]).\n\n# 1.0.0 - 2026-05-01\n\nInitial release.\n\n## [0.9.0-beta.1] - 2026-03-10\n\n### Added\n- Beta release for internal testing.\n- \n\n[Unreleased]: https://github.com/example/markdown-fixer/compare/v1.2.0...HEAD\n[1.2.0]: https://github.com/example/markdown-fixer/compare/v1.1.0...v1.2.0\n[1.1.0]: https://github.com/example/markdown-fixer/compare/v1.0.0...v1.1.0\n[0.9.0-beta.1]: https://github.com/example/markdown-fixer/releases/tag/v0.9.0-beta.1\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    }
+  ]
+}

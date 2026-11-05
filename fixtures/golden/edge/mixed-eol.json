@@ -1,0 +1,182 @@
+{
+  "source": "edge/mixed-eol.md",
+  "referenceVersion": "1.0.0",
+  "cases": [
+    {
+      "name": "default",
+      "options": {},
+      "diagnose": [
+        {
+          "rule": "MDX002",
+          "name": "line-endings",
+          "severity": "warning",
+          "fixable": true,
+          "line": 1,
+          "column": 1,
+          "message": "File uses CRLF or CR line endings. Normalize them to LF."
+        },
+        {
+          "rule": "MDX032",
+          "name": "list-blank-lines",
+          "severity": "warning",
+          "fixable": false,
+          "line": 6,
+          "column": 1,
+          "message": "List starts directly after a paragraph. Add a blank line before it so the list boundary is unambiguous."
+        },
+        {
+          "rule": "MDX030",
+          "name": "list-marker-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 6,
+          "column": 2,
+          "message": "Add a space after the \"-\" list marker."
+        }
+      ],
+      "fix": {
+        "text": "# Mixed\n\nLF line\nCRLF line\nCR line\n- item\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "snippet",
+      "options": {
+        "ignoreRules": [
+          "MDX003"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX002",
+          "name": "line-endings",
+          "severity": "warning",
+          "fixable": true,
+          "line": 1,
+          "column": 1,
+          "message": "File uses CRLF or CR line endings. Normalize them to LF."
+        },
+        {
+          "rule": "MDX032",
+          "name": "list-blank-lines",
+          "severity": "warning",
+          "fixable": false,
+          "line": 6,
+          "column": 1,
+          "message": "List starts directly after a paragraph. Add a blank line before it so the list boundary is unambiguous."
+        },
+        {
+          "rule": "MDX030",
+          "name": "list-marker-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 6,
+          "column": 2,
+          "message": "Add a space after the \"-\" list marker."
+        }
+      ],
+      "fix": {
+        "text": "# Mixed\n\nLF line\nCRLF line\nCR line\n- item\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "line-length-80",
+      "options": {
+        "maxLineLength": 80
+      },
+      "diagnose": [
+        {
+          "rule": "MDX002",
+          "name": "line-endings",
+          "severity": "warning",
+          "fixable": true,
+          "line": 1,
+          "column": 1,
+          "message": "File uses CRLF or CR line endings. Normalize them to LF."
+        },
+        {
+          "rule": "MDX032",
+          "name": "list-blank-lines",
+          "severity": "warning",
+          "fixable": false,
+          "line": 6,
+          "column": 1,
+          "message": "List starts directly after a paragraph. Add a blank line before it so the list boundary is unambiguous."
+        },
+        {
+          "rule": "MDX030",
+          "name": "list-marker-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 6,
+          "column": 2,
+          "message": "Add a space after the \"-\" list marker."
+        }
+      ],
+      "fix": {
+        "text": "# Mixed\n\nLF line\nCRLF line\nCR line\n- item\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "keep-encoding",
+      "options": {
+        "ignoreRules": [
+          "MDX001",
+          "MDX002"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX032",
+          "name": "list-blank-lines",
+          "severity": "warning",
+          "fixable": false,
+          "line": 6,
+          "column": 1,
+          "message": "List starts directly after a paragraph. Add a blank line before it so the list boundary is unambiguous."
+        },
+        {
+          "rule": "MDX030",
+          "name": "list-marker-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 6,
+          "column": 2,
+          "message": "Add a space after the \"-\" list marker."
+        }
+      ],
+      "fix": {
+        "text": "# Mixed\r\n\r\nLF line\r\nCRLF line\r\nCR line\r\n- item\r\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "headings-only",
+      "options": {
+        "rules": [
+          "MDX010",
+          "MDX011",
+          "MDX012",
+          "MDX013"
+        ]
+      },
+      "diagnose": [],
+      "fix": {
+        "text": "# Mixed\r\n\r\nLF line\nCRLF line\r\nCR line\r\n-item\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    }
+  ]
+}

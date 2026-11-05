@@ -1,0 +1,165 @@
+{
+  "source": "rules/MDX011/trigger.md",
+  "referenceVersion": "1.0.0",
+  "cases": [
+    {
+      "name": "default",
+      "options": {},
+      "diagnose": [
+        {
+          "rule": "MDX011",
+          "name": "atx-multiple-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 1,
+          "column": 2,
+          "message": "Use exactly one space after the ATX heading marker."
+        },
+        {
+          "rule": "MDX007",
+          "name": "hard-tab",
+          "severity": "warning",
+          "fixable": false,
+          "line": 3,
+          "column": 3,
+          "message": "Tab character found. Use spaces for indentation and alignment; tabs render at different widths."
+        }
+      ],
+      "fix": {
+        "text": "# 兩個空白\n\n##\tTab 間隔\n\n內容。\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "snippet",
+      "options": {
+        "ignoreRules": [
+          "MDX003"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX011",
+          "name": "atx-multiple-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 1,
+          "column": 2,
+          "message": "Use exactly one space after the ATX heading marker."
+        },
+        {
+          "rule": "MDX007",
+          "name": "hard-tab",
+          "severity": "warning",
+          "fixable": false,
+          "line": 3,
+          "column": 3,
+          "message": "Tab character found. Use spaces for indentation and alignment; tabs render at different widths."
+        }
+      ],
+      "fix": {
+        "text": "# 兩個空白\n\n##\tTab 間隔\n\n內容。\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "line-length-80",
+      "options": {
+        "maxLineLength": 80
+      },
+      "diagnose": [
+        {
+          "rule": "MDX011",
+          "name": "atx-multiple-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 1,
+          "column": 2,
+          "message": "Use exactly one space after the ATX heading marker."
+        },
+        {
+          "rule": "MDX007",
+          "name": "hard-tab",
+          "severity": "warning",
+          "fixable": false,
+          "line": 3,
+          "column": 3,
+          "message": "Tab character found. Use spaces for indentation and alignment; tabs render at different widths."
+        }
+      ],
+      "fix": {
+        "text": "# 兩個空白\n\n##\tTab 間隔\n\n內容。\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "keep-encoding",
+      "options": {
+        "ignoreRules": [
+          "MDX001",
+          "MDX002"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX011",
+          "name": "atx-multiple-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 1,
+          "column": 2,
+          "message": "Use exactly one space after the ATX heading marker."
+        },
+        {
+          "rule": "MDX007",
+          "name": "hard-tab",
+          "severity": "warning",
+          "fixable": false,
+          "line": 3,
+          "column": 3,
+          "message": "Tab character found. Use spaces for indentation and alignment; tabs render at different widths."
+        }
+      ],
+      "fix": {
+        "text": "# 兩個空白\n\n##\tTab 間隔\n\n內容。\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "headings-only",
+      "options": {
+        "rules": [
+          "MDX010",
+          "MDX011",
+          "MDX012",
+          "MDX013"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX011",
+          "name": "atx-multiple-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 1,
+          "column": 2,
+          "message": "Use exactly one space after the ATX heading marker."
+        }
+      ],
+      "fix": {
+        "text": "# 兩個空白\n\n##\tTab 間隔\n\n內容。\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    }
+  ]
+}

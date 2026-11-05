@@ -1,0 +1,119 @@
+{
+  "source": "rules/MDX051/trigger.md",
+  "referenceVersion": "1.0.0",
+  "cases": [
+    {
+      "name": "default",
+      "options": {},
+      "diagnose": [
+        {
+          "rule": "MDX051",
+          "name": "fence-unclosed",
+          "severity": "error",
+          "fixable": false,
+          "line": 3,
+          "column": 1,
+          "message": "Unclosed backtick code fence."
+        }
+      ],
+      "fix": {
+        "text": "# 未關閉的 fence\n\n```js\nconsole.log('hi');\n\n後面的內容都被吞進程式碼區塊。\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "snippet",
+      "options": {
+        "ignoreRules": [
+          "MDX003"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX051",
+          "name": "fence-unclosed",
+          "severity": "error",
+          "fixable": false,
+          "line": 3,
+          "column": 1,
+          "message": "Unclosed backtick code fence."
+        }
+      ],
+      "fix": {
+        "text": "# 未關閉的 fence\n\n```js\nconsole.log('hi');\n\n後面的內容都被吞進程式碼區塊。\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "line-length-80",
+      "options": {
+        "maxLineLength": 80
+      },
+      "diagnose": [
+        {
+          "rule": "MDX051",
+          "name": "fence-unclosed",
+          "severity": "error",
+          "fixable": false,
+          "line": 3,
+          "column": 1,
+          "message": "Unclosed backtick code fence."
+        }
+      ],
+      "fix": {
+        "text": "# 未關閉的 fence\n\n```js\nconsole.log('hi');\n\n後面的內容都被吞進程式碼區塊。\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "keep-encoding",
+      "options": {
+        "ignoreRules": [
+          "MDX001",
+          "MDX002"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX051",
+          "name": "fence-unclosed",
+          "severity": "error",
+          "fixable": false,
+          "line": 3,
+          "column": 1,
+          "message": "Unclosed backtick code fence."
+        }
+      ],
+      "fix": {
+        "text": "# 未關閉的 fence\n\n```js\nconsole.log('hi');\n\n後面的內容都被吞進程式碼區塊。\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "headings-only",
+      "options": {
+        "rules": [
+          "MDX010",
+          "MDX011",
+          "MDX012",
+          "MDX013"
+        ]
+      },
+      "diagnose": [],
+      "fix": {
+        "text": "# 未關閉的 fence\n\n```js\nconsole.log('hi');\n\n後面的內容都被吞進程式碼區塊。\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    }
+  ]
+}

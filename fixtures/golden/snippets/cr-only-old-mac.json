@@ -1,0 +1,201 @@
+{
+  "source": "snippets/cr-only-old-mac.md",
+  "referenceVersion": "1.0.0",
+  "cases": [
+    {
+      "name": "default",
+      "options": {},
+      "diagnose": [
+        {
+          "rule": "MDX002",
+          "name": "line-endings",
+          "severity": "warning",
+          "fixable": true,
+          "line": 1,
+          "column": 1,
+          "message": "File uses CRLF or CR line endings. Normalize them to LF."
+        },
+        {
+          "rule": "MDX013",
+          "name": "heading-blank-lines",
+          "severity": "warning",
+          "fixable": true,
+          "line": 4,
+          "column": 1,
+          "message": "Heading is directly attached to the preceding paragraph. Add a blank line before it."
+        },
+        {
+          "rule": "MDX010",
+          "name": "atx-missing-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 4,
+          "column": 3,
+          "message": "Add a space after the heading marker: \"## \" rather than \"##\"."
+        }
+      ],
+      "fix": {
+        "text": "# 舊 Mac 文件\n\n使用 CR 換行的文字。\n\n## 子標題\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "snippet",
+      "options": {
+        "ignoreRules": [
+          "MDX003"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX002",
+          "name": "line-endings",
+          "severity": "warning",
+          "fixable": true,
+          "line": 1,
+          "column": 1,
+          "message": "File uses CRLF or CR line endings. Normalize them to LF."
+        },
+        {
+          "rule": "MDX013",
+          "name": "heading-blank-lines",
+          "severity": "warning",
+          "fixable": true,
+          "line": 4,
+          "column": 1,
+          "message": "Heading is directly attached to the preceding paragraph. Add a blank line before it."
+        },
+        {
+          "rule": "MDX010",
+          "name": "atx-missing-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 4,
+          "column": 3,
+          "message": "Add a space after the heading marker: \"## \" rather than \"##\"."
+        }
+      ],
+      "fix": {
+        "text": "# 舊 Mac 文件\n\n使用 CR 換行的文字。\n\n## 子標題\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "line-length-80",
+      "options": {
+        "maxLineLength": 80
+      },
+      "diagnose": [
+        {
+          "rule": "MDX002",
+          "name": "line-endings",
+          "severity": "warning",
+          "fixable": true,
+          "line": 1,
+          "column": 1,
+          "message": "File uses CRLF or CR line endings. Normalize them to LF."
+        },
+        {
+          "rule": "MDX013",
+          "name": "heading-blank-lines",
+          "severity": "warning",
+          "fixable": true,
+          "line": 4,
+          "column": 1,
+          "message": "Heading is directly attached to the preceding paragraph. Add a blank line before it."
+        },
+        {
+          "rule": "MDX010",
+          "name": "atx-missing-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 4,
+          "column": 3,
+          "message": "Add a space after the heading marker: \"## \" rather than \"##\"."
+        }
+      ],
+      "fix": {
+        "text": "# 舊 Mac 文件\n\n使用 CR 換行的文字。\n\n## 子標題\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "keep-encoding",
+      "options": {
+        "ignoreRules": [
+          "MDX001",
+          "MDX002"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX013",
+          "name": "heading-blank-lines",
+          "severity": "warning",
+          "fixable": true,
+          "line": 4,
+          "column": 1,
+          "message": "Heading is directly attached to the preceding paragraph. Add a blank line before it."
+        },
+        {
+          "rule": "MDX010",
+          "name": "atx-missing-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 4,
+          "column": 3,
+          "message": "Add a space after the heading marker: \"## \" rather than \"##\"."
+        }
+      ],
+      "fix": {
+        "text": "# 舊 Mac 文件\r\r使用 CR 換行的文字。\r\r## 子標題\r",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "headings-only",
+      "options": {
+        "rules": [
+          "MDX010",
+          "MDX011",
+          "MDX012",
+          "MDX013"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX013",
+          "name": "heading-blank-lines",
+          "severity": "warning",
+          "fixable": true,
+          "line": 4,
+          "column": 1,
+          "message": "Heading is directly attached to the preceding paragraph. Add a blank line before it."
+        },
+        {
+          "rule": "MDX010",
+          "name": "atx-missing-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 4,
+          "column": 3,
+          "message": "Add a space after the heading marker: \"## \" rather than \"##\"."
+        }
+      ],
+      "fix": {
+        "text": "# 舊 Mac 文件\r\r使用 CR 換行的文字。\r\r## 子標題\r",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    }
+  ]
+}

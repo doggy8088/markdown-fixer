@@ -1,0 +1,26 @@
+{
+  "name": "info-strict",
+  "args": [
+    "--strict",
+    "info.md"
+  ],
+  "cwd": "",
+  "nonRoot": false,
+  "setup": [
+    {
+      "path": "info.md",
+      "text": "# Info Only\n\nVisit https://example.com for details.\n"
+    }
+  ],
+  "expected": {
+    "status": 1,
+    "stdout": "info.md\n  3:7        info    MDX070  Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text.\n\n1 problem(s) in 1 file(s): 0 fixable, 0 error(s), 0 warning(s), 1 info.\n",
+    "stderr": "",
+    "files": [
+      {
+        "path": "info.md",
+        "text": "# Info Only\n\nVisit https://example.com for details.\n"
+      }
+    ]
+  }
+}

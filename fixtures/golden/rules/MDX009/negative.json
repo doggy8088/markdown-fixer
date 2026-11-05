@@ -1,0 +1,79 @@
+{
+  "source": "rules/MDX009/negative.md",
+  "referenceVersion": "1.0.0",
+  "cases": [
+    {
+      "name": "default",
+      "options": {},
+      "diagnose": [],
+      "fix": {
+        "text": "# 看起來像零寬字元\n\n家庭表情符號 👨\u200D👩\u200D👧 使用 ZWJ（U+200D），不在檢查範圍。\n\n波斯文常用 ZWNJ（U+200C）：می\u200Cخواهم。\n\n`a\u200Bb` 在 inline code 裡。\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "snippet",
+      "options": {
+        "ignoreRules": [
+          "MDX003"
+        ]
+      },
+      "diagnose": [],
+      "fix": {
+        "text": "# 看起來像零寬字元\n\n家庭表情符號 👨\u200D👩\u200D👧 使用 ZWJ（U+200D），不在檢查範圍。\n\n波斯文常用 ZWNJ（U+200C）：می\u200Cخواهم。\n\n`a\u200Bb` 在 inline code 裡。\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "line-length-80",
+      "options": {
+        "maxLineLength": 80
+      },
+      "diagnose": [],
+      "fix": {
+        "text": "# 看起來像零寬字元\n\n家庭表情符號 👨\u200D👩\u200D👧 使用 ZWJ（U+200D），不在檢查範圍。\n\n波斯文常用 ZWNJ（U+200C）：می\u200Cخواهم。\n\n`a\u200Bb` 在 inline code 裡。\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "keep-encoding",
+      "options": {
+        "ignoreRules": [
+          "MDX001",
+          "MDX002"
+        ]
+      },
+      "diagnose": [],
+      "fix": {
+        "text": "# 看起來像零寬字元\n\n家庭表情符號 👨\u200D👩\u200D👧 使用 ZWJ（U+200D），不在檢查範圍。\n\n波斯文常用 ZWNJ（U+200C）：می\u200Cخواهم。\n\n`a\u200Bb` 在 inline code 裡。\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "headings-only",
+      "options": {
+        "rules": [
+          "MDX010",
+          "MDX011",
+          "MDX012",
+          "MDX013"
+        ]
+      },
+      "diagnose": [],
+      "fix": {
+        "text": "# 看起來像零寬字元\n\n家庭表情符號 👨\u200D👩\u200D👧 使用 ZWJ（U+200D），不在檢查範圍。\n\n波斯文常用 ZWNJ（U+200C）：می\u200Cخواهم。\n\n`a\u200Bb` 在 inline code 裡。\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "name": "crlf-bom-preserved",
+  "args": [
+    "--write",
+    "--ignore-rule",
+    "MDX001,MDX002",
+    "w.md"
+  ],
+  "cwd": "",
+  "nonRoot": false,
+  "setup": [
+    {
+      "path": "w.md",
+      "text": "﻿#Title\r\n\r\nLine one.  \r\nLine two\r\n"
+    }
+  ],
+  "expected": {
+    "status": 0,
+    "stdout": "w.md\n  No problems.\n  Fixed 1 issue(s).\n\nFixed 1 issue(s) in 1 file(s).\nNo remaining Markdown issues.\n",
+    "stderr": "",
+    "files": [
+      {
+        "path": "w.md",
+        "text": "﻿# Title\r\n\r\nLine one.  \r\nLine two\r\n"
+      }
+    ]
+  }
+}

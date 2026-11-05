@@ -1,0 +1,15 @@
+{
+  "name": "version-short",
+  "args": [
+    "-v"
+  ],
+  "cwd": "",
+  "nonRoot": false,
+  "setup": [],
+  "expected": {
+    "status": 0,
+    "stdout": "markdown-fixer <VERSION>\n",
+    "stderr": "",
+    "files": []
+  }
+}

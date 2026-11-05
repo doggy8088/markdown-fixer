@@ -1,0 +1,27 @@
+{
+  "name": "refused-write-quiet",
+  "args": [
+    "--write",
+    "--quiet",
+    "fm.md"
+  ],
+  "cwd": "",
+  "nonRoot": false,
+  "setup": [
+    {
+      "path": "fm.md",
+      "text": "---\ntitle: x\n#Title\n"
+    }
+  ],
+  "expected": {
+    "status": 1,
+    "stdout": "1 problem(s) remain: 0 fixable, 1 error(s), 0 warning(s), 0 info.\n1 file(s) were not modified because of structural or frontmatter ambiguity.\n",
+    "stderr": "",
+    "files": [
+      {
+        "path": "fm.md",
+        "text": "---\ntitle: x\n#Title\n"
+      }
+    ]
+  }
+}

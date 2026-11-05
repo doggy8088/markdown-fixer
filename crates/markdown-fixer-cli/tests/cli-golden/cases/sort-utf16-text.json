@@ -1,0 +1,41 @@
+{
+  "name": "sort-utf16-text",
+  "args": [
+    "."
+  ],
+  "cwd": "",
+  "nonRoot": false,
+  "setup": [
+    {
+      "path": "～.md",
+      "text": "# Fullwidth tilde\n"
+    },
+    {
+      "path": "😀.md",
+      "text": "# Emoji\n"
+    },
+    {
+      "path": "b.md",
+      "text": "# b\n"
+    }
+  ],
+  "expected": {
+    "status": 0,
+    "stdout": "b.md\n  No problems.\n\n😀.md\n  No problems.\n\n～.md\n  No problems.\n\nNo Markdown issues found in 3 file(s).\n",
+    "stderr": "",
+    "files": [
+      {
+        "path": "b.md",
+        "text": "# b\n"
+      },
+      {
+        "path": "😀.md",
+        "text": "# Emoji\n"
+      },
+      {
+        "path": "～.md",
+        "text": "# Fullwidth tilde\n"
+      }
+    ]
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "name": "missing-path",
+  "args": [
+    "missing.md",
+    "a.md",
+    "also-missing/"
+  ],
+  "cwd": "",
+  "nonRoot": false,
+  "setup": [
+    {
+      "path": "a.md",
+      "text": "# Clean Document\n\nThis document has no problems.\n\n## Section\n\n- One\n- Two\n\n```js\nconsole.log('hi');\n```\n"
+    }
+  ],
+  "expected": {
+    "status": 2,
+    "stdout": "",
+    "stderr": "Error: Cannot access missing.md: ENOENT: no such file or directory, stat 'missing.md'\nError: Cannot access also-missing/: ENOENT: no such file or directory, stat 'also-missing/'\n",
+    "files": [
+      {
+        "path": "a.md",
+        "text": "# Clean Document\n\nThis document has no problems.\n\n## Section\n\n- One\n- Two\n\n```js\nconsole.log('hi');\n```\n"
+      }
+    ]
+  }
+}

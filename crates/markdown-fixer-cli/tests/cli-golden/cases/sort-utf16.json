@@ -1,0 +1,67 @@
+{
+  "name": "sort-utf16",
+  "args": [
+    "--quiet",
+    "--json",
+    "."
+  ],
+  "cwd": "",
+  "nonRoot": false,
+  "setup": [
+    {
+      "path": "～.md",
+      "text": "#Fullwidth tilde\n"
+    },
+    {
+      "path": "😀.md",
+      "text": "#Emoji\n"
+    },
+    {
+      "path": "b.md",
+      "text": "#b\n"
+    },
+    {
+      "path": "_.md",
+      "text": "#underscore\n"
+    },
+    {
+      "path": "Z.md",
+      "text": "#Z\n"
+    },
+    {
+      "path": "中文.md",
+      "text": "#CJK\n"
+    }
+  ],
+  "expected": {
+    "status": 1,
+    "stdout": "{\n  \"tool\": \"markdown-fixer\",\n  \"version\": \"<VERSION>\",\n  \"mode\": \"check\",\n  \"files\": [\n    {\n      \"path\": \"Z.md\",\n      \"changed\": false,\n      \"wouldChange\": true,\n      \"refused\": false,\n      \"fixed\": 0,\n      \"wouldFix\": 1,\n      \"problems\": [\n        {\n          \"rule\": \"MDX010\",\n          \"name\": \"atx-missing-space\",\n          \"severity\": \"warning\",\n          \"fixable\": true,\n          \"line\": 1,\n          \"column\": 2,\n          \"message\": \"Add a space after the heading marker: \\\"# \\\" rather than \\\"#\\\".\"\n        }\n      ]\n    },\n    {\n      \"path\": \"_.md\",\n      \"changed\": false,\n      \"wouldChange\": true,\n      \"refused\": false,\n      \"fixed\": 0,\n      \"wouldFix\": 1,\n      \"problems\": [\n        {\n          \"rule\": \"MDX010\",\n          \"name\": \"atx-missing-space\",\n          \"severity\": \"warning\",\n          \"fixable\": true,\n          \"line\": 1,\n          \"column\": 2,\n          \"message\": \"Add a space after the heading marker: \\\"# \\\" rather than \\\"#\\\".\"\n        }\n      ]\n    },\n    {\n      \"path\": \"b.md\",\n      \"changed\": false,\n      \"wouldChange\": true,\n      \"refused\": false,\n      \"fixed\": 0,\n      \"wouldFix\": 1,\n      \"problems\": [\n        {\n          \"rule\": \"MDX010\",\n          \"name\": \"atx-missing-space\",\n          \"severity\": \"warning\",\n          \"fixable\": true,\n          \"line\": 1,\n          \"column\": 2,\n          \"message\": \"Add a space after the heading marker: \\\"# \\\" rather than \\\"#\\\".\"\n        }\n      ]\n    },\n    {\n      \"path\": \"中文.md\",\n      \"changed\": false,\n      \"wouldChange\": true,\n      \"refused\": false,\n      \"fixed\": 0,\n      \"wouldFix\": 1,\n      \"problems\": [\n        {\n          \"rule\": \"MDX010\",\n          \"name\": \"atx-missing-space\",\n          \"severity\": \"warning\",\n          \"fixable\": true,\n          \"line\": 1,\n          \"column\": 2,\n          \"message\": \"Add a space after the heading marker: \\\"# \\\" rather than \\\"#\\\".\"\n        }\n      ]\n    },\n    {\n      \"path\": \"😀.md\",\n      \"changed\": false,\n      \"wouldChange\": true,\n      \"refused\": false,\n      \"fixed\": 0,\n      \"wouldFix\": 1,\n      \"problems\": [\n        {\n          \"rule\": \"MDX010\",\n          \"name\": \"atx-missing-space\",\n          \"severity\": \"warning\",\n          \"fixable\": true,\n          \"line\": 1,\n          \"column\": 2,\n          \"message\": \"Add a space after the heading marker: \\\"# \\\" rather than \\\"#\\\".\"\n        }\n      ]\n    },\n    {\n      \"path\": \"～.md\",\n      \"changed\": false,\n      \"wouldChange\": true,\n      \"refused\": false,\n      \"fixed\": 0,\n      \"wouldFix\": 1,\n      \"problems\": [\n        {\n          \"rule\": \"MDX010\",\n          \"name\": \"atx-missing-space\",\n          \"severity\": \"warning\",\n          \"fixable\": true,\n          \"line\": 1,\n          \"column\": 2,\n          \"message\": \"Add a space after the heading marker: \\\"# \\\" rather than \\\"#\\\".\"\n        }\n      ]\n    }\n  ],\n  \"summary\": {\n    \"files\": 6,\n    \"changed\": 0,\n    \"wouldChange\": 6,\n    \"fixed\": 0,\n    \"refused\": 0,\n    \"problems\": {\n      \"total\": 6,\n      \"errors\": 0,\n      \"warnings\": 6,\n      \"info\": 0,\n      \"fixable\": 6\n    }\n  }\n}\n",
+    "stderr": "",
+    "files": [
+      {
+        "path": "Z.md",
+        "text": "#Z\n"
+      },
+      {
+        "path": "_.md",
+        "text": "#underscore\n"
+      },
+      {
+        "path": "b.md",
+        "text": "#b\n"
+      },
+      {
+        "path": "中文.md",
+        "text": "#CJK\n"
+      },
+      {
+        "path": "😀.md",
+        "text": "#Emoji\n"
+      },
+      {
+        "path": "～.md",
+        "text": "#Fullwidth tilde\n"
+      }
+    ]
+  }
+}

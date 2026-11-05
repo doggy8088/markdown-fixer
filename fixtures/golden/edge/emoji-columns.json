@@ -1,0 +1,407 @@
+{
+  "source": "edge/emoji-columns.md",
+  "referenceVersion": "1.0.0",
+  "cases": [
+    {
+      "name": "default",
+      "options": {},
+      "diagnose": [
+        {
+          "rule": "MDX040",
+          "name": "emphasis-inner-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 3,
+          "column": 6,
+          "message": "Remove spaces just inside the bold (**) delimiters."
+        },
+        {
+          "rule": "MDX008",
+          "name": "non-breaking-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 5,
+          "column": 3,
+          "message": "Replace non-breaking spaces (U+00A0) with normal spaces; they usually come from Word or a web page paste."
+        },
+        {
+          "rule": "MDX040",
+          "name": "emphasis-inner-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 7,
+          "column": 6,
+          "message": "Remove spaces just inside the bold (**) delimiters."
+        },
+        {
+          "rule": "MDX070",
+          "name": "bare-url",
+          "severity": "info",
+          "fixable": false,
+          "line": 7,
+          "column": 14,
+          "message": "Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text."
+        },
+        {
+          "rule": "MDX060",
+          "name": "table-delimiter-width",
+          "severity": "warning",
+          "fixable": true,
+          "line": 10,
+          "column": 3,
+          "message": "Table delimiter cell has fewer than three hyphens."
+        },
+        {
+          "rule": "MDX063",
+          "name": "table-pipe-in-code",
+          "severity": "warning",
+          "fixable": false,
+          "line": 11,
+          "column": 3,
+          "message": "A pipe inside code or a URL in a table cell still splits the cell. Escape it as \\| in code, or use %7C in a URL."
+        },
+        {
+          "rule": "MDX071",
+          "name": "empty-link",
+          "severity": "warning",
+          "fixable": false,
+          "line": 13,
+          "column": 7,
+          "message": "Link or image has empty text or an empty destination."
+        },
+        {
+          "rule": "MDX009",
+          "name": "zero-width-character",
+          "severity": "warning",
+          "fixable": false,
+          "line": 15,
+          "column": 3,
+          "message": "Zero-width character found. Remove it unless it is intentional (for example, a line-break opportunity in some scripts)."
+        },
+        {
+          "rule": "MDX007",
+          "name": "hard-tab",
+          "severity": "warning",
+          "fixable": false,
+          "line": 17,
+          "column": 3,
+          "message": "Tab character found. Use spaces for indentation and alignment; tabs render at different widths."
+        }
+      ],
+      "fix": {
+        "text": "# 😀 表情符號欄號\n\n😀😀 **粗體** 測試欄號（UTF-16）。\n\n🎉 慶祝 一下。\n\n𠮷野家 **吉** 與 https://example.com/😀\n\n| 😀 | b |\n| --- | --- |\n| `a|b` | c |\n\n😀😀😀[](x)\n\n👍\u200B讚\n\n𝒳\ttab\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "snippet",
+      "options": {
+        "ignoreRules": [
+          "MDX003"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX040",
+          "name": "emphasis-inner-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 3,
+          "column": 6,
+          "message": "Remove spaces just inside the bold (**) delimiters."
+        },
+        {
+          "rule": "MDX008",
+          "name": "non-breaking-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 5,
+          "column": 3,
+          "message": "Replace non-breaking spaces (U+00A0) with normal spaces; they usually come from Word or a web page paste."
+        },
+        {
+          "rule": "MDX040",
+          "name": "emphasis-inner-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 7,
+          "column": 6,
+          "message": "Remove spaces just inside the bold (**) delimiters."
+        },
+        {
+          "rule": "MDX070",
+          "name": "bare-url",
+          "severity": "info",
+          "fixable": false,
+          "line": 7,
+          "column": 14,
+          "message": "Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text."
+        },
+        {
+          "rule": "MDX060",
+          "name": "table-delimiter-width",
+          "severity": "warning",
+          "fixable": true,
+          "line": 10,
+          "column": 3,
+          "message": "Table delimiter cell has fewer than three hyphens."
+        },
+        {
+          "rule": "MDX063",
+          "name": "table-pipe-in-code",
+          "severity": "warning",
+          "fixable": false,
+          "line": 11,
+          "column": 3,
+          "message": "A pipe inside code or a URL in a table cell still splits the cell. Escape it as \\| in code, or use %7C in a URL."
+        },
+        {
+          "rule": "MDX071",
+          "name": "empty-link",
+          "severity": "warning",
+          "fixable": false,
+          "line": 13,
+          "column": 7,
+          "message": "Link or image has empty text or an empty destination."
+        },
+        {
+          "rule": "MDX009",
+          "name": "zero-width-character",
+          "severity": "warning",
+          "fixable": false,
+          "line": 15,
+          "column": 3,
+          "message": "Zero-width character found. Remove it unless it is intentional (for example, a line-break opportunity in some scripts)."
+        },
+        {
+          "rule": "MDX007",
+          "name": "hard-tab",
+          "severity": "warning",
+          "fixable": false,
+          "line": 17,
+          "column": 3,
+          "message": "Tab character found. Use spaces for indentation and alignment; tabs render at different widths."
+        }
+      ],
+      "fix": {
+        "text": "# 😀 表情符號欄號\n\n😀😀 **粗體** 測試欄號（UTF-16）。\n\n🎉 慶祝 一下。\n\n𠮷野家 **吉** 與 https://example.com/😀\n\n| 😀 | b |\n| --- | --- |\n| `a|b` | c |\n\n😀😀😀[](x)\n\n👍\u200B讚\n\n𝒳\ttab\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "line-length-80",
+      "options": {
+        "maxLineLength": 80
+      },
+      "diagnose": [
+        {
+          "rule": "MDX040",
+          "name": "emphasis-inner-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 3,
+          "column": 6,
+          "message": "Remove spaces just inside the bold (**) delimiters."
+        },
+        {
+          "rule": "MDX008",
+          "name": "non-breaking-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 5,
+          "column": 3,
+          "message": "Replace non-breaking spaces (U+00A0) with normal spaces; they usually come from Word or a web page paste."
+        },
+        {
+          "rule": "MDX040",
+          "name": "emphasis-inner-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 7,
+          "column": 6,
+          "message": "Remove spaces just inside the bold (**) delimiters."
+        },
+        {
+          "rule": "MDX070",
+          "name": "bare-url",
+          "severity": "info",
+          "fixable": false,
+          "line": 7,
+          "column": 14,
+          "message": "Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text."
+        },
+        {
+          "rule": "MDX060",
+          "name": "table-delimiter-width",
+          "severity": "warning",
+          "fixable": true,
+          "line": 10,
+          "column": 3,
+          "message": "Table delimiter cell has fewer than three hyphens."
+        },
+        {
+          "rule": "MDX063",
+          "name": "table-pipe-in-code",
+          "severity": "warning",
+          "fixable": false,
+          "line": 11,
+          "column": 3,
+          "message": "A pipe inside code or a URL in a table cell still splits the cell. Escape it as \\| in code, or use %7C in a URL."
+        },
+        {
+          "rule": "MDX071",
+          "name": "empty-link",
+          "severity": "warning",
+          "fixable": false,
+          "line": 13,
+          "column": 7,
+          "message": "Link or image has empty text or an empty destination."
+        },
+        {
+          "rule": "MDX009",
+          "name": "zero-width-character",
+          "severity": "warning",
+          "fixable": false,
+          "line": 15,
+          "column": 3,
+          "message": "Zero-width character found. Remove it unless it is intentional (for example, a line-break opportunity in some scripts)."
+        },
+        {
+          "rule": "MDX007",
+          "name": "hard-tab",
+          "severity": "warning",
+          "fixable": false,
+          "line": 17,
+          "column": 3,
+          "message": "Tab character found. Use spaces for indentation and alignment; tabs render at different widths."
+        }
+      ],
+      "fix": {
+        "text": "# 😀 表情符號欄號\n\n😀😀 **粗體** 測試欄號（UTF-16）。\n\n🎉 慶祝 一下。\n\n𠮷野家 **吉** 與 https://example.com/😀\n\n| 😀 | b |\n| --- | --- |\n| `a|b` | c |\n\n😀😀😀[](x)\n\n👍\u200B讚\n\n𝒳\ttab\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "keep-encoding",
+      "options": {
+        "ignoreRules": [
+          "MDX001",
+          "MDX002"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX040",
+          "name": "emphasis-inner-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 3,
+          "column": 6,
+          "message": "Remove spaces just inside the bold (**) delimiters."
+        },
+        {
+          "rule": "MDX008",
+          "name": "non-breaking-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 5,
+          "column": 3,
+          "message": "Replace non-breaking spaces (U+00A0) with normal spaces; they usually come from Word or a web page paste."
+        },
+        {
+          "rule": "MDX040",
+          "name": "emphasis-inner-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 7,
+          "column": 6,
+          "message": "Remove spaces just inside the bold (**) delimiters."
+        },
+        {
+          "rule": "MDX070",
+          "name": "bare-url",
+          "severity": "info",
+          "fixable": false,
+          "line": 7,
+          "column": 14,
+          "message": "Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text."
+        },
+        {
+          "rule": "MDX060",
+          "name": "table-delimiter-width",
+          "severity": "warning",
+          "fixable": true,
+          "line": 10,
+          "column": 3,
+          "message": "Table delimiter cell has fewer than three hyphens."
+        },
+        {
+          "rule": "MDX063",
+          "name": "table-pipe-in-code",
+          "severity": "warning",
+          "fixable": false,
+          "line": 11,
+          "column": 3,
+          "message": "A pipe inside code or a URL in a table cell still splits the cell. Escape it as \\| in code, or use %7C in a URL."
+        },
+        {
+          "rule": "MDX071",
+          "name": "empty-link",
+          "severity": "warning",
+          "fixable": false,
+          "line": 13,
+          "column": 7,
+          "message": "Link or image has empty text or an empty destination."
+        },
+        {
+          "rule": "MDX009",
+          "name": "zero-width-character",
+          "severity": "warning",
+          "fixable": false,
+          "line": 15,
+          "column": 3,
+          "message": "Zero-width character found. Remove it unless it is intentional (for example, a line-break opportunity in some scripts)."
+        },
+        {
+          "rule": "MDX007",
+          "name": "hard-tab",
+          "severity": "warning",
+          "fixable": false,
+          "line": 17,
+          "column": 3,
+          "message": "Tab character found. Use spaces for indentation and alignment; tabs render at different widths."
+        }
+      ],
+      "fix": {
+        "text": "# 😀 表情符號欄號\n\n😀😀 **粗體** 測試欄號（UTF-16）。\n\n🎉 慶祝 一下。\n\n𠮷野家 **吉** 與 https://example.com/😀\n\n| 😀 | b |\n| --- | --- |\n| `a|b` | c |\n\n😀😀😀[](x)\n\n👍\u200B讚\n\n𝒳\ttab\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "headings-only",
+      "options": {
+        "rules": [
+          "MDX010",
+          "MDX011",
+          "MDX012",
+          "MDX013"
+        ]
+      },
+      "diagnose": [],
+      "fix": {
+        "text": "# 😀 表情符號欄號\n\n😀😀 **粗體 ** 測試欄號（UTF-16）。\n\n🎉\u00A0慶祝\u00A0一下。\n\n𠮷野家 **  吉 ** 與 https://example.com/😀\n\n| 😀 | b |\n| - | -- |\n| `a|b` | c |\n\n😀😀😀[](x)\n\n👍\u200B讚\n\n𝒳\ttab\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    }
+  ]
+}

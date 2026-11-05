@@ -1,0 +1,389 @@
+{
+  "referenceVersion": "1.0.0",
+  "rules": [
+    {
+      "id": "MDX001",
+      "name": "bom",
+      "category": "encoding",
+      "severity": "warning",
+      "fixable": true,
+      "summary": "Remove a UTF-8 BOM from the start of the file."
+    },
+    {
+      "id": "MDX002",
+      "name": "line-endings",
+      "category": "encoding",
+      "severity": "warning",
+      "fixable": true,
+      "summary": "Normalize CRLF/CR line endings to LF."
+    },
+    {
+      "id": "MDX003",
+      "name": "final-newline",
+      "category": "whitespace",
+      "severity": "warning",
+      "fixable": true,
+      "summary": "End the file with exactly one newline."
+    },
+    {
+      "id": "MDX004",
+      "name": "trailing-whitespace",
+      "category": "whitespace",
+      "severity": "warning",
+      "fixable": true,
+      "summary": "Remove trailing whitespace, preserving two-space hard breaks."
+    },
+    {
+      "id": "MDX005",
+      "name": "multiple-blank-lines",
+      "category": "whitespace",
+      "severity": "warning",
+      "fixable": true,
+      "summary": "Collapse two or more blank lines to one."
+    },
+    {
+      "id": "MDX006",
+      "name": "leading-blank-lines",
+      "category": "whitespace",
+      "severity": "warning",
+      "fixable": true,
+      "summary": "Remove blank lines before the first block."
+    },
+    {
+      "id": "MDX007",
+      "name": "hard-tab",
+      "category": "whitespace",
+      "severity": "warning",
+      "fixable": false,
+      "summary": "Avoid tab characters in prose and indentation."
+    },
+    {
+      "id": "MDX008",
+      "name": "non-breaking-space",
+      "category": "whitespace",
+      "severity": "warning",
+      "fixable": true,
+      "summary": "Replace NBSP (U+00A0) with a normal space outside code."
+    },
+    {
+      "id": "MDX009",
+      "name": "zero-width-character",
+      "category": "encoding",
+      "severity": "warning",
+      "fixable": false,
+      "summary": "Detect stray zero-width spaces and mid-file BOMs."
+    },
+    {
+      "id": "MDX010",
+      "name": "atx-missing-space",
+      "category": "heading",
+      "severity": "warning",
+      "fixable": true,
+      "summary": "Add a space after the ATX heading marker (#)."
+    },
+    {
+      "id": "MDX011",
+      "name": "atx-multiple-space",
+      "category": "heading",
+      "severity": "warning",
+      "fixable": true,
+      "summary": "Use one space after the ATX heading marker."
+    },
+    {
+      "id": "MDX012",
+      "name": "atx-closing-hashes",
+      "category": "heading",
+      "severity": "warning",
+      "fixable": true,
+      "summary": "Remove optional closing hashes from an ATX heading."
+    },
+    {
+      "id": "MDX013",
+      "name": "heading-blank-lines",
+      "category": "heading",
+      "severity": "warning",
+      "fixable": true,
+      "summary": "Separate top-level headings from surrounding paragraphs with blank lines."
+    },
+    {
+      "id": "MDX014",
+      "name": "heading-indent",
+      "category": "heading",
+      "severity": "info",
+      "fixable": false,
+      "summary": "Verify indented headings are intentional (for example, inside a list)."
+    },
+    {
+      "id": "MDX015",
+      "name": "heading-increment",
+      "category": "heading",
+      "severity": "warning",
+      "fixable": false,
+      "summary": "Do not skip heading levels."
+    },
+    {
+      "id": "MDX016",
+      "name": "empty-heading",
+      "category": "heading",
+      "severity": "warning",
+      "fixable": false,
+      "summary": "Remove or fill an empty heading."
+    },
+    {
+      "id": "MDX017",
+      "name": "heading-trailing-punctuation",
+      "category": "heading",
+      "severity": "info",
+      "fixable": false,
+      "summary": "Avoid ending headings with sentence punctuation."
+    },
+    {
+      "id": "MDX018",
+      "name": "first-heading-h1",
+      "category": "heading",
+      "severity": "info",
+      "fixable": false,
+      "summary": "Start the document outline with an H1."
+    },
+    {
+      "id": "MDX019",
+      "name": "multiple-h1",
+      "category": "heading",
+      "severity": "info",
+      "fixable": false,
+      "summary": "Prefer one H1 per document; repeated H1s are sometimes intentional in changelogs and task logs."
+    },
+    {
+      "id": "MDX020",
+      "name": "blockquote-space",
+      "category": "blockquote",
+      "severity": "warning",
+      "fixable": true,
+      "summary": "Put one space after each blockquote marker."
+    },
+    {
+      "id": "MDX030",
+      "name": "list-marker-space",
+      "category": "list",
+      "severity": "warning",
+      "fixable": true,
+      "summary": "Add a space between a list marker and its content."
+    },
+    {
+      "id": "MDX031",
+      "name": "list-marker-style",
+      "category": "list",
+      "severity": "warning",
+      "fixable": true,
+      "summary": "Use one bullet marker per list."
+    },
+    {
+      "id": "MDX032",
+      "name": "list-blank-lines",
+      "category": "list",
+      "severity": "warning",
+      "fixable": false,
+      "summary": "Separate lists from surrounding paragraphs with blank lines."
+    },
+    {
+      "id": "MDX035",
+      "name": "empty-list-item",
+      "category": "list",
+      "severity": "warning",
+      "fixable": false,
+      "summary": "Remove empty list items or give them content."
+    },
+    {
+      "id": "MDX040",
+      "name": "emphasis-inner-space",
+      "category": "emphasis",
+      "severity": "warning",
+      "fixable": true,
+      "summary": "Remove spaces just inside emphasis delimiters."
+    },
+    {
+      "id": "MDX041",
+      "name": "unmatched-emphasis",
+      "category": "emphasis",
+      "severity": "warning",
+      "fixable": false,
+      "summary": "Check for a possible unmatched strong or strikethrough delimiter."
+    },
+    {
+      "id": "MDX042",
+      "name": "cjk-emphasis-unpaired",
+      "category": "emphasis",
+      "severity": "warning",
+      "fixable": true,
+      "summary": "Report ** or * that cannot pair next to CJK or full-width punctuation; move closing-side punctuation outside when safe."
+    },
+    {
+      "id": "MDX050",
+      "name": "fence-language",
+      "category": "fence",
+      "severity": "info",
+      "fixable": false,
+      "summary": "Add a language to fenced code blocks when one is known."
+    },
+    {
+      "id": "MDX051",
+      "name": "fence-unclosed",
+      "category": "fence",
+      "severity": "error",
+      "fixable": false,
+      "summary": "Close every fenced code block."
+    },
+    {
+      "id": "MDX052",
+      "name": "fence-blank-lines",
+      "category": "fence",
+      "severity": "warning",
+      "fixable": true,
+      "summary": "Surround top-level fenced code blocks with blank lines."
+    },
+    {
+      "id": "MDX053",
+      "name": "fence-invalid",
+      "category": "fence",
+      "severity": "error",
+      "fixable": false,
+      "summary": "Use a valid fence info string."
+    },
+    {
+      "id": "MDX060",
+      "name": "table-delimiter-width",
+      "category": "table",
+      "severity": "warning",
+      "fixable": true,
+      "summary": "Use at least three hyphens in each table delimiter cell."
+    },
+    {
+      "id": "MDX061",
+      "name": "table-column-count",
+      "category": "table",
+      "severity": "error",
+      "fixable": false,
+      "summary": "Keep the same number of cells in every table row."
+    },
+    {
+      "id": "MDX062",
+      "name": "table-blank-lines",
+      "category": "table",
+      "severity": "warning",
+      "fixable": true,
+      "summary": "Surround top-level tables with blank lines."
+    },
+    {
+      "id": "MDX063",
+      "name": "table-pipe-in-code",
+      "category": "table",
+      "severity": "warning",
+      "fixable": false,
+      "summary": "Escape pipes inside code spans or URLs in table cells."
+    },
+    {
+      "id": "MDX070",
+      "name": "bare-url",
+      "category": "link",
+      "severity": "info",
+      "fixable": false,
+      "summary": "Prefer an explicit link or angle-bracket autolink for bare URLs."
+    },
+    {
+      "id": "MDX071",
+      "name": "empty-link",
+      "category": "link",
+      "severity": "warning",
+      "fixable": false,
+      "summary": "Give links meaningful text and a destination."
+    },
+    {
+      "id": "MDX072",
+      "name": "link-space-before-destination",
+      "category": "link",
+      "severity": "info",
+      "fixable": false,
+      "summary": "A space between ] and ( prevents link parsing."
+    },
+    {
+      "id": "MDX073",
+      "name": "reference-missing-definition",
+      "category": "link",
+      "severity": "warning",
+      "fixable": false,
+      "summary": "Define every explicit reference-link label."
+    },
+    {
+      "id": "MDX074",
+      "name": "reference-duplicate-definition",
+      "category": "link",
+      "severity": "warning",
+      "fixable": false,
+      "summary": "Define each reference-link label once."
+    },
+    {
+      "id": "MDX075",
+      "name": "image-alt",
+      "category": "link",
+      "severity": "warning",
+      "fixable": false,
+      "summary": "Add image alt text or confirm the image is decorative."
+    },
+    {
+      "id": "MDX080",
+      "name": "setext-ambiguity",
+      "category": "structure",
+      "severity": "warning",
+      "fixable": false,
+      "summary": "A line of --- or === after a paragraph is a Setext heading, not a rule."
+    },
+    {
+      "id": "MDX081",
+      "name": "frontmatter-unclosed",
+      "category": "structure",
+      "severity": "error",
+      "fixable": false,
+      "summary": "Close YAML frontmatter with --- or ... ."
+    },
+    {
+      "id": "MDX082",
+      "name": "frontmatter-blank-line",
+      "category": "structure",
+      "severity": "warning",
+      "fixable": true,
+      "summary": "Put a blank line after frontmatter."
+    },
+    {
+      "id": "MDX083",
+      "name": "html-comment-unclosed",
+      "category": "structure",
+      "severity": "error",
+      "fixable": false,
+      "summary": "Close every HTML comment."
+    },
+    {
+      "id": "MDX084",
+      "name": "fullwidth-markdown-syntax",
+      "category": "structure",
+      "severity": "warning",
+      "fixable": false,
+      "summary": "Use ASCII punctuation for Markdown syntax."
+    },
+    {
+      "id": "MDX085",
+      "name": "math-unclosed",
+      "category": "structure",
+      "severity": "error",
+      "fixable": false,
+      "summary": "Close every $$ math block."
+    },
+    {
+      "id": "MDX090",
+      "name": "line-length",
+      "category": "style",
+      "severity": "info",
+      "fixable": false,
+      "summary": "Keep prose lines within the configured limit."
+    }
+  ]
+}

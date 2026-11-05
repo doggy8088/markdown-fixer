@@ -1,0 +1,155 @@
+{
+  "source": "rules/MDX072/trigger.md",
+  "referenceVersion": "1.0.0",
+  "cases": [
+    {
+      "name": "default",
+      "options": {},
+      "diagnose": [
+        {
+          "rule": "MDX072",
+          "name": "link-space-before-destination",
+          "severity": "info",
+          "fixable": false,
+          "line": 3,
+          "column": 9,
+          "message": "There is whitespace between ] and (. CommonMark does not parse this as a link; remove the space if a link was intended."
+        },
+        {
+          "rule": "MDX070",
+          "name": "bare-url",
+          "severity": "info",
+          "fixable": false,
+          "line": 3,
+          "column": 12,
+          "message": "Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text."
+        }
+      ],
+      "fix": {
+        "text": "# 連結\n\n請見 [官方文件] (https://example.com)。\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "snippet",
+      "options": {
+        "ignoreRules": [
+          "MDX003"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX072",
+          "name": "link-space-before-destination",
+          "severity": "info",
+          "fixable": false,
+          "line": 3,
+          "column": 9,
+          "message": "There is whitespace between ] and (. CommonMark does not parse this as a link; remove the space if a link was intended."
+        },
+        {
+          "rule": "MDX070",
+          "name": "bare-url",
+          "severity": "info",
+          "fixable": false,
+          "line": 3,
+          "column": 12,
+          "message": "Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text."
+        }
+      ],
+      "fix": {
+        "text": "# 連結\n\n請見 [官方文件] (https://example.com)。\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "line-length-80",
+      "options": {
+        "maxLineLength": 80
+      },
+      "diagnose": [
+        {
+          "rule": "MDX072",
+          "name": "link-space-before-destination",
+          "severity": "info",
+          "fixable": false,
+          "line": 3,
+          "column": 9,
+          "message": "There is whitespace between ] and (. CommonMark does not parse this as a link; remove the space if a link was intended."
+        },
+        {
+          "rule": "MDX070",
+          "name": "bare-url",
+          "severity": "info",
+          "fixable": false,
+          "line": 3,
+          "column": 12,
+          "message": "Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text."
+        }
+      ],
+      "fix": {
+        "text": "# 連結\n\n請見 [官方文件] (https://example.com)。\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "keep-encoding",
+      "options": {
+        "ignoreRules": [
+          "MDX001",
+          "MDX002"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX072",
+          "name": "link-space-before-destination",
+          "severity": "info",
+          "fixable": false,
+          "line": 3,
+          "column": 9,
+          "message": "There is whitespace between ] and (. CommonMark does not parse this as a link; remove the space if a link was intended."
+        },
+        {
+          "rule": "MDX070",
+          "name": "bare-url",
+          "severity": "info",
+          "fixable": false,
+          "line": 3,
+          "column": 12,
+          "message": "Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text."
+        }
+      ],
+      "fix": {
+        "text": "# 連結\n\n請見 [官方文件] (https://example.com)。\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "headings-only",
+      "options": {
+        "rules": [
+          "MDX010",
+          "MDX011",
+          "MDX012",
+          "MDX013"
+        ]
+      },
+      "diagnose": [],
+      "fix": {
+        "text": "# 連結\n\n請見 [官方文件] (https://example.com)。\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    }
+  ]
+}

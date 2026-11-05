@@ -1,0 +1,16 @@
+{
+  "name": "rule-consumes-next-flag",
+  "args": [
+    "--rule",
+    "--json"
+  ],
+  "cwd": "",
+  "nonRoot": false,
+  "setup": [],
+  "expected": {
+    "status": 2,
+    "stdout": "",
+    "stderr": "Error: Unknown rule: --json\nRun with --help for usage.\n",
+    "files": []
+  }
+}

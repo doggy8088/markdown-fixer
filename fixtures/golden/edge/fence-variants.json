@@ -1,0 +1,227 @@
+{
+  "source": "edge/fence-variants.md",
+  "referenceVersion": "1.0.0",
+  "cases": [
+    {
+      "name": "default",
+      "options": {},
+      "diagnose": [
+        {
+          "rule": "MDX050",
+          "name": "fence-language",
+          "severity": "info",
+          "fixable": false,
+          "line": 3,
+          "column": 1,
+          "message": "Fenced code block has no language. Add one when the language is known, for example ```js."
+        },
+        {
+          "rule": "MDX050",
+          "name": "fence-language",
+          "severity": "info",
+          "fixable": false,
+          "line": 8,
+          "column": 1,
+          "message": "Fenced code block has no language. Add one when the language is known, for example ```js."
+        },
+        {
+          "rule": "MDX050",
+          "name": "fence-language",
+          "severity": "info",
+          "fixable": false,
+          "line": 17,
+          "column": 1,
+          "message": "Fenced code block has no language. Add one when the language is known, for example ```js."
+        },
+        {
+          "rule": "MDX004",
+          "name": "trailing-whitespace",
+          "severity": "warning",
+          "fixable": true,
+          "line": 17,
+          "column": 4,
+          "message": "Trailing whitespace. Exactly two trailing spaces create a hard line break; other trailing whitespace is noise."
+        }
+      ],
+      "fix": {
+        "text": "# Fence 變化\n\n```\nunclosed by shorter\n``\n```\n\n~~~~\n~~~\nstill inside\n~~~~\n\n   ```indented-3\n   code\n   ```\n\n```  \ntrailing spaces in info\n```\n\n````js title=\"ab\"\nx\n````\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "snippet",
+      "options": {
+        "ignoreRules": [
+          "MDX003"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX050",
+          "name": "fence-language",
+          "severity": "info",
+          "fixable": false,
+          "line": 3,
+          "column": 1,
+          "message": "Fenced code block has no language. Add one when the language is known, for example ```js."
+        },
+        {
+          "rule": "MDX050",
+          "name": "fence-language",
+          "severity": "info",
+          "fixable": false,
+          "line": 8,
+          "column": 1,
+          "message": "Fenced code block has no language. Add one when the language is known, for example ```js."
+        },
+        {
+          "rule": "MDX050",
+          "name": "fence-language",
+          "severity": "info",
+          "fixable": false,
+          "line": 17,
+          "column": 1,
+          "message": "Fenced code block has no language. Add one when the language is known, for example ```js."
+        },
+        {
+          "rule": "MDX004",
+          "name": "trailing-whitespace",
+          "severity": "warning",
+          "fixable": true,
+          "line": 17,
+          "column": 4,
+          "message": "Trailing whitespace. Exactly two trailing spaces create a hard line break; other trailing whitespace is noise."
+        }
+      ],
+      "fix": {
+        "text": "# Fence 變化\n\n```\nunclosed by shorter\n``\n```\n\n~~~~\n~~~\nstill inside\n~~~~\n\n   ```indented-3\n   code\n   ```\n\n```  \ntrailing spaces in info\n```\n\n````js title=\"ab\"\nx\n````\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "line-length-80",
+      "options": {
+        "maxLineLength": 80
+      },
+      "diagnose": [
+        {
+          "rule": "MDX050",
+          "name": "fence-language",
+          "severity": "info",
+          "fixable": false,
+          "line": 3,
+          "column": 1,
+          "message": "Fenced code block has no language. Add one when the language is known, for example ```js."
+        },
+        {
+          "rule": "MDX050",
+          "name": "fence-language",
+          "severity": "info",
+          "fixable": false,
+          "line": 8,
+          "column": 1,
+          "message": "Fenced code block has no language. Add one when the language is known, for example ```js."
+        },
+        {
+          "rule": "MDX050",
+          "name": "fence-language",
+          "severity": "info",
+          "fixable": false,
+          "line": 17,
+          "column": 1,
+          "message": "Fenced code block has no language. Add one when the language is known, for example ```js."
+        },
+        {
+          "rule": "MDX004",
+          "name": "trailing-whitespace",
+          "severity": "warning",
+          "fixable": true,
+          "line": 17,
+          "column": 4,
+          "message": "Trailing whitespace. Exactly two trailing spaces create a hard line break; other trailing whitespace is noise."
+        }
+      ],
+      "fix": {
+        "text": "# Fence 變化\n\n```\nunclosed by shorter\n``\n```\n\n~~~~\n~~~\nstill inside\n~~~~\n\n   ```indented-3\n   code\n   ```\n\n```  \ntrailing spaces in info\n```\n\n````js title=\"ab\"\nx\n````\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "keep-encoding",
+      "options": {
+        "ignoreRules": [
+          "MDX001",
+          "MDX002"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX050",
+          "name": "fence-language",
+          "severity": "info",
+          "fixable": false,
+          "line": 3,
+          "column": 1,
+          "message": "Fenced code block has no language. Add one when the language is known, for example ```js."
+        },
+        {
+          "rule": "MDX050",
+          "name": "fence-language",
+          "severity": "info",
+          "fixable": false,
+          "line": 8,
+          "column": 1,
+          "message": "Fenced code block has no language. Add one when the language is known, for example ```js."
+        },
+        {
+          "rule": "MDX050",
+          "name": "fence-language",
+          "severity": "info",
+          "fixable": false,
+          "line": 17,
+          "column": 1,
+          "message": "Fenced code block has no language. Add one when the language is known, for example ```js."
+        },
+        {
+          "rule": "MDX004",
+          "name": "trailing-whitespace",
+          "severity": "warning",
+          "fixable": true,
+          "line": 17,
+          "column": 4,
+          "message": "Trailing whitespace. Exactly two trailing spaces create a hard line break; other trailing whitespace is noise."
+        }
+      ],
+      "fix": {
+        "text": "# Fence 變化\n\n```\nunclosed by shorter\n``\n```\n\n~~~~\n~~~\nstill inside\n~~~~\n\n   ```indented-3\n   code\n   ```\n\n```  \ntrailing spaces in info\n```\n\n````js title=\"ab\"\nx\n````\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "headings-only",
+      "options": {
+        "rules": [
+          "MDX010",
+          "MDX011",
+          "MDX012",
+          "MDX013"
+        ]
+      },
+      "diagnose": [],
+      "fix": {
+        "text": "# Fence 變化\n\n```\nunclosed by shorter\n``\n```\n\n~~~~\n~~~\nstill inside\n~~~~\n\n   ```indented-3\n   code\n   ```\n\n```   \ntrailing spaces in info\n```\n\n````js title=\"ab\"\nx\n````\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    }
+  ]
+}

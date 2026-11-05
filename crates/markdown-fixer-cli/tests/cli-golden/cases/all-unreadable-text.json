@@ -1,0 +1,25 @@
+{
+  "name": "all-unreadable-text",
+  "args": [
+    "bad.md"
+  ],
+  "cwd": "",
+  "nonRoot": false,
+  "setup": [
+    {
+      "path": "bad.md",
+      "hex": "c3"
+    }
+  ],
+  "expected": {
+    "status": 2,
+    "stdout": "",
+    "stderr": "Error: bad.md: The encoded data was not valid for encoding utf-8\n",
+    "files": [
+      {
+        "path": "bad.md",
+        "hex": "c3"
+      }
+    ]
+  }
+}

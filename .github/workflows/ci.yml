@@ -1,0 +1,108 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+env:
+  CARGO_TERM_COLOR: always
+  RUSTFLAGS: -D warnings
+
+jobs:
+  lint:
+    name: fmt + clippy + doc
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+      - uses: Swatinem/rust-cache@v2
+      - name: Format
+        run: cargo fmt --all --check
+      - name: Clippy
+        run: cargo clippy --workspace --all-targets --all-features --locked -- -D warnings
+      - name: Rustdoc
+        env:
+          RUSTDOCFLAGS: -D warnings
+        run: cargo doc --no-deps --workspace --locked
+
+  test:
+    name: Test (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      # 測試（含 golden 比對與 C 範例編譯）不需要 Node；C 範例在 Windows 上自動略過。
+      - name: Test
+        run: cargo test --workspace --all-features --locked
+      - name: Clipboard script test
+        if: runner.os != 'Windows'
+        run: examples/macos/test-markdown-fix-paste.sh
+      - name: Clipboard script end-to-end test
+        if: runner.os != 'Windows'
+        run: |
+          cargo build -p markdown-fixer-cli --locked
+          MARKDOWN_FIXER_TEST_BIN="$PWD/target/debug/markdown-fixer" examples/macos/test-markdown-fix-paste.sh
+      - name: Check this repo's Markdown with our own binary
+        if: runner.os == 'Linux'
+        shell: bash
+        run: |
+          files=(PRD.md AGENTS.md docs)
+          [ -f README.md ] && files+=(README.md)
+          cargo run -q -p markdown-fixer-cli --locked -- --check "${files[@]}"
+
+  msrv:
+    name: MSRV (1.85)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@1.85
+      - uses: Swatinem/rust-cache@v2
+      - name: Build
+        run: cargo build --workspace --all-features --locked
+
+  shellcheck:
+    name: shellcheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: shellcheck
+        run: |
+          shellcheck examples/macos/*.sh examples/linux/*.sh
+          if ls scripts/*.sh >/dev/null 2>&1; then shellcheck scripts/*.sh; fi
+      - name: Validate Karabiner JSON
+        run: python3 -m json.tool examples/macos/markdown-fixer-paste.json >/dev/null
+
+  parity:
+    name: Oracle parity (Node)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - name: Oracle unit tests
+        run: node --test reference/js/markdown-fixer.test.mjs
+      - name: Library golden files are up to date
+        run: node scripts/gen-golden.mjs --check
+      - name: CLI golden files are up to date
+        run: node scripts/gen-cli-golden.mjs --check
+      # parity.sh 與 fuzz-parity.mjs 會自行建置 `--example dump --features serde`
+      # （CARGO_TARGET_DIR 預設 target/parity）。
+      - name: Parity on the corpus
+        run: scripts/parity.sh fixtures/corpus
+      - name: Differential fuzzing
+        # 固定種子讓結果可重現；--no-save 避免在 CI 寫入 fixtures/corpus/regressions/。
+        run: node scripts/fuzz-parity.mjs --count 2000 --seed 1 --no-save

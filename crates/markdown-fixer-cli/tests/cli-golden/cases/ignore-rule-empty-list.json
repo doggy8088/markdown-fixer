@@ -1,0 +1,16 @@
+{
+  "name": "ignore-rule-empty-list",
+  "args": [
+    "--ignore-rule",
+    " , "
+  ],
+  "cwd": "",
+  "nonRoot": false,
+  "setup": [],
+  "expected": {
+    "status": 2,
+    "stdout": "",
+    "stderr": "Error: A rule list is required after --rule/--ignore-rule.\nRun with --help for usage.\n",
+    "files": []
+  }
+}

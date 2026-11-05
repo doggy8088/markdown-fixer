@@ -1,0 +1,22 @@
+{
+  "name": "no-markdown-files-json",
+  "args": [
+    "--write",
+    "--json",
+    "empty"
+  ],
+  "cwd": "",
+  "nonRoot": false,
+  "setup": [
+    {
+      "path": "empty",
+      "dir": true
+    }
+  ],
+  "expected": {
+    "status": 0,
+    "stdout": "{\n  \"tool\": \"markdown-fixer\",\n  \"version\": \"<VERSION>\",\n  \"mode\": \"write\",\n  \"files\": [],\n  \"summary\": {\n    \"files\": 0,\n    \"changed\": 0,\n    \"wouldChange\": 0,\n    \"fixed\": 0,\n    \"refused\": 0,\n    \"problems\": {\n      \"total\": 0,\n      \"errors\": 0,\n      \"warnings\": 0,\n      \"info\": 0,\n      \"fixable\": 0\n    }\n  }\n}\n",
+    "stderr": "",
+    "files": []
+  }
+}

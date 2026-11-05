@@ -1,0 +1,26 @@
+{
+  "name": "fence-unclosed-write",
+  "args": [
+    "--write",
+    "f.md"
+  ],
+  "cwd": "",
+  "nonRoot": false,
+  "setup": [
+    {
+      "path": "f.md",
+      "text": "# Code\n\nText before.\n\n```python\nprint(\"never closed\")\n"
+    }
+  ],
+  "expected": {
+    "status": 1,
+    "stdout": "f.md\n  5:1        error   MDX051  Unclosed backtick code fence.\n\n1 problem(s) remain: 0 fixable, 1 error(s), 0 warning(s), 0 info.\n",
+    "stderr": "",
+    "files": [
+      {
+        "path": "f.md",
+        "text": "# Code\n\nText before.\n\n```python\nprint(\"never closed\")\n"
+      }
+    ]
+  }
+}

@@ -63,7 +63,8 @@ node scripts/fuzz-parity.mjs --count 2000          # 隨機文件差異測試
 
 ### 常見的差異來源
 
-- **欄號**：JS 用 UTF-16 index。Rust 若直接用 byte offset 或 `char` 數，遇到 CJK 或 emoji 就會錯。統一透過 `utf16` 模組換算。
+- **欄號**：JS 用 UTF-16 index。Rust 若直接用 byte offset 或 `char` 數，遇到 CJK 或 emoji 就會錯。函式庫的行內處理一律在 UTF-16 code unit 上進行（`jsstr::JsString` = `Vec<u16>`），欄號因此天然與 JS 相同；不要在中途改用 `&str` 的 byte offset。
+- **正規表示式**：函式庫不用 `regex` crate，而是 `jsregex` 模組（以 `&[u16]` 為輸入、JS 語意的小型回溯 regex VM，支援 lookahead／lookbehind）。從 JS 移植 regex 時用 `re!(r"...")` 原樣搬過來，不要改寫成 Rust `regex` 語法。
 - **`\s` 與 `\w`**：JS 的 `\s` 包含 NBSP（U+00A0）、U+FEFF、U+3000 等；Rust `char::is_whitespace` 不含 U+FEFF。`\w` 在 JS 只有 ASCII。`\b` 也是 ASCII 字元邊界。
 - **`split('\n')` 與 `lines()`**：JS `split` 會保留最後一個空字串；Rust `str::lines()` 不會。一律用 `split('\n')`。
 - **`String.prototype.trim()`**：JS 會去掉 U+FEFF 與 Unicode 空白；Rust `trim()` 不去 U+FEFF。

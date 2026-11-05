@@ -1,0 +1,18 @@
+{
+  "title": "markdown-fixer paste",
+  "rules": [
+    {
+        "description": "左 Option+Shift+V：修正剪貼簿裡的 Markdown 後貼上（markdown-fixer）",
+        "manipulators": [
+            {
+                "from": {
+                    "key_code": "v",
+                    "modifiers": { "mandatory": ["left_option", "left_shift"] }
+                },
+                "to": [{ "shell_command": ". \"$HOME/.config/markdown-fixer/env\" 2>/dev/null; exec \"$HOME/.local/bin/markdown-fix-paste.sh\"" }],
+                "type": "basic"
+            }
+        ]
+    }
+  ]
+}

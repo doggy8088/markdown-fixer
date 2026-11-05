@@ -1,0 +1,161 @@
+{
+  "name": "explicit-excluded-directory",
+  "args": [
+    "node_modules"
+  ],
+  "cwd": "",
+  "nonRoot": false,
+  "setup": [
+    {
+      "path": "README.md",
+      "text": "#Project Notes   \nIntro paragraph with trailing spaces.   \n##  Setup ##\n* first item\n- second item\n-third item\n\n\nSome **  bold  ** text and a [link](https://example.com).\n\n| Name | Value |\n| - | -- |\n| a | 1 |\n> quote without space\n>no space here\n\n**標籤：**內容說明\nFinal line without newline."
+    },
+    {
+      "path": "clean.md",
+      "text": "# Clean Document\n\nThis document has no problems.\n\n## Section\n\n- One\n- Two\n\n```js\nconsole.log('hi');\n```\n"
+    },
+    {
+      "path": "notes.txt",
+      "text": "#Not a markdown extension\nbut given explicitly.\n"
+    },
+    {
+      "path": "docs/guide.MD",
+      "text": "# 會議記錄\n\n**日期：**2026-11-05\n**出席：** 王小明、李大華\n\n##討論事項\n1. 第一項\n2.第二項\n\n```\n沒有語言的程式碼\n```\n參考 [文件] 與 ![](image.png)。\n"
+    },
+    {
+      "path": "docs/intro.markdown",
+      "text": "# Info Only\n\nVisit https://example.com for details.\n"
+    },
+    {
+      "path": "docs/page.mdx",
+      "text": "#Skipped mdx\n"
+    },
+    {
+      "path": "docs/deep/long.md",
+      "text": "# Long Lines\n\nThis is a fairly long line of English prose that goes well past forty characters.\n這是一行很長的中文句子，用來測試行長計算是否以字元為單位而不是位元組，應該超過四十個字。\nShort line.\n\n| Column | Another column that is very very very long in a table row |\n| --- | --- |\n| a | b |\n"
+    },
+    {
+      "path": "docs/link.md",
+      "symlink": "../README.md"
+    },
+    {
+      "path": "docs/dirlink",
+      "symlink": "deep"
+    },
+    {
+      "path": "node_modules/pkg/README.md",
+      "text": "#Excluded\n"
+    },
+    {
+      "path": ".git/notes.md",
+      "text": "#Excluded\n"
+    },
+    {
+      "path": "vendor/x.md",
+      "text": "#Excluded\n"
+    },
+    {
+      "path": "docs/coverage/report.md",
+      "text": "#Excluded\n"
+    },
+    {
+      "path": "test-results/a.md",
+      "text": "#Excluded\n"
+    },
+    {
+      "path": "playwright-report/a.md",
+      "text": "#Excluded\n"
+    },
+    {
+      "path": "blob-report/a.md",
+      "text": "#Excluded\n"
+    },
+    {
+      "path": ".e2e-tmp/a.md",
+      "text": "#Excluded\n"
+    },
+    {
+      "path": ".hg/a.md",
+      "text": "#Excluded\n"
+    },
+    {
+      "path": ".svn/a.md",
+      "text": "#Excluded\n"
+    }
+  ],
+  "expected": {
+    "status": 1,
+    "stdout": "node_modules/pkg/README.md\n  1:2        warning MDX010  Add a space after the heading marker: \"# \" rather than \"#\". (fixable)\n\n1 problem(s) in 1 file(s): 1 fixable, 0 error(s), 1 warning(s), 0 info.\n",
+    "stderr": "",
+    "files": [
+      {
+        "path": ".e2e-tmp/a.md",
+        "text": "#Excluded\n"
+      },
+      {
+        "path": ".git/notes.md",
+        "text": "#Excluded\n"
+      },
+      {
+        "path": ".hg/a.md",
+        "text": "#Excluded\n"
+      },
+      {
+        "path": ".svn/a.md",
+        "text": "#Excluded\n"
+      },
+      {
+        "path": "README.md",
+        "text": "#Project Notes   \nIntro paragraph with trailing spaces.   \n##  Setup ##\n* first item\n- second item\n-third item\n\n\nSome **  bold  ** text and a [link](https://example.com).\n\n| Name | Value |\n| - | -- |\n| a | 1 |\n> quote without space\n>no space here\n\n**標籤：**內容說明\nFinal line without newline."
+      },
+      {
+        "path": "blob-report/a.md",
+        "text": "#Excluded\n"
+      },
+      {
+        "path": "clean.md",
+        "text": "# Clean Document\n\nThis document has no problems.\n\n## Section\n\n- One\n- Two\n\n```js\nconsole.log('hi');\n```\n"
+      },
+      {
+        "path": "docs/coverage/report.md",
+        "text": "#Excluded\n"
+      },
+      {
+        "path": "docs/deep/long.md",
+        "text": "# Long Lines\n\nThis is a fairly long line of English prose that goes well past forty characters.\n這是一行很長的中文句子，用來測試行長計算是否以字元為單位而不是位元組，應該超過四十個字。\nShort line.\n\n| Column | Another column that is very very very long in a table row |\n| --- | --- |\n| a | b |\n"
+      },
+      {
+        "path": "docs/guide.MD",
+        "text": "# 會議記錄\n\n**日期：**2026-11-05\n**出席：** 王小明、李大華\n\n##討論事項\n1. 第一項\n2.第二項\n\n```\n沒有語言的程式碼\n```\n參考 [文件] 與 ![](image.png)。\n"
+      },
+      {
+        "path": "docs/intro.markdown",
+        "text": "# Info Only\n\nVisit https://example.com for details.\n"
+      },
+      {
+        "path": "docs/page.mdx",
+        "text": "#Skipped mdx\n"
+      },
+      {
+        "path": "node_modules/pkg/README.md",
+        "text": "#Excluded\n"
+      },
+      {
+        "path": "notes.txt",
+        "text": "#Not a markdown extension\nbut given explicitly.\n"
+      },
+      {
+        "path": "playwright-report/a.md",
+        "text": "#Excluded\n"
+      },
+      {
+        "path": "test-results/a.md",
+        "text": "#Excluded\n"
+      },
+      {
+        "path": "vendor/x.md",
+        "text": "#Excluded\n"
+      }
+    ]
+  }
+}

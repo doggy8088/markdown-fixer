@@ -1,0 +1,26 @@
+{
+  "name": "nul-bytes",
+  "args": [
+    "--check",
+    "nul.md"
+  ],
+  "cwd": "",
+  "nonRoot": false,
+  "setup": [
+    {
+      "path": "nul.md",
+      "text": "# Title\u0000\n"
+    }
+  ],
+  "expected": {
+    "status": 2,
+    "stdout": "",
+    "stderr": "Error: nul.md: file contains NUL bytes; refusing to treat it as text\n",
+    "files": [
+      {
+        "path": "nul.md",
+        "text": "# Title\u0000\n"
+      }
+    ]
+  }
+}

@@ -1,0 +1,128 @@
+{
+  "source": "edge/deep-nesting.md",
+  "referenceVersion": "1.0.0",
+  "cases": [
+    {
+      "name": "default",
+      "options": {},
+      "diagnose": [
+        {
+          "rule": "MDX020",
+          "name": "blockquote-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 34,
+          "column": 1,
+          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
+        }
+      ],
+      "fix": {
+        "text": "# 深層巢狀\n\n- 第 1 層\n  - 第 2 層\n    - 第 3 層\n      - 第 4 層\n        - 第 5 層\n          - 第 6 層\n            - 第 7 層\n              - 第 8 層\n                - 第 9 層\n                  - 第 10 層\n                    - 第 11 層\n                      - 第 12 層\n                        - 第 13 層\n                          - 第 14 層\n                            - 第 15 層\n                              - 第 16 層\n                                - 第 17 層\n                                  - 第 18 層\n                                    - 第 19 層\n                                      - 第 20 層\n                                        - 第 21 層\n                                          - 第 22 層\n                                            - 第 23 層\n                                              - 第 24 層\n                                                - 第 25 層\n                                                  - 第 26 層\n                                                    - 第 27 層\n                                                      - 第 28 層\n                                                        - 第 29 層\n                                                          - 第 30 層\n\n> > > > > > > > > > > > 深層引言\n\n[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[x]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]((((((((((((((((((((y))))))))))))))))))))\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "snippet",
+      "options": {
+        "ignoreRules": [
+          "MDX003"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX020",
+          "name": "blockquote-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 34,
+          "column": 1,
+          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
+        }
+      ],
+      "fix": {
+        "text": "# 深層巢狀\n\n- 第 1 層\n  - 第 2 層\n    - 第 3 層\n      - 第 4 層\n        - 第 5 層\n          - 第 6 層\n            - 第 7 層\n              - 第 8 層\n                - 第 9 層\n                  - 第 10 層\n                    - 第 11 層\n                      - 第 12 層\n                        - 第 13 層\n                          - 第 14 層\n                            - 第 15 層\n                              - 第 16 層\n                                - 第 17 層\n                                  - 第 18 層\n                                    - 第 19 層\n                                      - 第 20 層\n                                        - 第 21 層\n                                          - 第 22 層\n                                            - 第 23 層\n                                              - 第 24 層\n                                                - 第 25 層\n                                                  - 第 26 層\n                                                    - 第 27 層\n                                                      - 第 28 層\n                                                        - 第 29 層\n                                                          - 第 30 層\n\n> > > > > > > > > > > > 深層引言\n\n[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[x]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]((((((((((((((((((((y))))))))))))))))))))\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "line-length-80",
+      "options": {
+        "maxLineLength": 80
+      },
+      "diagnose": [
+        {
+          "rule": "MDX020",
+          "name": "blockquote-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 34,
+          "column": 1,
+          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
+        },
+        {
+          "rule": "MDX090",
+          "name": "line-length",
+          "severity": "info",
+          "fixable": false,
+          "line": 36,
+          "column": 81,
+          "message": "Line is 142 characters; limit is 80."
+        }
+      ],
+      "fix": {
+        "text": "# 深層巢狀\n\n- 第 1 層\n  - 第 2 層\n    - 第 3 層\n      - 第 4 層\n        - 第 5 層\n          - 第 6 層\n            - 第 7 層\n              - 第 8 層\n                - 第 9 層\n                  - 第 10 層\n                    - 第 11 層\n                      - 第 12 層\n                        - 第 13 層\n                          - 第 14 層\n                            - 第 15 層\n                              - 第 16 層\n                                - 第 17 層\n                                  - 第 18 層\n                                    - 第 19 層\n                                      - 第 20 層\n                                        - 第 21 層\n                                          - 第 22 層\n                                            - 第 23 層\n                                              - 第 24 層\n                                                - 第 25 層\n                                                  - 第 26 層\n                                                    - 第 27 層\n                                                      - 第 28 層\n                                                        - 第 29 層\n                                                          - 第 30 層\n\n> > > > > > > > > > > > 深層引言\n\n[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[x]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]((((((((((((((((((((y))))))))))))))))))))\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "keep-encoding",
+      "options": {
+        "ignoreRules": [
+          "MDX001",
+          "MDX002"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX020",
+          "name": "blockquote-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 34,
+          "column": 1,
+          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
+        }
+      ],
+      "fix": {
+        "text": "# 深層巢狀\n\n- 第 1 層\n  - 第 2 層\n    - 第 3 層\n      - 第 4 層\n        - 第 5 層\n          - 第 6 層\n            - 第 7 層\n              - 第 8 層\n                - 第 9 層\n                  - 第 10 層\n                    - 第 11 層\n                      - 第 12 層\n                        - 第 13 層\n                          - 第 14 層\n                            - 第 15 層\n                              - 第 16 層\n                                - 第 17 層\n                                  - 第 18 層\n                                    - 第 19 層\n                                      - 第 20 層\n                                        - 第 21 層\n                                          - 第 22 層\n                                            - 第 23 層\n                                              - 第 24 層\n                                                - 第 25 層\n                                                  - 第 26 層\n                                                    - 第 27 層\n                                                      - 第 28 層\n                                                        - 第 29 層\n                                                          - 第 30 層\n\n> > > > > > > > > > > > 深層引言\n\n[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[x]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]((((((((((((((((((((y))))))))))))))))))))\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "headings-only",
+      "options": {
+        "rules": [
+          "MDX010",
+          "MDX011",
+          "MDX012",
+          "MDX013"
+        ]
+      },
+      "diagnose": [],
+      "fix": {
+        "text": "# 深層巢狀\n\n- 第 1 層\n  - 第 2 層\n    - 第 3 層\n      - 第 4 層\n        - 第 5 層\n          - 第 6 層\n            - 第 7 層\n              - 第 8 層\n                - 第 9 層\n                  - 第 10 層\n                    - 第 11 層\n                      - 第 12 層\n                        - 第 13 層\n                          - 第 14 層\n                            - 第 15 層\n                              - 第 16 層\n                                - 第 17 層\n                                  - 第 18 層\n                                    - 第 19 層\n                                      - 第 20 層\n                                        - 第 21 層\n                                          - 第 22 層\n                                            - 第 23 層\n                                              - 第 24 層\n                                                - 第 25 層\n                                                  - 第 26 層\n                                                    - 第 27 層\n                                                      - 第 28 層\n                                                        - 第 29 層\n                                                          - 第 30 層\n\n>>>>>>>>>>>> 深層引言\n\n[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[x]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]((((((((((((((((((((y))))))))))))))))))))\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    }
+  ]
+}

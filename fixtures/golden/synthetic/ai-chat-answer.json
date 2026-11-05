@@ -1,0 +1,416 @@
+{
+  "source": "synthetic/ai-chat-answer.md",
+  "referenceVersion": "1.0.0",
+  "cases": [
+    {
+      "name": "default",
+      "options": {},
+      "diagnose": [
+        {
+          "rule": "MDX018",
+          "name": "first-heading-h1",
+          "severity": "info",
+          "fixable": false,
+          "line": 1,
+          "column": 1,
+          "message": "The first heading is not an H1. Start the outline with one H1 unless the document intentionally starts in a section."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": true,
+          "line": 3,
+          "column": 41,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": true,
+          "line": 3,
+          "column": 48,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": true,
+          "line": 15,
+          "column": 4,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": true,
+          "line": 15,
+          "column": 13,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX050",
+          "name": "fence-language",
+          "severity": "info",
+          "fixable": false,
+          "line": 16,
+          "column": 1,
+          "message": "Fenced code block has no language. Add one when the language is known, for example ```js."
+        },
+        {
+          "rule": "MDX062",
+          "name": "table-blank-lines",
+          "severity": "warning",
+          "fixable": true,
+          "line": 36,
+          "column": 1,
+          "message": "Table starts directly after another block. Add a blank line before it."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": true,
+          "line": 42,
+          "column": 6,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": true,
+          "line": 42,
+          "column": 11,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        }
+      ],
+      "fix": {
+        "text": "### 簡短回答\n\n可以，用 `git rebase -i` 就能把多個 commit 合併成一個。**但要注意**：已經 push 到共用分支的 commit 不建議 rebase。\n\n### 詳細步驟\n\n1. **找出要合併的範圍**\n   ```bash\n   git log --oneline -5\n   ```\n2. **開始互動式 rebase**\n   ```bash\n   git rebase -i HEAD~3\n   ```\n3. **編輯指令清單**：把第二行之後的 `pick` 改成 `squash`（或 `s`）\n   ```\n   pick a1b2c3d 新增登入頁\n   squash d4e5f6a 修正錯字\n   squash 0718293 調整樣式\n   ```\n4. **儲存並編輯 commit 訊息**\n5. **強制推送（如果已經 push 過）：**\n   ```bash\n   git push --force-with-lease\n   ```\n\n### 常見問題\n\n**Q：rebase 到一半想放棄怎麼辦？**\nA：執行 `git rebase --abort`，會回到 rebase 前的狀態。\n\n**Q：`--force` 和 `--force-with-lease` 差在哪？**\nA：`--force-with-lease` 會先確認遠端沒有別人推的新 commit，比較安全。\n\n### 小結\n\n| 情境 | 建議做法 |\n|------|----------|\n| 本地還沒 push | 放心 rebase |\n| 已 push 到個人分支 | rebase 後 `--force-with-lease` |\n| 已 push 到 main | **不要** rebase，改用 revert |\n\n> 💡 **提示**：如果你只是想讓 PR 看起來乾淨，GitHub 的「Squash and merge」按鈕可以達到一樣的效果 。\n\n希望這有幫助！如果還有問題，歡迎繼續問 😊\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "snippet",
+      "options": {
+        "ignoreRules": [
+          "MDX003"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX018",
+          "name": "first-heading-h1",
+          "severity": "info",
+          "fixable": false,
+          "line": 1,
+          "column": 1,
+          "message": "The first heading is not an H1. Start the outline with one H1 unless the document intentionally starts in a section."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": true,
+          "line": 3,
+          "column": 41,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": true,
+          "line": 3,
+          "column": 48,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": true,
+          "line": 15,
+          "column": 4,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": true,
+          "line": 15,
+          "column": 13,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX050",
+          "name": "fence-language",
+          "severity": "info",
+          "fixable": false,
+          "line": 16,
+          "column": 1,
+          "message": "Fenced code block has no language. Add one when the language is known, for example ```js."
+        },
+        {
+          "rule": "MDX062",
+          "name": "table-blank-lines",
+          "severity": "warning",
+          "fixable": true,
+          "line": 36,
+          "column": 1,
+          "message": "Table starts directly after another block. Add a blank line before it."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": true,
+          "line": 42,
+          "column": 6,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": true,
+          "line": 42,
+          "column": 11,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        }
+      ],
+      "fix": {
+        "text": "### 簡短回答\n\n可以，用 `git rebase -i` 就能把多個 commit 合併成一個。**但要注意**：已經 push 到共用分支的 commit 不建議 rebase。\n\n### 詳細步驟\n\n1. **找出要合併的範圍**\n   ```bash\n   git log --oneline -5\n   ```\n2. **開始互動式 rebase**\n   ```bash\n   git rebase -i HEAD~3\n   ```\n3. **編輯指令清單**：把第二行之後的 `pick` 改成 `squash`（或 `s`）\n   ```\n   pick a1b2c3d 新增登入頁\n   squash d4e5f6a 修正錯字\n   squash 0718293 調整樣式\n   ```\n4. **儲存並編輯 commit 訊息**\n5. **強制推送（如果已經 push 過）：**\n   ```bash\n   git push --force-with-lease\n   ```\n\n### 常見問題\n\n**Q：rebase 到一半想放棄怎麼辦？**\nA：執行 `git rebase --abort`，會回到 rebase 前的狀態。\n\n**Q：`--force` 和 `--force-with-lease` 差在哪？**\nA：`--force-with-lease` 會先確認遠端沒有別人推的新 commit，比較安全。\n\n### 小結\n\n| 情境 | 建議做法 |\n|------|----------|\n| 本地還沒 push | 放心 rebase |\n| 已 push 到個人分支 | rebase 後 `--force-with-lease` |\n| 已 push 到 main | **不要** rebase，改用 revert |\n\n> 💡 **提示**：如果你只是想讓 PR 看起來乾淨，GitHub 的「Squash and merge」按鈕可以達到一樣的效果 。\n\n希望這有幫助！如果還有問題，歡迎繼續問 😊\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "line-length-80",
+      "options": {
+        "maxLineLength": 80
+      },
+      "diagnose": [
+        {
+          "rule": "MDX018",
+          "name": "first-heading-h1",
+          "severity": "info",
+          "fixable": false,
+          "line": 1,
+          "column": 1,
+          "message": "The first heading is not an H1. Start the outline with one H1 unless the document intentionally starts in a section."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": true,
+          "line": 3,
+          "column": 41,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": true,
+          "line": 3,
+          "column": 48,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX090",
+          "name": "line-length",
+          "severity": "info",
+          "fixable": false,
+          "line": 3,
+          "column": 81,
+          "message": "Line is 82 characters; limit is 80."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": true,
+          "line": 15,
+          "column": 4,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": true,
+          "line": 15,
+          "column": 13,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX050",
+          "name": "fence-language",
+          "severity": "info",
+          "fixable": false,
+          "line": 16,
+          "column": 1,
+          "message": "Fenced code block has no language. Add one when the language is known, for example ```js."
+        },
+        {
+          "rule": "MDX062",
+          "name": "table-blank-lines",
+          "severity": "warning",
+          "fixable": true,
+          "line": 36,
+          "column": 1,
+          "message": "Table starts directly after another block. Add a blank line before it."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": true,
+          "line": 42,
+          "column": 6,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": true,
+          "line": 42,
+          "column": 11,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        }
+      ],
+      "fix": {
+        "text": "### 簡短回答\n\n可以，用 `git rebase -i` 就能把多個 commit 合併成一個。**但要注意**：已經 push 到共用分支的 commit 不建議 rebase。\n\n### 詳細步驟\n\n1. **找出要合併的範圍**\n   ```bash\n   git log --oneline -5\n   ```\n2. **開始互動式 rebase**\n   ```bash\n   git rebase -i HEAD~3\n   ```\n3. **編輯指令清單**：把第二行之後的 `pick` 改成 `squash`（或 `s`）\n   ```\n   pick a1b2c3d 新增登入頁\n   squash d4e5f6a 修正錯字\n   squash 0718293 調整樣式\n   ```\n4. **儲存並編輯 commit 訊息**\n5. **強制推送（如果已經 push 過）：**\n   ```bash\n   git push --force-with-lease\n   ```\n\n### 常見問題\n\n**Q：rebase 到一半想放棄怎麼辦？**\nA：執行 `git rebase --abort`，會回到 rebase 前的狀態。\n\n**Q：`--force` 和 `--force-with-lease` 差在哪？**\nA：`--force-with-lease` 會先確認遠端沒有別人推的新 commit，比較安全。\n\n### 小結\n\n| 情境 | 建議做法 |\n|------|----------|\n| 本地還沒 push | 放心 rebase |\n| 已 push 到個人分支 | rebase 後 `--force-with-lease` |\n| 已 push 到 main | **不要** rebase，改用 revert |\n\n> 💡 **提示**：如果你只是想讓 PR 看起來乾淨，GitHub 的「Squash and merge」按鈕可以達到一樣的效果 。\n\n希望這有幫助！如果還有問題，歡迎繼續問 😊\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "keep-encoding",
+      "options": {
+        "ignoreRules": [
+          "MDX001",
+          "MDX002"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX018",
+          "name": "first-heading-h1",
+          "severity": "info",
+          "fixable": false,
+          "line": 1,
+          "column": 1,
+          "message": "The first heading is not an H1. Start the outline with one H1 unless the document intentionally starts in a section."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": true,
+          "line": 3,
+          "column": 41,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": true,
+          "line": 3,
+          "column": 48,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": true,
+          "line": 15,
+          "column": 4,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": true,
+          "line": 15,
+          "column": 13,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX050",
+          "name": "fence-language",
+          "severity": "info",
+          "fixable": false,
+          "line": 16,
+          "column": 1,
+          "message": "Fenced code block has no language. Add one when the language is known, for example ```js."
+        },
+        {
+          "rule": "MDX062",
+          "name": "table-blank-lines",
+          "severity": "warning",
+          "fixable": true,
+          "line": 36,
+          "column": 1,
+          "message": "Table starts directly after another block. Add a blank line before it."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": true,
+          "line": 42,
+          "column": 6,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        },
+        {
+          "rule": "MDX042",
+          "name": "cjk-emphasis-unpaired",
+          "severity": "warning",
+          "fixable": true,
+          "line": 42,
+          "column": 11,
+          "message": "Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword."
+        }
+      ],
+      "fix": {
+        "text": "### 簡短回答\n\n可以，用 `git rebase -i` 就能把多個 commit 合併成一個。**但要注意**：已經 push 到共用分支的 commit 不建議 rebase。\n\n### 詳細步驟\n\n1. **找出要合併的範圍**\n   ```bash\n   git log --oneline -5\n   ```\n2. **開始互動式 rebase**\n   ```bash\n   git rebase -i HEAD~3\n   ```\n3. **編輯指令清單**：把第二行之後的 `pick` 改成 `squash`（或 `s`）\n   ```\n   pick a1b2c3d 新增登入頁\n   squash d4e5f6a 修正錯字\n   squash 0718293 調整樣式\n   ```\n4. **儲存並編輯 commit 訊息**\n5. **強制推送（如果已經 push 過）：**\n   ```bash\n   git push --force-with-lease\n   ```\n\n### 常見問題\n\n**Q：rebase 到一半想放棄怎麼辦？**\nA：執行 `git rebase --abort`，會回到 rebase 前的狀態。\n\n**Q：`--force` 和 `--force-with-lease` 差在哪？**\nA：`--force-with-lease` 會先確認遠端沒有別人推的新 commit，比較安全。\n\n### 小結\n\n| 情境 | 建議做法 |\n|------|----------|\n| 本地還沒 push | 放心 rebase |\n| 已 push 到個人分支 | rebase 後 `--force-with-lease` |\n| 已 push 到 main | **不要** rebase，改用 revert |\n\n> 💡 **提示**：如果你只是想讓 PR 看起來乾淨，GitHub 的「Squash and merge」按鈕可以達到一樣的效果 。\n\n希望這有幫助！如果還有問題，歡迎繼續問 😊\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "headings-only",
+      "options": {
+        "rules": [
+          "MDX010",
+          "MDX011",
+          "MDX012",
+          "MDX013"
+        ]
+      },
+      "diagnose": [],
+      "fix": {
+        "text": "### 簡短回答\n\n可以，用 `git rebase -i` 就能把多個 commit 合併成一個。**但要注意：**已經 push 到共用分支的 commit 不建議 rebase。\n\n### 詳細步驟\n\n1. **找出要合併的範圍**\n   ```bash\n   git log --oneline -5\n   ```\n2. **開始互動式 rebase**\n   ```bash\n   git rebase -i HEAD~3\n   ```\n3. **編輯指令清單：**把第二行之後的 `pick` 改成 `squash`（或 `s`）\n   ```\n   pick a1b2c3d 新增登入頁\n   squash d4e5f6a 修正錯字\n   squash 0718293 調整樣式\n   ```\n4. **儲存並編輯 commit 訊息**\n5. **強制推送（如果已經 push 過）：**\n   ```bash\n   git push --force-with-lease\n   ```\n\n### 常見問題\n\n**Q：rebase 到一半想放棄怎麼辦？**\nA：執行 `git rebase --abort`，會回到 rebase 前的狀態。\n\n**Q：`--force` 和 `--force-with-lease` 差在哪？**\nA：`--force-with-lease` 會先確認遠端沒有別人推的新 commit，比較安全。\n\n### 小結\n| 情境 | 建議做法 |\n|------|----------|\n| 本地還沒 push | 放心 rebase |\n| 已 push 到個人分支 | rebase 後 `--force-with-lease` |\n| 已 push 到 main | **不要** rebase，改用 revert |\n\n> 💡 **提示：**如果你只是想讓 PR 看起來乾淨，GitHub 的「Squash and merge」按鈕可以達到一樣的效果 。\n\n希望這有幫助！如果還有問題，歡迎繼續問 😊\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    }
+  ]
+}

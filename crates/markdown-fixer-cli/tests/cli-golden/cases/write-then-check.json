@@ -1,0 +1,27 @@
+{
+  "name": "write-then-check",
+  "args": [
+    "--write",
+    "--check",
+    "zh-doc.md"
+  ],
+  "cwd": "",
+  "nonRoot": false,
+  "setup": [
+    {
+      "path": "zh-doc.md",
+      "text": "# 會議記錄\n\n**日期：**2026-11-05\n**出席：** 王小明、李大華\n\n##討論事項\n1. 第一項\n2.第二項\n\n```\n沒有語言的程式碼\n```\n參考 [文件] 與 ![](image.png)。\n"
+    }
+  ],
+  "expected": {
+    "status": 1,
+    "stdout": "zh-doc.md\n  3:1        warning MDX042  Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword. (fixable)\n  3:6        warning MDX042  Unpaired `**` next to CJK or full-width punctuation renders literally instead of emphasis. Move the full-width punctuation outside the delimiters (`**X：**Y` becomes `**X**：Y`) or reword. (fixable)\n  6:3        warning MDX010  Add a space after the heading marker: \"## \" rather than \"##\". (fixable)\n  8:3        warning MDX030  Add a space after the \"2.\" list marker. (fixable)\n  10:1       info    MDX050  Fenced code block has no language. Add one when the language is known, for example ```js.\n  12:1       warning MDX052  Fenced code block ends directly before another block. Add a blank line after it. (fixable)\n  13:11      warning MDX071  Link or image has empty text or an empty destination.\n  13:11      warning MDX075  Image has no alt text. Add a short description, or confirm that an empty alt is correct for a decorative image.\n\n8 problem(s) in 1 file(s): 5 fixable, 0 error(s), 7 warning(s), 1 info.\n",
+    "stderr": "",
+    "files": [
+      {
+        "path": "zh-doc.md",
+        "text": "# 會議記錄\n\n**日期：**2026-11-05\n**出席：** 王小明、李大華\n\n##討論事項\n1. 第一項\n2.第二項\n\n```\n沒有語言的程式碼\n```\n參考 [文件] 與 ![](image.png)。\n"
+      }
+    ]
+  }
+}

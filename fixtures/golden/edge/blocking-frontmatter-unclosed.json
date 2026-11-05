@@ -1,0 +1,119 @@
+{
+  "source": "edge/blocking-frontmatter-unclosed.md",
+  "referenceVersion": "1.0.0",
+  "cases": [
+    {
+      "name": "default",
+      "options": {},
+      "diagnose": [
+        {
+          "rule": "MDX081",
+          "name": "frontmatter-unclosed",
+          "severity": "error",
+          "fixable": false,
+          "line": 1,
+          "column": 1,
+          "message": "Unclosed YAML frontmatter: no closing --- or ... line was found."
+        }
+      ],
+      "fix": {
+        "text": "---\ntitle: x\n#Title\n",
+        "changed": false,
+        "refused": true,
+        "reason": "Unclosed YAML frontmatter: no closing --- or ... line was found."
+      }
+    },
+    {
+      "name": "snippet",
+      "options": {
+        "ignoreRules": [
+          "MDX003"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX081",
+          "name": "frontmatter-unclosed",
+          "severity": "error",
+          "fixable": false,
+          "line": 1,
+          "column": 1,
+          "message": "Unclosed YAML frontmatter: no closing --- or ... line was found."
+        }
+      ],
+      "fix": {
+        "text": "---\ntitle: x\n#Title\n",
+        "changed": false,
+        "refused": true,
+        "reason": "Unclosed YAML frontmatter: no closing --- or ... line was found."
+      }
+    },
+    {
+      "name": "line-length-80",
+      "options": {
+        "maxLineLength": 80
+      },
+      "diagnose": [
+        {
+          "rule": "MDX081",
+          "name": "frontmatter-unclosed",
+          "severity": "error",
+          "fixable": false,
+          "line": 1,
+          "column": 1,
+          "message": "Unclosed YAML frontmatter: no closing --- or ... line was found."
+        }
+      ],
+      "fix": {
+        "text": "---\ntitle: x\n#Title\n",
+        "changed": false,
+        "refused": true,
+        "reason": "Unclosed YAML frontmatter: no closing --- or ... line was found."
+      }
+    },
+    {
+      "name": "keep-encoding",
+      "options": {
+        "ignoreRules": [
+          "MDX001",
+          "MDX002"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX081",
+          "name": "frontmatter-unclosed",
+          "severity": "error",
+          "fixable": false,
+          "line": 1,
+          "column": 1,
+          "message": "Unclosed YAML frontmatter: no closing --- or ... line was found."
+        }
+      ],
+      "fix": {
+        "text": "---\ntitle: x\n#Title\n",
+        "changed": false,
+        "refused": true,
+        "reason": "Unclosed YAML frontmatter: no closing --- or ... line was found."
+      }
+    },
+    {
+      "name": "headings-only",
+      "options": {
+        "rules": [
+          "MDX010",
+          "MDX011",
+          "MDX012",
+          "MDX013"
+        ]
+      },
+      "diagnose": [],
+      "fix": {
+        "text": "---\ntitle: x\n#Title\n",
+        "changed": false,
+        "refused": true,
+        "reason": "Unclosed YAML frontmatter: no closing --- or ... line was found."
+      }
+    }
+  ]
+}

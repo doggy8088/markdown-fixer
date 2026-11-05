@@ -1,0 +1,35 @@
+{
+  "name": "invalid-utf8-and-good",
+  "args": [
+    "--check",
+    "good.md",
+    "bad.md"
+  ],
+  "cwd": "",
+  "nonRoot": false,
+  "setup": [
+    {
+      "path": "good.md",
+      "text": "# Clean Document\n\nThis document has no problems.\n\n## Section\n\n- One\n- Two\n\n```js\nconsole.log('hi');\n```\n"
+    },
+    {
+      "path": "bad.md",
+      "hex": "fffe2320"
+    }
+  ],
+  "expected": {
+    "status": 2,
+    "stdout": "good.md\n  No problems.\n\nSome files could not be read or written; see the errors above.\n",
+    "stderr": "Error: bad.md: The encoded data was not valid for encoding utf-8\n",
+    "files": [
+      {
+        "path": "bad.md",
+        "hex": "fffe2320"
+      },
+      {
+        "path": "good.md",
+        "text": "# Clean Document\n\nThis document has no problems.\n\n## Section\n\n- One\n- Two\n\n```js\nconsole.log('hi');\n```\n"
+      }
+    ]
+  }
+}

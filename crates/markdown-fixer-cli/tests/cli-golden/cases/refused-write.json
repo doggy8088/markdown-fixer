@@ -1,0 +1,26 @@
+{
+  "name": "refused-write",
+  "args": [
+    "--write",
+    "fm.md"
+  ],
+  "cwd": "",
+  "nonRoot": false,
+  "setup": [
+    {
+      "path": "fm.md",
+      "text": "---\ntitle: x\n#Title\n"
+    }
+  ],
+  "expected": {
+    "status": 1,
+    "stdout": "fm.md\n  ERROR  Not modified: Unclosed YAML frontmatter: no closing --- or ... line was found.\n  1:1        error   MDX081  Unclosed YAML frontmatter: no closing --- or ... line was found.\n\n1 problem(s) remain: 0 fixable, 1 error(s), 0 warning(s), 0 info.\n1 file(s) were not modified because of structural or frontmatter ambiguity.\n",
+    "stderr": "",
+    "files": [
+      {
+        "path": "fm.md",
+        "text": "---\ntitle: x\n#Title\n"
+      }
+    ]
+  }
+}

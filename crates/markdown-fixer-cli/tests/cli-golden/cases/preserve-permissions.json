@@ -1,0 +1,28 @@
+{
+  "name": "preserve-permissions",
+  "args": [
+    "--write",
+    "x.md"
+  ],
+  "cwd": "",
+  "nonRoot": false,
+  "setup": [
+    {
+      "path": "x.md",
+      "text": "#Title\n",
+      "mode": "640"
+    }
+  ],
+  "expected": {
+    "status": 0,
+    "stdout": "x.md\n  No problems.\n  Fixed 1 issue(s).\n\nFixed 1 issue(s) in 1 file(s).\nNo remaining Markdown issues.\n",
+    "stderr": "",
+    "files": [
+      {
+        "path": "x.md",
+        "text": "# Title\n",
+        "mode": "640"
+      }
+    ]
+  }
+}

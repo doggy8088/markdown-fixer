@@ -1,0 +1,25 @@
+{
+  "name": "not-a-directory",
+  "args": [
+    "a.md/"
+  ],
+  "cwd": "",
+  "nonRoot": false,
+  "setup": [
+    {
+      "path": "a.md",
+      "text": "# Clean Document\n\nThis document has no problems.\n\n## Section\n\n- One\n- Two\n\n```js\nconsole.log('hi');\n```\n"
+    }
+  ],
+  "expected": {
+    "status": 2,
+    "stdout": "",
+    "stderr": "Error: Cannot access a.md/: ENOTDIR: not a directory, stat 'a.md/'\n",
+    "files": [
+      {
+        "path": "a.md",
+        "text": "# Clean Document\n\nThis document has no problems.\n\n## Section\n\n- One\n- Two\n\n```js\nconsole.log('hi');\n```\n"
+      }
+    ]
+  }
+}

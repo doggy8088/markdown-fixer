@@ -1,0 +1,25 @@
+{
+  "name": "refused-check",
+  "args": [
+    "fm.md"
+  ],
+  "cwd": "",
+  "nonRoot": false,
+  "setup": [
+    {
+      "path": "fm.md",
+      "text": "---\ntitle: x\n#Title\n"
+    }
+  ],
+  "expected": {
+    "status": 1,
+    "stdout": "fm.md\n  ERROR  Structural error: Unclosed YAML frontmatter: no closing --- or ... line was found.\n  1:1        error   MDX081  Unclosed YAML frontmatter: no closing --- or ... line was found.\n\n1 problem(s) in 1 file(s): 0 fixable, 1 error(s), 0 warning(s), 0 info.\n1 file(s) need manual review before safe fixes.\n",
+    "stderr": "",
+    "files": [
+      {
+        "path": "fm.md",
+        "text": "---\ntitle: x\n#Title\n"
+      }
+    ]
+  }
+}

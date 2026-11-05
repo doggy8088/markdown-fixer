@@ -1,0 +1,119 @@
+{
+  "source": "real/mhtml/example.md",
+  "referenceVersion": "1.0.0",
+  "cases": [
+    {
+      "name": "default",
+      "options": {},
+      "diagnose": [
+        {
+          "rule": "MDX060",
+          "name": "table-delimiter-width",
+          "severity": "warning",
+          "fixable": true,
+          "line": 43,
+          "column": 14,
+          "message": "Table delimiter cell has fewer than three hyphens."
+        }
+      ],
+      "fix": {
+        "text": "---\ntitle: mhtml 範例文件\n---\n\n# mhtml 範例文件\n\n這份文件示範 **mhtml** 支援的常見 Markdown 語法。試試看：\n\n```sh\nmhtml examples/example.md                       # 在瀏覽器預覽\nmhtml examples/example.md out.html --theme dark # 輸出深色主題\n```\n\n## 文字樣式\n\n**粗體**、*斜體*、~~刪除線~~、`行內程式碼`、[連結](https://github.com/doggy8088/mhtml)，\n以及鍵盤按鍵 <kbd>Ctrl</kbd> + <kbd>C</kbd>。\n\n> 這是一段引用。\n> 可以有多行。\n\n> [!NOTE]\n> GitHub 風格的提示區塊：NOTE、TIP、IMPORTANT、WARNING、CAUTION。\n\n> [!WARNING]\n> 小心這個警告區塊。\n\n## 清單\n\n- 項目 A\n  - 巢狀項目\n- 項目 B\n\n1. 第一步\n2. 第二步\n\n- [x] 已完成的任務\n- [ ] 待辦的任務\n\n## 表格\n\n| 語法     | 支援 | 備註           |\n| :------- | :---: | -------------: |\n| 表格     |  ✅  |           GFM |\n| 任務清單 |  ✅  |           GFM |\n| 數學公式 |  ✅  |        MathML |\n\n## 程式碼\n\n```rust\nfn main() {\n    let name = \"mhtml\";\n    println!(\"Hello, {name}!\");\n}\n```\n\n```typescript\ninterface User { id: number; name: string }\nconst greet = (u: User): string => `Hi ${u.name}`;\n```\n\n## 數學公式\n\n行內公式：$E = mc^2$，區塊公式：\n\n$$\n\\int_0^\\infty e^{-x^2}\\,dx = \\frac{\\sqrt{\\pi}}{2}\n$$\n\n## Mermaid 圖表\n\n```mermaid\nflowchart LR\n  A[Markdown] --> B{mhtml}\n  B --> C[HTML]\n```\n\n## 其他\n\n腳註在這裡[^1]。\n\nterm\n: 定義清單的內容\n\n<details>\n<summary>展開看看</summary>\n\n被收合的內容。\n\n</details>\n\n---\n\n[^1]: 這是腳註的內容。\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "snippet",
+      "options": {
+        "ignoreRules": [
+          "MDX003"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX060",
+          "name": "table-delimiter-width",
+          "severity": "warning",
+          "fixable": true,
+          "line": 43,
+          "column": 14,
+          "message": "Table delimiter cell has fewer than three hyphens."
+        }
+      ],
+      "fix": {
+        "text": "---\ntitle: mhtml 範例文件\n---\n\n# mhtml 範例文件\n\n這份文件示範 **mhtml** 支援的常見 Markdown 語法。試試看：\n\n```sh\nmhtml examples/example.md                       # 在瀏覽器預覽\nmhtml examples/example.md out.html --theme dark # 輸出深色主題\n```\n\n## 文字樣式\n\n**粗體**、*斜體*、~~刪除線~~、`行內程式碼`、[連結](https://github.com/doggy8088/mhtml)，\n以及鍵盤按鍵 <kbd>Ctrl</kbd> + <kbd>C</kbd>。\n\n> 這是一段引用。\n> 可以有多行。\n\n> [!NOTE]\n> GitHub 風格的提示區塊：NOTE、TIP、IMPORTANT、WARNING、CAUTION。\n\n> [!WARNING]\n> 小心這個警告區塊。\n\n## 清單\n\n- 項目 A\n  - 巢狀項目\n- 項目 B\n\n1. 第一步\n2. 第二步\n\n- [x] 已完成的任務\n- [ ] 待辦的任務\n\n## 表格\n\n| 語法     | 支援 | 備註           |\n| :------- | :---: | -------------: |\n| 表格     |  ✅  |           GFM |\n| 任務清單 |  ✅  |           GFM |\n| 數學公式 |  ✅  |        MathML |\n\n## 程式碼\n\n```rust\nfn main() {\n    let name = \"mhtml\";\n    println!(\"Hello, {name}!\");\n}\n```\n\n```typescript\ninterface User { id: number; name: string }\nconst greet = (u: User): string => `Hi ${u.name}`;\n```\n\n## 數學公式\n\n行內公式：$E = mc^2$，區塊公式：\n\n$$\n\\int_0^\\infty e^{-x^2}\\,dx = \\frac{\\sqrt{\\pi}}{2}\n$$\n\n## Mermaid 圖表\n\n```mermaid\nflowchart LR\n  A[Markdown] --> B{mhtml}\n  B --> C[HTML]\n```\n\n## 其他\n\n腳註在這裡[^1]。\n\nterm\n: 定義清單的內容\n\n<details>\n<summary>展開看看</summary>\n\n被收合的內容。\n\n</details>\n\n---\n\n[^1]: 這是腳註的內容。\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "line-length-80",
+      "options": {
+        "maxLineLength": 80
+      },
+      "diagnose": [
+        {
+          "rule": "MDX060",
+          "name": "table-delimiter-width",
+          "severity": "warning",
+          "fixable": true,
+          "line": 43,
+          "column": 14,
+          "message": "Table delimiter cell has fewer than three hyphens."
+        }
+      ],
+      "fix": {
+        "text": "---\ntitle: mhtml 範例文件\n---\n\n# mhtml 範例文件\n\n這份文件示範 **mhtml** 支援的常見 Markdown 語法。試試看：\n\n```sh\nmhtml examples/example.md                       # 在瀏覽器預覽\nmhtml examples/example.md out.html --theme dark # 輸出深色主題\n```\n\n## 文字樣式\n\n**粗體**、*斜體*、~~刪除線~~、`行內程式碼`、[連結](https://github.com/doggy8088/mhtml)，\n以及鍵盤按鍵 <kbd>Ctrl</kbd> + <kbd>C</kbd>。\n\n> 這是一段引用。\n> 可以有多行。\n\n> [!NOTE]\n> GitHub 風格的提示區塊：NOTE、TIP、IMPORTANT、WARNING、CAUTION。\n\n> [!WARNING]\n> 小心這個警告區塊。\n\n## 清單\n\n- 項目 A\n  - 巢狀項目\n- 項目 B\n\n1. 第一步\n2. 第二步\n\n- [x] 已完成的任務\n- [ ] 待辦的任務\n\n## 表格\n\n| 語法     | 支援 | 備註           |\n| :------- | :---: | -------------: |\n| 表格     |  ✅  |           GFM |\n| 任務清單 |  ✅  |           GFM |\n| 數學公式 |  ✅  |        MathML |\n\n## 程式碼\n\n```rust\nfn main() {\n    let name = \"mhtml\";\n    println!(\"Hello, {name}!\");\n}\n```\n\n```typescript\ninterface User { id: number; name: string }\nconst greet = (u: User): string => `Hi ${u.name}`;\n```\n\n## 數學公式\n\n行內公式：$E = mc^2$，區塊公式：\n\n$$\n\\int_0^\\infty e^{-x^2}\\,dx = \\frac{\\sqrt{\\pi}}{2}\n$$\n\n## Mermaid 圖表\n\n```mermaid\nflowchart LR\n  A[Markdown] --> B{mhtml}\n  B --> C[HTML]\n```\n\n## 其他\n\n腳註在這裡[^1]。\n\nterm\n: 定義清單的內容\n\n<details>\n<summary>展開看看</summary>\n\n被收合的內容。\n\n</details>\n\n---\n\n[^1]: 這是腳註的內容。\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "keep-encoding",
+      "options": {
+        "ignoreRules": [
+          "MDX001",
+          "MDX002"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX060",
+          "name": "table-delimiter-width",
+          "severity": "warning",
+          "fixable": true,
+          "line": 43,
+          "column": 14,
+          "message": "Table delimiter cell has fewer than three hyphens."
+        }
+      ],
+      "fix": {
+        "text": "---\ntitle: mhtml 範例文件\n---\n\n# mhtml 範例文件\n\n這份文件示範 **mhtml** 支援的常見 Markdown 語法。試試看：\n\n```sh\nmhtml examples/example.md                       # 在瀏覽器預覽\nmhtml examples/example.md out.html --theme dark # 輸出深色主題\n```\n\n## 文字樣式\n\n**粗體**、*斜體*、~~刪除線~~、`行內程式碼`、[連結](https://github.com/doggy8088/mhtml)，\n以及鍵盤按鍵 <kbd>Ctrl</kbd> + <kbd>C</kbd>。\n\n> 這是一段引用。\n> 可以有多行。\n\n> [!NOTE]\n> GitHub 風格的提示區塊：NOTE、TIP、IMPORTANT、WARNING、CAUTION。\n\n> [!WARNING]\n> 小心這個警告區塊。\n\n## 清單\n\n- 項目 A\n  - 巢狀項目\n- 項目 B\n\n1. 第一步\n2. 第二步\n\n- [x] 已完成的任務\n- [ ] 待辦的任務\n\n## 表格\n\n| 語法     | 支援 | 備註           |\n| :------- | :---: | -------------: |\n| 表格     |  ✅  |           GFM |\n| 任務清單 |  ✅  |           GFM |\n| 數學公式 |  ✅  |        MathML |\n\n## 程式碼\n\n```rust\nfn main() {\n    let name = \"mhtml\";\n    println!(\"Hello, {name}!\");\n}\n```\n\n```typescript\ninterface User { id: number; name: string }\nconst greet = (u: User): string => `Hi ${u.name}`;\n```\n\n## 數學公式\n\n行內公式：$E = mc^2$，區塊公式：\n\n$$\n\\int_0^\\infty e^{-x^2}\\,dx = \\frac{\\sqrt{\\pi}}{2}\n$$\n\n## Mermaid 圖表\n\n```mermaid\nflowchart LR\n  A[Markdown] --> B{mhtml}\n  B --> C[HTML]\n```\n\n## 其他\n\n腳註在這裡[^1]。\n\nterm\n: 定義清單的內容\n\n<details>\n<summary>展開看看</summary>\n\n被收合的內容。\n\n</details>\n\n---\n\n[^1]: 這是腳註的內容。\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "headings-only",
+      "options": {
+        "rules": [
+          "MDX010",
+          "MDX011",
+          "MDX012",
+          "MDX013"
+        ]
+      },
+      "diagnose": [],
+      "fix": {
+        "text": "---\ntitle: mhtml 範例文件\n---\n\n# mhtml 範例文件\n\n這份文件示範 **mhtml** 支援的常見 Markdown 語法。試試看：\n\n```sh\nmhtml examples/example.md                       # 在瀏覽器預覽\nmhtml examples/example.md out.html --theme dark # 輸出深色主題\n```\n\n## 文字樣式\n\n**粗體**、*斜體*、~~刪除線~~、`行內程式碼`、[連結](https://github.com/doggy8088/mhtml)，\n以及鍵盤按鍵 <kbd>Ctrl</kbd> + <kbd>C</kbd>。\n\n> 這是一段引用。\n> 可以有多行。\n\n> [!NOTE]\n> GitHub 風格的提示區塊：NOTE、TIP、IMPORTANT、WARNING、CAUTION。\n\n> [!WARNING]\n> 小心這個警告區塊。\n\n## 清單\n\n- 項目 A\n  - 巢狀項目\n- 項目 B\n\n1. 第一步\n2. 第二步\n\n- [x] 已完成的任務\n- [ ] 待辦的任務\n\n## 表格\n\n| 語法     | 支援 | 備註           |\n| :------- | :--: | -------------: |\n| 表格     |  ✅  |           GFM |\n| 任務清單 |  ✅  |           GFM |\n| 數學公式 |  ✅  |        MathML |\n\n## 程式碼\n\n```rust\nfn main() {\n    let name = \"mhtml\";\n    println!(\"Hello, {name}!\");\n}\n```\n\n```typescript\ninterface User { id: number; name: string }\nconst greet = (u: User): string => `Hi ${u.name}`;\n```\n\n## 數學公式\n\n行內公式：$E = mc^2$，區塊公式：\n\n$$\n\\int_0^\\infty e^{-x^2}\\,dx = \\frac{\\sqrt{\\pi}}{2}\n$$\n\n## Mermaid 圖表\n\n```mermaid\nflowchart LR\n  A[Markdown] --> B{mhtml}\n  B --> C[HTML]\n```\n\n## 其他\n\n腳註在這裡[^1]。\n\nterm\n: 定義清單的內容\n\n<details>\n<summary>展開看看</summary>\n\n被收合的內容。\n\n</details>\n\n---\n\n[^1]: 這是腳註的內容。\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    }
+  ]
+}

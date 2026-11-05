@@ -1,0 +1,25 @@
+{
+  "name": "check-clean",
+  "args": [
+    "clean.md"
+  ],
+  "cwd": "",
+  "nonRoot": false,
+  "setup": [
+    {
+      "path": "clean.md",
+      "text": "# Clean Document\n\nThis document has no problems.\n\n## Section\n\n- One\n- Two\n\n```js\nconsole.log('hi');\n```\n"
+    }
+  ],
+  "expected": {
+    "status": 0,
+    "stdout": "clean.md\n  No problems.\n\nNo Markdown issues found in 1 file(s).\n",
+    "stderr": "",
+    "files": [
+      {
+        "path": "clean.md",
+        "text": "# Clean Document\n\nThis document has no problems.\n\n## Section\n\n- One\n- Two\n\n```js\nconsole.log('hi');\n```\n"
+      }
+    ]
+  }
+}

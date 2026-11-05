@@ -1,0 +1,417 @@
+{
+  "source": "synthetic/release-notes-zh.md",
+  "referenceVersion": "1.0.0",
+  "cases": [
+    {
+      "name": "default",
+      "options": {},
+      "diagnose": [
+        {
+          "rule": "MDX030",
+          "name": "list-marker-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 6,
+          "column": 2,
+          "message": "Add a space after the \"-\" list marker."
+        },
+        {
+          "rule": "MDX031",
+          "name": "list-marker-style",
+          "severity": "warning",
+          "fixable": true,
+          "line": 8,
+          "column": 1,
+          "message": "List uses \"+\" but the first item in this list uses \"-\". Use one bullet marker per list."
+        },
+        {
+          "rule": "MDX040",
+          "name": "emphasis-inner-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 14,
+          "column": 6,
+          "message": "Remove spaces just inside the bold (**) delimiters."
+        },
+        {
+          "rule": "MDX031",
+          "name": "list-marker-style",
+          "severity": "warning",
+          "fixable": true,
+          "line": 15,
+          "column": 1,
+          "message": "List uses \"-\" but the first item in this list uses \"*\". Use one bullet marker per list."
+        },
+        {
+          "rule": "MDX032",
+          "name": "list-blank-lines",
+          "severity": "warning",
+          "fixable": false,
+          "line": 21,
+          "column": 1,
+          "message": "List ends directly before a paragraph, which may be read as a lazy continuation of the last item. Add a blank line after the list."
+        },
+        {
+          "rule": "MDX035",
+          "name": "empty-list-item",
+          "severity": "warning",
+          "fixable": false,
+          "line": 21,
+          "column": 1,
+          "message": "Empty list item. Remove it or add content."
+        },
+        {
+          "rule": "MDX004",
+          "name": "trailing-whitespace",
+          "severity": "warning",
+          "fixable": true,
+          "line": 21,
+          "column": 2,
+          "message": "Trailing whitespace. Exactly two trailing spaces create a hard line break; other trailing whitespace is noise."
+        },
+        {
+          "rule": "MDX030",
+          "name": "list-marker-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 33,
+          "column": 3,
+          "message": "Add a space after the \"2.\" list marker."
+        },
+        {
+          "rule": "MDX070",
+          "name": "bare-url",
+          "severity": "info",
+          "fixable": false,
+          "line": 39,
+          "column": 6,
+          "message": "Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text."
+        }
+      ],
+      "fix": {
+        "text": "# 版本發佈說明\n\n## v3.2.0（2026-11-01）\n\n### ✨ 新功能\n- 支援深色模式自動切換\n- 新增匯出 CSV 功能\n- 搜尋結果可以依日期排序\n- 新增鍵盤快捷鍵 `?` 顯示說明\n\n### 🐛 錯誤修正\n\n* 修正在 Safari 上捲動卡頓的問題（#1203）\n* 修正 **時區** 顯示錯誤\n* 修正匯出 PDF 時中文字型遺失\n\n### ⚠️ 不相容變更\n\n- 移除 IE 11 支援\n- API `GET /v1/items` 已停用，請改用 `GET /v2/items`\n-\n\n### 📦 相依套件\n\n| 套件 | 舊版 | 新版 |\n| --- | --- | --- |\n| react | 18.2.0 | 19.1.0 |\n| vite | 5.4.1 | 6.0.3 |\n\n## v3.1.2（2026-10-15）\n### 🐛 錯誤修正\n1. 修正登入後重新導向錯誤\n2. 修正通知數字不更新\n3. 修正 #1188：上傳大檔案逾時\n\n## v3.1.1（2026-10-02）\n\n緊急修正：還原 v3.1.0 的快取設定 。\n詳情請見 https://status.example.com/incidents/2026-10-02\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "snippet",
+      "options": {
+        "ignoreRules": [
+          "MDX003"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX030",
+          "name": "list-marker-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 6,
+          "column": 2,
+          "message": "Add a space after the \"-\" list marker."
+        },
+        {
+          "rule": "MDX031",
+          "name": "list-marker-style",
+          "severity": "warning",
+          "fixable": true,
+          "line": 8,
+          "column": 1,
+          "message": "List uses \"+\" but the first item in this list uses \"-\". Use one bullet marker per list."
+        },
+        {
+          "rule": "MDX040",
+          "name": "emphasis-inner-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 14,
+          "column": 6,
+          "message": "Remove spaces just inside the bold (**) delimiters."
+        },
+        {
+          "rule": "MDX031",
+          "name": "list-marker-style",
+          "severity": "warning",
+          "fixable": true,
+          "line": 15,
+          "column": 1,
+          "message": "List uses \"-\" but the first item in this list uses \"*\". Use one bullet marker per list."
+        },
+        {
+          "rule": "MDX032",
+          "name": "list-blank-lines",
+          "severity": "warning",
+          "fixable": false,
+          "line": 21,
+          "column": 1,
+          "message": "List ends directly before a paragraph, which may be read as a lazy continuation of the last item. Add a blank line after the list."
+        },
+        {
+          "rule": "MDX035",
+          "name": "empty-list-item",
+          "severity": "warning",
+          "fixable": false,
+          "line": 21,
+          "column": 1,
+          "message": "Empty list item. Remove it or add content."
+        },
+        {
+          "rule": "MDX004",
+          "name": "trailing-whitespace",
+          "severity": "warning",
+          "fixable": true,
+          "line": 21,
+          "column": 2,
+          "message": "Trailing whitespace. Exactly two trailing spaces create a hard line break; other trailing whitespace is noise."
+        },
+        {
+          "rule": "MDX030",
+          "name": "list-marker-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 33,
+          "column": 3,
+          "message": "Add a space after the \"2.\" list marker."
+        },
+        {
+          "rule": "MDX070",
+          "name": "bare-url",
+          "severity": "info",
+          "fixable": false,
+          "line": 39,
+          "column": 6,
+          "message": "Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text."
+        }
+      ],
+      "fix": {
+        "text": "# 版本發佈說明\n\n## v3.2.0（2026-11-01）\n\n### ✨ 新功能\n- 支援深色模式自動切換\n- 新增匯出 CSV 功能\n- 搜尋結果可以依日期排序\n- 新增鍵盤快捷鍵 `?` 顯示說明\n\n### 🐛 錯誤修正\n\n* 修正在 Safari 上捲動卡頓的問題（#1203）\n* 修正 **時區** 顯示錯誤\n* 修正匯出 PDF 時中文字型遺失\n\n### ⚠️ 不相容變更\n\n- 移除 IE 11 支援\n- API `GET /v1/items` 已停用，請改用 `GET /v2/items`\n-\n\n### 📦 相依套件\n\n| 套件 | 舊版 | 新版 |\n| --- | --- | --- |\n| react | 18.2.0 | 19.1.0 |\n| vite | 5.4.1 | 6.0.3 |\n\n## v3.1.2（2026-10-15）\n### 🐛 錯誤修正\n1. 修正登入後重新導向錯誤\n2. 修正通知數字不更新\n3. 修正 #1188：上傳大檔案逾時\n\n## v3.1.1（2026-10-02）\n\n緊急修正：還原 v3.1.0 的快取設定 。\n詳情請見 https://status.example.com/incidents/2026-10-02\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "line-length-80",
+      "options": {
+        "maxLineLength": 80
+      },
+      "diagnose": [
+        {
+          "rule": "MDX030",
+          "name": "list-marker-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 6,
+          "column": 2,
+          "message": "Add a space after the \"-\" list marker."
+        },
+        {
+          "rule": "MDX031",
+          "name": "list-marker-style",
+          "severity": "warning",
+          "fixable": true,
+          "line": 8,
+          "column": 1,
+          "message": "List uses \"+\" but the first item in this list uses \"-\". Use one bullet marker per list."
+        },
+        {
+          "rule": "MDX040",
+          "name": "emphasis-inner-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 14,
+          "column": 6,
+          "message": "Remove spaces just inside the bold (**) delimiters."
+        },
+        {
+          "rule": "MDX031",
+          "name": "list-marker-style",
+          "severity": "warning",
+          "fixable": true,
+          "line": 15,
+          "column": 1,
+          "message": "List uses \"-\" but the first item in this list uses \"*\". Use one bullet marker per list."
+        },
+        {
+          "rule": "MDX032",
+          "name": "list-blank-lines",
+          "severity": "warning",
+          "fixable": false,
+          "line": 21,
+          "column": 1,
+          "message": "List ends directly before a paragraph, which may be read as a lazy continuation of the last item. Add a blank line after the list."
+        },
+        {
+          "rule": "MDX035",
+          "name": "empty-list-item",
+          "severity": "warning",
+          "fixable": false,
+          "line": 21,
+          "column": 1,
+          "message": "Empty list item. Remove it or add content."
+        },
+        {
+          "rule": "MDX004",
+          "name": "trailing-whitespace",
+          "severity": "warning",
+          "fixable": true,
+          "line": 21,
+          "column": 2,
+          "message": "Trailing whitespace. Exactly two trailing spaces create a hard line break; other trailing whitespace is noise."
+        },
+        {
+          "rule": "MDX030",
+          "name": "list-marker-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 33,
+          "column": 3,
+          "message": "Add a space after the \"2.\" list marker."
+        },
+        {
+          "rule": "MDX070",
+          "name": "bare-url",
+          "severity": "info",
+          "fixable": false,
+          "line": 39,
+          "column": 6,
+          "message": "Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text."
+        }
+      ],
+      "fix": {
+        "text": "# 版本發佈說明\n\n## v3.2.0（2026-11-01）\n\n### ✨ 新功能\n- 支援深色模式自動切換\n- 新增匯出 CSV 功能\n- 搜尋結果可以依日期排序\n- 新增鍵盤快捷鍵 `?` 顯示說明\n\n### 🐛 錯誤修正\n\n* 修正在 Safari 上捲動卡頓的問題（#1203）\n* 修正 **時區** 顯示錯誤\n* 修正匯出 PDF 時中文字型遺失\n\n### ⚠️ 不相容變更\n\n- 移除 IE 11 支援\n- API `GET /v1/items` 已停用，請改用 `GET /v2/items`\n-\n\n### 📦 相依套件\n\n| 套件 | 舊版 | 新版 |\n| --- | --- | --- |\n| react | 18.2.0 | 19.1.0 |\n| vite | 5.4.1 | 6.0.3 |\n\n## v3.1.2（2026-10-15）\n### 🐛 錯誤修正\n1. 修正登入後重新導向錯誤\n2. 修正通知數字不更新\n3. 修正 #1188：上傳大檔案逾時\n\n## v3.1.1（2026-10-02）\n\n緊急修正：還原 v3.1.0 的快取設定 。\n詳情請見 https://status.example.com/incidents/2026-10-02\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "keep-encoding",
+      "options": {
+        "ignoreRules": [
+          "MDX001",
+          "MDX002"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX030",
+          "name": "list-marker-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 6,
+          "column": 2,
+          "message": "Add a space after the \"-\" list marker."
+        },
+        {
+          "rule": "MDX031",
+          "name": "list-marker-style",
+          "severity": "warning",
+          "fixable": true,
+          "line": 8,
+          "column": 1,
+          "message": "List uses \"+\" but the first item in this list uses \"-\". Use one bullet marker per list."
+        },
+        {
+          "rule": "MDX040",
+          "name": "emphasis-inner-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 14,
+          "column": 6,
+          "message": "Remove spaces just inside the bold (**) delimiters."
+        },
+        {
+          "rule": "MDX031",
+          "name": "list-marker-style",
+          "severity": "warning",
+          "fixable": true,
+          "line": 15,
+          "column": 1,
+          "message": "List uses \"-\" but the first item in this list uses \"*\". Use one bullet marker per list."
+        },
+        {
+          "rule": "MDX032",
+          "name": "list-blank-lines",
+          "severity": "warning",
+          "fixable": false,
+          "line": 21,
+          "column": 1,
+          "message": "List ends directly before a paragraph, which may be read as a lazy continuation of the last item. Add a blank line after the list."
+        },
+        {
+          "rule": "MDX035",
+          "name": "empty-list-item",
+          "severity": "warning",
+          "fixable": false,
+          "line": 21,
+          "column": 1,
+          "message": "Empty list item. Remove it or add content."
+        },
+        {
+          "rule": "MDX004",
+          "name": "trailing-whitespace",
+          "severity": "warning",
+          "fixable": true,
+          "line": 21,
+          "column": 2,
+          "message": "Trailing whitespace. Exactly two trailing spaces create a hard line break; other trailing whitespace is noise."
+        },
+        {
+          "rule": "MDX030",
+          "name": "list-marker-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 33,
+          "column": 3,
+          "message": "Add a space after the \"2.\" list marker."
+        },
+        {
+          "rule": "MDX070",
+          "name": "bare-url",
+          "severity": "info",
+          "fixable": false,
+          "line": 39,
+          "column": 6,
+          "message": "Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text."
+        }
+      ],
+      "fix": {
+        "text": "# 版本發佈說明\n\n## v3.2.0（2026-11-01）\n\n### ✨ 新功能\n- 支援深色模式自動切換\n- 新增匯出 CSV 功能\n- 搜尋結果可以依日期排序\n- 新增鍵盤快捷鍵 `?` 顯示說明\n\n### 🐛 錯誤修正\n\n* 修正在 Safari 上捲動卡頓的問題（#1203）\n* 修正 **時區** 顯示錯誤\n* 修正匯出 PDF 時中文字型遺失\n\n### ⚠️ 不相容變更\n\n- 移除 IE 11 支援\n- API `GET /v1/items` 已停用，請改用 `GET /v2/items`\n-\n\n### 📦 相依套件\n\n| 套件 | 舊版 | 新版 |\n| --- | --- | --- |\n| react | 18.2.0 | 19.1.0 |\n| vite | 5.4.1 | 6.0.3 |\n\n## v3.1.2（2026-10-15）\n### 🐛 錯誤修正\n1. 修正登入後重新導向錯誤\n2. 修正通知數字不更新\n3. 修正 #1188：上傳大檔案逾時\n\n## v3.1.1（2026-10-02）\n\n緊急修正：還原 v3.1.0 的快取設定 。\n詳情請見 https://status.example.com/incidents/2026-10-02\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "headings-only",
+      "options": {
+        "rules": [
+          "MDX010",
+          "MDX011",
+          "MDX012",
+          "MDX013"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX013",
+          "name": "heading-blank-lines",
+          "severity": "warning",
+          "fixable": true,
+          "line": 5,
+          "column": 1,
+          "message": "Heading is directly attached to the following paragraph. Add a blank line after it."
+        }
+      ],
+      "fix": {
+        "text": "# 版本發佈說明\n\n## v3.2.0（2026-11-01）\n\n### ✨ 新功能\n\n-支援深色模式自動切換\n- 新增匯出 CSV 功能\n+ 搜尋結果可以依日期排序\n- 新增鍵盤快捷鍵 `?` 顯示說明\n\n### 🐛 錯誤修正\n\n* 修正在 Safari 上捲動卡頓的問題（#1203）\n* 修正 **  時區 ** 顯示錯誤\n- 修正匯出 PDF 時中文字型遺失\n\n### ⚠️ 不相容變更\n\n- 移除 IE 11 支援\n- API `GET /v1/items` 已停用，請改用 `GET /v2/items`\n- \n\n### 📦 相依套件\n\n| 套件 | 舊版 | 新版 |\n| --- | --- | --- |\n| react | 18.2.0 | 19.1.0 |\n| vite | 5.4.1 | 6.0.3 |\n\n## v3.1.2（2026-10-15）\n### 🐛 錯誤修正\n1. 修正登入後重新導向錯誤\n2.修正通知數字不更新\n3. 修正 #1188：上傳大檔案逾時\n\n## v3.1.1（2026-10-02）\n\n緊急修正：還原 v3.1.0 的快取設定 。\n詳情請見 https://status.example.com/incidents/2026-10-02\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    }
+  ]
+}

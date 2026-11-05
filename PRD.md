@@ -24,7 +24,7 @@
 - **G3 可嵌入**：Rust 應用程式以 `markdown-fixer` crate 直接呼叫；其他語言透過 C ABI（`cdylib`／`staticlib`）呼叫。
 - **G4 剪貼簿工作流程**：提供 Karabiner-Elements 設定範例，按熱鍵就把剪貼簿裡的 Markdown 正規化後貼上。
 - **G5 dedent-paste 整合**：`dedent-paste` 在既有的去縮排流程後，自動偵測內容是否為 Markdown，若是則輸出正規化後的 Markdown。
-- **G6 品質**：以接近真實的 Markdown 語料做差異測試（differential testing），涵蓋全部 50 條規則與主要使用情境。
+- **G6 品質**：以接近真實的 Markdown 語料做差異測試（differential testing），涵蓋全部 48 條規則與主要使用情境。
 
 ### 2.2 非目標
 
@@ -65,7 +65,7 @@
 
 ### 5.1 Library 層級
 
-- `diagnose(text, options)` 回傳的 `Vec<Problem>` 必須與 JS `diagnose(text, options)` 的陣列相同：元素順序、`rule`、`name`、`severity`、`fixable`、`line`、`column`、`message` 都一樣。JS 不排序，問題順序由各檢查函式的呼叫順序與 `dedupeProblems` 決定；Rust 必須照同樣順序產生。
+- `diagnose(text, options)` 回傳的 `Vec<Problem>` 必須與 JS `diagnose(text, options)` 的陣列相同：元素順序、`rule`、`name`、`severity`、`fixable`、`line`、`column`、`message` 都一樣。`dedupeProblems` 先以 `rule:line:column:message` 去重，再以 line → column → `rule.localeCompare` 做穩定排序；三者都相同時保留各檢查函式的呼叫順序。Rust 必須使用穩定排序（`sort_by`），並照 JS 的呼叫順序產生問題，才能在同位置、同規則的多筆問題上一致。規則 ID 都是 `MDX` 加三位數字的 ASCII 字串，`localeCompare` 與 byte 比較結果相同。
 - `fix_document(text, options)` 回傳的 `text`、`changed`、`refused`、`reason` 必須與 JS `fixDocument` 相同。
 - **行號**：從 1 起算，以 `\n` 分行（先做與 JS `normalizeForAnalysis` 相同的正規化）。
 - **欄號**：從 1 起算，單位是 JS 字串索引，也就是 UTF-16 code unit。BMP 以外的字元（例如 emoji）算 2。Rust 內部可以用 byte offset 運算，但輸出前必須換算成 UTF-16 欄號。這也剛好是 LSP 的預設單位。
@@ -91,13 +91,13 @@
 
 1. `--version` 輸出 `markdown-fixer <crate 版本>`，JSON 的 `version` 欄位亦同。
 2. 新增的旗標（`--stdin`、`--exit-zero`、`--detect` 等，見〈6.4〉）是 Rust 版專有，oracle 沒有。
-3. 用法說明的 `Usage:` 行把 `node markdown-fixer.mjs` 換成 `markdown-fixer`。
+3. 用法說明（`--help`）的 `Usage:` 與 `Examples:` 行把 `node markdown-fixer.mjs` 換成 `markdown-fixer`。
 
 ## 6. 功能需求
 
 ### 6.1 規則目錄
 
-規則目錄必須與 JS `RULES` 陣列完全相同（ID、name、category、severity、fixable、summary、順序）。下表是摘要；英文 summary 原文以 `reference/js/markdown-fixer.mjs` 為準，中文說明見 `docs/rules.md`。
+規則目錄共 48 條（20 條 fixable），必須與 JS `RULES` 陣列完全相同（ID、name、category、severity、fixable、summary、順序）。下表是摘要；英文 summary 原文以 `reference/js/markdown-fixer.mjs` 為準，中文說明見 `docs/rules.md`。
 
 | Rule | Name | Category | Severity | Fixable |
 | --- | --- | --- | --- | --- |
@@ -196,7 +196,7 @@ pub mod detect {
 - 預設零依賴。`serde` 是選用 feature，開啟後 `Severity`、`Rule`、`Problem`、`FixResult`、`Detection` 可序列化。可以視需要加入 `regex` 之類的小型相依，但要在 `docs/architecture.md` 說明理由；不得加入會拉進 I/O、執行緒池或 C 相依的套件。
 - `Options` 的 `max_line_length` 為 0 時停用 MDX090，行為與 JS `createEnabled` 相同。在 `rules` 指定了 MDX090 但沒給行長時預設 120，這個邏輯屬於 CLI 解析層（與 JS `parseArgs` 相同），函式庫保持原樣。
 - 公開型別要有 rustdoc（臺灣正體中文），`cargo doc` 無警告。
-- 內部模組建議切分：`scan`（`scanDocument` 與 line info）、`mask`（`buildMask`、`splitMasked`）、`line_fix`（標題、blockquote、清單、強調、NBSP 的單行修正）、`structure`（各 `compute*Structure` 診斷）、`cjk_emphasis`、`blank_lines`、`table`、`diagnose`、`fix`、`detect`、`utf16`（欄號換算）。JS 函式與 Rust 函式的對照表維護在 `docs/porting-map.md`。
+- 內部模組建議切分：`scan`（`scanDocument` 與 line info）、`mask`（`buildMask`、`splitMasked`）、`line_fix`（標題、blockquote、清單、強調、NBSP 的單行修正）、`structure`（各 `compute*Structure` 診斷）、`cjk_emphasis`、`blank_lines`、`table`、`diagnose`、`fix`、`detect`、`jsstr`（JS 字串語意與 UTF-16 code unit 處理）、`jsregex`（JS 語意的 regex 引擎）。JS 函式與 Rust 函式的對照表維護在 `docs/porting-map.md`。
 
 ### 6.4 CLI（`crates/markdown-fixer-cli`，執行檔名稱 `markdown-fixer`）
 
@@ -275,14 +275,17 @@ void mdfix_string_free(char *s);
 | `blockquote` | `> ` 開頭 | 1 |
 | `reference-definition` | `[label]: url` | 2 |
 | `frontmatter` | 檔首 `---` 到下一個 `---` | 2 |
-| `syntax-error` | 常見的 Markdown 筆誤，例如 `#標題`、`**標籤：**內容`、`-item` | 1 |
+| `syntax-error` | 常見的 Markdown 筆誤，例如 `#標題`、`**標籤：**內容`、`-item` | 2 |
 
 反向訊號（任一成立即扣分或直接判定為非 Markdown）：
 
 - 以 `#!` 開頭的 shebang、`#include`、`#define`、`#pragma`、`#region` 等前置處理指令。
 - 大量行以 `;`、`{`、`}` 結尾，或出現 `def `、`fn `、`function `、`class `、`import `、`package ` 等程式碼關鍵字開頭的行，而且沒有 fenced code 包住。
 - 看起來像 log 或 stack trace（大量時間戳記、`at ` 開頭的堆疊行）。
-- 看起來像 JSON、YAML、TOML、XML 整份文件（第一個非空白字元是 `{`、`[`、`<`，或大多數行是 `key: value`／`key = value`）。
+- 看起來像 JSON、YAML、TOML、XML 整份文件（第一個非空白字元是 `{`、`[`、`<`，或大多數行是 `key: value`／`key = value`），或含 YAML block scalar（`key: |`）。
+- 連續的 `# ` 註解區塊（shell、Python、YAML 註解）與 Python 三引號字串。
+
+權重與否決條件的實際值以 `crates/markdown-fixer/src/detect.rs` 為準，說明見 `docs/detect.md`。
 
 判定規則：分數至少 3，且至少命中兩種不同訊號，或命中一個權重 3 的訊號；同時反向訊號沒有成立。單行文字除非命中語法錯誤訊號且沒有反向訊號，否則不判定為 Markdown。
 
@@ -302,7 +305,7 @@ void mdfix_string_free(char *s);
 ### 6.8 dedent-paste 整合（`/Users/will/projects/dedent-paste`）
 
 - 新增相依 `markdown-fixer`，只用函式庫 crate。
-- 流程順序：讀剪貼簿 → 既有 `dedent_text`（含提示符展開）→ `detect::looks_like_markdown` → 若為 Markdown，呼叫 `fix_document`（停用 MDX003，保留 dedent 既有的檔尾換行行為）→ 寫回剪貼簿 → 貼上。
+- 流程順序：讀剪貼簿 → 既有 `dedent_text`（含提示符展開）→ `detect::looks_like_markdown` → 若為 Markdown，呼叫 `fix_document`（停用 MDX002 與 MDX003：保留 Windows 剪貼簿的 CRLF 與 dedent 既有的檔尾換行行為）→ 寫回剪貼簿 → 貼上。
 - 修正被拒絕（`refused`）時，輸出 dedent 之後的文字，不視為錯誤。
 - 新增關閉開關：CLI 旗標 `--no-markdown` 與環境變數 `DEDENT_PASTE_MARKDOWN=0`（旗標優先），風格與既有的 `--no-paste`／`DEDENT_PASTE_NO_PASTE` 一致。
 - Log 只記錄是否偵測為 Markdown、命中的訊號名稱、修正前後的大小，不記錄內容。
@@ -350,7 +353,7 @@ void mdfix_string_free(char *s);
 
 ## 10. 驗收標準
 
-- [ ] 50 條規則的目錄與 oracle 完全相同（有測試）。
+- [ ] 48 條規則的目錄與 oracle 完全相同（有測試）。
 - [ ] 42 個移植自 JS 的測試全部通過。
 - [ ] Golden 語料至少 40 份文件、總計至少 3,000 行，全部與 oracle 一致。
 - [ ] 差異模糊測試連續跑 10,000 份隨機文件，沒有未記錄的差異。

@@ -1,0 +1,129 @@
+{
+  "source": "synthetic/storybook-mdx.markdown",
+  "referenceVersion": "1.0.0",
+  "cases": [
+    {
+      "name": "default",
+      "options": {},
+      "diagnose": [
+        {
+          "rule": "MDX030",
+          "name": "list-marker-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 35,
+          "column": 3,
+          "message": "Add a space after the \"1.\" list marker."
+        }
+      ],
+      "fix": {
+        "text": "import { Meta, Canvas, Story, ArgsTable } from '@storybook/blocks';\nimport * as ButtonStories from './Button.stories';\n\n<Meta of={ButtonStories} />\n\n# Button 按鈕元件\n\n按鈕用來觸發動作。設計規範請見 [Figma](https://www.figma.com/file/abc123/Design-System)。\n\n<Canvas of={ButtonStories.Primary} />\n\n## 何時使用\n- 送出表單\n- 開啟對話框\n- 觸發**  主要動作 **\n\n## 變體\n\n<Canvas>\n  <Story of={ButtonStories.Secondary} />\n  <Story of={ButtonStories.Danger} />\n</Canvas>\n\n| 變體 | 用途 |\n| --- | --- |\n| `primary` | 頁面上最重要的動作，一頁最多一個 |\n| `secondary` | 次要動作 |\n| `danger` | 刪除等不可逆的動作 |\n\n## Props\n\n<ArgsTable of={ButtonStories} />\n\n## 無障礙\n1. 按鈕文字要能說明動作，不要只寫「點這裡」\n2. 只有圖示的按鈕要加 `aria-label`\n3. 不要用 `<div onClick>` 假裝按鈕\n\n{/* MDX 2 的註解寫法 */}\n\nexport const Example = () => (\n  <Button variant=\"primary\" onClick={() => alert('#clicked')}>\n    送出\n  </Button>\n);\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "snippet",
+      "options": {
+        "ignoreRules": [
+          "MDX003"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX030",
+          "name": "list-marker-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 35,
+          "column": 3,
+          "message": "Add a space after the \"1.\" list marker."
+        }
+      ],
+      "fix": {
+        "text": "import { Meta, Canvas, Story, ArgsTable } from '@storybook/blocks';\nimport * as ButtonStories from './Button.stories';\n\n<Meta of={ButtonStories} />\n\n# Button 按鈕元件\n\n按鈕用來觸發動作。設計規範請見 [Figma](https://www.figma.com/file/abc123/Design-System)。\n\n<Canvas of={ButtonStories.Primary} />\n\n## 何時使用\n- 送出表單\n- 開啟對話框\n- 觸發**  主要動作 **\n\n## 變體\n\n<Canvas>\n  <Story of={ButtonStories.Secondary} />\n  <Story of={ButtonStories.Danger} />\n</Canvas>\n\n| 變體 | 用途 |\n| --- | --- |\n| `primary` | 頁面上最重要的動作，一頁最多一個 |\n| `secondary` | 次要動作 |\n| `danger` | 刪除等不可逆的動作 |\n\n## Props\n\n<ArgsTable of={ButtonStories} />\n\n## 無障礙\n1. 按鈕文字要能說明動作，不要只寫「點這裡」\n2. 只有圖示的按鈕要加 `aria-label`\n3. 不要用 `<div onClick>` 假裝按鈕\n\n{/* MDX 2 的註解寫法 */}\n\nexport const Example = () => (\n  <Button variant=\"primary\" onClick={() => alert('#clicked')}>\n    送出\n  </Button>\n);\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "line-length-80",
+      "options": {
+        "maxLineLength": 80
+      },
+      "diagnose": [
+        {
+          "rule": "MDX030",
+          "name": "list-marker-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 35,
+          "column": 3,
+          "message": "Add a space after the \"1.\" list marker."
+        }
+      ],
+      "fix": {
+        "text": "import { Meta, Canvas, Story, ArgsTable } from '@storybook/blocks';\nimport * as ButtonStories from './Button.stories';\n\n<Meta of={ButtonStories} />\n\n# Button 按鈕元件\n\n按鈕用來觸發動作。設計規範請見 [Figma](https://www.figma.com/file/abc123/Design-System)。\n\n<Canvas of={ButtonStories.Primary} />\n\n## 何時使用\n- 送出表單\n- 開啟對話框\n- 觸發**  主要動作 **\n\n## 變體\n\n<Canvas>\n  <Story of={ButtonStories.Secondary} />\n  <Story of={ButtonStories.Danger} />\n</Canvas>\n\n| 變體 | 用途 |\n| --- | --- |\n| `primary` | 頁面上最重要的動作，一頁最多一個 |\n| `secondary` | 次要動作 |\n| `danger` | 刪除等不可逆的動作 |\n\n## Props\n\n<ArgsTable of={ButtonStories} />\n\n## 無障礙\n1. 按鈕文字要能說明動作，不要只寫「點這裡」\n2. 只有圖示的按鈕要加 `aria-label`\n3. 不要用 `<div onClick>` 假裝按鈕\n\n{/* MDX 2 的註解寫法 */}\n\nexport const Example = () => (\n  <Button variant=\"primary\" onClick={() => alert('#clicked')}>\n    送出\n  </Button>\n);\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "keep-encoding",
+      "options": {
+        "ignoreRules": [
+          "MDX001",
+          "MDX002"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX030",
+          "name": "list-marker-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 35,
+          "column": 3,
+          "message": "Add a space after the \"1.\" list marker."
+        }
+      ],
+      "fix": {
+        "text": "import { Meta, Canvas, Story, ArgsTable } from '@storybook/blocks';\nimport * as ButtonStories from './Button.stories';\n\n<Meta of={ButtonStories} />\n\n# Button 按鈕元件\n\n按鈕用來觸發動作。設計規範請見 [Figma](https://www.figma.com/file/abc123/Design-System)。\n\n<Canvas of={ButtonStories.Primary} />\n\n## 何時使用\n- 送出表單\n- 開啟對話框\n- 觸發**  主要動作 **\n\n## 變體\n\n<Canvas>\n  <Story of={ButtonStories.Secondary} />\n  <Story of={ButtonStories.Danger} />\n</Canvas>\n\n| 變體 | 用途 |\n| --- | --- |\n| `primary` | 頁面上最重要的動作，一頁最多一個 |\n| `secondary` | 次要動作 |\n| `danger` | 刪除等不可逆的動作 |\n\n## Props\n\n<ArgsTable of={ButtonStories} />\n\n## 無障礙\n1. 按鈕文字要能說明動作，不要只寫「點這裡」\n2. 只有圖示的按鈕要加 `aria-label`\n3. 不要用 `<div onClick>` 假裝按鈕\n\n{/* MDX 2 的註解寫法 */}\n\nexport const Example = () => (\n  <Button variant=\"primary\" onClick={() => alert('#clicked')}>\n    送出\n  </Button>\n);\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "headings-only",
+      "options": {
+        "rules": [
+          "MDX010",
+          "MDX011",
+          "MDX012",
+          "MDX013"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX013",
+          "name": "heading-blank-lines",
+          "severity": "warning",
+          "fixable": true,
+          "line": 34,
+          "column": 1,
+          "message": "Heading is directly attached to the following paragraph. Add a blank line after it."
+        }
+      ],
+      "fix": {
+        "text": "import { Meta, Canvas, Story, ArgsTable } from '@storybook/blocks';\nimport * as ButtonStories from './Button.stories';\n\n<Meta of={ButtonStories} />\n\n# Button 按鈕元件\n\n按鈕用來觸發動作。設計規範請見 [Figma](https://www.figma.com/file/abc123/Design-System)。\n\n<Canvas of={ButtonStories.Primary} />\n\n## 何時使用\n- 送出表單\n- 開啟對話框\n- 觸發**  主要動作 **\n\n## 變體\n\n<Canvas>\n  <Story of={ButtonStories.Secondary} />\n  <Story of={ButtonStories.Danger} />\n</Canvas>\n\n| 變體 | 用途 |\n| --- | --- |\n| `primary` | 頁面上最重要的動作，一頁最多一個 |\n| `secondary` | 次要動作 |\n| `danger` | 刪除等不可逆的動作 |\n\n## Props\n\n<ArgsTable of={ButtonStories} />\n\n## 無障礙\n\n1.按鈕文字要能說明動作，不要只寫「點這裡」\n2. 只有圖示的按鈕要加 `aria-label`\n3. 不要用 `<div onClick>` 假裝按鈕\n\n{/* MDX 2 的註解寫法 */}\n\nexport const Example = () => (\n  <Button variant=\"primary\" onClick={() => alert('#clicked')}>\n    送出\n  </Button>\n);\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    }
+  ]
+}

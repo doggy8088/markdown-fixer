@@ -1,0 +1,119 @@
+{
+  "source": "synthetic/docusaurus-mdx.md",
+  "referenceVersion": "1.0.0",
+  "cases": [
+    {
+      "name": "default",
+      "options": {},
+      "diagnose": [
+        {
+          "rule": "MDX070",
+          "name": "bare-url",
+          "severity": "info",
+          "fixable": false,
+          "line": 47,
+          "column": 4,
+          "message": "Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text."
+        }
+      ],
+      "fix": {
+        "text": "---\nid: getting-started\ntitle: 快速開始\nsidebar_position: 1\ndescription: 五分鐘內在本機跑起來\n---\n\nimport Tabs from '@theme/Tabs';\nimport TabItem from '@theme/TabItem';\nimport { Highlight } from '@site/src/components/Highlight';\n\n# 快速開始\n\n<Highlight color=\"#25c2a0\">本頁約需 5 分鐘</Highlight>，帶你安裝 CLI 並建立第一個專案。\n\n:::tip 小提示\n已經裝過舊版的話，請先執行 `npm uninstall -g example-cli`。\n:::\n\n## 安裝\n\n<Tabs groupId=\"os\">\n  <TabItem value=\"mac\" label=\"macOS\" default>\n\n```bash\nbrew install example-cli\n```\n\n  </TabItem>\n  <TabItem value=\"win\" label=\"Windows\">\n\n```powershell\nwinget install Example.Cli\n```\n\n  </TabItem>\n</Tabs>\n\n## 建立專案\n\n```bash\nexample-cli init my-app\ncd my-app\nexample-cli dev\n```\n\n打開 http://localhost:3000 就能看到預設頁面。\n\n:::warning\n`example-cli dev` 會監看檔案變更，**不要** 在 `node_modules` 很大的目錄下執行。\n:::\n\n## 專案結構\n\n```text\nmy-app/\n├── docs/\n├── src/\n│   └── pages/\n└── docusaurus.config.js\n```\n\n<details>\n  <summary>為什麼有兩個設定檔？</summary>\n\n`docusaurus.config.js` 是網站設定，`sidebars.js` 只管側邊欄。分開之後，改側邊欄不用重新載入整個設定。\n\n</details>\n\nexport const Version = () => <code>v{process.env.VERSION}</code>;\n\n目前版本：<Version />\n\n## 下一步\n- 閱讀[設定檔說明](./configuration.md)\n- 了解 [MDX 語法](https://mdxjs.com/docs/what-is-mdx/)\n- 部署到 GitHub Pages\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "snippet",
+      "options": {
+        "ignoreRules": [
+          "MDX003"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX070",
+          "name": "bare-url",
+          "severity": "info",
+          "fixable": false,
+          "line": 47,
+          "column": 4,
+          "message": "Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text."
+        }
+      ],
+      "fix": {
+        "text": "---\nid: getting-started\ntitle: 快速開始\nsidebar_position: 1\ndescription: 五分鐘內在本機跑起來\n---\n\nimport Tabs from '@theme/Tabs';\nimport TabItem from '@theme/TabItem';\nimport { Highlight } from '@site/src/components/Highlight';\n\n# 快速開始\n\n<Highlight color=\"#25c2a0\">本頁約需 5 分鐘</Highlight>，帶你安裝 CLI 並建立第一個專案。\n\n:::tip 小提示\n已經裝過舊版的話，請先執行 `npm uninstall -g example-cli`。\n:::\n\n## 安裝\n\n<Tabs groupId=\"os\">\n  <TabItem value=\"mac\" label=\"macOS\" default>\n\n```bash\nbrew install example-cli\n```\n\n  </TabItem>\n  <TabItem value=\"win\" label=\"Windows\">\n\n```powershell\nwinget install Example.Cli\n```\n\n  </TabItem>\n</Tabs>\n\n## 建立專案\n\n```bash\nexample-cli init my-app\ncd my-app\nexample-cli dev\n```\n\n打開 http://localhost:3000 就能看到預設頁面。\n\n:::warning\n`example-cli dev` 會監看檔案變更，**不要** 在 `node_modules` 很大的目錄下執行。\n:::\n\n## 專案結構\n\n```text\nmy-app/\n├── docs/\n├── src/\n│   └── pages/\n└── docusaurus.config.js\n```\n\n<details>\n  <summary>為什麼有兩個設定檔？</summary>\n\n`docusaurus.config.js` 是網站設定，`sidebars.js` 只管側邊欄。分開之後，改側邊欄不用重新載入整個設定。\n\n</details>\n\nexport const Version = () => <code>v{process.env.VERSION}</code>;\n\n目前版本：<Version />\n\n## 下一步\n- 閱讀[設定檔說明](./configuration.md)\n- 了解 [MDX 語法](https://mdxjs.com/docs/what-is-mdx/)\n- 部署到 GitHub Pages\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "line-length-80",
+      "options": {
+        "maxLineLength": 80
+      },
+      "diagnose": [
+        {
+          "rule": "MDX070",
+          "name": "bare-url",
+          "severity": "info",
+          "fixable": false,
+          "line": 47,
+          "column": 4,
+          "message": "Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text."
+        }
+      ],
+      "fix": {
+        "text": "---\nid: getting-started\ntitle: 快速開始\nsidebar_position: 1\ndescription: 五分鐘內在本機跑起來\n---\n\nimport Tabs from '@theme/Tabs';\nimport TabItem from '@theme/TabItem';\nimport { Highlight } from '@site/src/components/Highlight';\n\n# 快速開始\n\n<Highlight color=\"#25c2a0\">本頁約需 5 分鐘</Highlight>，帶你安裝 CLI 並建立第一個專案。\n\n:::tip 小提示\n已經裝過舊版的話，請先執行 `npm uninstall -g example-cli`。\n:::\n\n## 安裝\n\n<Tabs groupId=\"os\">\n  <TabItem value=\"mac\" label=\"macOS\" default>\n\n```bash\nbrew install example-cli\n```\n\n  </TabItem>\n  <TabItem value=\"win\" label=\"Windows\">\n\n```powershell\nwinget install Example.Cli\n```\n\n  </TabItem>\n</Tabs>\n\n## 建立專案\n\n```bash\nexample-cli init my-app\ncd my-app\nexample-cli dev\n```\n\n打開 http://localhost:3000 就能看到預設頁面。\n\n:::warning\n`example-cli dev` 會監看檔案變更，**不要** 在 `node_modules` 很大的目錄下執行。\n:::\n\n## 專案結構\n\n```text\nmy-app/\n├── docs/\n├── src/\n│   └── pages/\n└── docusaurus.config.js\n```\n\n<details>\n  <summary>為什麼有兩個設定檔？</summary>\n\n`docusaurus.config.js` 是網站設定，`sidebars.js` 只管側邊欄。分開之後，改側邊欄不用重新載入整個設定。\n\n</details>\n\nexport const Version = () => <code>v{process.env.VERSION}</code>;\n\n目前版本：<Version />\n\n## 下一步\n- 閱讀[設定檔說明](./configuration.md)\n- 了解 [MDX 語法](https://mdxjs.com/docs/what-is-mdx/)\n- 部署到 GitHub Pages\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "keep-encoding",
+      "options": {
+        "ignoreRules": [
+          "MDX001",
+          "MDX002"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX070",
+          "name": "bare-url",
+          "severity": "info",
+          "fixable": false,
+          "line": 47,
+          "column": 4,
+          "message": "Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text."
+        }
+      ],
+      "fix": {
+        "text": "---\nid: getting-started\ntitle: 快速開始\nsidebar_position: 1\ndescription: 五分鐘內在本機跑起來\n---\n\nimport Tabs from '@theme/Tabs';\nimport TabItem from '@theme/TabItem';\nimport { Highlight } from '@site/src/components/Highlight';\n\n# 快速開始\n\n<Highlight color=\"#25c2a0\">本頁約需 5 分鐘</Highlight>，帶你安裝 CLI 並建立第一個專案。\n\n:::tip 小提示\n已經裝過舊版的話，請先執行 `npm uninstall -g example-cli`。\n:::\n\n## 安裝\n\n<Tabs groupId=\"os\">\n  <TabItem value=\"mac\" label=\"macOS\" default>\n\n```bash\nbrew install example-cli\n```\n\n  </TabItem>\n  <TabItem value=\"win\" label=\"Windows\">\n\n```powershell\nwinget install Example.Cli\n```\n\n  </TabItem>\n</Tabs>\n\n## 建立專案\n\n```bash\nexample-cli init my-app\ncd my-app\nexample-cli dev\n```\n\n打開 http://localhost:3000 就能看到預設頁面。\n\n:::warning\n`example-cli dev` 會監看檔案變更，**不要** 在 `node_modules` 很大的目錄下執行。\n:::\n\n## 專案結構\n\n```text\nmy-app/\n├── docs/\n├── src/\n│   └── pages/\n└── docusaurus.config.js\n```\n\n<details>\n  <summary>為什麼有兩個設定檔？</summary>\n\n`docusaurus.config.js` 是網站設定，`sidebars.js` 只管側邊欄。分開之後，改側邊欄不用重新載入整個設定。\n\n</details>\n\nexport const Version = () => <code>v{process.env.VERSION}</code>;\n\n目前版本：<Version />\n\n## 下一步\n- 閱讀[設定檔說明](./configuration.md)\n- 了解 [MDX 語法](https://mdxjs.com/docs/what-is-mdx/)\n- 部署到 GitHub Pages\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "headings-only",
+      "options": {
+        "rules": [
+          "MDX010",
+          "MDX011",
+          "MDX012",
+          "MDX013"
+        ]
+      },
+      "diagnose": [],
+      "fix": {
+        "text": "---\nid: getting-started\ntitle: 快速開始\nsidebar_position: 1\ndescription: 五分鐘內在本機跑起來\n---\n\nimport Tabs from '@theme/Tabs';\nimport TabItem from '@theme/TabItem';\nimport { Highlight } from '@site/src/components/Highlight';\n\n# 快速開始\n\n<Highlight color=\"#25c2a0\">本頁約需 5 分鐘</Highlight>，帶你安裝 CLI 並建立第一個專案。\n\n:::tip 小提示\n已經裝過舊版的話，請先執行 `npm uninstall -g example-cli`。\n:::\n\n## 安裝\n\n<Tabs groupId=\"os\">\n  <TabItem value=\"mac\" label=\"macOS\" default>\n\n```bash\nbrew install example-cli\n```\n\n  </TabItem>\n  <TabItem value=\"win\" label=\"Windows\">\n\n```powershell\nwinget install Example.Cli\n```\n\n  </TabItem>\n</Tabs>\n\n## 建立專案\n\n```bash\nexample-cli init my-app\ncd my-app\nexample-cli dev\n```\n\n打開 http://localhost:3000 就能看到預設頁面。\n\n:::warning\n`example-cli dev` 會監看檔案變更，**不要** 在 `node_modules` 很大的目錄下執行。\n:::\n\n## 專案結構\n\n```text\nmy-app/\n├── docs/\n├── src/\n│   └── pages/\n└── docusaurus.config.js\n```\n\n<details>\n  <summary>為什麼有兩個設定檔？</summary>\n\n`docusaurus.config.js` 是網站設定，`sidebars.js` 只管側邊欄。分開之後，改側邊欄不用重新載入整個設定。\n\n</details>\n\nexport const Version = () => <code>v{process.env.VERSION}</code>;\n\n目前版本：<Version />\n\n## 下一步\n- 閱讀[設定檔說明](./configuration.md)\n- 了解 [MDX 語法](https://mdxjs.com/docs/what-is-mdx/)\n- 部署到 GitHub Pages\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    }
+  ]
+}

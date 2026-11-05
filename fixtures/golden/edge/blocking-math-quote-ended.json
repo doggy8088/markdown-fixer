@@ -1,0 +1,201 @@
+{
+  "source": "edge/blocking-math-quote-ended.md",
+  "referenceVersion": "1.0.0",
+  "cases": [
+    {
+      "name": "default",
+      "options": {},
+      "diagnose": [
+        {
+          "rule": "MDX085",
+          "name": "math-unclosed",
+          "severity": "error",
+          "fixable": false,
+          "line": 3,
+          "column": 1,
+          "message": "Unclosed $$ math block: the blockquote ended before a closing $$ was found."
+        },
+        {
+          "rule": "MDX019",
+          "name": "multiple-h1",
+          "severity": "info",
+          "fixable": false,
+          "line": 6,
+          "column": 1,
+          "message": "Document has more than one H1. Use H2 for subsections and keep one H1 for the page title."
+        },
+        {
+          "rule": "MDX010",
+          "name": "atx-missing-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 6,
+          "column": 2,
+          "message": "Add a space after the heading marker: \"# \" rather than \"#\"."
+        }
+      ],
+      "fix": {
+        "text": "# 筆記\n\n> $$\n> x = 1\n\n#Title\n",
+        "changed": false,
+        "refused": true,
+        "reason": "Unclosed $$ math block: the blockquote ended before a closing $$ was found."
+      }
+    },
+    {
+      "name": "snippet",
+      "options": {
+        "ignoreRules": [
+          "MDX003"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX085",
+          "name": "math-unclosed",
+          "severity": "error",
+          "fixable": false,
+          "line": 3,
+          "column": 1,
+          "message": "Unclosed $$ math block: the blockquote ended before a closing $$ was found."
+        },
+        {
+          "rule": "MDX019",
+          "name": "multiple-h1",
+          "severity": "info",
+          "fixable": false,
+          "line": 6,
+          "column": 1,
+          "message": "Document has more than one H1. Use H2 for subsections and keep one H1 for the page title."
+        },
+        {
+          "rule": "MDX010",
+          "name": "atx-missing-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 6,
+          "column": 2,
+          "message": "Add a space after the heading marker: \"# \" rather than \"#\"."
+        }
+      ],
+      "fix": {
+        "text": "# 筆記\n\n> $$\n> x = 1\n\n#Title\n",
+        "changed": false,
+        "refused": true,
+        "reason": "Unclosed $$ math block: the blockquote ended before a closing $$ was found."
+      }
+    },
+    {
+      "name": "line-length-80",
+      "options": {
+        "maxLineLength": 80
+      },
+      "diagnose": [
+        {
+          "rule": "MDX085",
+          "name": "math-unclosed",
+          "severity": "error",
+          "fixable": false,
+          "line": 3,
+          "column": 1,
+          "message": "Unclosed $$ math block: the blockquote ended before a closing $$ was found."
+        },
+        {
+          "rule": "MDX019",
+          "name": "multiple-h1",
+          "severity": "info",
+          "fixable": false,
+          "line": 6,
+          "column": 1,
+          "message": "Document has more than one H1. Use H2 for subsections and keep one H1 for the page title."
+        },
+        {
+          "rule": "MDX010",
+          "name": "atx-missing-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 6,
+          "column": 2,
+          "message": "Add a space after the heading marker: \"# \" rather than \"#\"."
+        }
+      ],
+      "fix": {
+        "text": "# 筆記\n\n> $$\n> x = 1\n\n#Title\n",
+        "changed": false,
+        "refused": true,
+        "reason": "Unclosed $$ math block: the blockquote ended before a closing $$ was found."
+      }
+    },
+    {
+      "name": "keep-encoding",
+      "options": {
+        "ignoreRules": [
+          "MDX001",
+          "MDX002"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX085",
+          "name": "math-unclosed",
+          "severity": "error",
+          "fixable": false,
+          "line": 3,
+          "column": 1,
+          "message": "Unclosed $$ math block: the blockquote ended before a closing $$ was found."
+        },
+        {
+          "rule": "MDX019",
+          "name": "multiple-h1",
+          "severity": "info",
+          "fixable": false,
+          "line": 6,
+          "column": 1,
+          "message": "Document has more than one H1. Use H2 for subsections and keep one H1 for the page title."
+        },
+        {
+          "rule": "MDX010",
+          "name": "atx-missing-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 6,
+          "column": 2,
+          "message": "Add a space after the heading marker: \"# \" rather than \"#\"."
+        }
+      ],
+      "fix": {
+        "text": "# 筆記\n\n> $$\n> x = 1\n\n#Title\n",
+        "changed": false,
+        "refused": true,
+        "reason": "Unclosed $$ math block: the blockquote ended before a closing $$ was found."
+      }
+    },
+    {
+      "name": "headings-only",
+      "options": {
+        "rules": [
+          "MDX010",
+          "MDX011",
+          "MDX012",
+          "MDX013"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX010",
+          "name": "atx-missing-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 6,
+          "column": 2,
+          "message": "Add a space after the heading marker: \"# \" rather than \"#\"."
+        }
+      ],
+      "fix": {
+        "text": "# 筆記\n\n> $$\n> x = 1\n\n#Title\n",
+        "changed": false,
+        "refused": true,
+        "reason": "Unclosed $$ math block: the blockquote ended before a closing $$ was found."
+      }
+    }
+  ]
+}

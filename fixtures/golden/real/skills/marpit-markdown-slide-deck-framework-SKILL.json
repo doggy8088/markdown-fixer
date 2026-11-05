@@ -1,0 +1,251 @@
+{
+  "source": "real/skills/marpit-markdown-slide-deck-framework-SKILL.md",
+  "referenceVersion": "1.0.0",
+  "cases": [
+    {
+      "name": "default",
+      "options": {},
+      "diagnose": [],
+      "fix": {
+        "text": "---\nname: marp-presentation-generator\ndescription: Create, edit, polish, and validate Marp Markdown slide decks. Use when Codex needs to generate a presentation, turn an outline or source material into slides, improve an existing Marp deck, choose default, gaia, or uncover themes, add Marp directives, or prepare Markdown for Marp for VS Code or Marp CLI export.\n---\n\n# Marp Presentation Generator\n\n## Workflow\n\n1. Determine the deliverable:\n   - If the user asks for a file, create or edit a `.md` deck at the requested path, otherwise use the current workspace.\n   - If the user asks for inline output, return the complete deck in a `markdown` code block only.\n   - If the user asks for PDF, PPTX, HTML, or image export, first produce valid Marp Markdown; then use Marp tooling only when available or explicitly requested.\n2. Gather missing content only when required. If the topic, outline, or source material is absent, ask for it. If theme, slide count, audience, or tone is absent, choose reasonable defaults and proceed.\n3. Start from `assets/template-default.md`, `assets/template-gaia.md`, or `assets/template-uncover.md` when a bundled template matches the requested style.\n4. Write the deck with valid front matter, clear slide boundaries, concise slide content, and relative asset paths.\n5. Review the finished deck for directive validity, slide flow, content density, spelling, and broken references.\n\n## Theme Selection\n\n- Use `default` for neutral technical, business, or documentation-style decks.\n- Use `gaia` for brighter presentation decks. Use `class: lead` or `_class: lead` on title and section-divider slides when centering helps.\n- Use `uncover` for sparse, modern decks with minimal text and strong visual hierarchy.\n- Honor an explicit user theme preference. If the user requests a custom theme, verify the theme CSS path or existing workspace configuration before referencing it.\n\n## Marp Structure\n\nUse YAML front matter at the top of every new deck:\n\n```markdown\n---\nmarp: true\ntheme: default\npaginate: true\nsize: 16:9\n---\n```\n\n- Include `marp: true` for Marp for VS Code compatibility.\n- Use `---` on its own line after front matter to separate slides.\n- Put global directives such as `theme`, `paginate`, `size`, `header`, and `footer` in front matter.\n- Put local directives in HTML comments immediately before the affected slide.\n- Prefix a local directive with `_` when it should apply only to the current slide, such as `<!-- _paginate: false -->` or `<!-- _class: lead -->`.\n\n## Slide Writing Rules\n\n- Use one main idea per slide.\n- Prefer 3-5 short bullets, a compact table, or a single visual over dense paragraphs.\n- Start content slides with a descriptive `##` heading.\n- Use title slides and section dividers sparingly; keep them short.\n- Preserve the user's terminology and factual claims. Do not invent data, citations, logos, screenshots, or source names.\n- For image-heavy slides, use Marp image syntax such as `![bg right:40%](path/to/image.png)` or `![w:640](path/to/image.png)`.\n- Keep speaker notes, if requested, in HTML comments so they do not render as slide body text.\n\n## Quality Check\n\nBefore finishing:\n\n1. Confirm the file starts with valid YAML front matter.\n2. Confirm slide separators are `---` on their own line.\n3. Confirm front matter is not mistaken for the first slide separator.\n4. Confirm local directives are placed before the slide they modify.\n5. Confirm image and asset paths are relative to the deck location unless the user requested absolute paths.\n6. Confirm the deck does not overflow obvious slide bounds with long paragraphs, large tables, or too many bullets.\n7. If Marp tooling is available and the user requested rendered output, run the smallest useful render or preview check and fix reported errors.\n\n## Inline Output Format\n\nWhen returning a deck inline, output only the Markdown code fence:\n\n````markdown\n```markdown\n---\nmarp: true\ntheme: default\npaginate: true\nsize: 16:9\n---\n\n<!-- _class: lead -->\n# Presentation Title\n\nSubtitle or presenter name\n\n---\n\n## Slide Heading\n\n- Key point one\n- Key point two\n- Key point three\n\n---\n\n## Conclusion\n\n- Summarize the main takeaway\n- State the next action\n```\n````\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "snippet",
+      "options": {
+        "ignoreRules": [
+          "MDX003"
+        ]
+      },
+      "diagnose": [],
+      "fix": {
+        "text": "---\nname: marp-presentation-generator\ndescription: Create, edit, polish, and validate Marp Markdown slide decks. Use when Codex needs to generate a presentation, turn an outline or source material into slides, improve an existing Marp deck, choose default, gaia, or uncover themes, add Marp directives, or prepare Markdown for Marp for VS Code or Marp CLI export.\n---\n\n# Marp Presentation Generator\n\n## Workflow\n\n1. Determine the deliverable:\n   - If the user asks for a file, create or edit a `.md` deck at the requested path, otherwise use the current workspace.\n   - If the user asks for inline output, return the complete deck in a `markdown` code block only.\n   - If the user asks for PDF, PPTX, HTML, or image export, first produce valid Marp Markdown; then use Marp tooling only when available or explicitly requested.\n2. Gather missing content only when required. If the topic, outline, or source material is absent, ask for it. If theme, slide count, audience, or tone is absent, choose reasonable defaults and proceed.\n3. Start from `assets/template-default.md`, `assets/template-gaia.md`, or `assets/template-uncover.md` when a bundled template matches the requested style.\n4. Write the deck with valid front matter, clear slide boundaries, concise slide content, and relative asset paths.\n5. Review the finished deck for directive validity, slide flow, content density, spelling, and broken references.\n\n## Theme Selection\n\n- Use `default` for neutral technical, business, or documentation-style decks.\n- Use `gaia` for brighter presentation decks. Use `class: lead` or `_class: lead` on title and section-divider slides when centering helps.\n- Use `uncover` for sparse, modern decks with minimal text and strong visual hierarchy.\n- Honor an explicit user theme preference. If the user requests a custom theme, verify the theme CSS path or existing workspace configuration before referencing it.\n\n## Marp Structure\n\nUse YAML front matter at the top of every new deck:\n\n```markdown\n---\nmarp: true\ntheme: default\npaginate: true\nsize: 16:9\n---\n```\n\n- Include `marp: true` for Marp for VS Code compatibility.\n- Use `---` on its own line after front matter to separate slides.\n- Put global directives such as `theme`, `paginate`, `size`, `header`, and `footer` in front matter.\n- Put local directives in HTML comments immediately before the affected slide.\n- Prefix a local directive with `_` when it should apply only to the current slide, such as `<!-- _paginate: false -->` or `<!-- _class: lead -->`.\n\n## Slide Writing Rules\n\n- Use one main idea per slide.\n- Prefer 3-5 short bullets, a compact table, or a single visual over dense paragraphs.\n- Start content slides with a descriptive `##` heading.\n- Use title slides and section dividers sparingly; keep them short.\n- Preserve the user's terminology and factual claims. Do not invent data, citations, logos, screenshots, or source names.\n- For image-heavy slides, use Marp image syntax such as `![bg right:40%](path/to/image.png)` or `![w:640](path/to/image.png)`.\n- Keep speaker notes, if requested, in HTML comments so they do not render as slide body text.\n\n## Quality Check\n\nBefore finishing:\n\n1. Confirm the file starts with valid YAML front matter.\n2. Confirm slide separators are `---` on their own line.\n3. Confirm front matter is not mistaken for the first slide separator.\n4. Confirm local directives are placed before the slide they modify.\n5. Confirm image and asset paths are relative to the deck location unless the user requested absolute paths.\n6. Confirm the deck does not overflow obvious slide bounds with long paragraphs, large tables, or too many bullets.\n7. If Marp tooling is available and the user requested rendered output, run the smallest useful render or preview check and fix reported errors.\n\n## Inline Output Format\n\nWhen returning a deck inline, output only the Markdown code fence:\n\n````markdown\n```markdown\n---\nmarp: true\ntheme: default\npaginate: true\nsize: 16:9\n---\n\n<!-- _class: lead -->\n# Presentation Title\n\nSubtitle or presenter name\n\n---\n\n## Slide Heading\n\n- Key point one\n- Key point two\n- Key point three\n\n---\n\n## Conclusion\n\n- Summarize the main takeaway\n- State the next action\n```\n````\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "line-length-80",
+      "options": {
+        "maxLineLength": 80
+      },
+      "diagnose": [
+        {
+          "rule": "MDX090",
+          "name": "line-length",
+          "severity": "info",
+          "fixable": false,
+          "line": 11,
+          "column": 81,
+          "message": "Line is 121 characters; limit is 80."
+        },
+        {
+          "rule": "MDX090",
+          "name": "line-length",
+          "severity": "info",
+          "fixable": false,
+          "line": 12,
+          "column": 81,
+          "message": "Line is 98 characters; limit is 80."
+        },
+        {
+          "rule": "MDX090",
+          "name": "line-length",
+          "severity": "info",
+          "fixable": false,
+          "line": 13,
+          "column": 81,
+          "message": "Line is 161 characters; limit is 80."
+        },
+        {
+          "rule": "MDX090",
+          "name": "line-length",
+          "severity": "info",
+          "fixable": false,
+          "line": 14,
+          "column": 81,
+          "message": "Line is 202 characters; limit is 80."
+        },
+        {
+          "rule": "MDX090",
+          "name": "line-length",
+          "severity": "info",
+          "fixable": false,
+          "line": 15,
+          "column": 81,
+          "message": "Line is 155 characters; limit is 80."
+        },
+        {
+          "rule": "MDX090",
+          "name": "line-length",
+          "severity": "info",
+          "fixable": false,
+          "line": 16,
+          "column": 81,
+          "message": "Line is 115 characters; limit is 80."
+        },
+        {
+          "rule": "MDX090",
+          "name": "line-length",
+          "severity": "info",
+          "fixable": false,
+          "line": 17,
+          "column": 81,
+          "message": "Line is 113 characters; limit is 80."
+        },
+        {
+          "rule": "MDX090",
+          "name": "line-length",
+          "severity": "info",
+          "fixable": false,
+          "line": 22,
+          "column": 81,
+          "message": "Line is 139 characters; limit is 80."
+        },
+        {
+          "rule": "MDX090",
+          "name": "line-length",
+          "severity": "info",
+          "fixable": false,
+          "line": 23,
+          "column": 81,
+          "message": "Line is 87 characters; limit is 80."
+        },
+        {
+          "rule": "MDX090",
+          "name": "line-length",
+          "severity": "info",
+          "fixable": false,
+          "line": 24,
+          "column": 81,
+          "message": "Line is 164 characters; limit is 80."
+        },
+        {
+          "rule": "MDX090",
+          "name": "line-length",
+          "severity": "info",
+          "fixable": false,
+          "line": 41,
+          "column": 81,
+          "message": "Line is 100 characters; limit is 80."
+        },
+        {
+          "rule": "MDX090",
+          "name": "line-length",
+          "severity": "info",
+          "fixable": false,
+          "line": 43,
+          "column": 81,
+          "message": "Line is 147 characters; limit is 80."
+        },
+        {
+          "rule": "MDX090",
+          "name": "line-length",
+          "severity": "info",
+          "fixable": false,
+          "line": 48,
+          "column": 81,
+          "message": "Line is 86 characters; limit is 80."
+        },
+        {
+          "rule": "MDX090",
+          "name": "line-length",
+          "severity": "info",
+          "fixable": false,
+          "line": 51,
+          "column": 81,
+          "message": "Line is 121 characters; limit is 80."
+        },
+        {
+          "rule": "MDX090",
+          "name": "line-length",
+          "severity": "info",
+          "fixable": false,
+          "line": 52,
+          "column": 81,
+          "message": "Line is 126 characters; limit is 80."
+        },
+        {
+          "rule": "MDX090",
+          "name": "line-length",
+          "severity": "info",
+          "fixable": false,
+          "line": 53,
+          "column": 81,
+          "message": "Line is 94 characters; limit is 80."
+        },
+        {
+          "rule": "MDX090",
+          "name": "line-length",
+          "severity": "info",
+          "fixable": false,
+          "line": 63,
+          "column": 81,
+          "message": "Line is 108 characters; limit is 80."
+        },
+        {
+          "rule": "MDX090",
+          "name": "line-length",
+          "severity": "info",
+          "fixable": false,
+          "line": 64,
+          "column": 81,
+          "message": "Line is 115 characters; limit is 80."
+        },
+        {
+          "rule": "MDX090",
+          "name": "line-length",
+          "severity": "info",
+          "fixable": false,
+          "line": 65,
+          "column": 81,
+          "message": "Line is 144 characters; limit is 80."
+        }
+      ],
+      "fix": {
+        "text": "---\nname: marp-presentation-generator\ndescription: Create, edit, polish, and validate Marp Markdown slide decks. Use when Codex needs to generate a presentation, turn an outline or source material into slides, improve an existing Marp deck, choose default, gaia, or uncover themes, add Marp directives, or prepare Markdown for Marp for VS Code or Marp CLI export.\n---\n\n# Marp Presentation Generator\n\n## Workflow\n\n1. Determine the deliverable:\n   - If the user asks for a file, create or edit a `.md` deck at the requested path, otherwise use the current workspace.\n   - If the user asks for inline output, return the complete deck in a `markdown` code block only.\n   - If the user asks for PDF, PPTX, HTML, or image export, first produce valid Marp Markdown; then use Marp tooling only when available or explicitly requested.\n2. Gather missing content only when required. If the topic, outline, or source material is absent, ask for it. If theme, slide count, audience, or tone is absent, choose reasonable defaults and proceed.\n3. Start from `assets/template-default.md`, `assets/template-gaia.md`, or `assets/template-uncover.md` when a bundled template matches the requested style.\n4. Write the deck with valid front matter, clear slide boundaries, concise slide content, and relative asset paths.\n5. Review the finished deck for directive validity, slide flow, content density, spelling, and broken references.\n\n## Theme Selection\n\n- Use `default` for neutral technical, business, or documentation-style decks.\n- Use `gaia` for brighter presentation decks. Use `class: lead` or `_class: lead` on title and section-divider slides when centering helps.\n- Use `uncover` for sparse, modern decks with minimal text and strong visual hierarchy.\n- Honor an explicit user theme preference. If the user requests a custom theme, verify the theme CSS path or existing workspace configuration before referencing it.\n\n## Marp Structure\n\nUse YAML front matter at the top of every new deck:\n\n```markdown\n---\nmarp: true\ntheme: default\npaginate: true\nsize: 16:9\n---\n```\n\n- Include `marp: true` for Marp for VS Code compatibility.\n- Use `---` on its own line after front matter to separate slides.\n- Put global directives such as `theme`, `paginate`, `size`, `header`, and `footer` in front matter.\n- Put local directives in HTML comments immediately before the affected slide.\n- Prefix a local directive with `_` when it should apply only to the current slide, such as `<!-- _paginate: false -->` or `<!-- _class: lead -->`.\n\n## Slide Writing Rules\n\n- Use one main idea per slide.\n- Prefer 3-5 short bullets, a compact table, or a single visual over dense paragraphs.\n- Start content slides with a descriptive `##` heading.\n- Use title slides and section dividers sparingly; keep them short.\n- Preserve the user's terminology and factual claims. Do not invent data, citations, logos, screenshots, or source names.\n- For image-heavy slides, use Marp image syntax such as `![bg right:40%](path/to/image.png)` or `![w:640](path/to/image.png)`.\n- Keep speaker notes, if requested, in HTML comments so they do not render as slide body text.\n\n## Quality Check\n\nBefore finishing:\n\n1. Confirm the file starts with valid YAML front matter.\n2. Confirm slide separators are `---` on their own line.\n3. Confirm front matter is not mistaken for the first slide separator.\n4. Confirm local directives are placed before the slide they modify.\n5. Confirm image and asset paths are relative to the deck location unless the user requested absolute paths.\n6. Confirm the deck does not overflow obvious slide bounds with long paragraphs, large tables, or too many bullets.\n7. If Marp tooling is available and the user requested rendered output, run the smallest useful render or preview check and fix reported errors.\n\n## Inline Output Format\n\nWhen returning a deck inline, output only the Markdown code fence:\n\n````markdown\n```markdown\n---\nmarp: true\ntheme: default\npaginate: true\nsize: 16:9\n---\n\n<!-- _class: lead -->\n# Presentation Title\n\nSubtitle or presenter name\n\n---\n\n## Slide Heading\n\n- Key point one\n- Key point two\n- Key point three\n\n---\n\n## Conclusion\n\n- Summarize the main takeaway\n- State the next action\n```\n````\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "keep-encoding",
+      "options": {
+        "ignoreRules": [
+          "MDX001",
+          "MDX002"
+        ]
+      },
+      "diagnose": [],
+      "fix": {
+        "text": "---\nname: marp-presentation-generator\ndescription: Create, edit, polish, and validate Marp Markdown slide decks. Use when Codex needs to generate a presentation, turn an outline or source material into slides, improve an existing Marp deck, choose default, gaia, or uncover themes, add Marp directives, or prepare Markdown for Marp for VS Code or Marp CLI export.\n---\n\n# Marp Presentation Generator\n\n## Workflow\n\n1. Determine the deliverable:\n   - If the user asks for a file, create or edit a `.md` deck at the requested path, otherwise use the current workspace.\n   - If the user asks for inline output, return the complete deck in a `markdown` code block only.\n   - If the user asks for PDF, PPTX, HTML, or image export, first produce valid Marp Markdown; then use Marp tooling only when available or explicitly requested.\n2. Gather missing content only when required. If the topic, outline, or source material is absent, ask for it. If theme, slide count, audience, or tone is absent, choose reasonable defaults and proceed.\n3. Start from `assets/template-default.md`, `assets/template-gaia.md`, or `assets/template-uncover.md` when a bundled template matches the requested style.\n4. Write the deck with valid front matter, clear slide boundaries, concise slide content, and relative asset paths.\n5. Review the finished deck for directive validity, slide flow, content density, spelling, and broken references.\n\n## Theme Selection\n\n- Use `default` for neutral technical, business, or documentation-style decks.\n- Use `gaia` for brighter presentation decks. Use `class: lead` or `_class: lead` on title and section-divider slides when centering helps.\n- Use `uncover` for sparse, modern decks with minimal text and strong visual hierarchy.\n- Honor an explicit user theme preference. If the user requests a custom theme, verify the theme CSS path or existing workspace configuration before referencing it.\n\n## Marp Structure\n\nUse YAML front matter at the top of every new deck:\n\n```markdown\n---\nmarp: true\ntheme: default\npaginate: true\nsize: 16:9\n---\n```\n\n- Include `marp: true` for Marp for VS Code compatibility.\n- Use `---` on its own line after front matter to separate slides.\n- Put global directives such as `theme`, `paginate`, `size`, `header`, and `footer` in front matter.\n- Put local directives in HTML comments immediately before the affected slide.\n- Prefix a local directive with `_` when it should apply only to the current slide, such as `<!-- _paginate: false -->` or `<!-- _class: lead -->`.\n\n## Slide Writing Rules\n\n- Use one main idea per slide.\n- Prefer 3-5 short bullets, a compact table, or a single visual over dense paragraphs.\n- Start content slides with a descriptive `##` heading.\n- Use title slides and section dividers sparingly; keep them short.\n- Preserve the user's terminology and factual claims. Do not invent data, citations, logos, screenshots, or source names.\n- For image-heavy slides, use Marp image syntax such as `![bg right:40%](path/to/image.png)` or `![w:640](path/to/image.png)`.\n- Keep speaker notes, if requested, in HTML comments so they do not render as slide body text.\n\n## Quality Check\n\nBefore finishing:\n\n1. Confirm the file starts with valid YAML front matter.\n2. Confirm slide separators are `---` on their own line.\n3. Confirm front matter is not mistaken for the first slide separator.\n4. Confirm local directives are placed before the slide they modify.\n5. Confirm image and asset paths are relative to the deck location unless the user requested absolute paths.\n6. Confirm the deck does not overflow obvious slide bounds with long paragraphs, large tables, or too many bullets.\n7. If Marp tooling is available and the user requested rendered output, run the smallest useful render or preview check and fix reported errors.\n\n## Inline Output Format\n\nWhen returning a deck inline, output only the Markdown code fence:\n\n````markdown\n```markdown\n---\nmarp: true\ntheme: default\npaginate: true\nsize: 16:9\n---\n\n<!-- _class: lead -->\n# Presentation Title\n\nSubtitle or presenter name\n\n---\n\n## Slide Heading\n\n- Key point one\n- Key point two\n- Key point three\n\n---\n\n## Conclusion\n\n- Summarize the main takeaway\n- State the next action\n```\n````\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "headings-only",
+      "options": {
+        "rules": [
+          "MDX010",
+          "MDX011",
+          "MDX012",
+          "MDX013"
+        ]
+      },
+      "diagnose": [],
+      "fix": {
+        "text": "---\nname: marp-presentation-generator\ndescription: Create, edit, polish, and validate Marp Markdown slide decks. Use when Codex needs to generate a presentation, turn an outline or source material into slides, improve an existing Marp deck, choose default, gaia, or uncover themes, add Marp directives, or prepare Markdown for Marp for VS Code or Marp CLI export.\n---\n\n# Marp Presentation Generator\n\n## Workflow\n\n1. Determine the deliverable:\n   - If the user asks for a file, create or edit a `.md` deck at the requested path, otherwise use the current workspace.\n   - If the user asks for inline output, return the complete deck in a `markdown` code block only.\n   - If the user asks for PDF, PPTX, HTML, or image export, first produce valid Marp Markdown; then use Marp tooling only when available or explicitly requested.\n2. Gather missing content only when required. If the topic, outline, or source material is absent, ask for it. If theme, slide count, audience, or tone is absent, choose reasonable defaults and proceed.\n3. Start from `assets/template-default.md`, `assets/template-gaia.md`, or `assets/template-uncover.md` when a bundled template matches the requested style.\n4. Write the deck with valid front matter, clear slide boundaries, concise slide content, and relative asset paths.\n5. Review the finished deck for directive validity, slide flow, content density, spelling, and broken references.\n\n## Theme Selection\n\n- Use `default` for neutral technical, business, or documentation-style decks.\n- Use `gaia` for brighter presentation decks. Use `class: lead` or `_class: lead` on title and section-divider slides when centering helps.\n- Use `uncover` for sparse, modern decks with minimal text and strong visual hierarchy.\n- Honor an explicit user theme preference. If the user requests a custom theme, verify the theme CSS path or existing workspace configuration before referencing it.\n\n## Marp Structure\n\nUse YAML front matter at the top of every new deck:\n\n```markdown\n---\nmarp: true\ntheme: default\npaginate: true\nsize: 16:9\n---\n```\n\n- Include `marp: true` for Marp for VS Code compatibility.\n- Use `---` on its own line after front matter to separate slides.\n- Put global directives such as `theme`, `paginate`, `size`, `header`, and `footer` in front matter.\n- Put local directives in HTML comments immediately before the affected slide.\n- Prefix a local directive with `_` when it should apply only to the current slide, such as `<!-- _paginate: false -->` or `<!-- _class: lead -->`.\n\n## Slide Writing Rules\n\n- Use one main idea per slide.\n- Prefer 3-5 short bullets, a compact table, or a single visual over dense paragraphs.\n- Start content slides with a descriptive `##` heading.\n- Use title slides and section dividers sparingly; keep them short.\n- Preserve the user's terminology and factual claims. Do not invent data, citations, logos, screenshots, or source names.\n- For image-heavy slides, use Marp image syntax such as `![bg right:40%](path/to/image.png)` or `![w:640](path/to/image.png)`.\n- Keep speaker notes, if requested, in HTML comments so they do not render as slide body text.\n\n## Quality Check\n\nBefore finishing:\n\n1. Confirm the file starts with valid YAML front matter.\n2. Confirm slide separators are `---` on their own line.\n3. Confirm front matter is not mistaken for the first slide separator.\n4. Confirm local directives are placed before the slide they modify.\n5. Confirm image and asset paths are relative to the deck location unless the user requested absolute paths.\n6. Confirm the deck does not overflow obvious slide bounds with long paragraphs, large tables, or too many bullets.\n7. If Marp tooling is available and the user requested rendered output, run the smallest useful render or preview check and fix reported errors.\n\n## Inline Output Format\n\nWhen returning a deck inline, output only the Markdown code fence:\n\n````markdown\n```markdown\n---\nmarp: true\ntheme: default\npaginate: true\nsize: 16:9\n---\n\n<!-- _class: lead -->\n# Presentation Title\n\nSubtitle or presenter name\n\n---\n\n## Slide Heading\n\n- Key point one\n- Key point two\n- Key point three\n\n---\n\n## Conclusion\n\n- Summarize the main takeaway\n- State the next action\n```\n````\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    }
+  ]
+}

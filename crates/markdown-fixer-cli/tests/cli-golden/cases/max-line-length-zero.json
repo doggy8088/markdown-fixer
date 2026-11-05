@@ -1,0 +1,16 @@
+{
+  "name": "max-line-length-zero",
+  "args": [
+    "--max-line-length",
+    "0"
+  ],
+  "cwd": "",
+  "nonRoot": false,
+  "setup": [],
+  "expected": {
+    "status": 2,
+    "stdout": "",
+    "stderr": "Error: --max-line-length requires a positive integer.\nRun with --help for usage.\n",
+    "files": []
+  }
+}

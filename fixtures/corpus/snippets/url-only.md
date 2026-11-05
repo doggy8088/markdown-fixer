@@ -1,0 +1,1 @@
+https://github.com/example/repo/pull/42#issuecomment-1234567890

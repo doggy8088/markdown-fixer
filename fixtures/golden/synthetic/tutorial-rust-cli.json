@@ -1,0 +1,417 @@
+{
+  "source": "synthetic/tutorial-rust-cli.md",
+  "referenceVersion": "1.0.0",
+  "cases": [
+    {
+      "name": "default",
+      "options": {},
+      "diagnose": [
+        {
+          "rule": "MDX032",
+          "name": "list-blank-lines",
+          "severity": "warning",
+          "fixable": false,
+          "line": 8,
+          "column": 1,
+          "message": "List starts directly after a paragraph. Add a blank line before it so the list boundary is unambiguous."
+        },
+        {
+          "rule": "MDX052",
+          "name": "fence-blank-lines",
+          "severity": "warning",
+          "fixable": true,
+          "line": 13,
+          "column": 1,
+          "message": "Fenced code block starts directly after another block. Add a blank line before it."
+        },
+        {
+          "rule": "MDX052",
+          "name": "fence-blank-lines",
+          "severity": "warning",
+          "fixable": true,
+          "line": 15,
+          "column": 1,
+          "message": "Fenced code block ends directly before another block. Add a blank line after it."
+        },
+        {
+          "rule": "MDX050",
+          "name": "fence-language",
+          "severity": "info",
+          "fixable": false,
+          "line": 18,
+          "column": 1,
+          "message": "Fenced code block has no language. Add one when the language is known, for example ```js."
+        },
+        {
+          "rule": "MDX010",
+          "name": "atx-missing-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 37,
+          "column": 3,
+          "message": "Add a space after the heading marker: \"## \" rather than \"##\"."
+        },
+        {
+          "rule": "MDX032",
+          "name": "list-blank-lines",
+          "severity": "warning",
+          "fixable": false,
+          "line": 53,
+          "column": 1,
+          "message": "List starts directly after a paragraph. Add a blank line before it so the list boundary is unambiguous."
+        },
+        {
+          "rule": "MDX020",
+          "name": "blockquote-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 71,
+          "column": 1,
+          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
+        },
+        {
+          "rule": "MDX020",
+          "name": "blockquote-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 73,
+          "column": 1,
+          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
+        },
+        {
+          "rule": "MDX070",
+          "name": "bare-url",
+          "severity": "info",
+          "fixable": false,
+          "line": 103,
+          "column": 20,
+          "message": "Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text."
+        }
+      ],
+      "fix": {
+        "text": "# 用 Rust 寫第一支命令列工具\n\n這篇教學帶你從零開始，用 Rust 寫一支會統計檔案行數的命令列工具 `wc-lite`。讀完之後，你會知道怎麼建立專案、解析參數、讀檔，以及寫測試。\n\n## 事前準備\n\n你需要：\n1. 安裝 Rust（建議用 rustup）\n2. 一個文字編輯器，VS Code 或 RustRover 都可以\n3. 大約 30 分鐘\n\n安裝 Rust：\n\n```sh\ncurl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh\n```\n\n裝好之後確認版本：\n\n```\n$ rustc --version\nrustc 1.85.0 (4d91de4e4 2025-02-17)\n```\n\n## 步驟一：建立專案\n\n```sh\ncargo new wc-lite\ncd wc-lite\n```\n\nCargo 會幫你產生以下結構：\n\n    wc-lite/\n    ├── Cargo.toml\n    └── src/\n        └── main.rs\n\n## 步驟二：讀取參數\n\n打開 `src/main.rs`，把內容換成：\n\n```rust\nuse std::env;\nuse std::fs;\n\nfn main() {\n    let path = env::args().nth(1).expect(\"usage: wc-lite <file>\");\n    let text = fs::read_to_string(&path).unwrap();\n    println!(\"{} lines\", text.lines().count());\n}\n```\n\n**說明：**\n- `env::args()` 回傳一個 iterator，第 0 個是程式本身。\n- `nth(1)` 取第一個參數。\n  - 如果使用者沒給參數，`expect` 會讓程式 panic。\n  - 正式的工具應該改用 `clap` 或自己印出用法。\n- `read_to_string` 會把整個檔案讀進記憶體。\n\n## 步驟三：執行\n\n```sh\ncargo run -- Cargo.toml\n```\n\n你應該會看到類似 `9 lines` 的輸出 。\n\n### 常見錯誤\n\n> **error[E0425]: cannot find value `path` in this scope**\n>\n> 這通常是變數名稱打錯了。\n\n> **warning: unused variable**\n> 加上底線前綴 `_path` 可以消除警告。\n\n## 步驟四：寫測試\n\n把計算邏輯抽出來，才好測試：\n\n```rust\nfn count_lines(text: &str) -> usize {\n    text.lines().count()\n}\n\n#[cfg(test)]\nmod tests {\n    use super::*;\n\n    #[test]\n    fn counts_lines() {\n        assert_eq!(count_lines(\"a\\nb\\n\"), 2);\n    }\n}\n```\n\n執行 `cargo test`，看到 `test result: ok.` 就代表成功了 。\n\n## 下一步\n\n- 支援多個檔案\n- 加上 `--words` 統計字數\n- 用 `clap` 解析參數\n- 參考 The Rust Book：https://doc.rust-lang.org/book/\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "snippet",
+      "options": {
+        "ignoreRules": [
+          "MDX003"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX032",
+          "name": "list-blank-lines",
+          "severity": "warning",
+          "fixable": false,
+          "line": 8,
+          "column": 1,
+          "message": "List starts directly after a paragraph. Add a blank line before it so the list boundary is unambiguous."
+        },
+        {
+          "rule": "MDX052",
+          "name": "fence-blank-lines",
+          "severity": "warning",
+          "fixable": true,
+          "line": 13,
+          "column": 1,
+          "message": "Fenced code block starts directly after another block. Add a blank line before it."
+        },
+        {
+          "rule": "MDX052",
+          "name": "fence-blank-lines",
+          "severity": "warning",
+          "fixable": true,
+          "line": 15,
+          "column": 1,
+          "message": "Fenced code block ends directly before another block. Add a blank line after it."
+        },
+        {
+          "rule": "MDX050",
+          "name": "fence-language",
+          "severity": "info",
+          "fixable": false,
+          "line": 18,
+          "column": 1,
+          "message": "Fenced code block has no language. Add one when the language is known, for example ```js."
+        },
+        {
+          "rule": "MDX010",
+          "name": "atx-missing-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 37,
+          "column": 3,
+          "message": "Add a space after the heading marker: \"## \" rather than \"##\"."
+        },
+        {
+          "rule": "MDX032",
+          "name": "list-blank-lines",
+          "severity": "warning",
+          "fixable": false,
+          "line": 53,
+          "column": 1,
+          "message": "List starts directly after a paragraph. Add a blank line before it so the list boundary is unambiguous."
+        },
+        {
+          "rule": "MDX020",
+          "name": "blockquote-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 71,
+          "column": 1,
+          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
+        },
+        {
+          "rule": "MDX020",
+          "name": "blockquote-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 73,
+          "column": 1,
+          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
+        },
+        {
+          "rule": "MDX070",
+          "name": "bare-url",
+          "severity": "info",
+          "fixable": false,
+          "line": 103,
+          "column": 20,
+          "message": "Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text."
+        }
+      ],
+      "fix": {
+        "text": "# 用 Rust 寫第一支命令列工具\n\n這篇教學帶你從零開始，用 Rust 寫一支會統計檔案行數的命令列工具 `wc-lite`。讀完之後，你會知道怎麼建立專案、解析參數、讀檔，以及寫測試。\n\n## 事前準備\n\n你需要：\n1. 安裝 Rust（建議用 rustup）\n2. 一個文字編輯器，VS Code 或 RustRover 都可以\n3. 大約 30 分鐘\n\n安裝 Rust：\n\n```sh\ncurl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh\n```\n\n裝好之後確認版本：\n\n```\n$ rustc --version\nrustc 1.85.0 (4d91de4e4 2025-02-17)\n```\n\n## 步驟一：建立專案\n\n```sh\ncargo new wc-lite\ncd wc-lite\n```\n\nCargo 會幫你產生以下結構：\n\n    wc-lite/\n    ├── Cargo.toml\n    └── src/\n        └── main.rs\n\n## 步驟二：讀取參數\n\n打開 `src/main.rs`，把內容換成：\n\n```rust\nuse std::env;\nuse std::fs;\n\nfn main() {\n    let path = env::args().nth(1).expect(\"usage: wc-lite <file>\");\n    let text = fs::read_to_string(&path).unwrap();\n    println!(\"{} lines\", text.lines().count());\n}\n```\n\n**說明：**\n- `env::args()` 回傳一個 iterator，第 0 個是程式本身。\n- `nth(1)` 取第一個參數。\n  - 如果使用者沒給參數，`expect` 會讓程式 panic。\n  - 正式的工具應該改用 `clap` 或自己印出用法。\n- `read_to_string` 會把整個檔案讀進記憶體。\n\n## 步驟三：執行\n\n```sh\ncargo run -- Cargo.toml\n```\n\n你應該會看到類似 `9 lines` 的輸出 。\n\n### 常見錯誤\n\n> **error[E0425]: cannot find value `path` in this scope**\n>\n> 這通常是變數名稱打錯了。\n\n> **warning: unused variable**\n> 加上底線前綴 `_path` 可以消除警告。\n\n## 步驟四：寫測試\n\n把計算邏輯抽出來，才好測試：\n\n```rust\nfn count_lines(text: &str) -> usize {\n    text.lines().count()\n}\n\n#[cfg(test)]\nmod tests {\n    use super::*;\n\n    #[test]\n    fn counts_lines() {\n        assert_eq!(count_lines(\"a\\nb\\n\"), 2);\n    }\n}\n```\n\n執行 `cargo test`，看到 `test result: ok.` 就代表成功了 。\n\n## 下一步\n\n- 支援多個檔案\n- 加上 `--words` 統計字數\n- 用 `clap` 解析參數\n- 參考 The Rust Book：https://doc.rust-lang.org/book/\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "line-length-80",
+      "options": {
+        "maxLineLength": 80
+      },
+      "diagnose": [
+        {
+          "rule": "MDX032",
+          "name": "list-blank-lines",
+          "severity": "warning",
+          "fixable": false,
+          "line": 8,
+          "column": 1,
+          "message": "List starts directly after a paragraph. Add a blank line before it so the list boundary is unambiguous."
+        },
+        {
+          "rule": "MDX052",
+          "name": "fence-blank-lines",
+          "severity": "warning",
+          "fixable": true,
+          "line": 13,
+          "column": 1,
+          "message": "Fenced code block starts directly after another block. Add a blank line before it."
+        },
+        {
+          "rule": "MDX052",
+          "name": "fence-blank-lines",
+          "severity": "warning",
+          "fixable": true,
+          "line": 15,
+          "column": 1,
+          "message": "Fenced code block ends directly before another block. Add a blank line after it."
+        },
+        {
+          "rule": "MDX050",
+          "name": "fence-language",
+          "severity": "info",
+          "fixable": false,
+          "line": 18,
+          "column": 1,
+          "message": "Fenced code block has no language. Add one when the language is known, for example ```js."
+        },
+        {
+          "rule": "MDX010",
+          "name": "atx-missing-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 37,
+          "column": 3,
+          "message": "Add a space after the heading marker: \"## \" rather than \"##\"."
+        },
+        {
+          "rule": "MDX032",
+          "name": "list-blank-lines",
+          "severity": "warning",
+          "fixable": false,
+          "line": 53,
+          "column": 1,
+          "message": "List starts directly after a paragraph. Add a blank line before it so the list boundary is unambiguous."
+        },
+        {
+          "rule": "MDX020",
+          "name": "blockquote-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 71,
+          "column": 1,
+          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
+        },
+        {
+          "rule": "MDX020",
+          "name": "blockquote-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 73,
+          "column": 1,
+          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
+        },
+        {
+          "rule": "MDX070",
+          "name": "bare-url",
+          "severity": "info",
+          "fixable": false,
+          "line": 103,
+          "column": 20,
+          "message": "Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text."
+        }
+      ],
+      "fix": {
+        "text": "# 用 Rust 寫第一支命令列工具\n\n這篇教學帶你從零開始，用 Rust 寫一支會統計檔案行數的命令列工具 `wc-lite`。讀完之後，你會知道怎麼建立專案、解析參數、讀檔，以及寫測試。\n\n## 事前準備\n\n你需要：\n1. 安裝 Rust（建議用 rustup）\n2. 一個文字編輯器，VS Code 或 RustRover 都可以\n3. 大約 30 分鐘\n\n安裝 Rust：\n\n```sh\ncurl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh\n```\n\n裝好之後確認版本：\n\n```\n$ rustc --version\nrustc 1.85.0 (4d91de4e4 2025-02-17)\n```\n\n## 步驟一：建立專案\n\n```sh\ncargo new wc-lite\ncd wc-lite\n```\n\nCargo 會幫你產生以下結構：\n\n    wc-lite/\n    ├── Cargo.toml\n    └── src/\n        └── main.rs\n\n## 步驟二：讀取參數\n\n打開 `src/main.rs`，把內容換成：\n\n```rust\nuse std::env;\nuse std::fs;\n\nfn main() {\n    let path = env::args().nth(1).expect(\"usage: wc-lite <file>\");\n    let text = fs::read_to_string(&path).unwrap();\n    println!(\"{} lines\", text.lines().count());\n}\n```\n\n**說明：**\n- `env::args()` 回傳一個 iterator，第 0 個是程式本身。\n- `nth(1)` 取第一個參數。\n  - 如果使用者沒給參數，`expect` 會讓程式 panic。\n  - 正式的工具應該改用 `clap` 或自己印出用法。\n- `read_to_string` 會把整個檔案讀進記憶體。\n\n## 步驟三：執行\n\n```sh\ncargo run -- Cargo.toml\n```\n\n你應該會看到類似 `9 lines` 的輸出 。\n\n### 常見錯誤\n\n> **error[E0425]: cannot find value `path` in this scope**\n>\n> 這通常是變數名稱打錯了。\n\n> **warning: unused variable**\n> 加上底線前綴 `_path` 可以消除警告。\n\n## 步驟四：寫測試\n\n把計算邏輯抽出來，才好測試：\n\n```rust\nfn count_lines(text: &str) -> usize {\n    text.lines().count()\n}\n\n#[cfg(test)]\nmod tests {\n    use super::*;\n\n    #[test]\n    fn counts_lines() {\n        assert_eq!(count_lines(\"a\\nb\\n\"), 2);\n    }\n}\n```\n\n執行 `cargo test`，看到 `test result: ok.` 就代表成功了 。\n\n## 下一步\n\n- 支援多個檔案\n- 加上 `--words` 統計字數\n- 用 `clap` 解析參數\n- 參考 The Rust Book：https://doc.rust-lang.org/book/\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "keep-encoding",
+      "options": {
+        "ignoreRules": [
+          "MDX001",
+          "MDX002"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX032",
+          "name": "list-blank-lines",
+          "severity": "warning",
+          "fixable": false,
+          "line": 8,
+          "column": 1,
+          "message": "List starts directly after a paragraph. Add a blank line before it so the list boundary is unambiguous."
+        },
+        {
+          "rule": "MDX052",
+          "name": "fence-blank-lines",
+          "severity": "warning",
+          "fixable": true,
+          "line": 13,
+          "column": 1,
+          "message": "Fenced code block starts directly after another block. Add a blank line before it."
+        },
+        {
+          "rule": "MDX052",
+          "name": "fence-blank-lines",
+          "severity": "warning",
+          "fixable": true,
+          "line": 15,
+          "column": 1,
+          "message": "Fenced code block ends directly before another block. Add a blank line after it."
+        },
+        {
+          "rule": "MDX050",
+          "name": "fence-language",
+          "severity": "info",
+          "fixable": false,
+          "line": 18,
+          "column": 1,
+          "message": "Fenced code block has no language. Add one when the language is known, for example ```js."
+        },
+        {
+          "rule": "MDX010",
+          "name": "atx-missing-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 37,
+          "column": 3,
+          "message": "Add a space after the heading marker: \"## \" rather than \"##\"."
+        },
+        {
+          "rule": "MDX032",
+          "name": "list-blank-lines",
+          "severity": "warning",
+          "fixable": false,
+          "line": 53,
+          "column": 1,
+          "message": "List starts directly after a paragraph. Add a blank line before it so the list boundary is unambiguous."
+        },
+        {
+          "rule": "MDX020",
+          "name": "blockquote-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 71,
+          "column": 1,
+          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
+        },
+        {
+          "rule": "MDX020",
+          "name": "blockquote-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 73,
+          "column": 1,
+          "message": "Put exactly one space after each blockquote marker; preserve four or more spaces only when they are content indentation."
+        },
+        {
+          "rule": "MDX070",
+          "name": "bare-url",
+          "severity": "info",
+          "fixable": false,
+          "line": 103,
+          "column": 20,
+          "message": "Bare URL. Wrap it in <...> or use an explicit link only when that improves readability; otherwise leave it as text."
+        }
+      ],
+      "fix": {
+        "text": "# 用 Rust 寫第一支命令列工具\n\n這篇教學帶你從零開始，用 Rust 寫一支會統計檔案行數的命令列工具 `wc-lite`。讀完之後，你會知道怎麼建立專案、解析參數、讀檔，以及寫測試。\n\n## 事前準備\n\n你需要：\n1. 安裝 Rust（建議用 rustup）\n2. 一個文字編輯器，VS Code 或 RustRover 都可以\n3. 大約 30 分鐘\n\n安裝 Rust：\n\n```sh\ncurl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh\n```\n\n裝好之後確認版本：\n\n```\n$ rustc --version\nrustc 1.85.0 (4d91de4e4 2025-02-17)\n```\n\n## 步驟一：建立專案\n\n```sh\ncargo new wc-lite\ncd wc-lite\n```\n\nCargo 會幫你產生以下結構：\n\n    wc-lite/\n    ├── Cargo.toml\n    └── src/\n        └── main.rs\n\n## 步驟二：讀取參數\n\n打開 `src/main.rs`，把內容換成：\n\n```rust\nuse std::env;\nuse std::fs;\n\nfn main() {\n    let path = env::args().nth(1).expect(\"usage: wc-lite <file>\");\n    let text = fs::read_to_string(&path).unwrap();\n    println!(\"{} lines\", text.lines().count());\n}\n```\n\n**說明：**\n- `env::args()` 回傳一個 iterator，第 0 個是程式本身。\n- `nth(1)` 取第一個參數。\n  - 如果使用者沒給參數，`expect` 會讓程式 panic。\n  - 正式的工具應該改用 `clap` 或自己印出用法。\n- `read_to_string` 會把整個檔案讀進記憶體。\n\n## 步驟三：執行\n\n```sh\ncargo run -- Cargo.toml\n```\n\n你應該會看到類似 `9 lines` 的輸出 。\n\n### 常見錯誤\n\n> **error[E0425]: cannot find value `path` in this scope**\n>\n> 這通常是變數名稱打錯了。\n\n> **warning: unused variable**\n> 加上底線前綴 `_path` 可以消除警告。\n\n## 步驟四：寫測試\n\n把計算邏輯抽出來，才好測試：\n\n```rust\nfn count_lines(text: &str) -> usize {\n    text.lines().count()\n}\n\n#[cfg(test)]\nmod tests {\n    use super::*;\n\n    #[test]\n    fn counts_lines() {\n        assert_eq!(count_lines(\"a\\nb\\n\"), 2);\n    }\n}\n```\n\n執行 `cargo test`，看到 `test result: ok.` 就代表成功了 。\n\n## 下一步\n\n- 支援多個檔案\n- 加上 `--words` 統計字數\n- 用 `clap` 解析參數\n- 參考 The Rust Book：https://doc.rust-lang.org/book/\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "headings-only",
+      "options": {
+        "rules": [
+          "MDX010",
+          "MDX011",
+          "MDX012",
+          "MDX013"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX010",
+          "name": "atx-missing-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 37,
+          "column": 3,
+          "message": "Add a space after the heading marker: \"## \" rather than \"##\"."
+        }
+      ],
+      "fix": {
+        "text": "# 用 Rust 寫第一支命令列工具\n\n這篇教學帶你從零開始，用 Rust 寫一支會統計檔案行數的命令列工具 `wc-lite`。讀完之後，你會知道怎麼建立專案、解析參數、讀檔，以及寫測試。\n\n## 事前準備\n\n你需要：\n1. 安裝 Rust（建議用 rustup）\n2. 一個文字編輯器，VS Code 或 RustRover 都可以\n3. 大約 30 分鐘\n\n安裝 Rust：\n```sh\ncurl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh\n```\n裝好之後確認版本：\n\n```\n$ rustc --version\nrustc 1.85.0 (4d91de4e4 2025-02-17)\n```\n\n## 步驟一：建立專案\n\n```sh\ncargo new wc-lite\ncd wc-lite\n```\n\nCargo 會幫你產生以下結構：\n\n    wc-lite/\n    ├── Cargo.toml\n    └── src/\n        └── main.rs\n\n## 步驟二：讀取參數\n\n打開 `src/main.rs`，把內容換成：\n\n```rust\nuse std::env;\nuse std::fs;\n\nfn main() {\n    let path = env::args().nth(1).expect(\"usage: wc-lite <file>\");\n    let text = fs::read_to_string(&path).unwrap();\n    println!(\"{} lines\", text.lines().count());\n}\n```\n\n**說明：**\n- `env::args()` 回傳一個 iterator，第 0 個是程式本身。\n- `nth(1)` 取第一個參數。\n  - 如果使用者沒給參數，`expect` 會讓程式 panic。\n  - 正式的工具應該改用 `clap` 或自己印出用法。\n- `read_to_string` 會把整個檔案讀進記憶體。\n\n## 步驟三：執行\n\n```sh\ncargo run -- Cargo.toml\n```\n\n你應該會看到類似 `9 lines` 的輸出 。\n\n### 常見錯誤\n\n> **error[E0425]: cannot find value `path` in this scope**\n>\n>這通常是變數名稱打錯了。\n\n>**warning: unused variable**\n> 加上底線前綴 `_path` 可以消除警告。\n\n## 步驟四：寫測試\n\n把計算邏輯抽出來，才好測試：\n\n```rust\nfn count_lines(text: &str) -> usize {\n    text.lines().count()\n}\n\n#[cfg(test)]\nmod tests {\n    use super::*;\n\n    #[test]\n    fn counts_lines() {\n        assert_eq!(count_lines(\"a\\nb\\n\"), 2);\n    }\n}\n```\n\n執行 `cargo test`，看到 `test result: ok.` 就代表成功了 。\n\n## 下一步\n\n- 支援多個檔案\n- 加上 `--words` 統計字數\n- 用 `clap` 解析參數\n- 參考 The Rust Book：https://doc.rust-lang.org/book/\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    }
+  ]
+}

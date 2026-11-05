@@ -1,0 +1,15 @@
+{
+  "name": "unknown-option-single-dash",
+  "args": [
+    "-"
+  ],
+  "cwd": "",
+  "nonRoot": false,
+  "setup": [],
+  "expected": {
+    "status": 2,
+    "stdout": "",
+    "stderr": "Error: Unknown option: -\nRun with --help for usage.\n",
+    "files": []
+  }
+}

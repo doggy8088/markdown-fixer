@@ -1,0 +1,26 @@
+{
+  "name": "write-clean",
+  "args": [
+    "--write",
+    "clean.md"
+  ],
+  "cwd": "",
+  "nonRoot": false,
+  "setup": [
+    {
+      "path": "clean.md",
+      "text": "# Clean Document\n\nThis document has no problems.\n\n## Section\n\n- One\n- Two\n\n```js\nconsole.log('hi');\n```\n"
+    }
+  ],
+  "expected": {
+    "status": 0,
+    "stdout": "clean.md\n  No problems.\n\nNo remaining Markdown issues.\n",
+    "stderr": "",
+    "files": [
+      {
+        "path": "clean.md",
+        "text": "# Clean Document\n\nThis document has no problems.\n\n## Section\n\n- One\n- Two\n\n```js\nconsole.log('hi');\n```\n"
+      }
+    ]
+  }
+}

@@ -1,0 +1,156 @@
+{
+  "source": "edge/double-bom.md",
+  "referenceVersion": "1.0.0",
+  "cases": [
+    {
+      "name": "default",
+      "options": {},
+      "diagnose": [
+        {
+          "rule": "MDX001",
+          "name": "bom",
+          "severity": "warning",
+          "fixable": true,
+          "line": 1,
+          "column": 1,
+          "message": "File starts with a UTF-8 BOM. Remove it so the first Markdown block starts at byte 0."
+        },
+        {
+          "rule": "MDX010",
+          "name": "atx-missing-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 1,
+          "column": 2,
+          "message": "Add a space after the heading marker: \"# \" rather than \"#\"."
+        }
+      ],
+      "fix": {
+        "text": "# Title\n\n內容。\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "snippet",
+      "options": {
+        "ignoreRules": [
+          "MDX003"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX001",
+          "name": "bom",
+          "severity": "warning",
+          "fixable": true,
+          "line": 1,
+          "column": 1,
+          "message": "File starts with a UTF-8 BOM. Remove it so the first Markdown block starts at byte 0."
+        },
+        {
+          "rule": "MDX010",
+          "name": "atx-missing-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 1,
+          "column": 2,
+          "message": "Add a space after the heading marker: \"# \" rather than \"#\"."
+        }
+      ],
+      "fix": {
+        "text": "# Title\n\n內容。\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "line-length-80",
+      "options": {
+        "maxLineLength": 80
+      },
+      "diagnose": [
+        {
+          "rule": "MDX001",
+          "name": "bom",
+          "severity": "warning",
+          "fixable": true,
+          "line": 1,
+          "column": 1,
+          "message": "File starts with a UTF-8 BOM. Remove it so the first Markdown block starts at byte 0."
+        },
+        {
+          "rule": "MDX010",
+          "name": "atx-missing-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 1,
+          "column": 2,
+          "message": "Add a space after the heading marker: \"# \" rather than \"#\"."
+        }
+      ],
+      "fix": {
+        "text": "# Title\n\n內容。\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "keep-encoding",
+      "options": {
+        "ignoreRules": [
+          "MDX001",
+          "MDX002"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX010",
+          "name": "atx-missing-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 1,
+          "column": 2,
+          "message": "Add a space after the heading marker: \"# \" rather than \"#\"."
+        }
+      ],
+      "fix": {
+        "text": "\uFEFF\uFEFF# Title\n\n內容。\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "headings-only",
+      "options": {
+        "rules": [
+          "MDX010",
+          "MDX011",
+          "MDX012",
+          "MDX013"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX010",
+          "name": "atx-missing-space",
+          "severity": "warning",
+          "fixable": true,
+          "line": 1,
+          "column": 2,
+          "message": "Add a space after the heading marker: \"# \" rather than \"#\"."
+        }
+      ],
+      "fix": {
+        "text": "\uFEFF\uFEFF# Title\n\n內容。\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    }
+  ]
+}

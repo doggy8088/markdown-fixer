@@ -1,0 +1,27 @@
+{
+  "name": "refused-html-comment-write-json",
+  "args": [
+    "--write",
+    "--json",
+    "c.md"
+  ],
+  "cwd": "",
+  "nonRoot": false,
+  "setup": [
+    {
+      "path": "c.md",
+      "text": "# Title\n\n<!-- this comment never closes\n\n#Broken heading\n"
+    }
+  ],
+  "expected": {
+    "status": 1,
+    "stdout": "{\n  \"tool\": \"markdown-fixer\",\n  \"version\": \"<VERSION>\",\n  \"mode\": \"write\",\n  \"files\": [\n    {\n      \"path\": \"c.md\",\n      \"changed\": false,\n      \"wouldChange\": false,\n      \"refused\": true,\n      \"reason\": \"Unclosed HTML comment: no closing --> was found.\",\n      \"fixed\": 0,\n      \"wouldFix\": 0,\n      \"problems\": [\n        {\n          \"rule\": \"MDX083\",\n          \"name\": \"html-comment-unclosed\",\n          \"severity\": \"error\",\n          \"fixable\": false,\n          \"line\": 3,\n          \"column\": 1,\n          \"message\": \"Unclosed HTML comment: no closing --> was found.\"\n        }\n      ]\n    }\n  ],\n  \"summary\": {\n    \"files\": 1,\n    \"changed\": 0,\n    \"wouldChange\": 0,\n    \"fixed\": 0,\n    \"refused\": 1,\n    \"problems\": {\n      \"total\": 1,\n      \"errors\": 1,\n      \"warnings\": 0,\n      \"info\": 0,\n      \"fixable\": 0\n    }\n  }\n}\n",
+    "stderr": "",
+    "files": [
+      {
+        "path": "c.md",
+        "text": "# Title\n\n<!-- this comment never closes\n\n#Broken heading\n"
+      }
+    ]
+  }
+}

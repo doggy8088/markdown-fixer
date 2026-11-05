@@ -1,0 +1,40 @@
+{
+  "name": "unreadable-directory",
+  "args": [
+    "."
+  ],
+  "cwd": "",
+  "nonRoot": true,
+  "setup": [
+    {
+      "path": "b",
+      "dir": true,
+      "mode": "000"
+    },
+    {
+      "path": "a",
+      "dir": true,
+      "mode": "000"
+    },
+    {
+      "path": "C",
+      "dir": true,
+      "mode": "000"
+    },
+    {
+      "path": "ok.md",
+      "text": "# Clean Document\n\nThis document has no problems.\n\n## Section\n\n- One\n- Two\n\n```js\nconsole.log('hi');\n```\n"
+    }
+  ],
+  "expected": {
+    "status": 2,
+    "stdout": "",
+    "stderr": "Error: Cannot read directory C: EACCES: permission denied, scandir 'C'\nError: Cannot read directory a: EACCES: permission denied, scandir 'a'\nError: Cannot read directory b: EACCES: permission denied, scandir 'b'\n",
+    "files": [
+      {
+        "path": "ok.md",
+        "text": "# Clean Document\n\nThis document has no problems.\n\n## Section\n\n- One\n- Two\n\n```js\nconsole.log('hi');\n```\n"
+      }
+    ]
+  }
+}
