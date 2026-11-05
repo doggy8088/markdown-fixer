@@ -1,0 +1,15 @@
+[package]
+name = "markdown-fixer-ffi"
+description = "C ABI shared/static library for markdown-fixer."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[lib]
+crate-type = ["cdylib", "staticlib", "rlib"]
+
+[dependencies]
+markdown-fixer = { path = "../markdown-fixer", version = "0.1.0", features = ["serde"] }

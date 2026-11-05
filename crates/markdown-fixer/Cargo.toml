@@ -1,0 +1,18 @@
+[package]
+name = "markdown-fixer"
+description = "Safe, line-oriented Markdown syntax checker and auto-corrector (Rust port of the markdown-autocorrect skill)."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+keywords = ["markdown", "lint", "formatter", "cjk"]
+categories = ["text-processing"]
+
+[features]
+default = []
+serde = ["dep:serde"]
+
+[dependencies]
+serde = { version = "1", features = ["derive"], optional = true }
