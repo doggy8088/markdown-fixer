@@ -230,7 +230,7 @@ powershell -NoProfile -File examples\windows\test-real-clipboard.ps1 `
 - 只有圖片：結束碼 0，圖片型別與位元組不變，也沒有多出文字型別。
 - 空的剪貼簿：結束碼 0，仍然沒有文字。
 
-另外每個平台各跑一次反向對照：把 `markdown-fixer` 換成什麼都不改（`/bin/cat`）或會失敗（`findstr.exe`）的程式，測試必須失敗，確認測試真的抓得到錯誤。
+另外每個平台各跑一次反向對照：把 `markdown-fixer` 換成不會修正的程式（Linux 與 macOS 用 `/bin/cat`，Windows 用 `findstr.exe`；兩者都不認得 `--stdin` 而失敗），測試必須失敗，確認測試真的抓得到錯誤。
 
 | Runner | 剪貼簿 | 另外驗證 |
 | --- | --- | --- |

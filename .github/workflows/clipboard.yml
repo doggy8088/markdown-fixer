@@ -42,7 +42,7 @@ jobs:
         env:
           MARKDOWN_FIXER_BIN: ${{ github.workspace }}/target/debug/markdown-fixer
         run: xvfb-run -a examples/linux/test-real-clipboard.sh x11
-      - name: Negative control (X11 test must catch a fixer that changes nothing)
+      - name: Negative control (X11 test must catch a fixer that does not fix)
         timeout-minutes: 5
         run: |
           log="$RUNNER_TEMP/negative-x11.log"
@@ -105,7 +105,7 @@ jobs:
           examples\windows\test-real-clipboard.ps1
           -AutoHotkey "$env:RUNNER_TEMP\ahk\AutoHotkey64.exe"
           -Fixer target\debug\markdown-fixer.exe
-      - name: Negative control (test must catch a fixer that fails)
+      - name: Negative control (test must catch a fixer that does not fix)
         timeout-minutes: 5
         shell: powershell
         run: |
@@ -139,7 +139,7 @@ jobs:
         env:
           MARKDOWN_FIXER_BIN: ${{ github.workspace }}/target/debug/markdown-fixer
         run: examples/macos/test-real-clipboard.sh
-      - name: Negative control (test must catch a fixer that changes nothing)
+      - name: Negative control (test must catch a fixer that does not fix)
         timeout-minutes: 5
         run: |
           log="$RUNNER_TEMP/negative-macos.log"
