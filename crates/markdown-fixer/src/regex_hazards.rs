@@ -334,6 +334,10 @@ fn pathological_documents_are_fast() {
         "_ ".repeat(5_000) + "_",
         "# ".repeat(5_000) + "x",
         "|".repeat(10_000) + "\n" + &"|-".repeat(5_000),
+        // review-2：只能 close 的強調 run 曾讓 MDX042 的配對退化成平方時間。
+        "a* ".repeat(32_000) + "a\n",
+        "甲* ".repeat(32_000) + "甲\n",
+        "a** ".repeat(24_000) + "a\n",
     ];
     for text in &cases {
         let started = Instant::now();
@@ -342,11 +346,8 @@ fn pathological_documents_are_fast() {
         let started = Instant::now();
         let _ = crate::diagnose(text, &crate::Options::default());
         let diag = started.elapsed();
-        eprintln!("{:>8?} {:>8?} {:?}", fix, diag, &text[..text.len().min(12)]);
-        check_time(
-            fix + diag,
-            LIMIT * 4,
-            &format!("{:?}", &text[..12.min(text.len())]),
-        );
+        let label: String = text.chars().take(12).collect();
+        eprintln!("{:>8?} {:>8?} {:?}", fix, diag, label);
+        check_time(fix + diag, LIMIT * 4, &format!("{label:?}"));
     }
 }
