@@ -172,7 +172,7 @@ GNOME、KDE 在「鍵盤快捷鍵」→「自訂快捷鍵」新增一個，指�
 
 ### 測試
 
-`examples/linux/test-real-clipboard.sh` 在真正的 X11 或 Wayland 剪貼簿上執行腳本（`MARKDOWN_FIX_PASTE_NO_PASTE=1`，不送出 `Ctrl+V`），會覆寫目前的剪貼簿。Wayland 需要支援 wlr-data-control 的合成器（例如 sway、Hyprland）；Weston 沒有這個協定，`wl-copy` 在沒有鍵盤焦點時會失敗。
+`examples/linux/test-real-clipboard.sh` 在真正的 X11 或 Wayland 剪貼簿上執行腳本（`MARKDOWN_FIX_PASTE_NO_PASTE=1`，不送出 `Ctrl+V`），會覆寫目前的剪貼簿。Wayland 只在 sway（支援 wlr-data-control）上測過，其他合成器沒有測試。
 
 ```sh
 cargo build -p markdown-fixer-cli
