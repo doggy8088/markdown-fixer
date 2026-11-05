@@ -333,7 +333,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: cargo install --git https://github.com/doggy8088/markdown-fixer markdown-fixer-cli
+      - run: cargo install markdown-fixer-cli --locked
       - run: markdown-fixer --check --json . > markdown-report.json
 ```
 

@@ -396,8 +396,8 @@ void mdfix_string_free(char *s);
 
 | 編號 | 問題 | 目前的暫定做法 |
 | --- | --- | --- |
-| Q1 | dedent-paste 要用什麼方式取得 `markdown-fixer` crate：path、git 或 crates.io？ | 開發期先用 path 相依（`../markdown-syntax-fixer/crates/markdown-fixer`）。這會讓 dedent-paste 的 CI 與 release 失敗，發佈前必須改成 git（含 `rev`）或 crates.io 相依 |
-| Q2 | crates.io 名稱 `markdown-fixer` 是否可用？ | 發佈前確認；不可用時改名為 `mdfix` 並同步文件 |
+| Q1 | dedent-paste 要用什麼方式取得 `markdown-fixer` crate：path、git 或 crates.io？ | 已決定：crates.io 相依 `markdown-fixer = "0.1"` |
+| Q2 | crates.io 名稱 `markdown-fixer` 是否可用？ | 已決定：名稱可用，2026-11-06 以 `markdown-fixer` 與 `markdown-fixer-cli` 發佈 0.1.0 |
 | Q3 | 規則訊息要不要提供中文？ | 第一版保持英文；後續以 `--lang zh-TW` 選項提供，不改變預設輸出 |
 | Q4 | oracle 升版時的同步流程 | 重新複製 `reference/js/`、重跑 `scripts/gen-golden.mjs`、逐一檢查 golden diff，流程記錄在 `docs/parity.md` |
 

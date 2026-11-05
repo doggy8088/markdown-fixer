@@ -38,7 +38,8 @@ jobs:
     needs: check-version
     runs-on: ${{ matrix.os }}
     strategy:
-      fail-fast: true
+      # 一個平台失敗時，其他平台照常建置，一次看到所有問題。
+      fail-fast: false
       matrix:
         include:
           - { os: macos-latest, target: aarch64-apple-darwin }
@@ -86,7 +87,7 @@ jobs:
           ffi="markdown-fixer-ffi-$VERSION-$TARGET"
           mkdir -p "dist" "stage/$cli" "stage/$ffi/include" "stage/$ffi/lib"
           for f in README.md LICENSE; do
-            if [ -f "$f" ]; then cp "$f" "stage/$cli/" "stage/$ffi/"; fi
+            if [ -f "$f" ]; then cp "$f" "stage/$cli/" && cp "$f" "stage/$ffi/"; fi
           done
           cp crates/markdown-fixer-ffi/include/markdown_fixer.h "stage/$ffi/include/"
           case "$TARGET" in

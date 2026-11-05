@@ -6,21 +6,20 @@
 
 ## 加入相依
 
-crates.io 版本還沒發佈（名稱待確認，見 PRD〈11〉Q2）。目前請用 path 或 git 相依：
+從 crates.io 加入相依（`cargo add markdown-fixer`）：
 
 ```toml
 [dependencies]
-# 本機開發
-markdown-fixer = { path = "../markdown-syntax-fixer/crates/markdown-fixer" }
+markdown-fixer = "0.1"
 
-# 或指定 git commit
+# 要用尚未發佈的變更時，改指定 git commit
 # markdown-fixer = { git = "https://github.com/doggy8088/markdown-fixer", rev = "<commit>" }
 ```
 
 需要把結果序列化成 JSON 時，開啟 `serde` feature：
 
 ```toml
-markdown-fixer = { path = "../markdown-syntax-fixer/crates/markdown-fixer", features = ["serde"] }
+markdown-fixer = { version = "0.1", features = ["serde"] }
 ```
 
 | Feature | 預設 | 內容 |

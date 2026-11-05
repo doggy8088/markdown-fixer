@@ -34,17 +34,17 @@ cd markdown-fixer
 cargo install --path crates/markdown-fixer-cli
 ```
 
-### 預先編譯的執行檔（規劃中）
+### 預先編譯的執行檔
 
-GitHub Releases 會提供 macOS（x86_64、aarch64）、Linux（x86_64、aarch64，glibc 與 musl）、Windows（x86_64、aarch64）的執行檔，以及 shell／PowerShell 安裝程式與 checksum。Homebrew tap 與 npm 包裝列為後續工作。發佈流程見 [docs/release.md](docs/release.md)。
+[GitHub Releases](https://github.com/doggy8088/markdown-fixer/releases) 提供 macOS（x86_64、aarch64）、Linux（x86_64、aarch64，glibc 與 musl）、Windows（x86_64、aarch64）的 CLI 與 C ABI 函式庫。每個檔案附 `.sha256`，另有彙整的 `SHA256SUMS`。shell／PowerShell 安裝程式、Homebrew tap 與 npm 包裝列為後續工作。發佈流程見 [docs/release.md](docs/release.md)。
 
-### crates.io（規劃中）
+### crates.io
 
 ```sh
-cargo install markdown-fixer-cli
+cargo install markdown-fixer-cli --locked
 ```
 
-crates.io 上的名稱發佈前還要確認。
+要在 Rust 程式裡使用函式庫：`cargo add markdown-fixer`，見 [docs/library.md](docs/library.md)。
 
 ## 30 秒上手
 
@@ -135,7 +135,7 @@ fn main() {
 
 macOS 上可以搭配 Karabiner-Elements，按 `左 Option+Shift+V` 把剪貼簿裡的 Markdown 修正後直接貼上。設定檔與輔助腳本在 [`examples/macos/`](examples/macos/)，安裝與疑難排解（含 Linux 與 Windows 的對應寫法）見 [docs/clipboard.md](docs/clipboard.md)。
 
-[dedent-paste](https://github.com/doggy8088/dedent-paste) 也整合了這個函式庫：按原本的 `左 Option+V`，若剪貼簿是 Markdown 就順便正規化（目前在 dedent-paste 的開發版，以 path 相依連到這個 repo，尚未發佈），見 [docs/dedent-paste.md](docs/dedent-paste.md)。
+[dedent-paste](https://github.com/doggy8088/dedent-paste) 也整合了這個函式庫：按原本的 `左 Option+V`，若剪貼簿是 Markdown 就順便正規化（dedent-paste 下一版起提供，以 crates.io 上的 `markdown-fixer` 相依），見 [docs/dedent-paste.md](docs/dedent-paste.md)。
 
 ## 安全契約
 

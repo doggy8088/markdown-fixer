@@ -51,7 +51,7 @@ CI（`.github/workflows/ci.yml`）在 push 到 `main` 或 `ci/**` 分支，以�
 
 ## crates.io Trusted Publishing
 
-crates.io 只能替已經存在的 crate 設定 trusted publisher，而且每個 crate 要各設一筆。所以第一版的流程是：
+crates.io 只能替已經存在的 crate 設定 trusted publisher，而且每個 crate 要各設一筆。0.1.0 已照下面的流程完成：2026-11-06 以 API token 發佈兩個 crate，再替兩者設定 trusted publisher；`v0.1.0` tag 觸發的 `publish.yml` 已成功以 OIDC 取得 token，並跳過已發佈的版本。第一版的流程是：
 
 1. **第一次發佈用 API token**：在 crates.io 的 Account Settings → API Tokens 建立 token（scope 選 `publish-new` 與 `publish-update`，crate 名稱限制 `markdown-fixer*`），`cargo login` 後在 repo 根目錄執行：
 
@@ -74,6 +74,8 @@ crates.io 只能替已經存在的 crate 設定 trusted publisher，而且每個
 3. **GitHub environment**：repo 已建立 `release` environment，部署規則只允許 `v*` tag。`publish.yml` 的 job 使用這個 environment，並以 `permissions: id-token: write` 向 crates.io 換取短期 token（`rust-lang/crates-io-auth-action@v1`，job 結束時自動撤銷）。
 
 4. **之後的版本**：bump 版本、推送 tag，`release.yml` 建置 GitHub Release，`publish.yml` 發佈到 crates.io。
+
+5. **選用**：確認 OIDC 發佈正常後，可以在兩個 crate 的 Settings → Trusted Publishing 勾選「Require trusted publishing for all new versions」，之後就不能再用 API token 發佈新版本。
 
 ## 後續
 

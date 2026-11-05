@@ -118,7 +118,7 @@ dedent-paste logs -n 20
 
 - **hard break 已經被 dedent 移除**：dedent 會移除每一行的行尾空白，所以兩個空格的 hard line break 在 `markdown-fixer` 看到之前就不見了。這是 dedent-paste 既有的行為，整合不會改變它。
 - **圖片轉文字不經過修正**：剪貼簿只有圖片時，dedent-paste 走 Gemini 圖片轉文字的路徑，轉出的文字不呼叫 `normalize_text`。
-- **相依方式**：dedent-paste 目前以 path 相依指向這個 repo（`../markdown-syntax-fixer/crates/markdown-fixer`）。CI 與 cargo-dist 的 checkout 沒有這個相鄰目錄，發佈前必須改成 git（含 `rev`）或 crates.io 相依（PRD〈11〉Q1）。
+- **相依方式**：dedent-paste 以 crates.io 上的 `markdown-fixer = "0.1"` 相依。要在 dedent-paste 裡試這個 repo 尚未發佈的變更，在本機用 `[patch.crates-io]` 暫時指向 checkout，不要 commit path 相依。
 
 ## 測試
 
