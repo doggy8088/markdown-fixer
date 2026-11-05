@@ -42,6 +42,14 @@ jobs:
         env:
           MARKDOWN_FIXER_BIN: ${{ github.workspace }}/target/debug/markdown-fixer
         run: xvfb-run -a examples/linux/test-real-clipboard.sh x11
+      - name: Negative control (X11 test must catch a fixer that changes nothing)
+        timeout-minutes: 5
+        run: |
+          log="$RUNNER_TEMP/negative-x11.log"
+          if MARKDOWN_FIXER_BIN=/bin/cat xvfb-run -a examples/linux/test-real-clipboard.sh x11 >"$log" 2>&1; then
+            cat "$log"; echo "test-real-clipboard.sh passed with /bin/cat as the fixer"; exit 1
+          fi
+          grep -F 'FAIL [cjk-fixed]' "$log"
       - name: Wayland clipboard (headless sway + wl-clipboard)
         timeout-minutes: 5
         env:
@@ -97,6 +105,15 @@ jobs:
           examples\windows\test-real-clipboard.ps1
           -AutoHotkey "$env:RUNNER_TEMP\ahk\AutoHotkey64.exe"
           -Fixer target\debug\markdown-fixer.exe
+      - name: Negative control (test must catch a fixer that fails)
+        timeout-minutes: 5
+        shell: powershell
+        run: |
+          $log = & examples\windows\test-real-clipboard.ps1 -AutoHotkey "$env:RUNNER_TEMP\ahk\AutoHotkey64.exe" -Fixer "$env:SystemRoot\System32\findstr.exe" *>&1 | Out-String
+          if ($LASTEXITCODE -eq 0) { Write-Host $log; throw 'test-real-clipboard.ps1 passed with findstr.exe as the fixer' }
+          if ($log -notmatch 'FAIL \[crlf-cjk-fixed\]') { Write-Host $log; throw 'expected crlf-cjk-fixed to fail' }
+          Write-Host 'negative control failed as expected'
+          $global:LASTEXITCODE = 0
 
   macos:
     name: macOS (pbcopy/pbpaste)
@@ -122,3 +139,11 @@ jobs:
         env:
           MARKDOWN_FIXER_BIN: ${{ github.workspace }}/target/debug/markdown-fixer
         run: examples/macos/test-real-clipboard.sh
+      - name: Negative control (test must catch a fixer that changes nothing)
+        timeout-minutes: 5
+        run: |
+          log="$RUNNER_TEMP/negative-macos.log"
+          if MARKDOWN_FIXER_BIN=/bin/cat examples/macos/test-real-clipboard.sh >"$log" 2>&1; then
+            cat "$log"; echo "test-real-clipboard.sh passed with /bin/cat as the fixer"; exit 1
+          fi
+          grep -F 'FAIL [cjk-fixed]' "$log"

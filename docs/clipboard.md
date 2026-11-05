@@ -136,6 +136,12 @@ cargo build -p markdown-fixer-cli
 MARKDOWN_FIXER_TEST_BIN="$PWD/target/debug/markdown-fixer" examples/macos/test-markdown-fix-paste.sh
 ```
 
+`examples/macos/test-real-clipboard.sh` 改用真正的剪貼簿（`pbcopy`／`pbpaste` 與 JXA 的 `NSPasteboard`），以 `MARKDOWN_FIX_PASTE_NO_PASTE=1` 執行腳本，不送出 `Cmd+V`，所以不需要輔助使用權限。它會覆寫你目前的剪貼簿：
+
+```sh
+MARKDOWN_FIXER_BIN="$PWD/target/debug/markdown-fixer" examples/macos/test-real-clipboard.sh
+```
+
 ## Linux
 
 `examples/linux/markdown-fix-paste.sh` 依 `WAYLAND_DISPLAY` 自動選擇 Wayland 或 X11，也可以用 `MARKDOWN_FIX_PASTE_BACKEND=wayland|x11` 指定。
@@ -162,6 +168,19 @@ bindsym --release Mod1+Shift+v exec ~/.local/bin/markdown-fix-paste.sh
 
 GNOME、KDE 在「鍵盤快捷鍵」→「自訂快捷鍵」新增一個，指令填腳本的絕對路徑。
 
+`wl-copy` 與 `xclip` 都會留一個背景行程持有剪貼簿。腳本把它們的輸出導到 `/dev/null`，呼叫端讀腳本輸出時才不會一直等那個背景行程結束。
+
+### 測試
+
+`examples/linux/test-real-clipboard.sh` 在真正的 X11 或 Wayland 剪貼簿上執行腳本（`MARKDOWN_FIX_PASTE_NO_PASTE=1`，不送出 `Ctrl+V`），會覆寫目前的剪貼簿。Wayland 需要支援 wlr-data-control 的合成器（例如 sway、Hyprland）；Weston 沒有這個協定，`wl-copy` 在沒有鍵盤焦點時會失敗。
+
+```sh
+cargo build -p markdown-fixer-cli
+export MARKDOWN_FIXER_BIN="$PWD/target/debug/markdown-fixer"
+xvfb-run -a examples/linux/test-real-clipboard.sh x11
+examples/linux/test-real-clipboard.sh wayland   # 在 Wayland 工作階段裡
+```
+
 ## Windows（AutoHotkey v2）
 
 1. 安裝 [AutoHotkey v2](https://www.autohotkey.com/)。
@@ -175,3 +194,56 @@ Windows 版的差異：
 - 以暫存檔傳遞內容：寫入用 `UTF-8-RAW`（不加 BOM，否則 MDX001 會把它當成要移除的 BOM），讀回用 `UTF-8`。
 - Windows 剪貼簿的換行是 CRLF。腳本另外加上 `--ignore-rule MDX002`，`markdown-fixer` 會照原文的行尾還原，不會把 CRLF 改成 LF。
 - 用 `KeyWait` 等 `LAlt` 與 `Shift` 放開（各最多 1 秒）再送出 `Ctrl+V`。
+
+### 測試模式
+
+`--fix-clipboard` 只修正剪貼簿一次就結束，不送出 `Ctrl+V`、不常駐，給 CI 與手動驗證用。加上 `/ErrorStdOut`，腳本錯誤會寫到 stderr，不會跳出對話框卡住：
+
+```powershell
+AutoHotkey64.exe /ErrorStdOut examples\windows\markdown-fix-paste.ahk --fix-clipboard
+```
+
+| 結束碼 | 意義 |
+| --- | --- |
+| `0` | 已修正、內容不需修正，或剪貼簿沒有文字 |
+| `1` | `markdown-fixer` 失敗或沒有輸出，原剪貼簿保留 |
+| `3` | 腳本執行錯誤，訊息寫到 stderr |
+
+因為腳本有 `#SingleInstance Force`，測試模式會取代正在執行的熱鍵常駐程式，測完要重新啟動它。
+
+`examples/windows/test-real-clipboard.ps1` 以 Windows PowerShell 5.1 設定真正的剪貼簿、執行測試模式，再逐位元組比對結果。它會覆寫目前的剪貼簿：
+
+```powershell
+powershell -NoProfile -File examples\windows\test-real-clipboard.ps1 `
+    -AutoHotkey C:\path\to\AutoHotkey64.exe -Fixer target\debug\markdown-fixer.exe
+```
+
+## CI 驗證
+
+`.github/workflows/clipboard.yml` 在 GitHub-hosted runner 上以真正的剪貼簿執行上面的測試；`examples/**`、`crates/markdown-fixer-cli/**` 或這個 workflow 有變動時觸發，也可以手動執行（`workflow_dispatch`）。
+
+每個平台都驗證同一組案例，測試資料是 CJK 加 emoji 的 Markdown（`#標題`、`**重點：**內容 😀`），比對的是剪貼簿裡確切的 UTF-8 位元組：
+
+- 可修正的內容：剪貼簿換成修正後的位元組，結束碼 0。
+- 不需修正的內容：剪貼簿不變（macOS 與 Windows 另外確認 HTML 格式還在，證明沒有重寫剪貼簿）。
+- `markdown-fixer` 失敗、找不到或沒有輸出：結束碼 1，原剪貼簿逐位元組保留。
+- 只有圖片：結束碼 0，圖片型別與位元組不變，也沒有多出文字型別。
+- 空的剪貼簿：結束碼 0，仍然沒有文字。
+
+另外每個平台各跑一次反向對照：把 `markdown-fixer` 換成什麼都不改（`/bin/cat`）或會失敗（`findstr.exe`）的程式，測試必須失敗，確認測試真的抓得到錯誤。
+
+| Runner | 剪貼簿 | 另外驗證 |
+| --- | --- | --- |
+| `ubuntu-latest` | X11：Xvfb + `xclip` | |
+| `ubuntu-latest` | Wayland：headless sway（`WLR_BACKENDS=headless`）+ `wl-clipboard` | |
+| `windows-latest` | Win32 剪貼簿（`System.Windows.Forms.Clipboard`），AutoHotkey v2 portable（固定版本與 SHA-256） | CRLF 輸入修正後仍是 CRLF，LF 輸入維持 LF |
+| `macos-latest` | `pbcopy`／`pbpaste` 與 `NSPasteboard` | 假剪貼簿的流程測試（`test-markdown-fix-paste.sh`，含端對端）與 JXA 等待邏輯（`test-paste-jxa.mjs`） |
+
+`ci.yml` 的 `test` job 也在 Linux 與 macOS 跑假剪貼簿的流程測試，`shellcheck` job 檢查所有範例腳本。
+
+還沒有在 CI 驗證的部分：
+
+- 熱鍵本身：Karabiner-Elements 的 `shell_command`、AutoHotkey 的 `<!+v` 熱鍵、GNOME／KDE／sway 的快捷鍵設定，都沒有真的按鍵觸發。
+- 送出貼上按鍵：`Cmd+V`（System Events，需要輔助使用權限）、`Ctrl+V`（`xdotool`、`wtype`、`ydotool`、AutoHotkey `Send`）都在 `MARKDOWN_FIX_PASTE_NO_PASTE=1` 或 `--fix-clipboard` 下略過，前景 App 是否收到貼上沒有驗證。macOS 的「等修飾鍵放開」只在模擬的 CoreGraphics 下測試。
+- Wayland 只測 sway；GNOME（mutter）與 KDE（KWin）的剪貼簿沒有測。
+- 剪貼簿上的 RTF 格式，以及 Linux 上同時有文字與 HTML 的剪貼簿。
