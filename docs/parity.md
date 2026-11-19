@@ -1,6 +1,6 @@
 # 與 oracle 的一致性（parity）
 
-這份文件說明 Rust 版與 JS 參考實作（oracle，`reference/js/markdown-fixer.mjs` v1.3.0）一致是什麼意思、golden 檔怎麼產生、oracle 升版怎麼同步，並記錄刻意差異與 oracle 的疑似問題。測試怎麼跑見 [testing.md](testing.md)。
+這份文件說明 Rust 版與 JS 參考實作（oracle，`reference/js/markdown-fixer.mjs` v1.4.0）一致是什麼意思、golden 檔怎麼產生、oracle 升版怎麼同步，並記錄刻意差異與 oracle 的疑似問題。測試怎麼跑見 [testing.md](testing.md)。
 
 ## 一致性的定義
 
@@ -13,8 +13,8 @@
 
 兩個容易誤會的地方：
 
-- **問題會排序**：oracle 的 `dedupeProblems`（`markdown-fixer.mjs` 第 2249 行）先以 `rule:line:column:message` 去重，再以行號、欄號、規則 ID 做穩定排序（規則 ID 用 `localeCompare`，但 ID 都是 ASCII，結果與一般字串比較相同）。同一行同一欄同一規則的多個問題保留產生順序。
-- **規則目錄**：v1.3.0 有 50 條規則，其中 20 條可自動修正。目錄一致性以 `fixtures/golden/rules.json` 比對。
+- **問題會排序**：oracle 的 `dedupeProblems`（`markdown-fixer.mjs` 第 2292 行）先以 `rule:line:column:message` 去重，再以行號、欄號、規則 ID 做穩定排序（規則 ID 用 `localeCompare`，但 ID 都是 ASCII，結果與一般字串比較相同）。同一行同一欄同一規則的多個問題保留產生順序。
+- **規則目錄**：v1.4.0 有 50 條規則，其中 20 條可自動修正。目錄一致性以 `fixtures/golden/rules.json` 比對。
 
 ## Golden 檔怎麼產生
 
@@ -26,7 +26,7 @@
 | `snippet` | `{"ignoreRules":["MDX003"]}` | 剪貼簿片段（不補檔尾換行） |
 | `line-length-80` | `{"maxLineLength":80}` | 啟用 MDX090 |
 | `keep-encoding` | `{"ignoreRules":["MDX001","MDX002"]}` | 保留 BOM 與行尾 |
-| `headings-only` | `{"rules":["MDX010","MDX011","MDX012","MDX013","MDX033"]}` | 標題格式與標題後接清單的空行 |
+| `headings-only` | `{"rules":["MDX010","MDX011","MDX012","MDX013","MDX033"]}` | 標題格式與標題和清單之間的空行 |
 | `quote-depth-3-ignore` | `{"maxQuoteDepth":3,"onLimit":"ignore"}` | 資源上限的 `ignore` 模式（v1.1.0） |
 
 讀檔方式與 oracle CLI 的 `readMarkdownFile` 相同：含 NUL 位元組就拒絕、以嚴格 UTF-8 解碼、保留 BOM。輸出寫到 `fixtures/golden/<相同相對路徑>.json`，格式如下：
@@ -115,6 +115,11 @@ oracle 的原始碼在 GitHub `doggy8088/skills` repo 的 `skills/markdown-autoc
 5. 渲染保護（PRD〈6.9〉）：`render_guard` 預設開啟，CLI 以 `--no-render-guard` 關閉。開啟時，會意外改變渲染結果的版面類修正，以及超出範圍的修復類修正不套用，記錄在 `FixResult::skipped` 與 CLI 的 `skippedFixes`；對應的問題仍出現在診斷中。關閉時與 oracle 逐位元組相同。
 
 函式庫層級在 `render_guard = false` 時沒有刻意差異。效能上 Rust 不得有 oracle 的平方或指數時間（見〈oracle 疑似問題〉），但輸出必須相同。
+
+## v1.4.0 的變更
+
+- MDX033 加入清單後接頂層 ATX 標題的修正。支援有縮排的續行與巢狀子項目，規則維持預設停用。
+- `regressions/oracle-mdx033-list-before-heading.md` 涵蓋標題、清單、標題與段落的連續區塊。啟用 MDX033 時，MDX033 與 MDX013 合計補三個空行。
 
 ## v1.3.0 的變更
 

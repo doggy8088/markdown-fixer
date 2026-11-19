@@ -5,7 +5,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 
-const VERSION = '1.3.0';
+const VERSION = '1.4.0';
 
 const RULES = [
   // Encoding and whitespace
@@ -38,7 +38,7 @@ const RULES = [
   { id: 'MDX030', name: 'list-marker-space', category: 'list', severity: 'warning', fixable: true, summary: 'Add a space between a list marker and its content.' },
   { id: 'MDX031', name: 'list-marker-style', category: 'list', severity: 'warning', fixable: false, summary: 'Use one bullet marker per list; a different marker starts a new list, so this is reported, not fixed.' },
   { id: 'MDX032', name: 'list-blank-lines', category: 'list', severity: 'warning', fixable: false, summary: 'Separate lists from surrounding paragraphs with blank lines.' },
-  { id: 'MDX033', name: 'heading-list-blank-lines', category: 'list', severity: 'warning', fixable: true, summary: 'Separate top-level ATX headings from following lists with a blank line.' },
+  { id: 'MDX033', name: 'heading-list-blank-lines', category: 'list', severity: 'warning', fixable: true, summary: 'Separate adjacent top-level ATX headings and lists with a blank line.' },
   { id: 'MDX035', name: 'empty-list-item', category: 'list', severity: 'warning', fixable: false, summary: 'Remove empty list items or give them content.' },
 
   // Emphasis
@@ -1981,14 +1981,57 @@ function computeBlankLineFixes(lines, info, scan, isEnabled) {
   }
 
   if (isEnabled('MDX033')) {
-    for (let i = 0; i + 1 < lines.length; i++) {
-      const heading = lines[i];
-      const next = lines[i + 1];
-      if (isProtectedLine(info[i]) || isProtectedLine(info[i + 1])) continue;
-      if (!isTopLevelLine(heading) || !isAtxHeading(heading)) continue;
-      if (!isTopLevelLine(next) || !isListLine(next) || isThematicBreak(next)) continue;
-      after.add(i);
-      issues.push(makeProblem('MDX033', i + 1, 1, 'Heading is directly attached to the following list. Add a blank line after it.'));
+    let item = null;
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i];
+      const lineInfo = info[i];
+      if (lineInfo.fence || (isProtectedLine(lineInfo) && !lineInfo.indentedCode)) {
+        item = null;
+        continue;
+      }
+      if (lineInfo.blank) continue;
+
+      const indent = line.match(/^[ \t]*/)[0];
+      if (indent.length > 0) {
+        // The scanner can mark an ordinary continuation as indented code
+        // because it counts from column zero, rather than the item margin.
+        const width = countIndent(indent);
+        const afterBlank = i > 0 && info[i - 1].blank;
+        if (!item || width < item.indent ||
+            (lineInfo.indentedCode && afterBlank && width >= item.indent + 4)) item = null;
+        continue;
+      }
+
+      const previousItem = item;
+      item = null;
+      if (isAtxHeading(line)) {
+        if (previousItem && !info[i - 1].blank) {
+          before.add(i);
+          issues.push(makeProblem('MDX033', i + 1, 1, 'Heading is directly attached to the preceding list. Add a blank line before it.'));
+        }
+        const next = lines[i + 1];
+        if (next !== undefined && !isProtectedLine(info[i + 1]) && isTopLevelLine(next) &&
+            isListLine(next) && !isThematicBreak(next)) {
+          after.add(i);
+          issues.push(makeProblem('MDX033', i + 1, 1, 'Heading is directly attached to the following list. Add a blank line after it.'));
+        }
+        continue;
+      }
+
+      const match = line.match(/^([-*+]|\d{1,9}[.)])([ \t]+)\S/);
+      if (!match || isThematicBreak(line)) continue;
+      const marker = match[1];
+      const kind = marker.at(-1);
+      const contentIndent = countIndent(marker + match[2]);
+      if (contentIndent - marker.length > 4) continue;
+      // An ordered marker other than 1 cannot interrupt a paragraph. Keep
+      // such a marker only after a known boundary or in the same list.
+      const prev = lines[i - 1];
+      if (marker.length === 1 || Number(marker.slice(0, -1)) === 1 || previousItem?.kind === kind ||
+          i === 0 || info[i - 1].blank ||
+          (!isProtectedLine(info[i - 1]) && isTopLevelLine(prev) && (isAtxHeading(prev) || isThematicBreak(prev)))) {
+        item = { indent: contentIndent, kind };
+      }
     }
   }
 
@@ -2549,7 +2592,7 @@ function printHelp() {
     '  --strict            Make info-level findings fail the run too.',
     '  --rule <ids>        Only enable these rules (comma-separated, repeatable).',
     '  --ignore-rule <ids> Disable these rules (comma-separated, repeatable).',
-    '  --heading-list-blank-lines Enable MDX033 for headings followed by lists.',
+    '  --heading-list-blank-lines Enable MDX033 for adjacent headings and lists.',
     '  --max-line-length N Enable MDX090 with a line-length limit.',
     '  --max-quote-depth N Limit blockquote nesting depth (default 32, 0 = no limit).',
     '  --on-limit <mode>   When a limit is exceeded: error (MDX086, default) or ignore.',

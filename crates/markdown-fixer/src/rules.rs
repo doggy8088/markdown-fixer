@@ -197,7 +197,7 @@ pub(crate) static RULES: &[Rule] = &[
         category: "list",
         severity: Severity::Warning,
         fixable: true,
-        summary: "Separate top-level ATX headings from following lists with a blank line.",
+        summary: "Separate adjacent top-level ATX headings and lists with a blank line.",
     },
     Rule {
         id: "MDX035",

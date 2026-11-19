@@ -14,7 +14,7 @@
     {
       "path": "corpus",
       "copyDir": "fixtures/corpus",
-      "fingerprint": "dc67a838d41cd19d"
+      "fingerprint": "c9a5bad793652556"
     }
   ],
   "expected": {
@@ -303,6 +303,10 @@
         "fnv": "2231e88694ab7771"
       },
       {
+        "path": "corpus/regressions/oracle-mdx033-list-before-heading.md",
+        "fnv": "094999efb44fa866"
+      },
+      {
         "path": "corpus/regressions/oracle-mdx042-multiple-transforms.md",
         "fnv": "21cd6be221d8c1b6"
       },
@@ -508,11 +512,11 @@
       },
       {
         "path": "corpus/rules/MDX033/negative.md",
-        "fnv": "116f91bf0597a115"
+        "fnv": "52fad7ad95c5dbdf"
       },
       {
         "path": "corpus/rules/MDX033/trigger.md",
-        "fnv": "e5b9cfa0fedd9981"
+        "fnv": "2814fc2db986e81e"
       },
       {
         "path": "corpus/rules/MDX035/negative.md",

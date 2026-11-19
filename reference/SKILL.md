@@ -25,7 +25,7 @@ node .agents/skills/markdown-autocorrect/scripts/markdown-fixer.mjs --check --ru
 # 忽略某條規則
 node .agents/skills/markdown-autocorrect/scripts/markdown-fixer.mjs --check --ignore-rule MDX032 docs/
 
-# 標題後緊接清單時補空行（MDX033，預設停用）
+# 標題與清單相鄰時補空行（MDX033，預設停用）
 node .agents/skills/markdown-autocorrect/scripts/markdown-fixer.mjs --write --heading-list-blank-lines notes.md
 
 # CI 用的 JSON

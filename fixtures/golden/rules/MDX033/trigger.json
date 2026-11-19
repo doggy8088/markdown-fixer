@@ -1,13 +1,13 @@
 {
   "source": "rules/MDX033/trigger.md",
-  "referenceVersion": "1.3.0",
+  "referenceVersion": "1.4.0",
   "cases": [
     {
       "name": "default",
       "options": {},
       "diagnose": [],
       "fix": {
-        "text": "# 使用說明\n1. 複製內容\n2. 貼上內容\n",
+        "text": "# 使用說明\n1. 複製內容\n2. 貼上內容\n\n## 多行清單\n\n10) 外層\n    - 內層\n      - 子項目\n        子項目續行\n## 清單後的標題\n",
         "changed": false,
         "refused": false,
         "reason": ""
@@ -22,7 +22,7 @@
       },
       "diagnose": [],
       "fix": {
-        "text": "# 使用說明\n1. 複製內容\n2. 貼上內容\n",
+        "text": "# 使用說明\n1. 複製內容\n2. 貼上內容\n\n## 多行清單\n\n10) 外層\n    - 內層\n      - 子項目\n        子項目續行\n## 清單後的標題\n",
         "changed": false,
         "refused": false,
         "reason": ""
@@ -35,7 +35,7 @@
       },
       "diagnose": [],
       "fix": {
-        "text": "# 使用說明\n1. 複製內容\n2. 貼上內容\n",
+        "text": "# 使用說明\n1. 複製內容\n2. 貼上內容\n\n## 多行清單\n\n10) 外層\n    - 內層\n      - 子項目\n        子項目續行\n## 清單後的標題\n",
         "changed": false,
         "refused": false,
         "reason": ""
@@ -51,7 +51,7 @@
       },
       "diagnose": [],
       "fix": {
-        "text": "# 使用說明\n1. 複製內容\n2. 貼上內容\n",
+        "text": "# 使用說明\n1. 複製內容\n2. 貼上內容\n\n## 多行清單\n\n10) 外層\n    - 內層\n      - 子項目\n        子項目續行\n## 清單後的標題\n",
         "changed": false,
         "refused": false,
         "reason": ""
@@ -77,10 +77,19 @@
           "line": 1,
           "column": 1,
           "message": "Heading is directly attached to the following list. Add a blank line after it."
+        },
+        {
+          "rule": "MDX033",
+          "name": "heading-list-blank-lines",
+          "severity": "warning",
+          "fixable": true,
+          "line": 11,
+          "column": 1,
+          "message": "Heading is directly attached to the preceding list. Add a blank line before it."
         }
       ],
       "fix": {
-        "text": "# 使用說明\n\n1. 複製內容\n2. 貼上內容\n",
+        "text": "# 使用說明\n\n1. 複製內容\n2. 貼上內容\n\n## 多行清單\n\n10) 外層\n    - 內層\n      - 子項目\n        子項目續行\n\n## 清單後的標題\n",
         "changed": true,
         "refused": false,
         "reason": ""
@@ -94,7 +103,7 @@
       },
       "diagnose": [],
       "fix": {
-        "text": "# 使用說明\n1. 複製內容\n2. 貼上內容\n",
+        "text": "# 使用說明\n1. 複製內容\n2. 貼上內容\n\n## 多行清單\n\n10) 外層\n    - 內層\n      - 子項目\n        子項目續行\n## 清單後的標題\n",
         "changed": false,
         "refused": false,
         "reason": ""

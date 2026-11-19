@@ -1,6 +1,6 @@
 {
   "source": "regressions/mdx052-quoted-fence-lazy.md",
-  "referenceVersion": "1.3.0",
+  "referenceVersion": "1.4.0",
   "cases": [
     {
       "name": "default",

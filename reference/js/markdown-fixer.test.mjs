@@ -45,7 +45,7 @@ function runCli(args, options = {}) {
 }
 
 test('rule catalog is well formed and unique', () => {
-  assert.equal(VERSION, '1.3.0');
+  assert.equal(VERSION, '1.4.0');
   const ids = RULES.map((rule) => rule.id);
   assert.equal(new Set(ids).size, ids.length);
   for (const rule of RULES) {
@@ -511,7 +511,7 @@ test('parseArgs handles modes, rule lists, limits, and errors', () => {
 test('CLI reports version, rules, and check results', (t) => {
   const version = runCli(['--version']);
   assert.equal(version.status, 0);
-  assert.match(version.stdout, /markdown-fixer 1\.3\.0/);
+  assert.match(version.stdout, /markdown-fixer 1\.4\.0/);
 
   const list = runCli(['--list-rules']);
   assert.equal(list.status, 0);
@@ -995,4 +995,66 @@ test('CLI --heading-list-blank-lines adds MDX033 to the default rules', (t) => {
   const result = runCli(['--write', '--heading-list-blank-lines', file]);
   assert.equal(result.status, 0, result.stderr);
   assert.equal(fs.readFileSync(file, 'utf8'), '# Heading\n\n- Item\n');
+});
+
+test('MDX033 and MDX013 separate both headings from the pasted list and paragraph', () => {
+  const first = '# 本使用的來源貼上內容，轉換會在這台裝置上完成。';
+  const list = [
+    '1. 使用 `⌘+C` 複製富文本內容',
+    '2. 在這個頁面使用 `⌘+V` 貼上',
+    '3. 編輯、預覽，然後複製 Markdown 結果',
+    '4. 按下 `Escape` 可以重設狀態',
+    '5. 使用 `Option+1` 與 `Option+2` 切換分頁'
+  ].join('\n');
+  const heading = '# Header 2';
+  const body = 'Content 1\n';
+  const input = [first, list, heading, body].join('\n');
+  const expected = [first, list, heading, body].join('\n\n');
+  const enabled = { headingListBlankLines: true };
+
+  assert.equal(fixed(input), [first, list, heading + '\n', body].join('\n'));
+  assert.equal(fixed(input, enabled), expected);
+  assert.equal(fixed(expected, enabled), expected);
+  assert.equal(fixed(input, { rules: ['MDX033'] }), [first, list, heading + '\n' + body].join('\n\n'));
+  assert.deepEqual(diagnose(input, { rules: ['MDX013', 'MDX033'] }).map(
+    ({ rule, line, column, message }) => [rule, line, column, message]
+  ), [
+    ['MDX033', 1, 1, 'Heading is directly attached to the following list. Add a blank line after it.'],
+    ['MDX013', 7, 1, 'Heading is directly attached to the following paragraph. Add a blank line after it.'],
+    ['MDX033', 7, 1, 'Heading is directly attached to the preceding list. Add a blank line before it.']
+  ]);
+});
+
+test('MDX033 recognizes list tails with indented continuation text and nested items', () => {
+  const options = { rules: ['MDX033'] };
+  assert.equal(
+    fixed('- Before\n# Heading\n- After\n', options),
+    '- Before\n\n# Heading\n\n- After\n'
+  );
+  for (const tail of [
+    '- Item',
+    '10) Item\n    Continued',
+    '-\tItem\n\tContinued',
+    '- Item\n\n  Another paragraph',
+    '- Item\n  - Nested\n    Continued',
+    '- Item\n  - Nested\n    - Deeper\n      Continued'
+  ]) {
+    assert.equal(fixed(`${tail}\n# Heading\n`, options), `${tail}\n\n# Heading\n`, tail);
+  }
+
+  for (const input of [
+    '- Item\n\n# Heading\n',
+    '- Item\n  # Nested heading\n',
+    '- Item\n\n      Indented code\n# Heading\n',
+    '- Item\nUnindented continuation\n# Heading\n',
+    '- Item\n  - Nested\n * * *\n# Heading\n',
+    '- Item\n-\n# Heading\n',
+    '> - Quoted item\n# Heading\n',
+    'Paragraph\n2. Still a paragraph\n3. Also a paragraph\n# Heading\n',
+    '- Item\n  ```text\n  - Protected\n  ```\n# Heading\n',
+    '```md\n- Item\n# Heading\n```\n'
+  ]) {
+    assert.deepEqual(diagnose(input, options), [], input);
+    assert.equal(fixed(input, options), input);
+  }
 });

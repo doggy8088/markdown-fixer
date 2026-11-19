@@ -9,9 +9,9 @@ use crate::jsregex::re;
 use crate::jsstr::{self, JsString, is_trim_empty};
 use crate::rules::{Enabled, Overrides, make_problem};
 use crate::scan::{
-    LineInfo, Scan, is_atx_heading, is_blank, is_list_line, is_paragraph_like, is_protected_block,
-    is_protected_line, is_thematic_break, is_top_level_line, parse_quote_prefix,
-    scan_document_with,
+    LineInfo, Scan, count_indent, is_atx_heading, is_blank, is_list_line, is_paragraph_like,
+    is_protected_block, is_protected_line, is_thematic_break, is_top_level_line, leading_space_tab,
+    parse_quote_prefix, scan_document_with,
 };
 use crate::table::find_tables;
 
@@ -78,26 +78,91 @@ pub(crate) fn compute_blank_line_fixes(
     }
 
     if enabled.is("MDX033") {
-        for (i, pair) in lines.windows(2).enumerate() {
-            let heading = &pair[0];
-            let next = &pair[1];
-            if is_protected_line(&info[i]) || is_protected_line(&info[i + 1]) {
+        let mut item: Option<(usize, u16)> = None;
+        for (i, (line, line_info)) in lines.iter().zip(info).enumerate() {
+            if line_info.fence || (is_protected_line(line_info) && !line_info.indented_code) {
+                item = None;
                 continue;
             }
-            if !is_top_level_line(heading) || !is_atx_heading(heading) {
+            if line_info.blank {
                 continue;
             }
-            if !is_top_level_line(next) || !is_list_line(next) || is_thematic_break(next) {
+
+            let indent = leading_space_tab(line);
+            if !indent.is_empty() {
+                // 掃描器從行首算縮排，可能把一般的清單續行當成縮排程式碼。
+                let width = count_indent(indent);
+                let after_blank = i > 0 && info[i - 1].blank;
+                if !item.is_some_and(|(margin, _)| {
+                    width >= margin
+                        && !(line_info.indented_code && after_blank && width >= margin + 4)
+                }) {
+                    item = None;
+                }
                 continue;
             }
-            fixes.after.insert(i);
-            fixes.issues.push(make_problem(
-                "MDX033",
-                i + 1,
-                1,
-                "Heading is directly attached to the following list. Add a blank line after it.",
-                Overrides::NONE,
-            ));
+
+            let previous_item = item.take();
+            if is_atx_heading(line) {
+                if previous_item.is_some() && i > 0 && !info[i - 1].blank {
+                    fixes.before.insert(i);
+                    fixes.issues.push(make_problem(
+                        "MDX033",
+                        i + 1,
+                        1,
+                        "Heading is directly attached to the preceding list. Add a blank line before it.",
+                        Overrides::NONE,
+                    ));
+                }
+                if i + 1 < lines.len()
+                    && !is_protected_line(&info[i + 1])
+                    && is_top_level_line(&lines[i + 1])
+                    && is_list_line(&lines[i + 1])
+                    && !is_thematic_break(&lines[i + 1])
+                {
+                    fixes.after.insert(i);
+                    fixes.issues.push(make_problem(
+                        "MDX033",
+                        i + 1,
+                        1,
+                        "Heading is directly attached to the following list. Add a blank line after it.",
+                        Overrides::NONE,
+                    ));
+                }
+                continue;
+            }
+
+            let Some(marker) = re!(r"^([-*+]|\d{1,9}[.)])([ \t]+)\S").exec(line) else {
+                continue;
+            };
+            if is_thematic_break(line) {
+                continue;
+            }
+            let Some((&kind, number)) = marker.str(line, 1).split_last() else {
+                continue;
+            };
+            let Some((_, padding_end)) = marker.get(2) else {
+                continue;
+            };
+            let content_indent = count_indent(&line[..padding_end]);
+            if content_indent - (number.len() + 1) > 4 {
+                continue;
+            }
+            // 非 1 的有序標記無法中斷段落，需有明確的區塊邊界或同類清單。
+            let starts_at_one = number.split_last().is_some_and(|(&last, rest)| {
+                last == u16::from(b'1') && rest.iter().all(|&digit| digit == u16::from(b'0'))
+            });
+            if number.is_empty()
+                || starts_at_one
+                || previous_item.is_some_and(|(_, previous_kind)| previous_kind == kind)
+                || i == 0
+                || info[i - 1].blank
+                || (!is_protected_line(&info[i - 1])
+                    && is_top_level_line(&lines[i - 1])
+                    && (is_atx_heading(&lines[i - 1]) || is_thematic_break(&lines[i - 1])))
+            {
+                item = Some((content_indent, kind));
+            }
         }
     }
 

@@ -42,7 +42,7 @@
 | MDX030 | `list-marker-space` | list | warning | 是 | 清單標記與內容之間缺空格 |
 | MDX031 | `list-marker-style` | list | warning | 否 | 同一層清單的 bullet 不一致（只報告） |
 | MDX032 | `list-blank-lines` | list | warning | 否 | 清單與相鄰段落之間缺空行 |
-| MDX033 | `heading-list-blank-lines` | list | warning | 是 | 頂層 ATX 標題後緊接清單（預設停用） |
+| MDX033 | `heading-list-blank-lines` | list | warning | 是 | 頂層 ATX 標題與相鄰清單之間缺空行（預設停用） |
 | MDX035 | `empty-list-item` | list | warning | 否 | 空清單項目 |
 | MDX040 | `emphasis-inner-space` | emphasis | warning | 是 | 強調符號內側多餘空白 |
 | MDX041 | `unmatched-emphasis` | emphasis | warning | 否 | 同一行 `**`、`__`、`~~` 數量為奇數 |
@@ -431,7 +431,9 @@ after
 - 自動修正：是
 - 預設：停用
 
-無縮排的 ATX 標題後緊接無縮排的有序或無序清單時，在兩者之間補一個空行。清單首項須有內容。已有空行、Setext 標題、引言、巢狀清單、受保護區塊與分隔線都略過。
+無縮排的 ATX 標題與無縮排的有序或無序清單相鄰時，在兩者之間補一個空行。清單在標題前時，結尾可以是有內容的外層項目，也可以是屬於該項目的縮排續行或巢狀子項目。
+
+已有空行、Setext 標題、縮排標題、引言、受保護區塊與分隔線都略過。無縮排的延續文字、空項目和界線不明的清單不會觸發清單後方的修正。
 
 用 `--heading-list-blank-lines` 加開這條規則，或用 `--rule MDX033` 只執行這條規則。
 
@@ -894,7 +896,7 @@ Blockquote nesting depth 33 exceeds the limit of 32. Reduce the nesting, raise -
 | MDX030 | MD030 |
 | MDX031 | MD004（部分，只有 bullet） |
 | MDX032 | MD032 |
-| MDX033 | MD022、MD032（只處理標題後接清單） |
+| MDX033 | MD022、MD032（只處理標題與清單的交界） |
 | MDX040 | MD037 |
 | MDX050 | MD040 |
 | MDX052 | MD031 |

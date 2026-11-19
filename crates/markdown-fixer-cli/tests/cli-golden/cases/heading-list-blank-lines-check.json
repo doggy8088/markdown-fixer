@@ -11,17 +11,17 @@
   "setup": [
     {
       "path": "list.md",
-      "text": "# 標題。\n1. 內容\n"
+      "text": "# 標題。\n1. 內容\n# 後續\n段落\n"
     }
   ],
   "expected": {
     "status": 1,
-    "stdout": "{\n  \"tool\": \"markdown-fixer\",\n  \"version\": \"<VERSION>\",\n  \"mode\": \"check\",\n  \"files\": [\n    {\n      \"path\": \"list.md\",\n      \"changed\": false,\n      \"wouldChange\": true,\n      \"refused\": false,\n      \"fixed\": 0,\n      \"wouldFix\": 1,\n      \"problems\": [\n        {\n          \"rule\": \"MDX017\",\n          \"name\": \"heading-trailing-punctuation\",\n          \"severity\": \"info\",\n          \"fixable\": false,\n          \"line\": 1,\n          \"column\": 1,\n          \"message\": \"Heading ends with sentence punctuation. Headings usually read better without a trailing period, colon, or similar mark.\"\n        },\n        {\n          \"rule\": \"MDX033\",\n          \"name\": \"heading-list-blank-lines\",\n          \"severity\": \"warning\",\n          \"fixable\": true,\n          \"line\": 1,\n          \"column\": 1,\n          \"message\": \"Heading is directly attached to the following list. Add a blank line after it.\"\n        }\n      ]\n    }\n  ],\n  \"summary\": {\n    \"files\": 1,\n    \"changed\": 0,\n    \"wouldChange\": 1,\n    \"fixed\": 0,\n    \"refused\": 0,\n    \"problems\": {\n      \"total\": 2,\n      \"errors\": 0,\n      \"warnings\": 1,\n      \"info\": 1,\n      \"fixable\": 1\n    }\n  }\n}\n",
+    "stdout": "{\n  \"tool\": \"markdown-fixer\",\n  \"version\": \"<VERSION>\",\n  \"mode\": \"check\",\n  \"files\": [\n    {\n      \"path\": \"list.md\",\n      \"changed\": false,\n      \"wouldChange\": true,\n      \"refused\": false,\n      \"fixed\": 0,\n      \"wouldFix\": 3,\n      \"problems\": [\n        {\n          \"rule\": \"MDX017\",\n          \"name\": \"heading-trailing-punctuation\",\n          \"severity\": \"info\",\n          \"fixable\": false,\n          \"line\": 1,\n          \"column\": 1,\n          \"message\": \"Heading ends with sentence punctuation. Headings usually read better without a trailing period, colon, or similar mark.\"\n        },\n        {\n          \"rule\": \"MDX033\",\n          \"name\": \"heading-list-blank-lines\",\n          \"severity\": \"warning\",\n          \"fixable\": true,\n          \"line\": 1,\n          \"column\": 1,\n          \"message\": \"Heading is directly attached to the following list. Add a blank line after it.\"\n        },\n        {\n          \"rule\": \"MDX013\",\n          \"name\": \"heading-blank-lines\",\n          \"severity\": \"warning\",\n          \"fixable\": true,\n          \"line\": 3,\n          \"column\": 1,\n          \"message\": \"Heading is directly attached to the following paragraph. Add a blank line after it.\"\n        },\n        {\n          \"rule\": \"MDX019\",\n          \"name\": \"multiple-h1\",\n          \"severity\": \"info\",\n          \"fixable\": false,\n          \"line\": 3,\n          \"column\": 1,\n          \"message\": \"Document has more than one H1. Use H2 for subsections and keep one H1 for the page title.\"\n        },\n        {\n          \"rule\": \"MDX033\",\n          \"name\": \"heading-list-blank-lines\",\n          \"severity\": \"warning\",\n          \"fixable\": true,\n          \"line\": 3,\n          \"column\": 1,\n          \"message\": \"Heading is directly attached to the preceding list. Add a blank line before it.\"\n        }\n      ]\n    }\n  ],\n  \"summary\": {\n    \"files\": 1,\n    \"changed\": 0,\n    \"wouldChange\": 1,\n    \"fixed\": 0,\n    \"refused\": 0,\n    \"problems\": {\n      \"total\": 5,\n      \"errors\": 0,\n      \"warnings\": 3,\n      \"info\": 2,\n      \"fixable\": 3\n    }\n  }\n}\n",
     "stderr": "",
     "files": [
       {
         "path": "list.md",
-        "text": "# 標題。\n1. 內容\n"
+        "text": "# 標題。\n1. 內容\n# 後續\n段落\n"
       }
     ]
   }

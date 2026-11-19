@@ -173,7 +173,7 @@
 
 ```rust
 pub const VERSION: &str;            // crate 版本
-pub const REFERENCE_VERSION: &str;  // 對齊的 oracle 版本，目前 "1.3.0"
+pub const REFERENCE_VERSION: &str;  // 對齊的 oracle 版本，目前 "1.4.0"
 
 pub enum Severity { Error, Warning, Info }
 pub struct Rule { id, name, category, severity, fixable, summary }

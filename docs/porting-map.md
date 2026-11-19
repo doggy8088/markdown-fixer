@@ -1,6 +1,6 @@
 # JS 與 Rust 對照表（porting map）
 
-這份文件列出 oracle（`reference/js/markdown-fixer.mjs` v1.3.0）裡每個函式庫函式對應的 Rust 函式、JS 行號，以及移植時處理過的語意陷阱。要改某個行為前，先在這裡找到 JS 函式與行號，讀 JS 原始碼，再改 Rust。CLI 相關函式（`expandPaths`、`parseArgs`、`main` 等）見 [cli.md](cli.md)。
+這份文件列出 oracle（`reference/js/markdown-fixer.mjs` v1.4.0）裡每個函式庫函式對應的 Rust 函式、JS 行號，以及移植時處理過的語意陷阱。要改某個行為前，先在這裡找到 JS 函式與行號，讀 JS 原始碼，再改 Rust。CLI 相關函式（`expandPaths`、`parseArgs`、`main` 等）見 [cli.md](cli.md)。
 
 模組路徑都相對於 `crates/markdown-fixer/src/`。
 
@@ -46,7 +46,7 @@ oracle 用了大量 lookbehind、lookahead、惰性量詞與回溯語意，而�
 | `RULE_BY_ID` | 80 | `rules::find`、`lib::rule` | |
 | `makeProblem` | 106–120 | `rules::make_problem`、`rules::Overrides` | `line`、`column` 小於 1 時夾成 1；`Overrides::NONE`、`NOT_FIXABLE`、`severity(..)` 對應 JS 的 `{}`、`{ fixable: false }`、`{ severity }` |
 | `createEnabled` | 134–146 | `rules::Enabled::new`、`Enabled::is` | `rules: Some(vec![])` 停用全部規則（JS 空陣列是 truthy）；MDX033 須明確啟用，MDX090 需要 `max_line_length > 0` |
-| `parseArgs` 的規則檢查 | 2617–2626 | `rules::validate`、`Options::validate` | 先檢查 `rules` 再檢查 `ignore_rules`，回報第一個未知 ID |
+| `parseArgs` 的規則檢查 | 2660–2669 | `rules::validate`、`Options::validate` | 先檢查 `rules` 再檢查 `ignore_rules`，回報第一個未知 ID |
 
 ## 掃描（scan.rs）
 
@@ -121,7 +121,7 @@ oracle 用了大量 lookbehind、lookahead、惰性量詞與回溯語意，而�
 | `findTables` | 1315–1330 | `table::find_tables`、`table::Table` | |
 | `fixTableDelimiter` | 1332–1360 | `table::fix_table_delimiter` | 欄號只在第一次修改前計算，等於原始各段長度的累加 |
 | `normalizeLabel` | 1362–1364 | `table::normalize_label` | |
-| `applyTableDelimiterFixes` | 2262–2273 | `table::apply_table_delimiter_fixes` | |
+| `applyTableDelimiterFixes` | 2305–2316 | `table::apply_table_delimiter_fixes` | |
 
 ## CJK 強調（cjk_emphasis.rs）
 
@@ -149,19 +149,19 @@ oracle 用了大量 lookbehind、lookahead、惰性量詞與回溯語意，而�
 
 | JS | JS 行號 | Rust | 備註 |
 | --- | --- | --- | --- |
-| `computeBlankLineFixes` | 1959–2048 | `blank_lines::compute_blank_line_fixes`、`BlankLineFixes` | MDX013、MDX033、MDX052、MDX062、MDX082；`issues` 給 `diagnose` 用。v1.1.0：引言裡的 fence 以 `fill` 記錄要插入的 `>` 行 |
+| `computeBlankLineFixes` | 1959–2091 | `blank_lines::compute_blank_line_fixes`、`BlankLineFixes` | MDX013、MDX033、MDX052、MDX062、MDX082；`issues` 給 `diagnose` 用。MDX033 以逐行掃描追蹤外層清單項目的內容縮排。v1.1.0：引言裡的 fence 以 `fill` 記錄要插入的 `>` 行 |
 | `isQuoteBlankLine` | 1954–1957 | `blank_lines::is_quote_blank_line` | v1.1.0 |
-| `applyBlankLineFixes` | 2050–2070 | `blank_lines::apply_blank_line_fixes` | |
-| `applyTrailingWhitespace` | 2086–2102 | `blank_lines::apply_trailing_whitespace` | 剛好兩個空格的 hard break 保留 |
-| `applyBlankLineNormalization` | 2185–2229 | `blank_lines::apply_blank_line_normalization` | `replace(/\n*$/, '\n')` 手寫為「去掉結尾連續 `\n` 再補一個」 |
+| `applyBlankLineFixes` | 2093–2113 | `blank_lines::apply_blank_line_fixes` | |
+| `applyTrailingWhitespace` | 2129–2145 | `blank_lines::apply_trailing_whitespace` | 剛好兩個空格的 hard break 保留 |
+| `applyBlankLineNormalization` | 2228–2272 | `blank_lines::apply_blank_line_normalization` | `replace(/\n*$/, '\n')` 手寫為「去掉結尾連續 `\n` 再補一個」 |
 
 ## 修正主流程（fix.rs）
 
 | JS | JS 行號 | Rust | 備註 |
 | --- | --- | --- | --- |
-| `BLOCKING_RULES` | 2390 | `fix::blocking_reason` | v1.1.0 加入 MDX086 |
-| `FRONTMATTER_TRAP` | 2392 | `fix::FRONTMATTER_TRAP` | |
-| `fixDocument` | 2394–2452 | `fix::fix_document`、`lib::fix_document` | 最多 6 輪；blocking 規則（MDX081、MDX083、MDX053、MDX085、MDX086）不受 `ignore_rules` 影響。v1.1.0 不再呼叫 `fixListStyle`（MDX031 只回報） |
+| `BLOCKING_RULES` | 2433 | `fix::blocking_reason` | v1.1.0 加入 MDX086 |
+| `FRONTMATTER_TRAP` | 2435 | `fix::FRONTMATTER_TRAP` | |
+| `fixDocument` | 2437–2495 | `fix::fix_document`、`lib::fix_document` | 最多 6 輪；blocking 規則（MDX081、MDX083、MDX053、MDX085、MDX086）不受 `ignore_rules` 影響。v1.1.0 不再呼叫 `fixListStyle`（MDX031 只回報） |
 | blocking 判斷 | 2338、2349 | `fix::blocking_reason` | |
 
 ## 結構診斷與 diagnose（diag 負責）
@@ -174,14 +174,14 @@ oracle 用了大量 lookbehind、lookahead、惰性量詞與回溯語意，而�
 | `computeReferenceStructure` | 1552–1617 | `structure::compute_reference_structure` | MDX074、MDX071、MDX075、MDX072、MDX073。定義行用 `scan::match_definition`；MDX071、MDX072、MDX073 改用線性比對器；label 正規化用 `table::normalize_label`，以 `JsString` 為 `HashSet` 鍵 |
 | `computeSetextAmbiguity` | 1619–1642 | `structure::compute_setext_ambiguity` | MDX080。regex 原樣移植（都是錨定的線性樣式） |
 | `computeFullwidthSyntax` | 1644–1659 | `structure::compute_fullwidth_syntax` | MDX084。前兩個錨定樣式原樣移植；連結樣式改用線性的 `has_fullwidth_link` |
-| `computeTrailingWhitespace` | 2072–2084 | `structure::compute_trailing_whitespace` | MDX004。`/[ \t]+$/` 等於行尾連續空格與 tab，手寫計數 |
-| `computeNbspInUrls` | 2104–2119 | `structure::compute_nbsp_in_urls` | MDX008。遮罩選項 `{ maskBareUrls: false, maskLinkDestinations: false }`，URL 樣式用 `mask::url_re` |
-| `computeZeroWidth` | 2121–2139 | `structure::compute_zero_width` | MDX009。每行只回報第一個未保護區段中的 U+200B、U+2060、U+FEFF |
-| `computeBlankLineRuns` | 2141–2183 | `structure::compute_blank_line_runs` | MDX006、MDX005、MDX003。在第一次 scan（行內修正前）上執行。v1.1.0：空行後那一行以 U+FEFF 開頭時 MDX006 以 `fixable: false` 回報 |
-| `computeLineLength` | 2231–2247 | `structure::compute_line_length` | MDX090。長度用 `jsstr::code_point_len`；表格行略過 |
-| `dedupeProblems` | 2249–2260 | `diagnose::dedupe_problems` | 以 `rule:line:column:message` 去重；`sort_by` 是穩定排序，規則 ID 為 ASCII，`localeCompare` 等同位元組比較 |
-| `pushAll` | 2277–2279 | `Vec::extend` | v1.1.0 取代 `issues.push(...spread)`，避免問題很多時 `RangeError` |
-| `diagnose` | 2281–2386 | `diagnose::diagnose` | 問題串接順序與 JS 相同。MDX007、MDX070、MDX050、MDX041 迴圈寫在函式內；MDX041 的 lookbehind 樣式原樣交給 `jsregex`，只在單一區段內比對，與 JS 相同 |
+| `computeTrailingWhitespace` | 2115–2127 | `structure::compute_trailing_whitespace` | MDX004。`/[ \t]+$/` 等於行尾連續空格與 tab，手寫計數 |
+| `computeNbspInUrls` | 2147–2162 | `structure::compute_nbsp_in_urls` | MDX008。遮罩選項 `{ maskBareUrls: false, maskLinkDestinations: false }`，URL 樣式用 `mask::url_re` |
+| `computeZeroWidth` | 2164–2182 | `structure::compute_zero_width` | MDX009。每行只回報第一個未保護區段中的 U+200B、U+2060、U+FEFF |
+| `computeBlankLineRuns` | 2184–2226 | `structure::compute_blank_line_runs` | MDX006、MDX005、MDX003。在第一次 scan（行內修正前）上執行。v1.1.0：空行後那一行以 U+FEFF 開頭時 MDX006 以 `fixable: false` 回報 |
+| `computeLineLength` | 2274–2290 | `structure::compute_line_length` | MDX090。長度用 `jsstr::code_point_len`；表格行略過 |
+| `dedupeProblems` | 2292–2303 | `diagnose::dedupe_problems` | 以 `rule:line:column:message` 去重；`sort_by` 是穩定排序，規則 ID 為 ASCII，`localeCompare` 等同位元組比較 |
+| `pushAll` | 2320–2322 | `Vec::extend` | v1.1.0 取代 `issues.push(...spread)`，避免問題很多時 `RangeError` |
+| `diagnose` | 2324–2429 | `diagnose::diagnose` | 問題串接順序與 JS 相同。MDX007、MDX070、MDX050、MDX041 迴圈寫在函式內；MDX041 的 lookbehind 樣式原樣交給 `jsregex`，只在單一區段內比對，與 JS 相同 |
 
 ### diag 的線性比對器
 

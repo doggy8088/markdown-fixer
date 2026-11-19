@@ -91,14 +91,14 @@ pub(crate) fn normalize_for_analysis(text: &[u16]) -> JsString {
 /// JS `countIndent`：tab 對齊到 4 的倍數。
 pub(crate) fn count_indent(value: &[u16]) -> usize {
     let mut columns = 0;
-    // JS 以 code point 疊代；這裡只會傳入空白與 tab，與 code unit 疊代相同。
+    // JS 以 code point 疊代；傳入的縮排與清單標記都是 ASCII。
     for ch in char::decode_utf16(value.iter().copied()) {
         columns += if ch == Ok('\t') { 4 - (columns % 4) } else { 1 };
     }
     columns
 }
 
-fn leading_space_tab(line: &[u16]) -> &[u16] {
+pub(crate) fn leading_space_tab(line: &[u16]) -> &[u16] {
     let n = line.iter().take_while(|&&c| c == SPACE || c == TAB).count();
     &line[..n]
 }

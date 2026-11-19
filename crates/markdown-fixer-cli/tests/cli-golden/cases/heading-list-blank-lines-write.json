@@ -10,17 +10,17 @@
   "setup": [
     {
       "path": "list.md",
-      "text": "#標題。\n1. 內容"
+      "text": "#標題。\n1. 內容\n# 後續\n段落"
     }
   ],
   "expected": {
     "status": 0,
-    "stdout": "list.md\n  1:1        info    MDX017  Heading ends with sentence punctuation. Headings usually read better without a trailing period, colon, or similar mark.\n  Fixed 3 issue(s).\n\nFixed 3 issue(s) in 1 file(s).\n1 problem(s) remain: 0 fixable, 0 error(s), 0 warning(s), 1 info.\n",
+    "stdout": "list.md\n  1:1        info    MDX017  Heading ends with sentence punctuation. Headings usually read better without a trailing period, colon, or similar mark.\n  5:1        info    MDX019  Document has more than one H1. Use H2 for subsections and keep one H1 for the page title.\n  Fixed 5 issue(s).\n\nFixed 5 issue(s) in 1 file(s).\n2 problem(s) remain: 0 fixable, 0 error(s), 0 warning(s), 2 info.\n",
     "stderr": "",
     "files": [
       {
         "path": "list.md",
-        "text": "# 標題。\n\n1. 內容\n"
+        "text": "# 標題。\n\n1. 內容\n\n# 後續\n\n段落\n"
       }
     ]
   }

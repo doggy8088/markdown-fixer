@@ -1,5 +1,5 @@
 {
-  "referenceVersion": "1.3.0",
+  "referenceVersion": "1.4.0",
   "rules": [
     {
       "id": "MDX001",
@@ -191,7 +191,7 @@
       "category": "list",
       "severity": "warning",
       "fixable": true,
-      "summary": "Separate top-level ATX headings from following lists with a blank line."
+      "summary": "Separate adjacent top-level ATX headings and lists with a blank line."
     },
     {
       "id": "MDX035",

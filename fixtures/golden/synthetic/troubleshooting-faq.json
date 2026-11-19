@@ -1,6 +1,6 @@
 {
   "source": "synthetic/troubleshooting-faq.md",
-  "referenceVersion": "1.3.0",
+  "referenceVersion": "1.4.0",
   "cases": [
     {
       "name": "default",

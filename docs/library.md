@@ -36,7 +36,7 @@ MSRV 是 Rust 1.85（edition 2024）。
 | 項目 | 說明 |
 | --- | --- |
 | `VERSION` | crate 版本 |
-| `REFERENCE_VERSION` | 對齊的 oracle 版本，目前是 `"1.3.0"` |
+| `REFERENCE_VERSION` | 對齊的 oracle 版本，目前是 `"1.4.0"` |
 | `DEFAULT_MAX_QUOTE_DEPTH` | 引言巢狀深度上限的預設值 32 |
 | `rules()` | 完整規則目錄，順序與 oracle 相同 |
 | `rule(id)` | 依 ID 查規則，找不到回傳 `None` |

@@ -1,13 +1,23 @@
 {
   "source": "rules/MDX033/negative.md",
-  "referenceVersion": "1.3.0",
+  "referenceVersion": "1.4.0",
   "cases": [
     {
       "name": "default",
       "options": {},
-      "diagnose": [],
+      "diagnose": [
+        {
+          "rule": "MDX032",
+          "name": "list-blank-lines",
+          "severity": "warning",
+          "fixable": false,
+          "line": 10,
+          "column": 1,
+          "message": "List starts directly after a paragraph. Add a blank line before it so the list boundary is unambiguous."
+        }
+      ],
       "fix": {
-        "text": "# 使用說明\n\n1. 複製內容\n2. 貼上內容\n\n## 分隔線\n* * *\n",
+        "text": "# 使用說明\n\n1. 複製內容\n2. 貼上內容\n\n## 分隔線\n* * *\n\n一般段落\n2. 仍是段落\n## 段落後的標題\n",
         "changed": false,
         "refused": false,
         "reason": ""
@@ -20,9 +30,19 @@
           "MDX003"
         ]
       },
-      "diagnose": [],
+      "diagnose": [
+        {
+          "rule": "MDX032",
+          "name": "list-blank-lines",
+          "severity": "warning",
+          "fixable": false,
+          "line": 10,
+          "column": 1,
+          "message": "List starts directly after a paragraph. Add a blank line before it so the list boundary is unambiguous."
+        }
+      ],
       "fix": {
-        "text": "# 使用說明\n\n1. 複製內容\n2. 貼上內容\n\n## 分隔線\n* * *\n",
+        "text": "# 使用說明\n\n1. 複製內容\n2. 貼上內容\n\n## 分隔線\n* * *\n\n一般段落\n2. 仍是段落\n## 段落後的標題\n",
         "changed": false,
         "refused": false,
         "reason": ""
@@ -33,9 +53,19 @@
       "options": {
         "maxLineLength": 80
       },
-      "diagnose": [],
+      "diagnose": [
+        {
+          "rule": "MDX032",
+          "name": "list-blank-lines",
+          "severity": "warning",
+          "fixable": false,
+          "line": 10,
+          "column": 1,
+          "message": "List starts directly after a paragraph. Add a blank line before it so the list boundary is unambiguous."
+        }
+      ],
       "fix": {
-        "text": "# 使用說明\n\n1. 複製內容\n2. 貼上內容\n\n## 分隔線\n* * *\n",
+        "text": "# 使用說明\n\n1. 複製內容\n2. 貼上內容\n\n## 分隔線\n* * *\n\n一般段落\n2. 仍是段落\n## 段落後的標題\n",
         "changed": false,
         "refused": false,
         "reason": ""
@@ -49,9 +79,19 @@
           "MDX002"
         ]
       },
-      "diagnose": [],
+      "diagnose": [
+        {
+          "rule": "MDX032",
+          "name": "list-blank-lines",
+          "severity": "warning",
+          "fixable": false,
+          "line": 10,
+          "column": 1,
+          "message": "List starts directly after a paragraph. Add a blank line before it so the list boundary is unambiguous."
+        }
+      ],
       "fix": {
-        "text": "# 使用說明\n\n1. 複製內容\n2. 貼上內容\n\n## 分隔線\n* * *\n",
+        "text": "# 使用說明\n\n1. 複製內容\n2. 貼上內容\n\n## 分隔線\n* * *\n\n一般段落\n2. 仍是段落\n## 段落後的標題\n",
         "changed": false,
         "refused": false,
         "reason": ""
@@ -70,7 +110,7 @@
       },
       "diagnose": [],
       "fix": {
-        "text": "# 使用說明\n\n1. 複製內容\n2. 貼上內容\n\n## 分隔線\n* * *\n",
+        "text": "# 使用說明\n\n1. 複製內容\n2. 貼上內容\n\n## 分隔線\n* * *\n\n一般段落\n2. 仍是段落\n## 段落後的標題\n",
         "changed": false,
         "refused": false,
         "reason": ""
@@ -82,9 +122,19 @@
         "maxQuoteDepth": 3,
         "onLimit": "ignore"
       },
-      "diagnose": [],
+      "diagnose": [
+        {
+          "rule": "MDX032",
+          "name": "list-blank-lines",
+          "severity": "warning",
+          "fixable": false,
+          "line": 10,
+          "column": 1,
+          "message": "List starts directly after a paragraph. Add a blank line before it so the list boundary is unambiguous."
+        }
+      ],
       "fix": {
-        "text": "# 使用說明\n\n1. 複製內容\n2. 貼上內容\n\n## 分隔線\n* * *\n",
+        "text": "# 使用說明\n\n1. 複製內容\n2. 貼上內容\n\n## 分隔線\n* * *\n\n一般段落\n2. 仍是段落\n## 段落後的標題\n",
         "changed": false,
         "refused": false,
         "reason": ""

@@ -31,7 +31,7 @@ pub fn help_text() -> String {
         "  --strict            Make info-level findings fail the run too.",
         "  --rule <ids>        Only enable these rules (comma-separated, repeatable).",
         "  --ignore-rule <ids> Disable these rules (comma-separated, repeatable).",
-        "  --heading-list-blank-lines Enable MDX033 for headings followed by lists.",
+        "  --heading-list-blank-lines Enable MDX033 for adjacent headings and lists.",
         "  --max-line-length N Enable MDX090 with a line-length limit.",
         "  --max-quote-depth N Limit blockquote nesting depth (default 32, 0 = no limit).",
         "  --on-limit <mode>   When a limit is exceeded: error (MDX086, default) or ignore.",

@@ -278,12 +278,12 @@ EOF
     expect_calls pbcopy 0
     expect_clipboard_unchanged
 
-    reset_case "real binary: enabling MDX033 keeps other paste fixes" '#標題。\n1. 複製內容'
+    reset_case "real binary: enabling MDX033 keeps other paste fixes" '#標題。\n1. 複製內容\n# 後續\n段落'
     MARKDOWN_FIXER_BIN="$bin/real-fixer" MARKDOWN_FIX_PASTE_HEADING_LIST_BLANK_LINES=1 run_script
     expect_status 0
     expect_calls fixer 1
     expect_calls pbcopy 1
-    expect_clipboard '# 標題。\n\n1. 複製內容'
+    expect_clipboard '# 標題。\n\n1. 複製內容\n\n# 後續\n\n段落'
 
     reset_case "real binary: unclosed frontmatter is refused, clipboard kept" '---\ntitle: x\n#標題\n'
     MARKDOWN_FIXER_BIN="$bin/real-fixer" run_script

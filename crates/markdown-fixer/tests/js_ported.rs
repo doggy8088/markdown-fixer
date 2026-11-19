@@ -64,7 +64,7 @@ fn has(text: &str, rule: &str) -> bool {
 // 1. 'rule catalog is well formed and unique'
 #[test]
 fn rule_catalog_is_well_formed_and_unique() {
-    assert_eq!(markdown_fixer::REFERENCE_VERSION, "1.3.0");
+    assert_eq!(markdown_fixer::REFERENCE_VERSION, "1.4.0");
     let ids: Vec<&str> = rules().iter().map(|r| r.id).collect();
     let mut unique = ids.clone();
     unique.sort_unstable();
@@ -1084,4 +1084,41 @@ fn mdx033_is_opt_in_and_preserves_rendering() {
     assert_eq!(result.text, expected);
     assert!(result.skipped.is_empty());
     assert!(!fix_document(expected, &options).changed);
+}
+
+#[test]
+fn mdx033_and_mdx013_fix_the_full_clipboard_example_with_render_guard() {
+    let input =
+        include_str!("../../../fixtures/corpus/regressions/oracle-mdx033-list-before-heading.md");
+    let expected = concat!(
+        "# 本使用的來源貼上內容，轉換會在這台裝置上完成。\n\n",
+        "1. 使用 `⌘+C` 複製富文本內容\n",
+        "2. 在這個頁面使用 `⌘+V` 貼上\n",
+        "3. 編輯、預覽，然後複製 Markdown 結果\n",
+        "4. 按下 `Escape` 可以重設狀態\n",
+        "5. 使用 `Option+1` 與 `Option+2` 切換分頁\n\n",
+        "# Header 2\n\n",
+        "Content 1\n",
+    );
+    let options = Options {
+        heading_list_blank_lines: true,
+        ..Options::default()
+    };
+    let result = fix_document(input, &options);
+    assert_eq!(result.text, expected);
+    assert!(result.skipped.is_empty());
+    assert!(!fix_document(expected, &options).changed);
+}
+
+#[test]
+fn mdx033_fixes_only_list_boundaries_including_multiline_tails() {
+    let options = Options {
+        rules: Some(vec!["MDX033".into()]),
+        ..Options::default()
+    };
+    let input = "# Lists\n10) Item\n    - Nested\n      - Deeper\n        Continued\n## Heading\nParagraph\n";
+    let expected = "# Lists\n\n10) Item\n    - Nested\n      - Deeper\n        Continued\n\n## Heading\nParagraph\n";
+    let result = fix_document(input, &options);
+    assert_eq!(result.text, expected);
+    assert!(result.skipped.is_empty());
 }
