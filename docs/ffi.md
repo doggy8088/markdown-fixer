@@ -75,13 +75,14 @@ void mdfix_string_free(char *s);
 `options_json` 是 NUL 結尾的 JSON 字串，`NULL` 表示全部預設。鍵名與 JS 的 `options` 相同：
 
 ```json
-{"rules":["MDX010","MDX090"],"ignoreRules":["MDX003"],"maxLineLength":100,"maxQuoteDepth":32,"onLimit":"error","renderGuard":true}
+{"ignoreRules":["MDX003"],"headingListBlankLines":true,"maxLineLength":100,"maxQuoteDepth":32,"onLimit":"error","renderGuard":true}
 ```
 
 | 鍵 | 型別 | 意思 |
 | --- | --- | --- |
-| `rules` | 字串陣列或 `null` | 只啟用這些規則。`null` 或省略表示全部啟用；空陣列 `[]` 表示全部停用（與 JS 相同） |
+| `rules` | 字串陣列或 `null` | 只啟用這些規則。`null` 或省略時依各規則的預設值與個別選項決定；空陣列 `[]` 表示全部停用（與 JS 相同） |
 | `ignoreRules` | 字串陣列或 `null` | 停用這些規則 |
+| `headingListBlankLines` | 布林值或 `null` | 加開 MDX033。預設為 `false`，也可在 `rules` 明確選取 MDX033 |
 | `maxLineLength` | 非負整數或 `null` | MDX090 的行長上限；0、`null` 或省略表示停用 MDX090 |
 | `maxQuoteDepth` | 非負整數或 `null` | 引言巢狀深度上限；`null` 或省略表示預設 32，0 表示不限制 |
 | `onLimit` | `"error"`、`"ignore"` 或 `null` | 超過上限時的處理方式。`"error"`（預設）回報 MDX086 並拒絕修正；`"ignore"` 讓超過上限的行不修改、不診斷。大小寫有別 |

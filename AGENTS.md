@@ -17,7 +17,7 @@ oracle 的原始碼在 GitHub `doggy8088/skills` repo 的 `skills/markdown-autoc
 | `crates/markdown-fixer/` | 純函式庫，不做 I/O。`diagnose`、`fix_document`、`rules`、`detect` |
 | `crates/markdown-fixer-cli/` | CLI，執行檔名稱 `markdown-fixer`。參數解析照 oracle 手寫，不用 clap |
 | `crates/markdown-fixer-ffi/` | C ABI（`cdylib`／`staticlib`）與 `include/markdown_fixer.h` |
-| `reference/js/` | Oracle：`markdown-fixer.mjs` v1.1.0 與它的測試，從 `doggy8088/skills` 複製。**不要直接改**，改 skills repo 再複製 |
+| `reference/js/` | Oracle：`markdown-fixer.mjs` 與它的測試，從 `doggy8088/skills` 複製。**不要直接改**，改 skills repo 再複製 |
 | `reference/rules.md`、`reference/SKILL.md` | 原 skill 的規則說明與使用說明，同樣從 skills repo 複製 |
 | `fixtures/corpus/` | 接近真實的 Markdown 語料 |
 | `fixtures/golden/` | 由 oracle 產生的預期輸出。**不要手改**，用 `scripts/gen-golden.mjs` 重新產生 |

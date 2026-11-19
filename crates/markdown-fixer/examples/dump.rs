@@ -80,6 +80,10 @@ mod real {
         Ok(Options {
             rules: string_list(object.get("rules"), "rules")?,
             ignore_rules: string_list(object.get("ignoreRules"), "ignoreRules")?,
+            heading_list_blank_lines: object
+                .get("headingListBlankLines")
+                .and_then(Value::as_bool)
+                .unwrap_or(false),
             max_line_length,
             max_quote_depth,
             on_limit,

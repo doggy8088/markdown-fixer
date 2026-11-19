@@ -192,6 +192,14 @@ pub(crate) static RULES: &[Rule] = &[
         summary: "Separate lists from surrounding paragraphs with blank lines.",
     },
     Rule {
+        id: "MDX033",
+        name: "heading-list-blank-lines",
+        category: "list",
+        severity: Severity::Warning,
+        fixable: true,
+        summary: "Separate top-level ATX headings from following lists with a blank line.",
+    },
+    Rule {
         id: "MDX035",
         name: "empty-list-item",
         category: "list",
@@ -468,6 +476,7 @@ pub(crate) fn make_problem(
 pub(crate) struct Enabled {
     include: Option<HashSet<String>>,
     ignore: Option<HashSet<String>>,
+    heading_list_blank_lines: bool,
     max_line_length: usize,
     /// 資源上限（JS 掛在 `isEnabled.limits`），每次掃描都要用同一組。
     pub(crate) limits: Limits,
@@ -482,6 +491,7 @@ impl Enabled {
                 .ignore_rules
                 .as_ref()
                 .map(|v| v.iter().cloned().collect()),
+            heading_list_blank_lines: options.heading_list_blank_lines,
             max_line_length: options.max_line_length,
             limits: Limits::new(options),
         }
@@ -498,6 +508,9 @@ impl Enabled {
             if ignore.contains(rule_id) {
                 return false;
             }
+        }
+        if rule_id == "MDX033" && self.include.is_none() && !self.heading_list_blank_lines {
+            return false;
         }
         if rule_id == "MDX090" && self.max_line_length == 0 {
             return false;
@@ -527,8 +540,8 @@ mod tests {
 
     #[test]
     fn catalog_shape() {
-        assert_eq!(RULES.len(), 49);
-        assert_eq!(RULES.iter().filter(|r| r.fixable).count(), 19);
+        assert_eq!(RULES.len(), 50);
+        assert_eq!(RULES.iter().filter(|r| r.fixable).count(), 20);
         assert_eq!(RULES[0].id, "MDX001");
         assert_eq!(RULES[RULES.len() - 1].id, "MDX090");
     }

@@ -1,0 +1,163 @@
+{
+  "source": "regressions/oracle-mdx033-heading-list.md",
+  "referenceVersion": "1.3.0",
+  "cases": [
+    {
+      "name": "default",
+      "options": {},
+      "diagnose": [
+        {
+          "rule": "MDX017",
+          "name": "heading-trailing-punctuation",
+          "severity": "info",
+          "fixable": false,
+          "line": 1,
+          "column": 1,
+          "message": "Heading ends with sentence punctuation. Headings usually read better without a trailing period, colon, or similar mark."
+        }
+      ],
+      "fix": {
+        "text": "# 本使用的來源貼上內容，轉換會在這台裝置上完成。\n1. 使用 `⌘+C` 複製富文本內容\n2. 在這個頁面使用 `⌘+V` 貼上\n3. 編輯、預覽，然後複製 Markdown 結果\n4. 按下 `Escape` 可以重設狀態\n5. 使用 `Option+1` 與 `Option+2` 切換分頁\n\n## 無序清單\n- 內容\n\n## 已有空行\n\n+ 內容\n\n## 分隔線\n* * *\n\n> ## 引言\n> - 內容\n\n```markdown\n## 原始碼\n- 內容\n```\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "snippet",
+      "options": {
+        "ignoreRules": [
+          "MDX003"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX017",
+          "name": "heading-trailing-punctuation",
+          "severity": "info",
+          "fixable": false,
+          "line": 1,
+          "column": 1,
+          "message": "Heading ends with sentence punctuation. Headings usually read better without a trailing period, colon, or similar mark."
+        }
+      ],
+      "fix": {
+        "text": "# 本使用的來源貼上內容，轉換會在這台裝置上完成。\n1. 使用 `⌘+C` 複製富文本內容\n2. 在這個頁面使用 `⌘+V` 貼上\n3. 編輯、預覽，然後複製 Markdown 結果\n4. 按下 `Escape` 可以重設狀態\n5. 使用 `Option+1` 與 `Option+2` 切換分頁\n\n## 無序清單\n- 內容\n\n## 已有空行\n\n+ 內容\n\n## 分隔線\n* * *\n\n> ## 引言\n> - 內容\n\n```markdown\n## 原始碼\n- 內容\n```\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "line-length-80",
+      "options": {
+        "maxLineLength": 80
+      },
+      "diagnose": [
+        {
+          "rule": "MDX017",
+          "name": "heading-trailing-punctuation",
+          "severity": "info",
+          "fixable": false,
+          "line": 1,
+          "column": 1,
+          "message": "Heading ends with sentence punctuation. Headings usually read better without a trailing period, colon, or similar mark."
+        }
+      ],
+      "fix": {
+        "text": "# 本使用的來源貼上內容，轉換會在這台裝置上完成。\n1. 使用 `⌘+C` 複製富文本內容\n2. 在這個頁面使用 `⌘+V` 貼上\n3. 編輯、預覽，然後複製 Markdown 結果\n4. 按下 `Escape` 可以重設狀態\n5. 使用 `Option+1` 與 `Option+2` 切換分頁\n\n## 無序清單\n- 內容\n\n## 已有空行\n\n+ 內容\n\n## 分隔線\n* * *\n\n> ## 引言\n> - 內容\n\n```markdown\n## 原始碼\n- 內容\n```\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "keep-encoding",
+      "options": {
+        "ignoreRules": [
+          "MDX001",
+          "MDX002"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX017",
+          "name": "heading-trailing-punctuation",
+          "severity": "info",
+          "fixable": false,
+          "line": 1,
+          "column": 1,
+          "message": "Heading ends with sentence punctuation. Headings usually read better without a trailing period, colon, or similar mark."
+        }
+      ],
+      "fix": {
+        "text": "# 本使用的來源貼上內容，轉換會在這台裝置上完成。\n1. 使用 `⌘+C` 複製富文本內容\n2. 在這個頁面使用 `⌘+V` 貼上\n3. 編輯、預覽，然後複製 Markdown 結果\n4. 按下 `Escape` 可以重設狀態\n5. 使用 `Option+1` 與 `Option+2` 切換分頁\n\n## 無序清單\n- 內容\n\n## 已有空行\n\n+ 內容\n\n## 分隔線\n* * *\n\n> ## 引言\n> - 內容\n\n```markdown\n## 原始碼\n- 內容\n```\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "headings-only",
+      "options": {
+        "rules": [
+          "MDX010",
+          "MDX011",
+          "MDX012",
+          "MDX013",
+          "MDX033"
+        ]
+      },
+      "diagnose": [
+        {
+          "rule": "MDX033",
+          "name": "heading-list-blank-lines",
+          "severity": "warning",
+          "fixable": true,
+          "line": 1,
+          "column": 1,
+          "message": "Heading is directly attached to the following list. Add a blank line after it."
+        },
+        {
+          "rule": "MDX033",
+          "name": "heading-list-blank-lines",
+          "severity": "warning",
+          "fixable": true,
+          "line": 8,
+          "column": 1,
+          "message": "Heading is directly attached to the following list. Add a blank line after it."
+        }
+      ],
+      "fix": {
+        "text": "# 本使用的來源貼上內容，轉換會在這台裝置上完成。\n\n1. 使用 `⌘+C` 複製富文本內容\n2. 在這個頁面使用 `⌘+V` 貼上\n3. 編輯、預覽，然後複製 Markdown 結果\n4. 按下 `Escape` 可以重設狀態\n5. 使用 `Option+1` 與 `Option+2` 切換分頁\n\n## 無序清單\n\n- 內容\n\n## 已有空行\n\n+ 內容\n\n## 分隔線\n* * *\n\n> ## 引言\n> - 內容\n\n```markdown\n## 原始碼\n- 內容\n```\n",
+        "changed": true,
+        "refused": false,
+        "reason": ""
+      }
+    },
+    {
+      "name": "quote-depth-3-ignore",
+      "options": {
+        "maxQuoteDepth": 3,
+        "onLimit": "ignore"
+      },
+      "diagnose": [
+        {
+          "rule": "MDX017",
+          "name": "heading-trailing-punctuation",
+          "severity": "info",
+          "fixable": false,
+          "line": 1,
+          "column": 1,
+          "message": "Heading ends with sentence punctuation. Headings usually read better without a trailing period, colon, or similar mark."
+        }
+      ],
+      "fix": {
+        "text": "# 本使用的來源貼上內容，轉換會在這台裝置上完成。\n1. 使用 `⌘+C` 複製富文本內容\n2. 在這個頁面使用 `⌘+V` 貼上\n3. 編輯、預覽，然後複製 Markdown 結果\n4. 按下 `Escape` 可以重設狀態\n5. 使用 `Option+1` 與 `Option+2` 切換分頁\n\n## 無序清單\n- 內容\n\n## 已有空行\n\n+ 內容\n\n## 分隔線\n* * *\n\n> ## 引言\n> - 內容\n\n```markdown\n## 原始碼\n- 內容\n```\n",
+        "changed": false,
+        "refused": false,
+        "reason": ""
+      }
+    }
+  ]
+}

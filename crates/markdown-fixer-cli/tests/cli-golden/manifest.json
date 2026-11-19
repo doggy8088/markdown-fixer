@@ -37,6 +37,8 @@
     { "name": "rule-consumes-next-flag", "args": ["--rule", "--json"] },
     { "name": "rule-unknown", "args": ["--rule=MDX010,NOPE"] },
     { "name": "ignore-rule-empty-list", "args": ["--ignore-rule", " , "] },
+    { "name": "heading-list-blank-lines-check", "setup": [{ "path": "list.md", "text": "# 標題。\n1. 內容\n" }], "args": ["--check", "--json", "--heading-list-blank-lines", "list.md"] },
+    { "name": "heading-list-blank-lines-write", "setup": [{ "path": "list.md", "text": "#標題。\n1. 內容" }], "args": ["--write", "--heading-list-blank-lines", "list.md"] },
     { "name": "max-line-length-zero", "args": ["--max-line-length", "0"] },
     { "name": "max-line-length-fraction", "args": ["--max-line-length=8.5"] },
     { "name": "max-line-length-missing", "args": ["--max-line-length"] },

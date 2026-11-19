@@ -25,6 +25,9 @@ node .agents/skills/markdown-autocorrect/scripts/markdown-fixer.mjs --check --ru
 # 忽略某條規則
 node .agents/skills/markdown-autocorrect/scripts/markdown-fixer.mjs --check --ignore-rule MDX032 docs/
 
+# 標題後緊接清單時補空行（MDX033，預設停用）
+node .agents/skills/markdown-autocorrect/scripts/markdown-fixer.mjs --write --heading-list-blank-lines notes.md
+
 # CI 用的 JSON
 node .agents/skills/markdown-autocorrect/scripts/markdown-fixer.mjs --check --json docs/
 
@@ -99,6 +102,7 @@ node .agents/skills/markdown-autocorrect/scripts/markdown-fixer.mjs --list-rules
 | MDX013 | 標題與相鄰段落之間補空行 |
 | MDX020 | blockquote 的 `>` 之間與之後只留一個空格；只移除一般內容前多出的一個空格，保留可能是清單延續的兩到三個空格、fence 與清單標記前的空格，以及縮排 code |
 | MDX030 | `-item` → `- item`、`1.item` → `1. item` |
+| MDX033 | 頂層 ATX 標題與緊接的清單之間補空行（需啟用） |
 | MDX040 | 移除 `**`、`__`、`*`、`_` 內側多餘空白（單一 `*`/`_` 只修非對稱情況；開頭 delimiter 前面緊鄰文字或標點時不修；行首當作清單標記的 `*` 不算） |
 | MDX042 | 部分：CJK／全形標點旁配對不成立的強調，收尾端 `**X：**Y` → `**X**：Y`、成對引號 `**「X」**` → `「**X**」`；其他開頭端問題只報告 |
 | MDX052 | 頂層 fenced code 與相鄰 block 之間補空行；引言裡的 fence 補 `>`（依深度 `> >`…）空行，標記後還有縮排的 fence（可能在清單項目裡）不處理 |

@@ -1,6 +1,6 @@
 {
   "source": "synthetic/changelog-keepachangelog.md",
-  "referenceVersion": "1.2.0",
+  "referenceVersion": "1.3.0",
   "cases": [
     {
       "name": "default",
@@ -293,13 +293,33 @@
           "MDX010",
           "MDX011",
           "MDX012",
-          "MDX013"
+          "MDX013",
+          "MDX033"
         ]
       },
-      "diagnose": [],
+      "diagnose": [
+        {
+          "rule": "MDX033",
+          "name": "heading-list-blank-lines",
+          "severity": "warning",
+          "fixable": true,
+          "line": 10,
+          "column": 1,
+          "message": "Heading is directly attached to the following list. Add a blank line after it."
+        },
+        {
+          "rule": "MDX033",
+          "name": "heading-list-blank-lines",
+          "severity": "warning",
+          "fixable": true,
+          "line": 48,
+          "column": 1,
+          "message": "Heading is directly attached to the following list. Add a blank line after it."
+        }
+      ],
       "fix": {
-        "text": "# Changelog\n\nAll notable changes to this project will be documented in this file.\n\nThe format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),\nand this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).\n\n## [Unreleased]\n\n### Added\n- `--stdin` flag reads Markdown from standard input.\n- `--exit-zero` for clipboard scripts.\n\n### Fixed\n\n-Column numbers for emoji are now reported in UTF-16 code units.\n- Trailing whitespace inside fenced code is no longer touched.\n\n## [1.2.0] - 2026-10-20\n\n### Added\n\n* New rule MDX042 for unpaired emphasis next to CJK punctuation.\n* `--list-rules` prints the catalog.\n- JSON output includes `wouldFix`.\n\n### Changed\n\n- Bumped MSRV to 1.85 .\n- **Breaking:** `fix()` was renamed to `fix_document()`.\n\n### Removed\n\n- The `--legacy` flag. See #123 for details.\n\n## [1.1.0] - 2026-07-02\n\n### Security\n\n- Refuse to write files that contain NUL bytes ([#98]).\n\n# 1.0.0 - 2026-05-01\n\nInitial release.\n\n## [0.9.0-beta.1] - 2026-03-10\n\n### Added\n- Beta release for internal testing.\n- \n\n[Unreleased]: https://github.com/example/markdown-fixer/compare/v1.2.0...HEAD\n[1.2.0]: https://github.com/example/markdown-fixer/compare/v1.1.0...v1.2.0\n[1.1.0]: https://github.com/example/markdown-fixer/compare/v1.0.0...v1.1.0\n[0.9.0-beta.1]: https://github.com/example/markdown-fixer/releases/tag/v0.9.0-beta.1\n",
-        "changed": false,
+        "text": "# Changelog\n\nAll notable changes to this project will be documented in this file.\n\nThe format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),\nand this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).\n\n## [Unreleased]\n\n### Added\n\n- `--stdin` flag reads Markdown from standard input.\n- `--exit-zero` for clipboard scripts.\n\n### Fixed\n\n-Column numbers for emoji are now reported in UTF-16 code units.\n- Trailing whitespace inside fenced code is no longer touched.\n\n## [1.2.0] - 2026-10-20\n\n### Added\n\n* New rule MDX042 for unpaired emphasis next to CJK punctuation.\n* `--list-rules` prints the catalog.\n- JSON output includes `wouldFix`.\n\n### Changed\n\n- Bumped MSRV to 1.85 .\n- **Breaking:** `fix()` was renamed to `fix_document()`.\n\n### Removed\n\n- The `--legacy` flag. See #123 for details.\n\n## [1.1.0] - 2026-07-02\n\n### Security\n\n- Refuse to write files that contain NUL bytes ([#98]).\n\n# 1.0.0 - 2026-05-01\n\nInitial release.\n\n## [0.9.0-beta.1] - 2026-03-10\n\n### Added\n\n- Beta release for internal testing.\n- \n\n[Unreleased]: https://github.com/example/markdown-fixer/compare/v1.2.0...HEAD\n[1.2.0]: https://github.com/example/markdown-fixer/compare/v1.1.0...v1.2.0\n[1.1.0]: https://github.com/example/markdown-fixer/compare/v1.0.0...v1.1.0\n[0.9.0-beta.1]: https://github.com/example/markdown-fixer/releases/tag/v0.9.0-beta.1\n",
+        "changed": true,
         "refused": false,
         "reason": ""
       }

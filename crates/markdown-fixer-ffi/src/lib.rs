@@ -35,10 +35,12 @@ static VERSION_CSTR: &CStr =
 #[derive(Debug, Default, Deserialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 struct FfiOptions {
-    /// 只啟用這些規則；`null` 或省略表示全部啟用，空陣列表示全部停用（與 JS 相同）。
+    /// 只啟用這些規則；`null` 或省略時按規則預設值與個別選項啟用，空陣列表示全部停用（與 JS 相同）。
     rules: Option<Vec<String>>,
     /// 停用這些規則。
     ignore_rules: Option<Vec<String>>,
+    /// 加開 MDX033；`null` 或省略時沿用預設停用。
+    heading_list_blank_lines: Option<bool>,
     /// MDX090 行長上限；`null`、省略或 0 表示停用 MDX090。必須是非負整數。
     max_line_length: Option<usize>,
     /// 引言巢狀深度上限；`null` 或省略表示預設 32，0 表示不限制。必須是非負整數。
@@ -54,6 +56,7 @@ impl From<FfiOptions> for Options {
         Options {
             rules: value.rules,
             ignore_rules: value.ignore_rules,
+            heading_list_blank_lines: value.heading_list_blank_lines.unwrap_or(false),
             max_line_length: value.max_line_length.unwrap_or(0),
             max_quote_depth: value
                 .max_quote_depth

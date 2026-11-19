@@ -31,7 +31,7 @@ use crate::{FixResult, Options, Problem, SkippedFix};
 /// 版面類規則（PRD〈6.9〉）：本身不應改變渲染。
 pub(crate) const LAYOUT_RULES: &[&str] = &[
     "MDX001", "MDX002", "MDX003", "MDX004", "MDX005", "MDX006", "MDX011", "MDX012", "MDX013",
-    "MDX020", "MDX052", "MDX060", "MDX082",
+    "MDX020", "MDX033", "MDX052", "MDX060", "MDX082",
 ];
 
 /// 修復類規則（PRD〈6.9〉）：目的就是讓原本壞掉的語法正確渲染。

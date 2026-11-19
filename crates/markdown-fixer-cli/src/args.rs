@@ -41,6 +41,7 @@ pub struct CliOptions {
     pub list_rules: bool,
     pub rules: Option<Vec<String>>,
     pub ignore_rules: Option<Vec<String>>,
+    pub heading_list_blank_lines: bool,
     pub max_line_length: usize,
     /// `--max-quote-depth`（oracle `maxQuoteDepth`）；0 表示不限制。
     pub max_quote_depth: usize,
@@ -69,6 +70,7 @@ impl Default for CliOptions {
             list_rules: false,
             rules: None,
             ignore_rules: None,
+            heading_list_blank_lines: false,
             max_line_length: 0,
             max_quote_depth: markdown_fixer::DEFAULT_MAX_QUOTE_DEPTH,
             on_limit: markdown_fixer::LimitPolicy::Error,
@@ -87,6 +89,7 @@ impl CliOptions {
         markdown_fixer::Options {
             rules: self.rules.clone(),
             ignore_rules: self.ignore_rules.clone(),
+            heading_list_blank_lines: self.heading_list_blank_lines,
             max_line_length: self.max_line_length,
             max_quote_depth: self.max_quote_depth,
             on_limit: self.on_limit,
@@ -196,6 +199,7 @@ pub fn parse_args(
                     is_known_rule,
                 )?;
             }
+            "--heading-list-blank-lines" => options.heading_list_blank_lines = true,
             "--max-line-length" => {
                 i += 1;
                 options.max_line_length = parse_max_line_length(text.get(i).map(String::as_str))?;

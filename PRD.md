@@ -97,7 +97,7 @@
 
 ### 6.1 規則目錄
 
-規則目錄共 49 條（19 條 fixable；v0.1 新增 MDX086，MDX031 改為只報告），必須與 JS `RULES` 陣列完全相同（ID、name、category、severity、fixable、summary、順序）。下表是摘要；英文 summary 原文以 `reference/js/markdown-fixer.mjs` 為準，中文說明見 `docs/rules.md`。
+規則目錄共 50 條（20 條可自動修正），必須與 JS `RULES` 陣列完全相同（ID、name、category、severity、fixable、summary、順序）。下表是摘要；英文 summary 原文以 `reference/js/markdown-fixer.mjs` 為準，中文說明見 `docs/rules.md`。
 
 | Rule | Name | Category | Severity | Fixable |
 | --- | --- | --- | --- | --- |
@@ -124,6 +124,7 @@
 | MDX030 | `list-marker-space` | list | warning | yes |
 | MDX031 | `list-marker-style` | list | warning | no |
 | MDX032 | `list-blank-lines` | list | warning | no |
+| MDX033 | `heading-list-blank-lines` | list | warning | yes |
 | MDX035 | `empty-list-item` | list | warning | no |
 | MDX040 | `emphasis-inner-space` | emphasis | warning | yes |
 | MDX041 | `unmatched-emphasis` | emphasis | warning | no |
@@ -172,12 +173,20 @@
 
 ```rust
 pub const VERSION: &str;            // crate 版本
-pub const REFERENCE_VERSION: &str;  // 對齊的 oracle 版本，目前 "1.2.0"
+pub const REFERENCE_VERSION: &str;  // 對齊的 oracle 版本，目前 "1.3.0"
 
 pub enum Severity { Error, Warning, Info }
 pub struct Rule { id, name, category, severity, fixable, summary }
 pub struct Problem { rule, name, severity, fixable, line, column, message }
-pub struct Options { rules: Option<Vec<String>>, ignore_rules: Option<Vec<String>>, max_line_length: usize }
+pub struct Options {
+    pub rules: Option<Vec<String>>,
+    pub ignore_rules: Option<Vec<String>>,
+    pub heading_list_blank_lines: bool,
+    pub max_line_length: usize,
+    pub max_quote_depth: usize,
+    pub on_limit: LimitPolicy,
+    pub render_guard: bool,
+}
 pub struct FixResult { text: String, changed: bool, refused: bool, reason: String }
 
 pub fn rules() -> &'static [Rule];
@@ -195,6 +204,7 @@ pub mod detect {
 要求：
 
 - 核心規則引擎零依賴。預設啟用的 `render-guard` feature 加入 `pulldown-cmark`（純 Rust，`default-features = false`）作為渲染保護用的 CommonMark/GFM parser；以 `default-features = false` 關閉後函式庫完全零依賴（此時 `render_guard` 沒有作用）。`serde` 是選用 feature，開啟後 `Severity`、`Rule`、`Problem`、`FixResult`、`Detection` 可序列化。不得加入會拉進 I/O、執行緒池或 C 相依的套件。
+- `Options::heading_list_blank_lines` 預設為 `false`。設為 `true` 可加開 MDX033，也可在 `rules` 明確選取 MDX033；`ignore_rules` 優先。
 - `Options` 的 `max_line_length` 為 0 時停用 MDX090，行為與 JS `createEnabled` 相同。在 `rules` 指定了 MDX090 但沒給行長時預設 120，這個邏輯屬於 CLI 解析層（與 JS `parseArgs` 相同），函式庫保持原樣。
 - 公開型別要有 rustdoc（臺灣正體中文），`cargo doc` 無警告。
 - 內部模組建議切分：`scan`（`scanDocument` 與 line info）、`mask`（`buildMask`、`splitMasked`）、`line_fix`（標題、blockquote、清單、強調、NBSP 的單行修正）、`structure`（各 `compute*Structure` 診斷）、`cjk_emphasis`、`blank_lines`、`table`、`diagnose`、`fix`、`detect`、`jsstr`（JS 字串語意與 UTF-16 code unit 處理）、`jsregex`（JS 語意的 regex 引擎）。JS 函式與 Rust 函式的對照表維護在 `docs/porting-map.md`。
@@ -212,6 +222,7 @@ pub mod detect {
 | `--strict` | info 也算失敗 |
 | `--rule <ids>`、`--rule=<ids>` | 只啟用這些規則，可重複，逗號分隔；指定 MDX090 時預設行長 120 |
 | `--ignore-rule <ids>`、`--ignore-rule=<ids>` | 停用這些規則 |
+| `--heading-list-blank-lines` | 加開 MDX033 |
 | `--max-line-length N`、`--max-line-length=N` | 啟用 MDX090 |
 | `--list-rules` | 列出規則目錄 |
 | `--version`、`-v` | 印出版本 |
@@ -321,7 +332,7 @@ void mdfix_string_free(char *s);
 
 1. **根因修正**（JS 與 Rust 一起改，oracle 升到 v1.1.0）：已知會改變渲染的修正直接修掉，例如 MDX052 在引言（`>`）或清單裡插入完全空白的行，把一個引言拆成兩個。這類修正改為「插入帶有相同容器前綴的空行」或「不在容器內插入」，以不改變渲染為原則。
 2. **執行期保護**（`render_guard`，預設開啟，需要 `render-guard` feature，以 `pulldown-cmark` 渲染）：
-   - 每條 fixable 規則屬於兩類之一。**版面類**（layout）：MDX001～006、011、012、013、020、052、060、082，本身不應改變渲染。MDX031 在 v1.1.0 改為只報告：不同的項目符號在 CommonMark 裡本來就是兩個清單，統一符號一定會合併清單，沒有不改變渲染的修法。**修復類**（repair）：MDX008、010、030、040、042、062，目的就是讓原本壞掉的語法正確渲染。
+   - 每條 fixable 規則屬於兩類之一。**版面類**（layout）：MDX001～006、011、012、013、020、033、052、060、082，本身不應改變渲染。MDX031 在 v1.1.0 改為只報告：不同的項目符號在 CommonMark 裡本來就是兩個清單，統一符號一定會合併清單，沒有不改變渲染的修法。**修復類**（repair）：MDX008、010、030、040、042、062，目的就是讓原本壞掉的語法正確渲染。
    - 版面類檢查：`render(全部修正)` 必須等於 `render(只套用修復類)`。不相等時，逐條找出造成差異的版面類規則，不套用它們。
    - 修復類檢查：修復類只能改變「被修正的行所在的頂層區塊」以及與它相鄰的一個區塊；其他頂層區塊的 HTML 與行範圍必須完全相同。違反時把該區域的修復還原。
    - 被擋下的修正記錄在 `FixResult::skipped`（規則、行號、原因），CLI 在文字輸出與 `--json`（`skippedFixes`，只在非空時出現）中顯示；對應的問題仍會出現在診斷中，結束碼照常計算。

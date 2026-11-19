@@ -14,6 +14,8 @@
 #
 # 環境變數（都可以省略，也可以寫在 ~/.config/markdown-fixer/env）：
 #   MARKDOWN_FIXER_BIN                  markdown-fixer 執行檔路徑
+#   MARKDOWN_FIX_PASTE_HEADING_LIST_BLANK_LINES=1
+#                                       標題後緊接清單時補空行
 #   MARKDOWN_FIX_PASTE_NO_PASTE=1       只修正剪貼簿，不送出 Cmd+V
 #   MARKDOWN_FIX_PASTE_MODIFIER_TIMEOUT_MS
 #                                       等待放開修飾鍵的上限，預設 1000 毫秒
@@ -135,8 +137,12 @@ if [ ! -s "$tmp/in" ]; then
 fi
 
 fixer=$(find_fixer)
+set -- --stdin --write --quiet --exit-zero --ignore-rule MDX003
+if [ "${MARKDOWN_FIX_PASTE_HEADING_LIST_BLANK_LINES:-0}" = 1 ]; then
+    set -- "$@" --heading-list-blank-lines
+fi
 status=0
-"$fixer" --stdin --write --quiet --exit-zero --ignore-rule MDX003 <"$tmp/in" >"$tmp/out" 2>/dev/null || status=$?
+"$fixer" "$@" <"$tmp/in" >"$tmp/out" 2>/dev/null || status=$?
 
 if [ "$status" -ne 0 ]; then
     if [ "$status" -eq 126 ] || [ "$status" -eq 127 ]; then

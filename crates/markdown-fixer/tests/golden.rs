@@ -80,6 +80,10 @@ fn options_from(value: &Value) -> Options {
     Options {
         rules: string_list(value.get("rules")),
         ignore_rules: string_list(value.get("ignoreRules")),
+        heading_list_blank_lines: value
+            .get("headingListBlankLines")
+            .and_then(Value::as_bool)
+            .unwrap_or(false),
         max_line_length: value
             .get("maxLineLength")
             .and_then(Value::as_u64)

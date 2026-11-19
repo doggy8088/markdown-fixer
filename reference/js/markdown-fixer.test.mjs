@@ -45,7 +45,7 @@ function runCli(args, options = {}) {
 }
 
 test('rule catalog is well formed and unique', () => {
-  assert.equal(VERSION, '1.2.0');
+  assert.equal(VERSION, '1.3.0');
   const ids = RULES.map((rule) => rule.id);
   assert.equal(new Set(ids).size, ids.length);
   for (const rule of RULES) {
@@ -511,7 +511,7 @@ test('parseArgs handles modes, rule lists, limits, and errors', () => {
 test('CLI reports version, rules, and check results', (t) => {
   const version = runCli(['--version']);
   assert.equal(version.status, 0);
-  assert.match(version.stdout, /markdown-fixer 1\.2\.0/);
+  assert.match(version.stdout, /markdown-fixer 1\.3\.0/);
 
   const list = runCli(['--list-rules']);
   assert.equal(list.status, 0);
@@ -947,4 +947,52 @@ test('keeps whitespace-only lines that GitHub treats as content after an empty l
   // Elsewhere whitespace-only lines are still cleared.
   assert.equal(fixed('text  \n\n  \n\nmore\n'), 'text  \n\nmore\n');
   assert.equal(fixed('- a\n  \n  b\n'), '- a\n\n  b\n');
+});
+
+test('MDX033 is opt-in and separates a top-level heading from a following list', () => {
+  const input = '# 使用說明。\n1. 複製內容\n2. 貼上內容\n';
+  const expected = '# 使用說明。\n\n1. 複製內容\n2. 貼上內容\n';
+  const enabled = { headingListBlankLines: true };
+  assert.equal(fixed(input), input);
+  assert.equal(fixed(input, enabled), expected);
+  assert.equal(fixed(input, { rules: ['MDX033'] }), expected);
+  assert.equal(fixed(expected, enabled), expected);
+  assert.equal(fixed(input, { ...enabled, ignoreRules: ['MDX033'] }), input);
+  assert.equal(fixed(input, { ...enabled, rules: ['MDX013'] }), input);
+  assert.deepEqual(diagnose(input, { rules: ['MDX033'] }), [{
+    rule: 'MDX033',
+    name: 'heading-list-blank-lines',
+    severity: 'warning',
+    fixable: true,
+    line: 1,
+    column: 1,
+    message: 'Heading is directly attached to the following list. Add a blank line after it.'
+  }]);
+});
+
+test('MDX033 accepts unindented list markers and skips other block boundaries', () => {
+  const options = { rules: ['MDX033'] };
+  for (const marker of ['-', '+', '*', '2.', '2)']) {
+    assert.equal(fixed(`## Section\n${marker} Item\n`, options), `## Section\n\n${marker} Item\n`);
+  }
+  for (const input of [
+    '# Heading\n\n- Item\n',
+    '# Heading\n* * *\n',
+    'Heading\n=======\n- Item\n',
+    '# Heading\n  - Indented item\n',
+    '- Outer\n  # Heading\n  - Nested\n',
+    '> # Heading\n> - Item\n',
+    '```md\n# Heading\n- Item\n```\n',
+    '<!--\n# Heading\n- Item\n-->\n'
+  ]) {
+    assert.deepEqual(diagnose(input, options), [], input);
+    assert.equal(fixed(input, options), input);
+  }
+});
+
+test('CLI --heading-list-blank-lines adds MDX033 to the default rules', (t) => {
+  const file = tempFile(t, '# Heading\n- Item');
+  const result = runCli(['--write', '--heading-list-blank-lines', file]);
+  assert.equal(result.status, 0, result.stderr);
+  assert.equal(fs.readFileSync(file, 'utf8'), '# Heading\n\n- Item\n');
 });

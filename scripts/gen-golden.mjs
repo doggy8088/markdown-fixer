@@ -34,7 +34,7 @@ export const OPTION_SETS = [
   { name: 'snippet', options: { ignoreRules: ['MDX003'] } },
   { name: 'line-length-80', options: { maxLineLength: 80 } },
   { name: 'keep-encoding', options: { ignoreRules: ['MDX001', 'MDX002'] } },
-  { name: 'headings-only', options: { rules: ['MDX010', 'MDX011', 'MDX012', 'MDX013'] } },
+  { name: 'headings-only', options: { rules: ['MDX010', 'MDX011', 'MDX012', 'MDX013', 'MDX033'] } },
   { name: 'quote-depth-3-ignore', options: { maxQuoteDepth: 3, onLimit: 'ignore' } }
 ];
 
@@ -156,6 +156,7 @@ function checkCoverage(goldens) {
   const triggered = new Set();
   const ruleIds = new Set(RULES.map((rule) => rule.id));
   const caseOf = (golden, name) => golden.cases.find((c) => c.name === name);
+  const optInCases = new Map([['MDX033', 'headings-only'], ['MDX090', 'line-length-80']]);
 
   for (const golden of goldens) {
     for (const c of golden.cases) {
@@ -168,7 +169,7 @@ function checkCoverage(goldens) {
         errors.push(`${golden.source}: unknown rule directory ${id}`);
         continue;
       }
-      const c = caseOf(golden, id === 'MDX090' ? 'line-length-80' : 'default');
+      const c = caseOf(golden, optInCases.get(id) ?? 'default');
       const has = c.diagnose.some((problem) => problem.rule === id);
       if (kind === 'trigger' && !has) errors.push(`${golden.source}: expected ${id} but it was not reported`);
       if (kind === 'negative' && has) errors.push(`${golden.source}: ${id} must not be reported`);

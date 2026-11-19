@@ -1,6 +1,6 @@
 {
   "source": "snippets/cr-only-old-mac.md",
-  "referenceVersion": "1.2.0",
+  "referenceVersion": "1.3.0",
   "cases": [
     {
       "name": "default",
@@ -167,7 +167,8 @@
           "MDX010",
           "MDX011",
           "MDX012",
-          "MDX013"
+          "MDX013",
+          "MDX033"
         ]
       },
       "diagnose": [

@@ -14,12 +14,12 @@
     {
       "path": "corpus",
       "copyDir": "fixtures/corpus",
-      "fingerprint": "8d528fb04f302563"
+      "fingerprint": "dc67a838d41cd19d"
     }
   ],
   "expected": {
     "status": 1,
-    "stdout": "Fixed 348 issue(s) in 93 file(s).\n494 problem(s) remain: 10 fixable, 22 error(s), 191 warning(s), 281 info.\n17 file(s) were not modified because of structural or frontmatter ambiguity.\n",
+    "stdout": "Fixed 348 issue(s) in 93 file(s).\n495 problem(s) remain: 10 fixable, 22 error(s), 191 warning(s), 282 info.\n17 file(s) were not modified because of structural or frontmatter ambiguity.\n",
     "stderr": "",
     "files": [
       {
@@ -299,6 +299,10 @@
         "fnv": "9e63cc5f70eb35a0"
       },
       {
+        "path": "corpus/regressions/oracle-mdx033-heading-list.md",
+        "fnv": "2231e88694ab7771"
+      },
+      {
         "path": "corpus/regressions/oracle-mdx042-multiple-transforms.md",
         "fnv": "b8983c985b093516"
       },
@@ -501,6 +505,14 @@
       {
         "path": "corpus/rules/MDX032/trigger.md",
         "fnv": "5a65b38e4ffb7f21"
+      },
+      {
+        "path": "corpus/rules/MDX033/negative.md",
+        "fnv": "116f91bf0597a115"
+      },
+      {
+        "path": "corpus/rules/MDX033/trigger.md",
+        "fnv": "e5b9cfa0fedd9981"
       },
       {
         "path": "corpus/rules/MDX035/negative.md",

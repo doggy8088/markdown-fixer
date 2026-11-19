@@ -9,11 +9,13 @@
  *   - 輸入文字以「指標＋長度」傳入，必須是 UTF-8，不需要 NUL 結尾，可以含 NUL 位元組。
  *     text 為 NULL 時 len 必須是 0（代表空字串）。
  *   - options_json 是 NUL 結尾的 UTF-8 JSON，NULL 表示全部預設。格式：
- *       {"rules":["MDX001",...],"ignoreRules":["MDX003",...],"maxLineLength":120,
+ *       {"rules":["MDX001",...],"ignoreRules":["MDX003",...],"headingListBlankLines":true,
+ *        "maxLineLength":120,
  *        "maxQuoteDepth":32,"onLimit":"error","renderGuard":true}
  *     每個鍵都可以省略或設成 null（表示預設值）；鍵名與 JS 的 options 相同。
  *       - rules：只啟用這些規則。空陣列表示全部停用（與 JS 相同）。
  *       - ignoreRules：停用這些規則。
+ *       - headingListBlankLines：加開 MDX033，預設 false。
  *       - maxLineLength：MDX090 行長上限，非負整數，0 表示停用。與 CLI 不同，
  *         rules 指定 MDX090 時不會自動套用 120。
  *       - maxQuoteDepth：引言巢狀深度上限，非負整數，預設 32，0 表示不限制。

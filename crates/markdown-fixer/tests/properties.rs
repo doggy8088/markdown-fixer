@@ -46,7 +46,7 @@ fn option_sets() -> Vec<Options> {
         ignore(&["MDX001", "MDX002"]),
         Options {
             rules: Some(
-                ["MDX010", "MDX011", "MDX012", "MDX013"]
+                ["MDX010", "MDX011", "MDX012", "MDX013", "MDX033"]
                     .iter()
                     .map(|s| (*s).to_owned())
                     .collect(),

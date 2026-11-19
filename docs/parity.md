@@ -1,20 +1,20 @@
 # 與 oracle 的一致性（parity）
 
-這份文件說明 Rust 版與 JS 參考實作（oracle，`reference/js/markdown-fixer.mjs` v1.1.0）一致是什麼意思、golden 檔怎麼產生、oracle 升版怎麼同步，並記錄刻意差異與 oracle 的疑似問題。測試怎麼跑見 [testing.md](testing.md)。
+這份文件說明 Rust 版與 JS 參考實作（oracle，`reference/js/markdown-fixer.mjs` v1.3.0）一致是什麼意思、golden 檔怎麼產生、oracle 升版怎麼同步，並記錄刻意差異與 oracle 的疑似問題。測試怎麼跑見 [testing.md](testing.md)。
 
 ## 一致性的定義
 
 **函式庫層級**：同一份輸入文字與同一組選項下，`diagnose` 回傳的問題清單與 JS `diagnose` 完全相同，包括元素順序與每個欄位（`rule`、`name`、`severity`、`fixable`、`line`、`column`、`message`）；`fix_document` 回傳的 `text`、`changed`、`refused`、`reason` 與 JS `fixDocument` 完全相同。`column` 的單位是 UTF-16 code unit。比對時 Rust 一律以 `render_guard = false` 執行（PRD〈6.9〉）；渲染保護開啟時，只有被它擋下的修正（`FixResult::skipped`）會與 oracle 不同。
 
-**CLI 層級**：旗標、結束碼、文字輸出、`--json` 結構與 oracle CLI 相同，只有下面〈刻意差異〉列出的項目例外。CLI 的 golden 由 `scripts/gen-cli-golden.mjs` 產生（目前 92 個案例，含 `--max-quote-depth`／`--on-limit` 的 12 個），細節見 [cli.md](cli.md)。`cli_golden.rs` 把每個案例重播兩次：
+**CLI 層級**：旗標、結束碼、文字輸出、`--json` 結構與 oracle CLI 相同，只有下面〈刻意差異〉列出的項目例外。CLI 的 golden 由 `scripts/gen-cli-golden.mjs` 產生（目前 94 個案例，含 `--max-quote-depth`／`--on-limit` 的 12 個），細節見 [cli.md](cli.md)。`cli_golden.rs` 把每個案例重播兩次：
 
 - 在參數最前面加上 `--no-render-guard`，輸出必須與 golden 逐位元組相同。
 - 照原樣（渲染保護開啟），輸出只能在渲染保護擋下修正時不同；文字輸出裡要看得到 `Fix not applied`、`--quiet` 時的 `Render guard skipped ...` 摘要行，或 `--json` 的 `skippedFixes`。
 
 兩個容易誤會的地方：
 
-- **問題會排序**：oracle 的 `dedupeProblems`（`markdown-fixer.mjs` 第 2183 行）先以 `rule:line:column:message` 去重，再以行號、欄號、規則 ID 做穩定排序（規則 ID 用 `localeCompare`，但 ID 都是 ASCII，結果與一般字串比較相同）。同一行同一欄同一規則的多個問題保留產生順序。
-- **規則數是 49 條**：oracle v1.1.0 的 `RULES` 共 49 條，其中 19 條可自動修正（v1.0.0 是 48 條、20 條；v1.1.0 新增 MDX086，MDX031 改為只報告）。測試一律以 `fixtures/golden/rules.json` 為準，不寫死數量。
+- **問題會排序**：oracle 的 `dedupeProblems`（`markdown-fixer.mjs` 第 2249 行）先以 `rule:line:column:message` 去重，再以行號、欄號、規則 ID 做穩定排序（規則 ID 用 `localeCompare`，但 ID 都是 ASCII，結果與一般字串比較相同）。同一行同一欄同一規則的多個問題保留產生順序。
+- **規則目錄**：v1.3.0 有 50 條規則，其中 20 條可自動修正。目錄一致性以 `fixtures/golden/rules.json` 比對。
 
 ## Golden 檔怎麼產生
 
@@ -26,7 +26,7 @@
 | `snippet` | `{"ignoreRules":["MDX003"]}` | 剪貼簿片段（不補檔尾換行） |
 | `line-length-80` | `{"maxLineLength":80}` | 啟用 MDX090 |
 | `keep-encoding` | `{"ignoreRules":["MDX001","MDX002"]}` | 保留 BOM 與行尾 |
-| `headings-only` | `{"rules":["MDX010","MDX011","MDX012","MDX013"]}` | 只啟用部分規則 |
+| `headings-only` | `{"rules":["MDX010","MDX011","MDX012","MDX013","MDX033"]}` | 標題格式與標題後接清單的空行 |
 | `quote-depth-3-ignore` | `{"maxQuoteDepth":3,"onLimit":"ignore"}` | 資源上限的 `ignore` 模式（v1.1.0） |
 
 讀檔方式與 oracle CLI 的 `readMarkdownFile` 相同：含 NUL 位元組就拒絕、以嚴格 UTF-8 解碼、保留 BOM。輸出寫到 `fixtures/golden/<相同相對路徑>.json`，格式如下：
@@ -71,6 +71,11 @@ node scripts/gen-golden.mjs --check    # 只檢查：golden 過期、缺少或�
 
 ## 目前狀態
 
+2026-11-19 的結果（oracle v1.3.0）：
+
+- 212 份文件、1,272 個案例，`scripts/parity.sh fixtures/corpus` 無差異。
+- `scripts/fuzz-parity.mjs --count 10000 --seed 7` 比對 60,000 個案例，無差異。
+
 2026-11-06 的結果（oracle v1.2.0）：
 
 - 語料 209 份文件、4,642 行，六組選項共 1,254 個案例，`golden.rs` 與 `scripts/parity.sh fixtures/corpus` 都與 oracle 全部一致。
@@ -110,6 +115,11 @@ oracle 的原始碼在 GitHub `doggy8088/skills` repo 的 `skills/markdown-autoc
 5. 渲染保護（PRD〈6.9〉）：`render_guard` 預設開啟，CLI 以 `--no-render-guard` 關閉。開啟時，會意外改變渲染結果的版面類修正，以及超出範圍的修復類修正不套用，記錄在 `FixResult::skipped` 與 CLI 的 `skippedFixes`；對應的問題仍出現在診斷中。關閉時與 oracle 逐位元組相同。
 
 函式庫層級在 `render_guard = false` 時沒有刻意差異。效能上 Rust 不得有 oracle 的平方或指數時間（見〈oracle 疑似問題〉），但輸出必須相同。
+
+## v1.3.0 的變更
+
+- 新增預設停用的 MDX033。啟用後會在無縮排的 ATX 標題與緊接的清單首項之間補空行。
+- `regressions/oracle-mdx033-heading-list.md` 記錄剪貼簿範例。Golden 的 `headings-only` 選項會執行 MDX033，CLI golden 則驗證加開旗標。
 
 ## v1.2.0 的變更
 

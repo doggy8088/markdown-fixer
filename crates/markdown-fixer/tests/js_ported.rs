@@ -1,4 +1,4 @@
-//! 移植自 `reference/js/markdown-fixer.test.mjs`（v1.1.0）的測試。
+//! 移植自 `reference/js/markdown-fixer.test.mjs` 的測試。
 //!
 //! 每個測試上方的註解是原始 JS 案例名稱與編號（依檔案中的順序）。只能透過內部函式
 //! （`buildMask`、`splitTableCells`、`scanDocument`）觀察的斷言，在這裡改以公開 API
@@ -64,7 +64,7 @@ fn has(text: &str, rule: &str) -> bool {
 // 1. 'rule catalog is well formed and unique'
 #[test]
 fn rule_catalog_is_well_formed_and_unique() {
-    assert_eq!(markdown_fixer::REFERENCE_VERSION, "1.2.0");
+    assert_eq!(markdown_fixer::REFERENCE_VERSION, "1.3.0");
     let ids: Vec<&str> = rules().iter().map(|r| r.id).collect();
     let mut unique = ids.clone();
     unique.sort_unstable();
@@ -1061,4 +1061,27 @@ fn keeps_whitespace_only_lines_that_github_treats_as_content() {
     }
     assert_eq!(fixed("text  \n\n  \n\nmore\n"), "text  \n\nmore\n");
     assert_eq!(fixed("- a\n  \n  b\n"), "- a\n\n  b\n");
+}
+
+#[test]
+fn mdx033_is_opt_in_and_preserves_rendering() {
+    let input = "# 使用說明。\n1. 複製內容\n2. 貼上內容\n";
+    let expected = "# 使用說明。\n\n1. 複製內容\n2. 貼上內容\n";
+
+    assert_eq!(fix_document(input, &Options::default()).text, input);
+
+    let options = Options {
+        rules: Some(vec!["MDX033".into()]),
+        ..Options::default()
+    };
+    let issues = diagnose(input, &options);
+    assert_eq!(issues.len(), 1);
+    assert_eq!(issues[0].rule, "MDX033");
+    assert_eq!((issues[0].line, issues[0].column), (1, 1));
+    assert!(issues[0].fixable);
+
+    let result = fix_document(input, &options);
+    assert_eq!(result.text, expected);
+    assert!(result.skipped.is_empty());
+    assert!(!fix_document(expected, &options).changed);
 }

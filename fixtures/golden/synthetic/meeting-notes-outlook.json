@@ -1,6 +1,6 @@
 {
   "source": "synthetic/meeting-notes-outlook.md",
-  "referenceVersion": "1.2.0",
+  "referenceVersion": "1.3.0",
   "cases": [
     {
       "name": "default",
@@ -851,7 +851,8 @@
           "MDX010",
           "MDX011",
           "MDX012",
-          "MDX013"
+          "MDX013",
+          "MDX033"
         ]
       },
       "diagnose": [
@@ -863,10 +864,19 @@
           "line": 1,
           "column": 2,
           "message": "Use exactly one space after the ATX heading marker."
+        },
+        {
+          "rule": "MDX033",
+          "name": "heading-list-blank-lines",
+          "severity": "warning",
+          "fixable": true,
+          "line": 30,
+          "column": 1,
+          "message": "Heading is directly attached to the following list. Add a blank line after it."
         }
       ],
       "fix": {
-        "text": "# 產品週會紀錄（2026-11-03）\r\n\r\n**時間：**2026-11-03（一）14:00–15:00\r\n**地點：**3F 大會議室／Teams\r\n**主持人：**林經理\r\n**記錄：**陳小美\r\n**與會者：**王大明、李小華、張工程師、Alice（遠端）\r\n\r\n## 一、上週待辦追蹤\r\n\r\n| 項目 | 負責人 | 狀態 |\r\n| -- | -- | -- |\r\n| 結帳頁改版 | 王大明 | 已完成 |\r\n| 會員等級規則 | 李小華 | 進行中 |\r\n| 效能監控告警 | 張工程師 | 卡關\u00A0（等 SRE 回覆） |\r\n\r\n## 二、本週討論事項\r\n\r\n1. 結帳頁改版上線後的轉換率\r\n   - 桌機：+3.2%\r\n   - 手機：+5.8%\r\n   - 平板：持平\r\n2. 會員等級規則\r\n   - 金卡門檻從 NT$\u00A030,000 調整為 NT$\u00A025,000\r\n   - **待確認：**是否追溯既有會員？\r\n3.效能監控\r\n   - 目前 P95 延遲 820ms ，目標 500ms\r\n   - 張工程師建議先加 cache\r\n\r\n## 三、決議\r\n* 會員等級新規則 12/1 生效，不追溯\r\n* 效能優化列為下個 sprint 的最高優先\r\n- 結帳頁 A/B 測試延長一週\r\n\r\n## 四、待辦事項\r\n\r\n- [ ] 王大明：整理轉換率報表，週三前寄出 \r\n- [ ] 李小華：更新會員條款文案\r\n- [x] 張工程師：申請 Redis 資源\r\n- [ ]\r\n- [ ] 陳小美：預約下週會議室   \r\n\r\n## 五、下次會議\r\n\r\n\r\n2026-11-10（一）14:00，同一間會議室。\r\n",
+        "text": "# 產品週會紀錄（2026-11-03）\r\n\r\n**時間：**2026-11-03（一）14:00–15:00\r\n**地點：**3F 大會議室／Teams\r\n**主持人：**林經理\r\n**記錄：**陳小美\r\n**與會者：**王大明、李小華、張工程師、Alice（遠端）\r\n\r\n## 一、上週待辦追蹤\r\n\r\n| 項目 | 負責人 | 狀態 |\r\n| -- | -- | -- |\r\n| 結帳頁改版 | 王大明 | 已完成 |\r\n| 會員等級規則 | 李小華 | 進行中 |\r\n| 效能監控告警 | 張工程師 | 卡關\u00A0（等 SRE 回覆） |\r\n\r\n## 二、本週討論事項\r\n\r\n1. 結帳頁改版上線後的轉換率\r\n   - 桌機：+3.2%\r\n   - 手機：+5.8%\r\n   - 平板：持平\r\n2. 會員等級規則\r\n   - 金卡門檻從 NT$\u00A030,000 調整為 NT$\u00A025,000\r\n   - **待確認：**是否追溯既有會員？\r\n3.效能監控\r\n   - 目前 P95 延遲 820ms ，目標 500ms\r\n   - 張工程師建議先加 cache\r\n\r\n## 三、決議\r\n\r\n* 會員等級新規則 12/1 生效，不追溯\r\n* 效能優化列為下個 sprint 的最高優先\r\n- 結帳頁 A/B 測試延長一週\r\n\r\n## 四、待辦事項\r\n\r\n- [ ] 王大明：整理轉換率報表，週三前寄出 \r\n- [ ] 李小華：更新會員條款文案\r\n- [x] 張工程師：申請 Redis 資源\r\n- [ ]\r\n- [ ] 陳小美：預約下週會議室   \r\n\r\n## 五、下次會議\r\n\r\n\r\n2026-11-10（一）14:00，同一間會議室。\r\n",
         "changed": true,
         "refused": false,
         "reason": ""

@@ -36,6 +36,7 @@
 | MDX030 | warning | yes | 清單標記與內容之間缺空格 |
 | MDX031 | warning | no | 同一層級的清單 bullet 不一致（換 bullet 就是新清單，只報告） |
 | MDX032 | warning | no | 清單與相鄰段落之間缺空行 |
+| MDX033 | warning | yes | 頂層 ATX 標題後緊接清單（預設停用） |
 | MDX035 | warning | no | 空清單項目 |
 | MDX040 | warning | yes | 強調符號內側多餘空白 |
 | MDX041 | warning | no | 可能未配對的 `**`、`__`、`~~` |
@@ -390,6 +391,7 @@ title: x
 
 - **MDX032**：清單直接貼在段落前後。CommonMark 可能把它讀成 lazy continuation；請補空行。這一條不自動修，因為補空行可能改變 loose/tight list 的語意。
 - **MDX031**：同一個縮排層級的清單混用 `-`、`*`、`+`。CommonMark 裡換一種 bullet 就會開始新的清單，所以 `- a` 接 `* b` 本來就是兩個清單；統一 bullet 會把它們合併成一個（中間有空行時還會變成 loose list），因此 v1.1.0 起只報告。是同一個清單就人工統一 bullet；是兩個刻意分開的清單，就用其他內容隔開或 `--ignore-rule MDX031`。
+- **MDX033**：在無縮排的 ATX 標題與下一行無縮排的清單首項之間補一個空行。首項須有內容，分隔線與受保護區塊略過。預設停用，用 `--heading-list-blank-lines` 加開，或用 `--rule MDX033` 單獨執行。
 - **MDX035**：`-`、`*`、`1.` 後面沒有內容。刪掉或補內容。
 
 ### 強調與 code fence
@@ -443,6 +445,7 @@ title: x
 | MDX030 | MD030 |
 | MDX031 | MD004（部分，只含 bullet） |
 | MDX032 | MD032 |
+| MDX033 | MD022、MD032（只處理標題後接清單） |
 | MDX035 | 無直接對應 |
 | MDX040 | MD037 |
 | MDX041 | 無直接對應 |

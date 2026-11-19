@@ -1,6 +1,6 @@
 {
   "source": "synthetic/weekly-report.md",
-  "referenceVersion": "1.2.0",
+  "referenceVersion": "1.3.0",
   "cases": [
     {
       "name": "default",
@@ -572,13 +572,42 @@
           "MDX010",
           "MDX011",
           "MDX012",
-          "MDX013"
+          "MDX013",
+          "MDX033"
         ]
       },
-      "diagnose": [],
+      "diagnose": [
+        {
+          "rule": "MDX033",
+          "name": "heading-list-blank-lines",
+          "severity": "warning",
+          "fixable": true,
+          "line": 7,
+          "column": 1,
+          "message": "Heading is directly attached to the following list. Add a blank line after it."
+        },
+        {
+          "rule": "MDX033",
+          "name": "heading-list-blank-lines",
+          "severity": "warning",
+          "fixable": true,
+          "line": 14,
+          "column": 1,
+          "message": "Heading is directly attached to the following list. Add a blank line after it."
+        },
+        {
+          "rule": "MDX033",
+          "name": "heading-list-blank-lines",
+          "severity": "warning",
+          "fixable": true,
+          "line": 28,
+          "column": 1,
+          "message": "Heading is directly attached to the following list. Add a blank line after it."
+        }
+      ],
       "fix": {
-        "text": "\n# 第 45 週工作週報（11/03–11/07）\n\n**姓名：**陳工程師\n**部門：**平台組\n\n## 本週完成\n1. **完成：**訂單服務的 cursor 分頁（PR #512 已合併）\n2. **完成：**修正 CI 在 Windows 上偶發失敗的問題\n   - 原因：測試共用了同一個暫存目錄\n   - 解法：每個測試用 `tempfile::tempdir()`\n3. **進行中：**Redis cache 導入，完成度約 60%\n\n## 下週計畫\n- 完成 Redis cache 並上 staging\n- 和 SRE 討論告警門檻\n- 準備技術分享：「Rust 的錯誤處理」\n\n## 遇到的問題\n>Redis 連線池在高併發下會耗盡，目前調大到 64 暫時解決，**根本原因還在查**。\n\n## 數據\n| 指標 | 上週 | 本週 | 變化 |\n| --- | --- | --- | --- |\n| P95 延遲 | 820ms | 610ms | ⬇️ 25.6% |\n| 錯誤率 | 0.42% | 0.18% | ⬇️ |\n| 部署次數 | 6 | 9 | ⬆️ |\n## 需要協助\n- 需要 SRE 開 Redis 監控 dashboard 的權限\n",
-        "changed": false,
+        "text": "\n# 第 45 週工作週報（11/03–11/07）\n\n**姓名：**陳工程師\n**部門：**平台組\n\n## 本週完成\n\n1. **完成：**訂單服務的 cursor 分頁（PR #512 已合併）\n2. **完成：**修正 CI 在 Windows 上偶發失敗的問題\n   - 原因：測試共用了同一個暫存目錄\n   - 解法：每個測試用 `tempfile::tempdir()`\n3. **進行中：**Redis cache 導入，完成度約 60%\n\n## 下週計畫\n\n- 完成 Redis cache 並上 staging\n- 和 SRE 討論告警門檻\n- 準備技術分享：「Rust 的錯誤處理」\n\n## 遇到的問題\n>Redis 連線池在高併發下會耗盡，目前調大到 64 暫時解決，**根本原因還在查**。\n\n## 數據\n| 指標 | 上週 | 本週 | 變化 |\n| --- | --- | --- | --- |\n| P95 延遲 | 820ms | 610ms | ⬇️ 25.6% |\n| 錯誤率 | 0.42% | 0.18% | ⬇️ |\n| 部署次數 | 6 | 9 | ⬆️ |\n## 需要協助\n\n- 需要 SRE 開 Redis 監控 dashboard 的權限\n",
+        "changed": true,
         "refused": false,
         "reason": ""
       }

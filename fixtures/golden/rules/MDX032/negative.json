@@ -1,6 +1,6 @@
 {
   "source": "rules/MDX032/negative.md",
-  "referenceVersion": "1.2.0",
+  "referenceVersion": "1.3.0",
   "cases": [
     {
       "name": "default",
@@ -64,13 +64,24 @@
           "MDX010",
           "MDX011",
           "MDX012",
-          "MDX013"
+          "MDX013",
+          "MDX033"
         ]
       },
-      "diagnose": [],
+      "diagnose": [
+        {
+          "rule": "MDX033",
+          "name": "heading-list-blank-lines",
+          "severity": "warning",
+          "fixable": true,
+          "line": 10,
+          "column": 1,
+          "message": "Heading is directly attached to the following list. Add a blank line after it."
+        }
+      ],
       "fix": {
-        "text": "# 步驟\n\n請依序執行：\n\n- 安裝\n- 設定\n\n完成後重新啟動。\n\n## 清單緊接標題\n- 不是段落後的清單\n",
-        "changed": false,
+        "text": "# 步驟\n\n請依序執行：\n\n- 安裝\n- 設定\n\n完成後重新啟動。\n\n## 清單緊接標題\n\n- 不是段落後的清單\n",
+        "changed": true,
         "refused": false,
         "reason": ""
       }

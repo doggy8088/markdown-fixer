@@ -119,7 +119,7 @@ line info 的主要欄位：
 3. **單行修正（只取問題）**：每一個非保護行依序經過 `fixHeading` → `fixBlockquote` → `fixListMarker` → `fixEmphasis` → `fixNbsp`（JS `transformLine`）。每一步收到的是前一步的輸出，所以後面步驟的欄號是相對於已修正的行。
 4. **原文的空白檢查**：MDX004 行尾空白、URL 內的 MDX008、MDX009 零寬字元、MDX003／MDX005／MDX006 空行。這些看的是原本的行，不是步驟 3 的輸出。
 5. **重新掃描**：把步驟 3 修正後的行接起來，再跑一次 `scanDocument`。
-6. **結構檢查**：在修正後的文字上依序跑標題（MDX014 到 MDX019）、清單（MDX031、MDX035、MDX032）、表格（MDX061、MDX063、MDX060）、參考連結（MDX074、MDX071、MDX075、MDX072、MDX073）、MDX080、MDX084、MDX042、空行（MDX013、MDX052、MDX062、MDX082）、MDX090。
+6. **結構檢查**：在修正後的文字上依序跑標題（MDX014 到 MDX019）、清單（MDX031、MDX035、MDX032）、表格（MDX061、MDX063、MDX060）、參考連結（MDX074、MDX071、MDX075、MDX072、MDX073）、MDX080、MDX084、MDX042、空行（MDX013、MDX033、MDX052、MDX062、MDX082）、MDX090。
 7. **其他逐行檢查**：MDX007、MDX070、MDX050、MDX041。
 8. **過濾、去重、排序**：濾掉停用的規則，以 `規則:行:欄:訊息` 去重，再依行號、欄號、規則 ID 穩定排序。
 
@@ -145,7 +145,7 @@ line info 的主要欄位：
  │  2. MDX042 收尾端標點搬移（applyCjkEmphasisFixes）
  │  3. MDX060 表格分隔列（applyTableDelimiterFixes）
  │  4. MDX031 清單 bullet（fixListStyle）
- │  5. MDX013／052／062／082 補空行（applyBlankLineFixes）
+ │  5. MDX013／033／052／062／082 補空行（applyBlankLineFixes）
  │  6. MDX004 行尾空白（applyTrailingWhitespace）
  │  7. MDX003／005／006 空行正規化（applyBlankLineNormalization）
  ▼
@@ -245,7 +245,7 @@ PRD〈6.9〉要求自動修正不能意外改變渲染結果。行導向掃描�
 | 類別 | 規則 | 要求 |
 | --- | --- | --- |
 | 編碼 | MDX001、MDX002 | 比對前先去掉 BOM、統一行尾，所以永遠不會改變渲染，一律照常套用 |
-| 版面 | MDX003～006、011、012、013、020、052、060、082 | 不得改變渲染 |
+| 版面 | MDX003～006、011、012、013、020、033、052、060、082 | 不得改變渲染 |
 | 修復 | MDX008、010、030、040、042、062 | 目的就是改變渲染，但只能改被修正的區塊與相鄰的一個區塊 |
 
 MDX031 在 oracle v1.1.0 改成只回報，不在任何一類。

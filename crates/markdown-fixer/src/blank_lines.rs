@@ -9,8 +9,9 @@ use crate::jsregex::re;
 use crate::jsstr::{self, JsString, is_trim_empty};
 use crate::rules::{Enabled, Overrides, make_problem};
 use crate::scan::{
-    LineInfo, Scan, is_blank, is_paragraph_like, is_protected_block, is_protected_line,
-    is_top_level_line, parse_quote_prefix, scan_document_with,
+    LineInfo, Scan, is_atx_heading, is_blank, is_list_line, is_paragraph_like, is_protected_block,
+    is_protected_line, is_thematic_break, is_top_level_line, parse_quote_prefix,
+    scan_document_with,
 };
 use crate::table::find_tables;
 
@@ -38,7 +39,7 @@ fn starts_with_space_or_tab(line: &[u16]) -> bool {
     matches!(line.first(), Some(&c) if c == SPACE || c == TAB)
 }
 
-/// JS `computeBlankLineFixes(lines, info, scan, isEnabled)`（MDX013、MDX052、MDX062、MDX082）。
+/// JS `computeBlankLineFixes(lines, info, scan, isEnabled)`（MDX013、MDX033、MDX052、MDX062、MDX082）。
 pub(crate) fn compute_blank_line_fixes(
     lines: &[JsString],
     info: &[LineInfo],
@@ -73,6 +74,30 @@ pub(crate) fn compute_blank_line_fixes(
                     Overrides::NONE,
                 ));
             }
+        }
+    }
+
+    if enabled.is("MDX033") {
+        for (i, pair) in lines.windows(2).enumerate() {
+            let heading = &pair[0];
+            let next = &pair[1];
+            if is_protected_line(&info[i]) || is_protected_line(&info[i + 1]) {
+                continue;
+            }
+            if !is_top_level_line(heading) || !is_atx_heading(heading) {
+                continue;
+            }
+            if !is_top_level_line(next) || !is_list_line(next) || is_thematic_break(next) {
+                continue;
+            }
+            fixes.after.insert(i);
+            fixes.issues.push(make_problem(
+                "MDX033",
+                i + 1,
+                1,
+                "Heading is directly attached to the following list. Add a blank line after it.",
+                Overrides::NONE,
+            ));
         }
     }
 

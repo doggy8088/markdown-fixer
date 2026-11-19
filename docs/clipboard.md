@@ -60,9 +60,16 @@ export MARKDOWN_FIX_PASTE_MODIFIER_TIMEOUT_MS=1500
 | 變數 | 預設 | 意思 |
 | --- | --- | --- |
 | `MARKDOWN_FIXER_BIN` | 依序找上面列的安裝位置，最後查 `PATH` | `markdown-fixer` 執行檔路徑 |
+| `MARKDOWN_FIX_PASTE_HEADING_LIST_BLANK_LINES` | `0` | 設成 `1` 時加開 MDX033，在頂層標題與緊接的清單之間補空行 |
 | `MARKDOWN_FIX_PASTE_NO_PASTE` | `0` | 設成 `1` 時只修正剪貼簿，不送出 `Cmd+V` |
 | `MARKDOWN_FIX_PASTE_MODIFIER_TIMEOUT_MS` | `1000` | 等待修飾鍵放開的上限（毫秒） |
 | `MARKDOWN_FIX_PASTE_LOG` | `~/Library/Logs/markdown-fix-paste.log` | log 檔；設成 `/dev/null` 可關閉 |
+
+若要在修正貼上時補上標題和清單之間的空行，在同一個設定檔加入：
+
+```sh
+export MARKDOWN_FIX_PASTE_HEADING_LIST_BLANK_LINES=1
+```
 
 ### 改熱鍵
 

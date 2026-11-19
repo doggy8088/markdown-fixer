@@ -33,6 +33,7 @@ markdown-fixer --check --json .             # 給程式解析的 JSON
 | `--strict` | info 等級的問題也算失敗 |
 | `--rule <ids>`、`--rule=<ids>` | 只啟用這些規則。以逗號分隔，可重複 |
 | `--ignore-rule <ids>`、`--ignore-rule=<ids>` | 停用這些規則。以逗號分隔，可重複 |
+| `--heading-list-blank-lines` | 加開 MDX033，在頂層 ATX 標題與緊接的清單之間補空行 |
 | `--max-line-length N`、`--max-line-length=N` | 啟用 MDX090，行長上限為 N |
 | `--max-quote-depth N`、`--max-quote-depth=N` | 引言巢狀深度上限，預設 32，0 表示不限制 |
 | `--on-limit <mode>`、`--on-limit=<mode>` | 超過上限時的處理方式：`error`（預設）或 `ignore`，見〈資源上限〉 |
@@ -40,6 +41,8 @@ markdown-fixer --check --json .             # 給程式解析的 JSON
 | `--version`、`-v` | 印出 `markdown-fixer <版本>` 後結束 |
 | `--help`、`-h` | 印出說明後結束 |
 | `--` | 之後的參數都是路徑 |
+
+`--rule MDX033` 可單獨執行 MDX033。
 
 `--rule` 指定了 MDX090 但沒有給 `--max-line-length` 時，行長上限預設為 120。MDX090 平常是停用的，只有給了行長上限才會檢查。
 

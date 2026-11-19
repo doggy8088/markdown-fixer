@@ -1,6 +1,6 @@
 {
   "source": "synthetic/storybook-mdx.markdown",
-  "referenceVersion": "1.2.0",
+  "referenceVersion": "1.3.0",
   "cases": [
     {
       "name": "default",
@@ -104,10 +104,20 @@
           "MDX010",
           "MDX011",
           "MDX012",
-          "MDX013"
+          "MDX013",
+          "MDX033"
         ]
       },
       "diagnose": [
+        {
+          "rule": "MDX033",
+          "name": "heading-list-blank-lines",
+          "severity": "warning",
+          "fixable": true,
+          "line": 12,
+          "column": 1,
+          "message": "Heading is directly attached to the following list. Add a blank line after it."
+        },
         {
           "rule": "MDX013",
           "name": "heading-blank-lines",
@@ -119,7 +129,7 @@
         }
       ],
       "fix": {
-        "text": "import { Meta, Canvas, Story, ArgsTable } from '@storybook/blocks';\nimport * as ButtonStories from './Button.stories';\n\n<Meta of={ButtonStories} />\n\n# Button 按鈕元件\n\n按鈕用來觸發動作。設計規範請見 [Figma](https://www.figma.com/file/abc123/Design-System)。\n\n<Canvas of={ButtonStories.Primary} />\n\n## 何時使用\n- 送出表單\n- 開啟對話框\n- 觸發**  主要動作 **\n\n## 變體\n\n<Canvas>\n  <Story of={ButtonStories.Secondary} />\n  <Story of={ButtonStories.Danger} />\n</Canvas>\n\n| 變體 | 用途 |\n| --- | --- |\n| `primary` | 頁面上最重要的動作，一頁最多一個 |\n| `secondary` | 次要動作 |\n| `danger` | 刪除等不可逆的動作 |\n\n## Props\n\n<ArgsTable of={ButtonStories} />\n\n## 無障礙\n\n1.按鈕文字要能說明動作，不要只寫「點這裡」\n2. 只有圖示的按鈕要加 `aria-label`\n3. 不要用 `<div onClick>` 假裝按鈕\n\n{/* MDX 2 的註解寫法 */}\n\nexport const Example = () => (\n  <Button variant=\"primary\" onClick={() => alert('#clicked')}>\n    送出\n  </Button>\n);\n",
+        "text": "import { Meta, Canvas, Story, ArgsTable } from '@storybook/blocks';\nimport * as ButtonStories from './Button.stories';\n\n<Meta of={ButtonStories} />\n\n# Button 按鈕元件\n\n按鈕用來觸發動作。設計規範請見 [Figma](https://www.figma.com/file/abc123/Design-System)。\n\n<Canvas of={ButtonStories.Primary} />\n\n## 何時使用\n\n- 送出表單\n- 開啟對話框\n- 觸發**  主要動作 **\n\n## 變體\n\n<Canvas>\n  <Story of={ButtonStories.Secondary} />\n  <Story of={ButtonStories.Danger} />\n</Canvas>\n\n| 變體 | 用途 |\n| --- | --- |\n| `primary` | 頁面上最重要的動作，一頁最多一個 |\n| `secondary` | 次要動作 |\n| `danger` | 刪除等不可逆的動作 |\n\n## Props\n\n<ArgsTable of={ButtonStories} />\n\n## 無障礙\n\n1.按鈕文字要能說明動作，不要只寫「點這裡」\n2. 只有圖示的按鈕要加 `aria-label`\n3. 不要用 `<div onClick>` 假裝按鈕\n\n{/* MDX 2 的註解寫法 */}\n\nexport const Example = () => (\n  <Button variant=\"primary\" onClick={() => alert('#clicked')}>\n    送出\n  </Button>\n);\n",
         "changed": true,
         "refused": false,
         "reason": ""

@@ -2,7 +2,7 @@
 
 這份文件說明 `markdown-fixer` 的每一條規則：偵測什麼、能不能自動修正、什麼時候可以忽略，以及 CJK 文件要注意的地方。內容改寫自原 skill 的 [`reference/rules.md`](../reference/rules.md)，並逐條對照 oracle（`reference/js/markdown-fixer.mjs` v1.1.0）的原始碼與實際輸出校正過。
 
-規則目錄共 **49 條**，其中 19 條可自動修正（v1.1.0 新增 MDX086，MDX031 改為只報告）。ID、名稱、分類、嚴重度、是否可修正與英文摘要都和 oracle 的 `RULES` 陣列完全相同，`markdown-fixer --list-rules` 印出的就是這份目錄。
+規則目錄共 **50 條**，其中 20 條可自動修正。ID、名稱、分類、嚴重度、是否可修正與英文摘要都和 oracle 的 `RULES` 陣列完全相同，`markdown-fixer --list-rules` 印出的就是這份目錄。
 
 > 本文所有「修正前」範例都放在 fenced code block 裡，所以這份文件本身可以通過檢查。範例裡的「修正後」是把「修正前」交給 oracle 的 `fixDocument`（只啟用該條規則）實際得到的輸出，不是手寫的。
 
@@ -42,6 +42,7 @@
 | MDX030 | `list-marker-space` | list | warning | 是 | 清單標記與內容之間缺空格 |
 | MDX031 | `list-marker-style` | list | warning | 否 | 同一層清單的 bullet 不一致（只報告） |
 | MDX032 | `list-blank-lines` | list | warning | 否 | 清單與相鄰段落之間缺空行 |
+| MDX033 | `heading-list-blank-lines` | list | warning | 是 | 頂層 ATX 標題後緊接清單（預設停用） |
 | MDX035 | `empty-list-item` | list | warning | 否 | 空清單項目 |
 | MDX040 | `emphasis-inner-space` | emphasis | warning | 是 | 強調符號內側多餘空白 |
 | MDX041 | `unmatched-emphasis` | emphasis | warning | 否 | 同一行 `**`、`__`、`~~` 數量為奇數 |
@@ -423,6 +424,16 @@ after
 ```
 
 請在清單前後補空行。這條規則不自動修，因為補空行可能改變 tight／loose list 的語意。
+
+### MDX033 `heading-list-blank-lines`
+
+- 嚴重度：warning
+- 自動修正：是
+- 預設：停用
+
+無縮排的 ATX 標題後緊接無縮排的有序或無序清單時，在兩者之間補一個空行。清單首項須有內容。已有空行、Setext 標題、引言、巢狀清單、受保護區塊與分隔線都略過。
+
+用 `--heading-list-blank-lines` 加開這條規則，或用 `--rule MDX033` 只執行這條規則。
 
 ### MDX035 `empty-list-item`
 
@@ -883,6 +894,7 @@ Blockquote nesting depth 33 exceeds the limit of 32. Reduce the nesting, raise -
 | MDX030 | MD030 |
 | MDX031 | MD004（部分，只有 bullet） |
 | MDX032 | MD032 |
+| MDX033 | MD022、MD032（只處理標題後接清單） |
 | MDX040 | MD037 |
 | MDX050 | MD040 |
 | MDX052 | MD031 |

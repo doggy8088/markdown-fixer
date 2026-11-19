@@ -335,3 +335,14 @@ fn concurrent_calls_are_independent() {
         handle.join().unwrap();
     }
 }
+
+#[test]
+fn heading_list_blank_lines_can_be_enabled_in_json() {
+    let input = b"# Heading\n- Item\n";
+    let default: serde_json::Value = serde_json::from_str(&fix_bytes(input, None)).unwrap();
+    assert_eq!(default["text"], "# Heading\n- Item\n");
+
+    let enabled: serde_json::Value =
+        serde_json::from_str(&fix_bytes(input, Some(r#"{"headingListBlankLines":true}"#))).unwrap();
+    assert_eq!(enabled["text"], "# Heading\n\n- Item\n");
+}

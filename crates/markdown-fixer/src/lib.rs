@@ -11,7 +11,7 @@
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");
 
 /// 對齊的 JS 參考實作版本（`reference/js/markdown-fixer.mjs` 的 `VERSION`）。
-pub const REFERENCE_VERSION: &str = "1.2.0";
+pub const REFERENCE_VERSION: &str = "1.3.0";
 
 /// 問題嚴重度。
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -80,10 +80,12 @@ pub enum LimitPolicy {
 /// 請用 `Options { ..Default::default() }` 建構，日後新增欄位才不會破壞相容性。
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Options {
-    /// 只啟用這些規則；`None` 表示全部啟用。
+    /// 只啟用這些規則；`None` 依各規則的預設值與個別選項決定。
     pub rules: Option<Vec<String>>,
     /// 停用這些規則。
     pub ignore_rules: Option<Vec<String>>,
+    /// 加開 `MDX033`（JS `headingListBlankLines`），預設關閉。
+    pub heading_list_blank_lines: bool,
     /// `MDX090` 行長上限；0 表示停用 MDX090。
     pub max_line_length: usize,
     /// 引言（`>`）巢狀深度上限，超過時依 [`Options::on_limit`] 處理；0 表示不限制。
@@ -103,6 +105,7 @@ impl Default for Options {
         Options {
             rules: None,
             ignore_rules: None,
+            heading_list_blank_lines: false,
             max_line_length: 0,
             max_quote_depth: DEFAULT_MAX_QUOTE_DEPTH,
             on_limit: LimitPolicy::Error,

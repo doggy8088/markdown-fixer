@@ -126,6 +126,10 @@ fn probe_options() -> crate::Options {
     crate::Options {
         rules: list("rules"),
         ignore_rules: list("ignoreRules"),
+        heading_list_blank_lines: v
+            .get("headingListBlankLines")
+            .and_then(serde_json::Value::as_bool)
+            .unwrap_or(false),
         max_line_length: v.get("maxLineLength").and_then(|x| x.as_u64()).unwrap_or(0) as usize,
         ..Default::default()
     }

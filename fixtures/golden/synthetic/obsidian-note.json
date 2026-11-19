@@ -1,6 +1,6 @@
 {
   "source": "synthetic/obsidian-note.md",
-  "referenceVersion": "1.2.0",
+  "referenceVersion": "1.3.0",
   "cases": [
     {
       "name": "default",
@@ -401,7 +401,8 @@
           "MDX010",
           "MDX011",
           "MDX012",
-          "MDX013"
+          "MDX013",
+          "MDX033"
         ]
       },
       "diagnose": [
@@ -413,6 +414,15 @@
           "line": 9,
           "column": 2,
           "message": "Add a space after the heading marker: \"# \" rather than \"#\"."
+        },
+        {
+          "rule": "MDX033",
+          "name": "heading-list-blank-lines",
+          "severity": "warning",
+          "fixable": true,
+          "line": 35,
+          "column": 1,
+          "message": "Heading is directly attached to the following list. Add a blank line after it."
         },
         {
           "rule": "MDX013",
@@ -440,10 +450,19 @@
           "line": 42,
           "column": 2,
           "message": "Add a space after the heading marker: \"# \" rather than \"#\"."
+        },
+        {
+          "rule": "MDX033",
+          "name": "heading-list-blank-lines",
+          "severity": "warning",
+          "fixable": true,
+          "line": 45,
+          "column": 1,
+          "message": "Heading is directly attached to the following list. Add a blank line after it."
         }
       ],
       "fix": {
-        "text": "---\naliases: [Rust 所有權, ownership]\ntags: [rust, 學習筆記]\ncreated: 2026-08-20\n---\n\n# Rust 所有權筆記\n\n# rust #學習筆記\n\n相關筆記：[[Rust 借用規則]]、[[生命週期|Lifetime]]、[[Rust 智慧指標#Box]]\n\n> [!note] 核心觀念\n> 每個值都有一個擁有者（owner），擁有者離開作用域時，值就會被釋放。\n\n> [!warning]\n>移動（move）之後，原本的變數就不能再用了。\n\n## 三條規則\n\n1. 每個值都有一個擁有者\n2. 同一時間只能有一個擁有者\n3. 擁有者離開作用域，值就被 drop\n\n## 範例\n\n```rust\nlet s1 = String::from(\"hello\");\nlet s2 = s1; // s1 被移動\n// println!(\"{}\", s1); // 編譯錯誤\n```\n\n![[ownership-diagram.png]]\n\n## 疑問\n- [ ] `Copy` 和 `Clone` 的差別？→ 見 [[Copy vs Clone]]\n- [x] 為什麼 `&str` 不用 move？\n- [ ] \n\n%%\n這段是 Obsidian 的註解，不會顯示在預覽裡。\n\n# TODO 補上 Rc 的例子\n\n%%\n\n## 參考\n- The Book 第 4 章 https://doc.rust-lang.org/book/ch04-00-understanding-ownership.html\n- ^block-ref-123\n",
+        "text": "---\naliases: [Rust 所有權, ownership]\ntags: [rust, 學習筆記]\ncreated: 2026-08-20\n---\n\n# Rust 所有權筆記\n\n# rust #學習筆記\n\n相關筆記：[[Rust 借用規則]]、[[生命週期|Lifetime]]、[[Rust 智慧指標#Box]]\n\n> [!note] 核心觀念\n> 每個值都有一個擁有者（owner），擁有者離開作用域時，值就會被釋放。\n\n> [!warning]\n>移動（move）之後，原本的變數就不能再用了。\n\n## 三條規則\n\n1. 每個值都有一個擁有者\n2. 同一時間只能有一個擁有者\n3. 擁有者離開作用域，值就被 drop\n\n## 範例\n\n```rust\nlet s1 = String::from(\"hello\");\nlet s2 = s1; // s1 被移動\n// println!(\"{}\", s1); // 編譯錯誤\n```\n\n![[ownership-diagram.png]]\n\n## 疑問\n\n- [ ] `Copy` 和 `Clone` 的差別？→ 見 [[Copy vs Clone]]\n- [x] 為什麼 `&str` 不用 move？\n- [ ] \n\n%%\n這段是 Obsidian 的註解，不會顯示在預覽裡。\n\n# TODO 補上 Rc 的例子\n\n%%\n\n## 參考\n\n- The Book 第 4 章 https://doc.rust-lang.org/book/ch04-00-understanding-ownership.html\n- ^block-ref-123\n",
         "changed": true,
         "refused": false,
         "reason": ""

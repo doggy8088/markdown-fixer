@@ -36,7 +36,7 @@ MSRV 是 Rust 1.85（edition 2024）。
 | 項目 | 說明 |
 | --- | --- |
 | `VERSION` | crate 版本 |
-| `REFERENCE_VERSION` | 對齊的 oracle 版本，目前是 `"1.2.0"` |
+| `REFERENCE_VERSION` | 對齊的 oracle 版本，目前是 `"1.3.0"` |
 | `DEFAULT_MAX_QUOTE_DEPTH` | 引言巢狀深度上限的預設值 32 |
 | `rules()` | 完整規則目錄，順序與 oracle 相同 |
 | `rule(id)` | 依 ID 查規則，找不到回傳 `None` |
@@ -53,7 +53,7 @@ MSRV 是 Rust 1.85（edition 2024）。
 | `Severity` | `Error`、`Warning`、`Info`；`as_str()` 回傳 `"error"` 等小寫字串 |
 | `Rule` | `id`、`name`、`category`、`severity`、`fixable`、`summary` |
 | `Problem` | `rule`、`name`、`severity`、`fixable`、`line`、`column`、`message` |
-| `Options` | `rules`、`ignore_rules`、`max_line_length`、`max_quote_depth`、`on_limit`、`render_guard` |
+| `Options` | `rules`、`ignore_rules`、`heading_list_blank_lines`、`max_line_length`、`max_quote_depth`、`on_limit`、`render_guard` |
 | `LimitPolicy` | `Error`（預設）、`Ignore`；超過資源上限時的處理方式 |
 | `FixResult` | `text`、`changed`、`refused`、`reason`、`skipped` |
 | `SkippedFix` | `rule`、`line`、`reason`；渲染保護擋下的修正 |
@@ -159,6 +159,7 @@ fn options_examples() {
 
 - `rules` 是 `Some` 時，只有列出的規則會啟用。
 - `ignore_rules` 裡的規則一律停用；同時出現在兩邊時以停用為準。
+- `heading_list_blank_lines` 預設為 `false`。設為 `true` 可加開 MDX033。也可用 `rules` 明確選取 MDX033。
 - `max_line_length` 為 0 時 MDX090 停用，即使 `rules` 指定了 MDX090。CLI 的「`--rule MDX090` 沒給行長就預設 120」是參數解析層的邏輯，函式庫不會自動補。
 - 阻擋規則（MDX081、MDX083、MDX053、MDX085、MDX086）即使被停用，`fix_document` 仍然會拒絕修正，只是 `diagnose` 不回報它們。
 - `max_quote_depth`（JS `maxQuoteDepth`）是引言巢狀深度上限，預設 32，0 表示不限制。超過時依 `on_limit` 處理：`LimitPolicy::Error` 在該行回報 MDX086 並拒絕修正整份文件；`LimitPolicy::Ignore` 把超過上限的行當成不透明的保護行，不修改、不診斷。

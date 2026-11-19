@@ -65,6 +65,7 @@ export FAKE_CALLS="$work/calls"
 export MARKDOWN_FIX_PASTE_LOG="$work/log"
 export MARKDOWN_FIXER_BIN="$bin/fake-fixer"
 unset MARKDOWN_FIX_PASTE_NO_PASTE MARKDOWN_FIX_PASTE_MODIFIER_TIMEOUT_MS
+unset MARKDOWN_FIX_PASTE_HEADING_LIST_BLANK_LINES
 
 failures=0
 current=""
@@ -269,6 +270,20 @@ EOF
     expect_status 0
     expect_clipboard '# 標題\n\n中文 段落'
     expect_calls fixer 1
+
+    reset_case "real binary: heading-list spacing is off by default" '# 標題。\n1. 複製內容'
+    MARKDOWN_FIXER_BIN="$bin/real-fixer" run_script
+    expect_status 0
+    expect_calls fixer 1
+    expect_calls pbcopy 0
+    expect_clipboard_unchanged
+
+    reset_case "real binary: enabling MDX033 keeps other paste fixes" '#標題。\n1. 複製內容'
+    MARKDOWN_FIXER_BIN="$bin/real-fixer" MARKDOWN_FIX_PASTE_HEADING_LIST_BLANK_LINES=1 run_script
+    expect_status 0
+    expect_calls fixer 1
+    expect_calls pbcopy 1
+    expect_clipboard '# 標題。\n\n1. 複製內容'
 
     reset_case "real binary: unclosed frontmatter is refused, clipboard kept" '---\ntitle: x\n#標題\n'
     MARKDOWN_FIXER_BIN="$bin/real-fixer" run_script
