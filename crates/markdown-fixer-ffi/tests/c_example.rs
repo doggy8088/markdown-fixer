@@ -10,18 +10,27 @@ use std::process::Command;
 
 /// 找本 crate 的 `staticlib`／`cdylib`。
 ///
-/// cargo 會把它們建在 `target/<profile>/deps/`，通常再複製（uplift）一份到
-/// `target/<profile>/`。但 uplift 不一定會更新：例如曾用 `cargo rustc --crate-type`
-/// 建置過，`target/<profile>/` 可能留著舊版。所以兩處都找，取修改時間最新的那個，
-/// 避免連結到過期的函式庫。
+/// Cargo 1.100 起把測試執行檔與函式庫分別放在同個套件下的不同建置單元。
+/// 舊版放在 profile 目錄或其 `deps/`。同一版面下可能有多份產物，取修改時間最新的一份。
 fn find_lib(file_name: &str) -> PathBuf {
     let exe = std::env::current_exe().expect("找不到測試執行檔路徑");
-    let deps = exe
-        .parent()
-        .expect("測試執行檔應位於 target/<profile>/deps/");
-    let profile = deps.parent().unwrap_or(deps);
-    [profile, deps]
-        .iter()
+    let output = exe.parent().expect("測試執行檔應位於建置輸出目錄");
+    let parent = output.parent().unwrap_or(output);
+    let dirs = if output.ends_with("out") {
+        let package = parent
+            .parent()
+            .filter(|path| path.ends_with(env!("CARGO_PKG_NAME")))
+            .expect("測試執行檔應位於本套件的 Cargo 建置單元");
+        package
+            .read_dir()
+            .expect("無法讀取 Cargo 建置單元")
+            .filter_map(Result::ok)
+            .map(|unit| unit.path().join("out"))
+            .collect::<Vec<_>>()
+    } else {
+        vec![parent.to_owned(), output.to_owned()]
+    };
+    dirs.iter()
         .map(|dir| dir.join(file_name))
         .filter_map(|path| {
             let modified = std::fs::metadata(&path).and_then(|m| m.modified()).ok()?;
@@ -29,13 +38,7 @@ fn find_lib(file_name: &str) -> PathBuf {
         })
         .max_by_key(|(modified, _)| *modified)
         .map(|(_, path)| path)
-        .unwrap_or_else(|| {
-            panic!(
-                "在 {} 與 {} 都找不到 {file_name}；cargo test 應該已經建置 staticlib 與 cdylib",
-                profile.display(),
-                deps.display()
-            )
-        })
+        .unwrap_or_else(|| panic!("在 {dirs:?} 找不到 {file_name}；請確認 cargo test 已建置 C ABI"))
 }
 
 fn repo_root() -> PathBuf {
